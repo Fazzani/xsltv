@@ -1,0 +1,463 @@
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+	<title>TV Listings</title>
+	<!--XSLTv is Copyright 2008 Eric Lofgren. See http://www.ericandchar.com/xsltvgrid/ -->
+	<link rel="stylesheet" href="stylesheets/style.css" >
+	<link rel="stylesheet" type="text/css" href="stylesheets/yahooold.tv.css" title="YahooOld" />
+	<link rel="stylesheet" type="text/css" href="stylesheets/yahoonew.tv.css" title="YahooNew" />
+	<link rel="alternate stylesheet" type="text/css" href="stylesheets/tvguideold.tv.css" title="TVGuideOld" />
+	<link rel="alternate stylesheet" type="text/css" href="stylesheets/tvguideprint.tv.css" title="TVGuidePrint" />
+	<link rel="alternate stylesheet" type="text/css" href="stylesheets/tvguidenew.tv.css" title="TVGuideNew" />
+	<link rel="alternate stylesheet" type="text/css" href="stylesheets/excite.tv.css" title="Excite" />
+	<link rel="alternate stylesheet" type="text/css" href="stylesheets/aol.tv.css" title="AOL" />
+	<link rel="alternate stylesheet" type="text/css" href="stylesheets/meevee.tv.css" title="MeeVee" />
+	<link rel="alternate stylesheet" type="text/css" href="stylesheets/newspaper.tv.css" title="Newspaper" />
+	<link rel="alternate stylesheet" type="text/css" href="stylesheets/msn.tv.css" title="MSN" />
+	<link rel="alternate stylesheet" type="text/css" href="stylesheets/titantv.tv.css" title="TitanTV" />
+	<link rel="alternate stylesheet" type="text/css" href="stylesheets/eric.css" title="Eric" />
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.0/js.cookie.min.js"></script>
+	<script src="lang/english.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+	<script type='text/javascript' src='tv.js'></script>
+	<script type='text/javascript' src="js/init.js"></script>
+	<!--Empty style is added to for dynamic table sizing-->
+	<!-- HINTBOX -->
+	<script type="text/javascript">
+		var xmlfileloaded;
+		var xmlfileneeded = '';
+
+		function selectOption(value, options) {
+			for (var i = 0; i < options.length; i++) {
+				if (options[i].value == value) options[i].selected = true
+			}
+		}
+		var otheroptionstab = 'Other Options';
+		var loadonclicklabel = 'On click:';
+		var loadonclicknothing = 'Do Nothing';
+		var loadonclickIMDB = 'Search IMDB';
+		var loadonclickURL = 'URL in XML';
+		var categorycolorslabel = 'Category Highlighting';
+		var categorycolorshint = 'Select to enable category highlighting (colors must be defined in CSS files). Deselect for a small speed improvement. This is separate from the ratings-based highlighting.';
+		var dailyfileslabel = 'Use daily files';
+		var dailyfileshint = 'Select to use daily files in the format YYYYMMDD.xml instead of a single tv.xml file.';
+		var highlightclickablelabel = 'Highlight linked programs';
+		var highlightclickablehint = 'Highlight programs which are linked to a URL (set above). The type of highlighting depends on the stylesheet. It is recommended to disable this if all programs are to be links, or if none are.';
+		var highlightmovieslabel = 'Highlight movies rated at or over:';
+		var highlightmovieshint = 'Highlight movies rated at or over this number of stars. The type of highlighting depends on the stylesheet, but is generally a brighter color. This is separate from the category highlighting below.';
+		var highlightnewlabel = 'Highlight new shows';
+		var highlightnewhint = 'Highlight shows which are airing for the first time. The highlighting is generally a darker or thicker border.';
+		var printdateslabel = 'Show movie release dates';
+		var printdateshint = 'Show movie release dates in the grid. This is separate from the dates in the popup, and only applies to movies.';
+		var twelvehourlabel = 'Use twelve-hour clock';
+		var twelvehourhint = 'Use twelve-hour (with AM and PM) instead of twenty-four-hour clock.';
+		var showclocklabel = 'Show clock in upper right';
+		var showclockhint = 'Check to show current time and date in the top right of page.';
+		var showbarclocklabel = 'Show clock in top bar';
+		var showbarclockhint = 'Check to show current time in the top bar.';
+		var reloadbutton = 'Reload';
+
+		var monthnames = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+		var shortmonthnames = new Array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
+		var daynames = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+		var dayletters = new Array('S', 'M', 'T', 'W', 'T', 'F', 'S');
+
+		var alllabel = 'All';
+		var nonelabel = 'None';
+	</script>
+
+</head>
+
+<body>
+	<h1>TV Listings</h1>
+	<div id="gridtime" class="container-fluid">
+
+		<div style="clear:both;"></div>
+		<div style="float:left;">
+			<select id='year'></select>
+			<select id='month'></select>
+			<select id='day'>
+				<option value='1'>1</option>
+				<option value='2'>2</option>
+				<option value='3'>3</option>
+				<option value='4'>4</option>
+				<option value='5'>5</option>
+				<option value='6'>6</option>
+
+				<option value='7'>7</option>
+				<option value='8'>8</option>
+				<option value='9'>9</option>
+				<option value='10'>10</option>
+				<option value='11'>11</option>
+				<option value='12'>12</option>
+
+				<option value='13'>13</option>
+				<option value='14'>14</option>
+				<option value='15'>15</option>
+				<option value='16'>16</option>
+				<option value='17'>17</option>
+				<option value='18'>18</option>
+
+				<option value='19'>19</option>
+				<option value='20'>20</option>
+				<option value='21'>21</option>
+				<option value='22'>22</option>
+				<option value='23'>23</option>
+				<option value='24'>24</option>
+
+				<option value='25'>25</option>
+				<option value='26'>26</option>
+				<option value='27'>27</option>
+				<option value='28'>28</option>
+				<option value='29'>29</option>
+				<option value='30'>30</option>
+
+				<option value='31'>31</option>
+			</select>
+			<a href="#" onclick="moveObject('calendarContainer', event);moveObject('califrame',event);document.getElementById('califrame').style.width=document.getElementById('calendarContainer').offsetWidth;document.getElementById('califrame').style.height=document.getElementById('calendarContainer').offsetHeight;" id="calendarlink"><span>Calendar</span></a>
+			<select id='hour'>
+				<option value='0'>00:00</option>
+				<option value='1'>01:00</option>
+				<option value='2'>02:00</option>
+				<option value='3'>03:00</option>
+				<option value='4'>04:00</option>
+				<option value='5'>05:00</option>
+				<option value='6'>06:00</option>
+				<option value='7'>07:00</option>
+				<option value='8'>08:00</option>
+				<option value='9'>09:00</option>
+				<option value='10'>10:00</option>
+				<option value='11'>11:00</option>
+
+				<option value='12'>12:00</option>
+				<option value='13'>13:00</option>
+				<option value='14'>14:00</option>
+				<option value='15'>15:00</option>
+				<option value='16'>16:00</option>
+				<option value='17'>17:00</option>
+				<option value='18'>18:00</option>
+				<option value='19'>19:00</option>
+				<option value='20'>20:00</option>
+				<option value='21'>21:00</option>
+				<option value='22'>22:00</option>
+				<option value='23'>23:00</option>
+			</select>
+			<button id="gobutton">
+				GO
+			</button>
+		</div>
+		<div style="float:right;">
+			<span id="barclock"></span>
+			<select id="styleswitcher" name="styleswitcher" onchange="var v=this.options[this.selectedIndex].value; setActiveStyleSheet(v); setActiveStyleSheet(v); return false;">
+				<option value="AOL">
+					AOL
+				</option>
+				<option value="Excite">
+					Excite
+				</option>
+				<option value="MeeVee">
+					MeeVee
+				</option>
+				<option value="MSN">
+					MSN
+				</option>
+				<option value="Newspaper">
+					Newspaper
+				</option>
+				<option value="TitanTV">
+					TitanTV
+				</option>
+				<option value="TVGuideNew">
+					TV Guide (New)
+				</option>
+				<option value="TVGuideOld">
+					TV Guide (Old)
+				</option>
+				<option value="TVGuidePrint">
+					TV Guide (Print)
+				</option>
+				<option value="YahooOld">
+					Yahoo (Old)
+				</option>
+				<option value="YahooNew">
+					Yahoo (New)
+				</option>
+			</select>
+		</div>
+		<div style="clear:both;"></div>
+	</div>
+	<div id="tvframe"></div>
+	<div id="loadingcontainer">
+		<div id="loading">
+			<!-- <script type="text/javascript">
+				document.write(loadingtext + "...");
+			</script> -->
+		</div>
+	</div>
+	<div id="clock"></div>
+	<div id="preflink">
+		<a href="#" onclick="moveObject('menu', event);moveObject('prefiframe',event);document.getElementById('prefiframe').style.width=document.getElementById('menu').offsetWidth;document.getElementById('prefiframe').style.height=document.getElementById('menu').offsetHeight;">
+			Options
+		</a>
+	</div>
+	<iframe src="javascript:;" scrolling="no" frameborder="0" id="prefiframe" style="display:none;position:absolute;"></iframe>
+	<div id="menu">
+		<ul id="preftabs">
+			<li><a id="agridtab" href="#" onclick="switchtab('agridtab','gridfieldset',true);switchtab('apopupstab','popupsfieldset',false);switchtab('alocaloptionstab','localoptionsfieldset',false);switchtab('aotheroptionstab','otheroptionsfieldset',false);">
+					Grid
+				</a></li>
+			<li><a id="apopupstab" href="#" onclick="switchtab('agridtab','gridfieldset',false);switchtab('apopupstab','popupsfieldset',true);switchtab('alocaloptionstab','localoptionsfieldset',false);switchtab('aotheroptionstab','otheroptionsfieldset',false);">
+					Popup
+				</a></li>
+			<li><a id="alocaloptionstab" href="#" onclick="switchtab('agridtab','gridfieldset',false);switchtab('apopupstab','popupsfieldset',false);switchtab('alocaloptionstab','localoptionsfieldset',true);switchtab('aotheroptionstab','otheroptionsfieldset',false);">
+					Local Options
+				</a></li>
+			<li><a id="aotheroptionstab" href="#" onclick="switchtab('agridtab','gridfieldset',false);switchtab('apopupstab','popupsfieldset',false);switchtab('alocaloptionstab','localoptionsfieldset',false);switchtab('aotheroptionstab','otheroptionsfieldset',true);">
+					Other Options
+				</a></li>
+		</ul>
+		<div id="gridfieldset">
+			<label for="hours">
+				Display hours
+			</label>
+			<select id="hours" name="hours" onchange="sizeform(); var v=this.options[this.selectedIndex].value; createCookie('xsltvhours',v,365);">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+				<option value="9">9</option>
+			</select><a href="#" class="hintanchor" onMouseover="showhint(displayhourshint, this, event)">[?]</a><br />
+			<label for="autosize">
+				Automatic table size
+			</label><input id="autosize" name="autosize" type="checkbox" onclick="sizeform(); var v=this.checked; createCookie('xsltvautosize',v,365);" /><a href="#" class="hintanchor" onMouseover="showhint(autosizehint, this, event)">[?]</a><br />
+			<label for="tablewidth">
+				Table width (in pixels)
+			</label><input id="tablewidth" name="tablewidth" size="4" type="text" maxlength="4" onchange="if(checkNumeric(this,1,9999)){var v=Number(this.value); createCookie('xsltvtablewidth',v,365);}" /><a href="#" class="hintanchor" onMouseover="showhint(tablewidthhint, this, event)">[?]</a><br />
+			<label for="offsetminutes">
+				Start with next hour after
+			</label><select id="offsetminutes" name="offsetminutes" onchange="var v=this.options[this.selectedIndex].value; createCookie('xsltvoffsetminutes',v,365);">
+				<option value="60">:00</option>
+				<option value="55">:55</option>
+				<option value="50">:50</option>
+				<option value="45">:45</option>
+				<option value="40">:40</option>
+				<option value="35">:35</option>
+				<option value="30">:30</option>
+				<option value="25">:25</option>
+				<option value="20">:20</option>
+				<option value="15">:15</option>
+				<option value="10">:10</option>
+				<option value="05">:05</option>
+			</select><a href="#" class="hintanchor" onMouseover="showhint(offsetminuteshint, this, event)">[?]</a><br />
+			<label for="refreshonthe">
+				Refresh every hour at
+			</label><select id="refreshonthe" name="refreshonthe" onchange="var v=this.options[this.selectedIndex].value; createCookie('xsltvrefreshonthe',v,365);">
+				<option value="-1">
+					No restaure
+				</option>
+				<option value="2">:02</option>
+				<option value="7">:07</option>
+				<option value="12">:12</option>
+				<option value="17">:17</option>
+				<option value="22">:22</option>
+				<option value="27">:27</option>
+				<option value="32">:32</option>
+				<option value="37">:37</option>
+				<option value="42">:42</option>
+				<option value="47">:47</option>
+				<option value="52">:52</option>
+				<option value="57">:57</option>
+			</select><a href="#" class="hintanchor" onMouseover="showhint(refreshonthehint,this,event)">[?]</a><br />
+			<label for="timebarfrequency">
+				Time Bar Frequency
+			</label><select id="timebarfrequency" name="timebarfrequency" onchange="var v=this.options[this.selectedIndex].value; createCookie('xsltvtimebarfrequency',v,365);">
+				<option value="-1">
+					Top Line Only
+				</option>
+				<option value="2">2</option>
+				<option value="5">5</option>
+				<option value="10">10</option>
+				<option value="15">15</option>
+				<option value="20">20</option>
+				<option value="25">25</option>
+				<option value="30">30</option>
+				<option value="35">35</option>
+				<option value="40">40</option>
+				<option value="45">45</option>
+				<option value="50">50</option>
+			</select><a href="#" class="hintanchor" onMouseover="showhint(timebarfrequencyhint,this,event)">[?]</a><br />
+		</div>
+		<div id="popupsfieldset">
+			<label for="channelpopups">
+				Channel Popups
+			</label><input id="channelpopups" name="channelpopups" type="checkbox" onchange="var v=this.checked; createCookie('xsltvchannelpopups',v,365);" /><a href="#" class="hintanchor" onMouseover="showhint(channelpopupshint, this, event)">[?]</a><br />
+			<label for="descriptionpopups">
+				Description Popups
+			</label><input id="descriptionpopups" name="descriptionpopups" type="checkbox" onchange="var v=this.checked; createCookie('xsltvdescriptionpopups',v,365);" /><a href="#" class="hintanchor" onMouseover="showhint(descriptionpopupshint, this, event)">[?]</a><br />
+			<label for="popupdelay">
+				Popup Delay (in ms)
+			</label><input id="popupdelay" name="popupdelay" size="4" type="text" maxlength="4" onchange="if(checkNumeric(this,0,9999)){var v=Number(this.value); createCookie('xsltvpopupdelay',v,365);}" /><a href="#" class="hintanchor" onMouseover="showhint(popupdelayhint, this, event)">[?]</a><br />
+			<label for="popuptimes">
+				Times
+			</label><input id="popuptimes" name="popuptimes" type="checkbox" onclick="var v=this.checked; createCookie('xsltvpopuptimes',v,365);" /><a href="#" class="hintanchor" onMouseover="showhint(popuptimeshint, this, event)">[?]</a><br />
+			<label for="popuprating">
+				Rating
+			</label><input id="popuprating" name="popuprating" type="checkbox" onclick="var v=this.checked; createCookie('xsltvpopuprating',v,365);" /><a href="#" class="hintanchor" onMouseover="showhint(popupratinghint, this, event)">[?]</a><br />
+			<label for="popupsubtitle">
+				Subtitle
+			</label><input id="popupsubtitle" name="popupsubtitle" type="checkbox" onclick="var v=this.checked; createCookie('xsltvpopupsubtitle',v,365);" /><a href="#" class="hintanchor" onMouseover="showhint(popupsubtitlehint, this, event)">[?]</a><br />
+			<label for="popupdescription">
+				Description
+			</label><input id="popupdescription" name="popupdescription" type="checkbox" onclick="var v=this.checked; createCookie('xsltvpopupdescription',v,365);" /><a href="#" class="hintanchor" onMouseover="showhint(popupdescriptionhint, this, event)">[?]</a><br />
+			<label for="popupdate">
+				Date
+			</label><input id="popupdate" name="popupdate" type="checkbox" onclick="var v=this.checked; createCookie('xsltvpopupdate',v,365);" /><a href="#" class="hintanchor" onMouseover="showhint(popupdatehint, this, event)">[?]</a><br />
+			<label for="popupcategories">
+				Categories
+			</label><input id="popupcategories" name="popupcategories" type="checkbox" onclick="var v=this.checked; createCookie('xsltvpopupcategories',v,365);" /><a href="#" class="hintanchor" onMouseover="showhint(popupcategorieshint, this, event)">[?]</a><br />
+			<label for="popupstarrating">
+				Star Rating
+			</label><input id="popupstarrating" name="popupstarrating" type="checkbox" onclick="var v=this.checked; createCookie('xsltvpopupstarrating',v,365);" /><a href="#" class="hintanchor" onMouseover="showhint(popupstarratinghint, this, event)">[?]</a><br />
+		</div>
+		<div id="localoptionsfieldset">
+			<label for="language">
+				Language
+			</label><select id="language" name="language" onchange="var v=this.options[this.selectedIndex].value; createCookie('xsltvlanguage',v,365);">
+				<option value="czech">&#269;esky</option>
+				<option value="deutsch">Deutsch</option>
+				<option value="english">English</option>
+				<option value="espanol">Espa&#241;ol</option>
+				<option value="francais">Fran&#231;ais</option>
+				<option value="italiano">Italiano</option>
+				<option value="nederlands">Nederlands</option>
+				<option value="portugues">Portugu&#234;s</option>
+				<option value="svensk">Svensk</option>
+			</select><br />
+			<label for="fixgaps">
+				Fix gaps in listings
+			</label><input id="fixgaps" name="fixgaps" type="checkbox" onclick="var v=this.checked;if(v){var x=confirm(fixgapsconfirm);if(x){createCookie('xsltvfixgaps',v,365);}else{this.checked=false;}}else{createCookie('xsltvfixgaps',v,365);}" /><a href="#" class="hintanchor" onMouseover="showhint(fixgapshint, this, event)">[?]</a><br />
+			<label for="absoluteicons">
+				Absolute icon references
+			</label><input id="absoluteicons" name="absoluteicons" type="checkbox" onclick="var v=this.checked; createCookie('xsltvabsoluteicons',v,365);" /><a href="#" class="hintanchor" onMouseover="showhint(absoluteiconshint, this, event)">[?]</a><br />
+			<label for="dayfirst">
+				Display day first in dates
+			</label><input id="dayfirst" name="dayfirst" type="checkbox" onclick="var v=this.checked; createCookie('xsltvdayfirst',v,365);" /><a href="#" class="hintanchor" onMouseover="showhint(dayfirsthint, this, event)">[?]</a><br />
+			<label for="grabber">
+				Grabber: tv_grab_
+			</label><select id="grabber" name="grabber" onchange="var v=this.options[this.selectedIndex].value; createCookie('xsltvgrabber',v,365);if(v=='tv_grab_na_dd'){document.getElementById('dayfirst').checked=false; createCookie('xsltvdayfirst',false,365);}else if(v=='tv_grab_es' || v=='tv_grab_fr' || v=='tv_grab_se' || v=='tv_grab_de'){document.getElementById('dayfirst').checked=true; createCookie('xsltvdayfirst',true,365);}">
+				<option value="tv_grab_de">de</option>
+				<option value="tv_grab_es">es</option>
+				<option value="tv_grab_fr">fr</option>
+				<option value="tv_grab_huro">huro</option>
+				<option value="tv_grab_na_dd">na_dd</option>
+				<option value="tv_grab_se">se</option>
+			</select><a href="#" class="hintanchor" onMouseover="showhint(grabberhint, this, event)">[?]</a><br />
+		</div>
+		<div id="otheroptionsfieldset">
+			<label for="loadonclick">
+				On click:
+			</label><select id="loadonclick" name="loadonclick" onchange="var v=this.options[this.selectedIndex].value; createCookie('xsltvloadonclick',v,365);">
+				<option value="nothing">
+					Do Nothing
+				</option>
+				<option value="IMDB">
+					<script type="text/javascript">
+						document.write(loadonclickIMDB)
+					</script>
+				</option>
+				<option value="URL">
+					<script type="text/javascript">
+						document.write(loadonclickURL)
+					</script>
+				</option>
+			</select><br />
+			<label for="highlightclickable">
+				<script type="text/javascript">
+					document.write(highlightclickablelabel)
+				</script>
+			</label><input id="highlightclickable" name="highlightclickable" type="checkbox" onclick="var v=this.checked; createCookie('xsltvhighlightclickable',v,365);" /><a href="#" class="hintanchor" onMouseover="showhint(highlightclickablehint, this, event)">[?]</a><br />
+			<label for="highlightmovies">
+				<script type="text/javascript">
+					document.write(highlightmovieslabel)
+				</script>
+			</label>
+			<select id="highlightmovies" name="highlightmovies" onchange="var v=this.options[this.selectedIndex].value; createCookie('xsltvhighlightmovies',v,365);">
+				<option value="0">
+					<script type="text/javascript">
+						document.write(alllabel)
+					</script>
+				</option>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+				<option value="9">9</option>
+				<option value="10">
+					<script type="text/javascript">
+						document.write(nonelabel)
+					</script>
+				</option>
+			</select><a href="#" class="hintanchor" onMouseover="showhint(highlightmovieshint, this, event)">[?]</a><br />
+
+			<label for="categorycolors">
+				<script type="text/javascript">
+					document.write(categorycolorslabel)
+				</script>
+			</label><input id="categorycolors" name="categorycolors" type="checkbox" onclick="var v=this.checked; createCookie('xsltvcategorycolors',v,365);" /><a href="#" class="hintanchor" onMouseover="showhint(categorycolorshint, this, event)">[?]</a><br />
+			<label for="highlightnew">
+				<script type="text/javascript">
+					document.write(highlightnewlabel)
+				</script>
+			</label><input id="highlightnew" name="highlightnew" type="checkbox" onclick="var v=this.checked; createCookie('xsltvhighlightnew',v,365);" /><a href="#" class="hintanchor" onMouseover="showhint(highlightnewhint, this, event)">[?]</a><br />
+			<label for="printdates">
+				<script type="text/javascript">
+					document.write(printdateslabel)
+				</script>
+			</label><input id="printdates" name="printdates" type="checkbox" onclick="var v=this.checked; createCookie('xsltvprintdates',v,365);" /><a href="#" class="hintanchor" onMouseover="showhint(printdateshint, this, event)">[?]</a><br />
+			<label for="dailyfiles">
+				<script type="text/javascript">
+					document.write(dailyfileslabel)
+				</script>
+			</label><input id="dailyfiles" name="dailyfiles" type="checkbox" onclick="var v=this.checked; createCookie('xsltvdailyfiles',v,365);" /><a href="#" class="hintanchor" onMouseover="showhint(dailyfileshint, this, event)">[?]</a><br />
+			<label for="twelvehour">
+				<script type="text/javascript">
+					document.write(twelvehourlabel)
+				</script>
+			</label><input id="twelvehour" name="twelvehour" type="checkbox" onclick="var v=this.checked; createCookie('xsltvtwelvehour',v,365);" /><a href="#" class="hintanchor" onMouseover="showhint(twelvehourhint, this, event)">[?]</a><br />
+			<label for="showclock">
+				<script type="text/javascript">
+					document.write(showclocklabel)
+				</script>
+			</label><input id="showclock" name="showclock" type="checkbox" onclick="var v=this.checked; createCookie('xsltvshowclock',v,365);" /><a href="#" class="hintanchor" onMouseover="showhint(showclockhint, this, event)">[?]</a><br />
+			<label for="showbarclock">
+				<script type="text/javascript">
+					document.write(showbarclocklabel)
+				</script>
+			</label><input id="showbarclock" name="showbarclock" type="checkbox" onclick="var v=this.checked; createCookie('xsltvshowbarclock',v,365);" /><a href="#" class="hintanchor" onMouseover="showhint(showbarclockhint, this, event)">[?]</a><br />
+		</div>
+		<a href="#" class="Submit" onClick="window.location.reload();">
+			<script type="text/javascript">
+				document.write(reloadbutton)
+			</script>
+		</a>
+	</div>
+	<iframe src="javascript:;" scrolling="no" frameborder="0" id="califrame" style="display:none;position:absolute;"></iframe>
+	<div id='calendarContainer' style="display:none; position:absolute;"></div>
+	<script type='text/javascript' src='boxover.js'></script>
+
+</body>
+
+</html>

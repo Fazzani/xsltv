@@ -1,0 +1,5 @@
+{
+    "beautify.language": {
+        "xml": ["xml", "xsl", "xslt"],
+      }
+}

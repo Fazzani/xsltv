@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/1999/xhtml">
 <xsl:output method='html' version='1.0' encoding='UTF-8' indent='yes'/>
 
 <xsl:variable name="DescriptionBR">0</xsl:variable>
@@ -56,8 +56,8 @@
 <xsl:variable name="StartDisplayCode" select="number($CurrentHour)*60" /> <!-- These are for rendering the table -->
 <xsl:variable name="StopDisplayCode" select="(number($CurrentHour)+number($DisplayLength))*60" />
 
-<xsl:variable name="StartTimeString" select="number(concat($CurrentYear, format-number($CurrentMonth,'00'), format-number($CurrentDay,'00'), format-number($CurrentHour,'00'), '00'))" /> <!-- These are for selecting the appropriate programmes -->
-<xsl:variable name="StopTimeString" select="number(concat($StopYear, format-number($StopMonth,'00'), format-number($StopDay,'00'), format-number($StopHour,'00'), '00'))" /> <!-- These are for selecting the appropriate programmes -->
+<xsl:variable name="StartTimeString" select="concat($CurrentYear, format-number($CurrentMonth,'00'), format-number($CurrentDay,'00'), format-number($CurrentHour,'00'), '00')" /> <!-- These are for selecting the appropriate programmes -->
+<xsl:variable name="StopTimeString" select="concat($StopYear, format-number($StopMonth,'00'), format-number($StopDay,'00'), format-number($StopHour,'00'), '00')" /> <!-- These are for selecting the appropriate programmes -->
 <xsl:variable name="programmes" select="/tv/programme[((substring(@stop,1,12) &gt; $StartTimeString and substring(@stop,1,12) &lt;= $StopTimeString) or (substring(@start,1,12) &gt;= $StartTimeString and substring(@start,1,12) &lt; $StopTimeString) or (substring(@start,1,12) &lt;= $StartTimeString and substring(@stop,1,12) &gt;= $StopTimeString))]"/>
 
 <table id="listings">
@@ -186,7 +186,8 @@
 					<xsl:text>]</xsl:text>
 				</xsl:attribute>
 			</xsl:if>
-		<table class="leftchanneltable"><tr><td class="leftlogocell"><xsl:if test="string-length($iconname) &gt; 0"><img><xsl:attribute name="src">
+		<table class="leftchanneltable">
+		<tr><td class="leftlogocell"><xsl:if test="string-length($iconname) &gt; 0"><img><xsl:attribute name="src">
 						<xsl:choose>
 							<xsl:when test="$AbsoluteIcons">
 								<xsl:value-of select="icon/@src"/>
@@ -203,7 +204,8 @@
 								<xsl:value-of select="concat('icons/',$iconname)"/>
 							</xsl:otherwise>
 						</xsl:choose>
-</xsl:attribute><xsl:attribute name="class">channelimage</xsl:attribute></img></xsl:if></td></tr></table>
+</xsl:attribute>
+<xsl:attribute name="class">channelimage</xsl:attribute></img></xsl:if></td></tr></table>
 		</th>
 		<xsl:variable name="theseprogrammes" select="$programmes[@channel=current()/@id]"/>
 		<xsl:for-each select="$theseprogrammes">                                           <!--Program Stop Time is after Display Start   and Program Stop Time is before Display End......or...Program Start Time is after Display Start and Program Start Time is before Display End........or  Program Start Time is before Display Start and Program Stop Time is after Display End. -->
@@ -275,7 +277,7 @@
 			<xsl:choose>
 				<xsl:when test="$OnClick='IMDB'">
 					<xsl:attribute name="onclick">
-						<xsl:text>window.open('http://www.imdb.com/find?q=</xsl:text>						
+						<xsl:text>window.open('http://www.imdb.com/find?q=</xsl:text>
 							<xsl:call-template name="replace">
 								<xsl:with-param name="string">
 								<xsl:call-template name="replace">
@@ -297,7 +299,7 @@
 								<xsl:with-param name="pattern" select="'?'"/>
 								<xsl:with-param name="replacement" select="'%3f'"/>
 							</xsl:call-template>
-						<xsl:text>')</xsl:text>						
+						<xsl:text>')</xsl:text>
 					</xsl:attribute>
 				</xsl:when>
 				<xsl:when test="$OnClick='URL'">

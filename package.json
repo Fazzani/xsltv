@@ -1,0 +1,34 @@
+{
+  "name": "xsltv",
+  "version": "1.0.0",
+  "description": "EPG viewer for xmltv files",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "nodemon -L --watch public -e js,html,xsl server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fazzani/xsltv.git"
+  },
+  "keywords": [
+    "epg",
+    "xmltv"
+  ],
+  "author": "Fazzani Heni",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Fazzani/xsltv/issues"
+  },
+  "homepage": "https://github.com/Fazzani/xsltv#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.3",
+    "csurf": "^1.9.0",
+    "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
+  }
+}
