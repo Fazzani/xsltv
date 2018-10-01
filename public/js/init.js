@@ -14,11 +14,7 @@ $(function () {
     }, 50);
 
 
-    if ('<!--#include virtual="ssitest" -->' == 'ssiworking') {
-        var currenttime = '<!--#config timefmt="%B %d, %Y %H:%M:%S" --><!--#echo var="DATE_LOCAL" -->';
-    } else {
-        var currenttime = new Date();
-    }
+    var currenttime = new Date();
 
     /***********************************************
      * Show Hint script- copyright Dynamic Drive (www.dynamicdrive.com)
@@ -26,75 +22,75 @@ $(function () {
      * Visit http://www.dynamicdrive.com/ for this script and 100s more.
      ***********************************************/
 
-    var horizontal_offset = "9px" //horizontal offset of hint box from anchor link
+    var horizontal_offset = "9px"; //horizontal offset of hint box from anchor link
 
     /////No further editting needed
 
-    var vertical_offset = "0" //horizontal offset of hint box from anchor link. No need to change.
-    var ie = document.all
-    var ns6 = document.getElementById && !document.all
+    var vertical_offset = "0"; //horizontal offset of hint box from anchor link. No need to change.
+    var ie = document.all;
+    var ns6 = document.getElementById && !document.all;
 
     function getposOffset(what, offsettype) {
-        var totaloffset = (offsettype == "left") ? what.offsetLeft : what.offsetTop;
+        var totaloffset = (offsettype === "left") ? what.offsetLeft : what.offsetTop;
         var parentEl = what.offsetParent;
-        while (parentEl != null) {
-            totaloffset = (offsettype == "left") ? totaloffset + parentEl.offsetLeft : totaloffset + parentEl.offsetTop;
+        while (parentEl !== null) {
+            totaloffset = (offsettype === "left") ? totaloffset + parentEl.offsetLeft : totaloffset + parentEl.offsetTop;
             parentEl = parentEl.offsetParent;
         }
         return totaloffset;
     }
 
     function iecompattest() {
-        return (document.compatMode && document.compatMode != "BackCompat") ? document.documentElement : document.body
+        return (document.compatMode && document.compatMode !== "BackCompat") ? document.documentElement : document.body;
     }
 
     function clearbrowseredge(obj, whichedge) {
-        var edgeoffset = (whichedge == "rightedge") ? parseInt(horizontal_offset) * -1 : parseInt(vertical_offset) * -1
-        if (whichedge == "rightedge") {
-            var windowedge = ie && !window.opera ? iecompattest().scrollLeft + iecompattest().clientWidth - 30 : window.pageXOffset + window.innerWidth - 40
+        var edgeoffset = (whichedge === "rightedge") ? parseInt(horizontal_offset) * -1 : parseInt(vertical_offset) * -1;
+        if (whichedge === "rightedge") {
+            windowedge = ie && !window.opera ? iecompattest().scrollLeft + iecompattest().clientWidth - 30 : window.pageXOffset + window.innerWidth - 40
             dropmenuobj.contentmeasure = dropmenuobj.offsetWidth
             if (windowedge - dropmenuobj.x < dropmenuobj.contentmeasure)
                 edgeoffset = dropmenuobj.contentmeasure + obj.offsetWidth + parseInt(horizontal_offset)
         } else {
-            var windowedge = ie && !window.opera ? iecompattest().scrollTop + iecompattest().clientHeight - 15 : window.pageYOffset + window.innerHeight - 18
+            windowedge = ie && !window.opera ? iecompattest().scrollTop + iecompattest().clientHeight - 15 : window.pageYOffset + window.innerHeight - 18
             dropmenuobj.contentmeasure = dropmenuobj.offsetHeight
             if (windowedge - dropmenuobj.y < dropmenuobj.contentmeasure)
-                edgeoffset = dropmenuobj.contentmeasure - obj.offsetHeight
+                edgeoffset = dropmenuobj.contentmeasure - obj.offsetHeight;
         }
-        return edgeoffset
+        return edgeoffset;
     }
 
     function showhint(menucontents, obj, e) {
         if ((ie || ns6) && document.getElementById("hintbox")) {
-            dropmenuobj = document.getElementById("hintbox")
-            dropmenuobj.innerHTML = menucontents
-            dropmenuobj.style.left = dropmenuobj.style.top = -500
-            dropmenuobj.x = getposOffset(obj, "left")
-            dropmenuobj.y = getposOffset(obj, "top")
-            dropmenuobj.style.left = dropmenuobj.x - clearbrowseredge(obj, "rightedge") + obj.offsetWidth + "px"
-            dropmenuobj.style.top = dropmenuobj.y - clearbrowseredge(obj, "bottomedge") + "px"
-            dropmenuobj.style.visibility = "visible"
-            obj.onmouseout = hidetip
+            dropmenuobj = document.getElementById("hintbox");
+            dropmenuobj.innerHTML = menucontents;
+            dropmenuobj.style.left = dropmenuobj.style.top = -500;
+            dropmenuobj.x = getposOffset(obj, "left");
+            dropmenuobj.y = getposOffset(obj, "top");
+            dropmenuobj.style.left = dropmenuobj.x - clearbrowseredge(obj, "rightedge") + obj.offsetWidth + "px";
+            dropmenuobj.style.top = dropmenuobj.y - clearbrowseredge(obj, "bottomedge") + "px";
+            dropmenuobj.style.visibility = "visible";
+            obj.onmouseout = hidetip;
         }
     }
 
     function hidetip(e) {
-        dropmenuobj.style.visibility = "hidden"
-        dropmenuobj.style.left = "-500px"
+        dropmenuobj.style.visibility = "hidden";
+        dropmenuobj.style.left = "-500px";
     }
 
     function createhintbox() {
-        var divblock = document.createElement("div")
-        divblock.setAttribute("id", "hintbox")
-        document.body.appendChild(divblock)
+        var divblock = document.createElement("div");
+        divblock.setAttribute("id", "hintbox");
+        document.body.appendChild(divblock);
     }
 
     if (window.addEventListener)
-        window.addEventListener("load", createhintbox, false)
+        window.addEventListener("load", createhintbox, false);
     else if (window.attachEvent)
-        window.attachEvent("onload", createhintbox)
-    else if (document.getElementById)
-        window.onload = createhintbox
+        window.attachEvent("onload", createhintbox);
+    else if (document.getElementById);
+    window.onload = createhintbox;
 
 
     var cookie = Cookies.get("xsltvhours");
@@ -166,7 +162,7 @@ $(function () {
     var myDate = new Date(currenttime);
     myDate.setMinutes(myDate.getMinutes() + (60 - offsetminutes));
 
-    if (dailyfiles.toString() == "true") {
+    if (dailyfiles.toString() === "true") {
         fileDate = myDate.getDate();
         if (fileDate < 10) {
             fileDate = "0" + fileDate;
@@ -177,14 +173,14 @@ $(function () {
         }
         xmlfileneeded = xmlfileneeded.concat(myDate.getFullYear(), fileMonth, fileDate, '.xml');
     } else {
-        xmlfileneeded = 'https://raw.githubusercontent.com/Fazzani/grab/master/out/test.xml'
+        xmlfileneeded = 'https://raw.githubusercontent.com/Fazzani/grab/master/out/test.xml';
     }
 
-    if (grabber == "tv_grab_fr") {
+    if (grabber === "tv_grab_fr") {
         sortstring = "substring-after(substring-before(./@id,'.'),'C')";
-    } else if (grabber == "tv_grab_es") {
+    } else if (grabber === "tv_grab_es") {
         sortstring = "display-name[2]";
-    } else if (grabber == "tv_grab_huro") {
+    } else if (grabber === "tv_grab_huro") {
         sortstring = "substring(./@id,1,3)";
     } else {
         sortstring = "display-name[3]";
@@ -235,7 +231,7 @@ $(function () {
     }
 
     function handleXslResponse() {
-        if (xslrequest.readyState == 4) {
+        if (xslrequest.readyState === 4) {
             if (window.XMLHttpRequest && window.XSLTProcessor) { //Netscape only
                 xsl = xslrequest.responseXML;
                 sortTag = xsl.getElementsByTagName('xsl:sort'); //for firefox 3
@@ -257,7 +253,7 @@ $(function () {
     }
 
     function handleXmlResponse() {
-        if (xmlrequest.readyState == 4) {
+        if (xmlrequest.readyState === 4) {
             if (xmlrequest.status >= 300) {
                 var errorstring = errortext + " " + xmlrequest.status + ": " + filetext + " " + xmlfileneeded + " " + notfoundtext + ".";
                 $('#loading').text(errorstring);
@@ -296,12 +292,12 @@ $(function () {
         if (fileMonth < 10) {
             fileMonth = "0" + fileMonth;
         }
-        if (dailyfiles.toString() == "true") {
+        if (dailyfiles.toString() === "true") {
             xmlfileneeded = '';
             xmlfileneeded = xmlfileneeded.concat(startDate.getFullYear(), fileMonth, fileDate, '.xml');
             //xmlfileneeded is YYYYMMDD.xml
         }
-        if (xmlfileneeded != xmlfileloaded) {
+        if (xmlfileneeded !== xmlfileloaded) {
             //reload everything
             loadXML();
         } else { //this is the entire remainder of the Init() function.
@@ -351,7 +347,7 @@ $(function () {
                 processor.setParameter(null, "PrevMonth", prevDate.getMonth() + 1);
                 processor.setParameter(null, "PrevYear", prevDate.getFullYear());
 
-                if (fixgaps.toString() == "true") {
+                if (fixgaps.toString() === "true") {
                     processor.setParameter(null, "FixGaps", 1);
                 } else {
                     processor.setParameter(null, "FixGaps", 0);
@@ -361,54 +357,54 @@ $(function () {
                 processor.setParameter(null, "EarlierText", earliertext);
                 processor.setParameter(null, "LaterText", latertext);
                 processor.setParameter(null, "TimeBarFrequency", timebarfrequency);
-                if (channelpopups.toString() == "true") {
+                if (channelpopups.toString() === "true") {
                     processor.setParameter(null, "ChannelPopups", 1);
                 } else {
                     processor.setParameter(null, "ChannelPopups", 0);
                 }
-                if (descriptionpopups.toString() == "true") {
+                if (descriptionpopups.toString() === "true") {
                     processor.setParameter(null, "DescriptionPopups", 1);
                 } else {
                     processor.setParameter(null, "DescriptionPopups", 0);
                 }
 
-                if (absoluteicons.toString() == "true") {
+                if (absoluteicons.toString() === "true") {
                     processor.setParameter(null, "AbsoluteIcons", 1);
                 } else {
                     processor.setParameter(null, "AbsoluteIcons", 0);
                 }
 
-                if (popuptimes.toString() == "true") {
+                if (popuptimes.toString() === "true") {
                     processor.setParameter(null, "PopupTimes", 1);
                 } else {
                     processor.setParameter(null, "PopupTimes", 0);
                 }
-                if (popuprating.toString() == "true") {
+                if (popuprating.toString() === "true") {
                     processor.setParameter(null, "PopupRating", 1);
                 } else {
                     processor.setParameter(null, "PopupRating", 0);
                 }
-                if (popupsubtitle.toString() == "true") {
+                if (popupsubtitle.toString() === "true") {
                     processor.setParameter(null, "PopupSubtitle", 1);
                 } else {
                     processor.setParameter(null, "PopupSubtitle", 0);
                 }
-                if (popupdescription.toString() == "true") {
+                if (popupdescription.toString() === "true") {
                     processor.setParameter(null, "PopupDescription", 1);
                 } else {
                     processor.setParameter(null, "PopupDescription", 0);
                 }
-                if (popupdate.toString() == "true") {
+                if (popupdate.toString() === "true") {
                     processor.setParameter(null, "PopupDate", 1);
                 } else {
                     processor.setParameter(null, "PopupDate", 0);
                 }
-                if (popupcategories.toString() == "true") {
+                if (popupcategories.toString() === "true") {
                     processor.setParameter(null, "PopupCategories", 1);
                 } else {
                     processor.setParameter(null, "PopupCategories", 0);
                 }
-                if (popupstarrating.toString() == "true") {
+                if (popupstarrating.toString() === "true") {
                     processor.setParameter(null, "PopupStarRating", 1);
                 } else {
                     processor.setParameter(null, "PopupStarRating", 0);
@@ -417,27 +413,27 @@ $(function () {
                 processor.setParameter(null, "Grabber", grabber);
 
                 processor.setParameter(null, "HighlightMovies", highlightmovies);
-                if (highlightclickable.toString() == "true") {
+                if (highlightclickable.toString() === "true") {
                     processor.setParameter(null, "HighlightClickable", 1);
                 } else {
                     processor.setParameter(null, "HighlightClickable", 0);
                 }
-                if (printdates.toString() == "true") {
+                if (printdates.toString() === "true") {
                     processor.setParameter(null, "PrintDates", 1);
                 } else {
                     processor.setParameter(null, "PrintDates", 0);
                 }
-                if (dayfirst.toString() == "true") {
+                if (dayfirst.toString() === "true") {
                     processor.setParameter(null, "DayFirst", 1);
                 } else {
                     processor.setParameter(null, "DayFirst", 0);
                 }
-                if (categorycolors.toString() == "true") {
+                if (categorycolors.toString() === "true") {
                     processor.setParameter(null, "Categories", 1);
                 } else {
                     processor.setParameter(null, "Categories", 0);
                 }
-                if (highlightnew.toString() == "true") {
+                if (highlightnew.toString() === "true") {
                     processor.setParameter(null, "HighlightNew", 1);
                 } else {
                     processor.setParameter(null, "HighlightNew", 0);
@@ -468,7 +464,7 @@ $(function () {
                 processor.addParameter("PrevMonth", prevDate.getMonth() + 1);
                 processor.addParameter("PrevYear", prevDate.getFullYear());
 
-                if (fixgaps.toString() == "true") {
+                if (fixgaps.toString() === "true") {
                     processor.addParameter("FixGaps", 1);
                 } else {
                     processor.addParameter("FixGaps", 0);
@@ -478,80 +474,80 @@ $(function () {
                 processor.addParameter("EarlierText", earliertext);
                 processor.addParameter("LaterText", latertext);
                 processor.addParameter("TimeBarFrequency", timebarfrequency);
-                if (channelpopups.toString() == "true") {
+                if (channelpopups.toString() === "true") {
                     processor.addParameter("ChannelPopups", 1);
                 } else {
                     processor.addParameter("ChannelPopups", 0);
                 }
-                if (descriptionpopups.toString() == "true") {
+                if (descriptionpopups.toString() === "true") {
                     processor.addParameter("DescriptionPopups", 1);
                 } else {
                     processor.addParameter("DescriptionPopups", 0);
                 }
 
-                if (popuptimes.toString() == "true") {
+                if (popuptimes.toString() === "true") {
                     processor.addParameter("PopupTimes", 1);
                 } else {
                     processor.addParameter("PopupTimes", 0);
                 }
-                if (popuprating.toString() == "true") {
+                if (popuprating.toString() === "true") {
                     processor.addParameter("PopupRating", 1);
                 } else {
                     processor.addParameter("PopupRating", 0);
                 }
-                if (popupsubtitle.toString() == "true") {
+                if (popupsubtitle.toString() === "true") {
                     processor.addParameter("PopupSubtitle", 1);
                 } else {
                     processor.addParameter("PopupSubtitle", 0);
                 }
-                if (popupdescription.toString() == "true") {
+                if (popupdescription.toString() === "true") {
                     processor.addParameter("PopupDescription", 1);
                 } else {
                     processor.addParameter("PopupDescription", 0);
                 }
-                if (popupdate.toString() == "true") {
+                if (popupdate.toString() === "true") {
                     processor.addParameter("PopupDate", 1);
                 } else {
                     processor.addParameter("PopupDate", 0);
                 }
-                if (popupcategories.toString() == "true") {
+                if (popupcategories.toString() === "true") {
                     processor.addParameter("PopupCategories", 1);
                 } else {
                     processor.addParameter("PopupCategories", 0);
                 }
-                if (popupstarrating.toString() == "true") {
+                if (popupstarrating.toString() === "true") {
                     processor.addParameter("PopupStarRating", 1);
                 } else {
                     processor.addParameter("PopupStarRating", 0);
                 }
-                if (printdates.toString() == "true") {
+                if (printdates.toString() === "true") {
                     processor.addParameter("PrintDates", 1);
                 } else {
                     processor.addParameter("PrintDates", 0);
                 }
                 processor.addParameter("Grabber", grabber);
                 processor.addParameter("HighlightMovies", highlightmovies);
-                if (dayfirst.toString() == "true") {
+                if (dayfirst.toString() === "true") {
                     processor.addParameter("DayFirst", 1);
                 } else {
                     processor.addParameter("DayFirst", 0);
                 }
-                if (absoluteicons.toString() == "true") {
+                if (absoluteicons.toString() === "true") {
                     processor.addParameter("AbsoluteIcons", 1);
                 } else {
                     processor.addParameter("AbsoluteIcons", 0);
                 }
-                if (categorycolors.toString() == "true") {
+                if (categorycolors.toString() === "true") {
                     processor.addParameter("Categories", 1);
                 } else {
                     processor.addParameter("Categories", 0);
                 }
-                if (highlightnew.toString() == "true") {
+                if (highlightnew.toString() === "true") {
                     processor.addParameter("HighlightNew", 1);
                 } else {
                     processor.addParameter("HighlightNew", 0);
                 }
-                if (highlightclickable.toString() == "true") {
+                if (highlightclickable.toString() === "true") {
                     processor.addParameter("HighlightClickable", 1);
                 } else {
                     processor.addParameter("HighlightClickable", 0);
@@ -570,19 +566,6 @@ $(function () {
     }
 
     window.Init = Init;
-    // Handler for .ready() called.
-
-    // document.getElementById('menu').style.display = "none"; /*hide the preferences form*/
     $('#loading').css("display", "block");
-    if (window.XMLHttpRequest && window.XSLTProcessor) { //Netscape only
-        var processor = new XSLTProcessor();
-    }
-    loadXSL(); /*loadXSL starts a chain reaction which does everything, mostly asynchronously */
-    // $("#gobutton").click(function(e){
-    //     Init(hours,
-    //         document.getElementById('hour').options[document.getElementById('hour').selectedIndex].value,
-    //         document.getElementById('day').options[document.getElementById('day').selectedIndex].value,
-    //         Number(document.getElementById('month').options[document.getElementById('month').selectedIndex].value)+1,
-    //         document.getElementById('year').options[document.getElementById('year').selectedIndex].value);
-    // });
+    loadXSL(); 
 });

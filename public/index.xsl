@@ -35,7 +35,7 @@
   <xsl:param name="PopupCategories"/>
   <xsl:param name="PopupStarRating"/>
   <xsl:param name="Categories"/>
-  <xsl:param name="AbsoluteIcons"/>
+  <!--<xsl:param name="AbsoluteIcons"/>-->
   <xsl:param name="Grabber"/>
   <xsl:param name="DayFirst"/>
   <xsl:param name="EarlierText"/>
@@ -98,62 +98,12 @@
               </tr>
             </xsl:when>
           </xsl:choose>
-
-          <xsl:variable name="channelnumber">
-            <xsl:choose>
-              <xsl:when test="$Grabber = 'tv_grab_na_dd'">
-                <xsl:value-of select="display-name[3]"/>
-              </xsl:when>
-              <xsl:when test="$Grabber = 'tv_grab_es'">
-                <xsl:value-of select="display-name[2]"/>
-              </xsl:when>
-              <xsl:when test="$Grabber = 'tv_grab_fr'">
-                <xsl:value-of select="substring-after(substring-before(./@id,'.'),'C')"/>
-              </xsl:when>
-              <xsl:when test="$Grabber = 'tv_grab_se' or $Grabber = 'tv_grab_de'">
-                <xsl:text> </xsl:text>
-              </xsl:when>
-              <xsl:when test="$Grabber = 'tv_grab_huro'">
-                <xsl:value-of select="substring(./@id,1,3)"/>
-              </xsl:when>
-              <xsl:otherwise>
-                ??
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:variable>
-
           <xsl:variable name="channelshortname">
-            <xsl:choose>
-              <xsl:when test="$Grabber='tv_grab_na_dd'">
-                <xsl:value-of select="normalize-space(substring-after(display-name[1],display-name[3]))"/>
-              </xsl:when>
-              <xsl:when test="$Grabber='tv_grab_es'">
-                <xsl:value-of select="display-name[1]"/>
-              </xsl:when>
-              <xsl:when test="$Grabber='tv_grab_fr' or $Grabber='tv_grab_se' or $Grabber='tv_grab_de' or $Grabber = 'tv_grab_huro'">
-                <xsl:value-of select="display-name"/>
-              </xsl:when>
-              <xsl:otherwise>
-                ??
-              </xsl:otherwise>
-            </xsl:choose>
+            <xsl:value-of select="normalize-space(substring-after(display-name[1],display-name[3]))"/>
           </xsl:variable>
 
           <xsl:variable name="channellongname">
-            <xsl:choose>
-              <xsl:when test="$Grabber='tv_grab_na_dd'">
-                <xsl:value-of select="display-name[5]" />
-              </xsl:when>
-              <xsl:when test="$Grabber='tv_grab_es'">
-                <xsl:value-of select="display-name[1]"/>
-              </xsl:when>
-              <xsl:when test="$Grabber='tv_grab_fr' or $Grabber='tv_grab_se' or $Grabber='tv_grab_de' or $Grabber = 'tv_grab_huro'">
-                <xsl:value-of select="display-name" />
-              </xsl:when>
-              <xsl:otherwise>
-                ??
-              </xsl:otherwise>
-            </xsl:choose>
+             <xsl:value-of select="display-name[5]" />
           </xsl:variable>
 
           <xsl:variable name="iconname">
@@ -180,14 +130,7 @@
                   <xsl:text>header=[</xsl:text>
                   <xsl:if test="string-length($iconname) &gt; 0">
                     <xsl:text>&lt;img src="</xsl:text>
-                    <xsl:choose>
-                      <xsl:when test="$AbsoluteIcons">
-                        <xsl:value-of select="icon/@src"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <xsl:value-of select="concat('icons/',$iconname)"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
+                    <xsl:value-of select="icon/@src"/>
                     <xsl:text>" alt="" class="popupimage"/></xsl:text>
                   </xsl:if>
                   <xsl:value-of select="$channellongname" />
@@ -204,26 +147,15 @@
                     <xsl:if test="string-length($iconname) &gt; 0">
                       <img>
                         <xsl:attribute name="src">
-                          <xsl:choose>
-                            <xsl:when test="$AbsoluteIcons">
-                              <xsl:value-of select="icon/@src"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                              <xsl:value-of select="concat('icons/',$iconname)"/>
-                            </xsl:otherwise>
-                          </xsl:choose>
+                          <xsl:value-of select="icon/@src"/>
                         </xsl:attribute>
                         <xsl:attribute name="class">channelimage</xsl:attribute>
                       </img>
                     </xsl:if>
                   </td>
-                  <td class="leftnumbercell">
-                    <xsl:value-of select="$channelnumber"/>
-                  </td>
+
                   <td class="middlecell">
-                    <span class="leftnumber">
-                      <xsl:value-of select="$channelnumber"/>
-                    </span>
+
                     <br class="leftchannelbr" />
                     <span class="leftnbsp">&#160;</span>
                     <span class="channelname">
@@ -231,25 +163,14 @@
                     </span>
                     <br class="rightchannelbr" />
                     <span class="rightnbsp">&#160;</span>
-                    <span class="rightnumber">
-                      <xsl:value-of select="$channelnumber"/>
-                    </span>
+
                   </td>
-                  <td class="rightnumbercell">
-                    <xsl:value-of select="$channelnumber"/>
-                  </td>
+
                   <td class="rightlogocell">
                     <xsl:if test="string-length($iconname) &gt; 0">
                       <img>
                         <xsl:attribute name="src">
-                          <xsl:choose>
-                            <xsl:when test="$AbsoluteIcons">
-                              <xsl:value-of select="icon/@src"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                              <xsl:value-of select="concat('icons/',$iconname)"/>
-                            </xsl:otherwise>
-                          </xsl:choose>
+                          <xsl:value-of select="icon/@src"/>
                         </xsl:attribute>
                         <xsl:attribute name="class">channelimage</xsl:attribute>
                       </img>
@@ -610,15 +531,7 @@
                   <xsl:text>header=[</xsl:text>
                   <xsl:if test="string-length($iconname) &gt; 0">
                     <xsl:text>&lt;img src="</xsl:text>
-                    <xsl:choose>
-                      <xsl:when test="$AbsoluteIcons">
-                        <xsl:value-of select="icon/@src"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <xsl:value-of select="concat('icons/',$iconname)"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-
+                    <xsl:value-of select="icon/@src"/>
                     <xsl:text>" alt="" class="popupimage"/></xsl:text>
                   </xsl:if>
                   <xsl:value-of select="$channellongname" />
@@ -635,26 +548,15 @@
                     <xsl:if test="string-length($iconname) &gt; 0">
                       <img>
                         <xsl:attribute name="src">
-                          <xsl:choose>
-                            <xsl:when test="$AbsoluteIcons">
-                              <xsl:value-of select="icon/@src"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                              <xsl:value-of select="concat('icons/',$iconname)"/>
-                            </xsl:otherwise>
-                          </xsl:choose>
+                          <xsl:value-of select="icon/@src"/>
                         </xsl:attribute>
                         <xsl:attribute name="class">channelimage</xsl:attribute>
                       </img>
                     </xsl:if>
                   </td>
-                  <td class="leftnumbercell">
-                    <xsl:value-of select="$channelnumber"/>
-                  </td>
+
                   <td class="middlecell">
-                    <span class="leftnumber">
-                      <xsl:value-of select="$channelnumber"/>
-                    </span>
+
                     <br class="leftchannelbr" />
                     <span class="leftnbsp">&#160;</span>
                     <span class="channelname">
@@ -662,25 +564,14 @@
                     </span>
                     <br class="rightchannelbr" />
                     <span class="rightnbsp">&#160;</span>
-                    <span class="rightnumber">
-                      <xsl:value-of select="$channelnumber"/>
-                    </span>
+
                   </td>
-                  <td class="rightnumbercell">
-                    <xsl:value-of select="$channelnumber"/>
-                  </td>
+
                   <td class="rightlogocell">
                     <xsl:if test="string-length($iconname) &gt; 0">
                       <img>
                         <xsl:attribute name="src">
-                          <xsl:choose>
-                            <xsl:when test="$AbsoluteIcons">
-                              <xsl:value-of select="icon/@src"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                              <xsl:value-of select="concat('icons/',$iconname)"/>
-                            </xsl:otherwise>
-                          </xsl:choose>
+                          <xsl:value-of select="icon/@src"/>
                         </xsl:attribute>
                         <xsl:attribute name="class">channelimage</xsl:attribute>
                       </img>
