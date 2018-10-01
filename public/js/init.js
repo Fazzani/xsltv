@@ -196,18 +196,18 @@ $(function () {
 
     function loadXSL() {
         $('#loading').css('display', 'block');
-        $('#loading').html("tv.xsl");
+        $('#loading').html("index.xsl");
         if (window.XMLHttpRequest && window.XSLTProcessor) { //netscape, but not IE7
             xslrequest = new XMLHttpRequest();
             xslrequest.onreadystatechange = handleXslResponse;
             xslrequest.overrideMimeType('text/xml');
-            xslrequest.open("GET", "tv.xsl", true);
+            xslrequest.open("GET", "index.xsl", true);
             xslrequest.send(null);
         } else if (window.ActiveXObject) { //IE
             xslrequest = new ActiveXObject("Msxml2.FreeThreadedDOMDocument.3.0");
             xslrequest.async = true;
             xslrequest.onreadystatechange = handleXslResponse;
-            xslrequest.load("tv.xsl");
+            xslrequest.load("index.xsl");
         } else {
             alert('Your browser can\'t handle this script');
             return;

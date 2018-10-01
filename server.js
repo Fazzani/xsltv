@@ -6,7 +6,7 @@ app.use(express.static(__dirname + '/public'));
 //Store all JS and CSS in Scripts folder.
 
 app.get('/',function(req,res){
-  res.sendFile(path.join(__dirname+'/public/tv.html'));
+  res.sendFile(path.join(__dirname+'/public/index.html'));
   //__dirname : It will resolve to your project folder.
 });
 
