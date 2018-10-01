@@ -144,11 +144,11 @@
 	</xsl:choose>
 </xsl:variable>
 
-			<xsl:variable name="iconname">
-    				<xsl:call-template name="filename">
-					<xsl:with-param name="x" select="icon/@src"/>
-				</xsl:call-template>
-			</xsl:variable>
+<xsl:variable name="iconname">
+		<xsl:call-template name="filename">
+		<xsl:with-param name="x" select="icon/@src"/>
+	</xsl:call-template>
+</xsl:variable>
 	<tr>
 		<xsl:choose>
 			<xsl:when test="(position() mod 2 = 1)">
@@ -209,297 +209,297 @@
 		</th>
 		<xsl:variable name="theseprogrammes" select="$programmes[@channel=current()/@id]"/>
 		<xsl:for-each select="$theseprogrammes">                                           <!--Program Stop Time is after Display Start   and Program Stop Time is before Display End......or...Program Start Time is after Display Start and Program Start Time is before Display End........or  Program Start Time is before Display Start and Program Stop Time is after Display End. -->
-		<xsl:sort select="@start"/>
-		<xsl:variable name="StartTime">
-			<xsl:choose>
-				<xsl:when test="number(substring($StartTimeString,1,8)) &lt; number(substring(@start,1,8))">  <!--it must be starting tomorrow ... Add the number of minutes in a day. -->
-					<xsl:value-of select="(number((number(substring(@start,9,2))*60)+number(substring(@start,11,2)))) + 1440"/>
-				</xsl:when>
-				<xsl:when test="number(substring($StartTimeString,1,8)) &gt; number(substring(@start,1,8))">  <!--it have started yesterday ... Subtract the number of minutes in a day. -->
-					<xsl:value-of select="(number((number(substring(@start,9,2))*60)+number(substring(@start,11,2)))) - 1440"/>
-				</xsl:when>
-				<xsl:otherwise> <!--otherwise it must be starting tomorrow ... Add the number of minutes in a day. -->
-					<xsl:value-of select="number((number(substring(@start,9,2))*60)+number(substring(@start,11,2)))"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-		<xsl:variable name="NextStartTime">
-			<xsl:choose>
-				<xsl:when test="$FixGaps">
-						<xsl:choose>
-							<xsl:when test="number(substring($StartTimeString,1,8)) &lt; number(substring(following::programme[1]/@start,1,8))">
-								<xsl:value-of select="(number((number(substring(following::programme[1]/@start,9,2))*60)+number(substring(following::programme[1]/@start,11,2)))) + 1440"/>
-							</xsl:when>
-							<xsl:when test="number(substring($StartTimeString,1,8)) &gt; number(substring(following::programme[1]/@start,1,8))">
-								<xsl:value-of select="(number((number(substring(following::programme[1]/@start,9,2))*60)+number(substring(following::programme[1]/@start,11,2)))) - 1440"/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="number((number(substring(following::programme[1]/@start,9,2))*60)+number(substring(following::programme[1]/@start,11,2)))"/>
-							</xsl:otherwise>
-						</xsl:choose>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:text>0</xsl:text>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-		<xsl:variable name="Length">
-			<xsl:choose>
-				<xsl:when test="@stop">
-					<xsl:choose>
-						<xsl:when test="((number(substring(@stop,9,2))*60)+number(substring(@stop,11,2))) > ((number(substring(@start,9,2))*60)+number(substring(@start,11,2)))">
-							<xsl:value-of select="(((number(substring(@stop,9,2))*60)+number(substring(@stop,11,2)))-((number(substring(@start,9,2))*60)+number(substring(@start,11,2))))"/>
-						</xsl:when>
-						<xsl:otherwise> <!--otherwise it must be concluding tomorrow, so the result will be negative. Add the number of minutes in a day. -->
-							<xsl:value-of select="(((number(substring(@stop,9,2))*60)+number(substring(@stop,11,2)))-((number(substring(@start,9,2))*60)+number(substring(@start,11,2)))) + 1440"/>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="$StopDisplayCode - $StartTime"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-		<xsl:variable name="StopTime" select="$StartTime+$Length"/>
-		<xsl:variable name="RatingRounded">
-			<xsl:choose>
-				<xsl:when test="contains(substring-before(star-rating,'/'),'.')">
-					<xsl:value-of select="number(substring-before(substring-before(star-rating,'/'),'.'))"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="number(substring-before(star-rating,'/'))"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-
-		<xsl:if test="position()=1 and number($StartTime) &gt; number($StartDisplayCode)"><td class="empty" colspan="{number($StartTime)-number($StartDisplayCode)}"></td></xsl:if>
-		<td>
-			<xsl:choose>
-				<xsl:when test="$OnClick='IMDB'">
-					<xsl:attribute name="onclick">
-						<xsl:text>window.open('http://www.imdb.com/find?q=</xsl:text>
-							<xsl:call-template name="replace">
-								<xsl:with-param name="string">
-								<xsl:call-template name="replace">
-									<xsl:with-param name="string">
-										<xsl:call-template name="replace">
-											<xsl:with-param name="string">
-												<xsl:call-template name="fixquotes">
-												<xsl:with-param name="string" select="translate(title,' ','+')" />
-												</xsl:call-template>
-											</xsl:with-param>
-											<xsl:with-param name="pattern" select="'&amp;'"/>
-											<xsl:with-param name="replacement" select="'%26'"/>
-										</xsl:call-template>
-									</xsl:with-param>
-									<xsl:with-param name="pattern" select="'='"/>
-									<xsl:with-param name="replacement" select="'%3d'"/>
-									</xsl:call-template>
-								</xsl:with-param>
-								<xsl:with-param name="pattern" select="'?'"/>
-								<xsl:with-param name="replacement" select="'%3f'"/>
-							</xsl:call-template>
-						<xsl:text>')</xsl:text>
-					</xsl:attribute>
-				</xsl:when>
-				<xsl:when test="$OnClick='URL'">
-					<xsl:if test="url">
-						<xsl:attribute name="onclick">
-							<xsl:text>window.open('</xsl:text><xsl:value-of select="url"/><xsl:text>')</xsl:text>
-						</xsl:attribute>
-					</xsl:if>
-				</xsl:when>
-			</xsl:choose>
- 
-
-		<xsl:choose>
-			<xsl:when test="number($StartTime) &gt;= number($StartDisplayCode) and $StopTime &lt;= $StopDisplayCode">
-				<!-- Program starts during and concludes during display window. Putting first since most likely.-->
-				<xsl:attribute name="colspan"><xsl:value-of select="$Length"/></xsl:attribute>
-			</xsl:when>
-			<xsl:when test="number($StartTime) &lt; number($StartDisplayCode) and $StopTime &lt;= $StopDisplayCode">
-				<!-- Program starts before and concludes during display window-->
-				<xsl:attribute name="colspan"><xsl:value-of select="(($Length - ($StartDisplayCode - $StartTime)))"/></xsl:attribute>
-			</xsl:when>
-			<xsl:when test="$StartTime &gt;= $StartDisplayCode and $StopTime &gt; $StopDisplayCode">
-				<!-- Program starts during and concludes after display window -->
-				<xsl:attribute name="colspan"><xsl:value-of select="(($Length - ($StopTime - $StopDisplayCode)))"/></xsl:attribute>
-			</xsl:when>
-			<xsl:when test="$StartTime &lt; $StartDisplayCode and $StopTime &gt; $StopDisplayCode">
-				<!-- Program starts before and concludes after display window. Least likely. -->
-				<xsl:attribute name="colspan"><xsl:value-of select="(($Length - ($StopTime - $StopDisplayCode) - ($StartDisplayCode - $StartTime)))"/></xsl:attribute>
-			</xsl:when>
-			</xsl:choose>
-					<xsl:attribute name="class">
-						<xsl:if test="$Categories">
-							<xsl:value-of select="substring(episode-num[@system='dd_progid'],1,2)"/><xsl:text> </xsl:text>
-							<xsl:for-each select="category">
-								<xsl:value-of select="translate(.,' ','_')" /><xsl:text> </xsl:text>
-							</xsl:for-each>
-							<xsl:if test="$Grabber='tv_grab_de' and string(number(category))!='NaN'">
-								MV
-							</xsl:if>
-							<xsl:if test="$Length &gt; 69">
-								Longshow
-							</xsl:if>
-						</xsl:if>
-						<xsl:if test="($Length &gt; 69) and (number($RatingRounded) &gt;= number($HighlightMovies))">
-							Goodmovie
-						</xsl:if> 
-						<xsl:if test="$HighlightClickable and ($OnClick='IMDB' or ($OnClick='URL' and url))">
-							Clickable
-						</xsl:if>
-						<xsl:if test="$HighlightNew and string-length(date) = 8">
-							<xsl:if test="(substring(date,1,4)=$CurrentYear) and (substring(date,5,2)=$CurrentMonth) and (substring(date,7,2)=$CurrentDay)">
-								Newshow
-							</xsl:if>
-						</xsl:if>
-					</xsl:attribute>
-					<xsl:if test="$DescriptionPopups">
-						<xsl:attribute name="title">
-							<xsl:text>header=[</xsl:text>
-							<xsl:value-of select="title" />
-							<xsl:text>] body=[</xsl:text>
-							<xsl:if test="$PopupTimes or ($PopupRating and rating) or ($PopupSubtitle and sub-title) or ($PopupDescription and desc) or ($PopupDate and date) or ($PopupCategories and category) or ($PopupStarRating and star-rating)">
-							<xsl:if test="$PopupTimes">
-								&lt;span class="popuptimes"&gt;
-								<xsl:value-of select="number(substring(@start,9,2))"/>:<xsl:value-of select="substring(@start,11,2)"/>-<xsl:choose><xsl:when test="@stop"><xsl:value-of select="number(substring(@stop,9,2))"/>:<xsl:value-of select="substring(@stop,11,2)"/></xsl:when><xsl:otherwise>???</xsl:otherwise></xsl:choose>
-								&lt;/span&gt;
-							</xsl:if>
-							<xsl:if test="$PopupRating">
-								&lt;span class="popuprating"&gt;<xsl:value-of select="rating/value" />&lt;/span&gt;
-							</xsl:if>
-							<xsl:if test="($PopupTimes or ($PopupRating and rating)) and (($PopupSubtitle and sub-title) or ($PopupDescription and desc))">
-								&lt;hr class="popuphr1"/&gt;
-							</xsl:if>
-							<xsl:if test="$PopupSubtitle and sub-title">
-								&lt;span class="subtitle"&gt;
-								<xsl:value-of select="sub-title"/>
-								&lt;/span&gt;
-								&lt;br /&gt;
-							</xsl:if>
-							<xsl:if test="$PopupDescription">
-								&lt;span class="popupdesc"&gt;
-								<xsl:choose>
-									<xsl:when test="$DescriptionBR">
-										<xsl:call-template name="lf2br"><xsl:with-param name="StringToTransform" select="desc"/></xsl:call-template>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of select="desc"/>
-									</xsl:otherwise>
-								</xsl:choose>
-								&lt;/span&gt;
-							</xsl:if>
-							<xsl:if test="$PopupDate and date">
-								<xsl:if test="$PopupTimes or ($PopupRating and rating) or ($PopupSubtitle and sub-title) or ($PopupDescription and desc)">&lt;hr class="popuphr2"/&gt;</xsl:if>
-								&lt;span class="popupdate"&gt;
-								<xsl:choose>
-									<xsl:when test="string-length(date) = 8">
-										<xsl:choose>
-											<xsl:when test="$DayFirst">
-												<xsl:value-of select="concat(substring(date,7,2),'/',substring(date,5,2),'/',substring(date,1,4))" />
-											</xsl:when>
-											<xsl:otherwise>
-												<xsl:value-of select="concat(substring(date,5,2),'/',substring(date,7,2),'/',substring(date,1,4))" />
-											</xsl:otherwise>
-										</xsl:choose>
-									</xsl:when>
-									<xsl:when test="string-length(date) = 4">
-										<xsl:value-of select="date" />
-									</xsl:when>
-								</xsl:choose>
-								&lt;/span&gt;
-
-							</xsl:if>
-							<xsl:if test="$PopupDate and $Grabber='tv_grab_de' and string(number(category))!='NaN'">
-								<xsl:if test="$PopupTimes or ($PopupRating and rating) or ($PopupSubtitle and sub-title) or ($PopupDescription and desc)">&lt;hr class="popuphr2"/&gt;</xsl:if>
-								&lt;span class="popupdate"&gt;
-										<xsl:value-of select="category" />
-								&lt;/span&gt;
-							</xsl:if>
-							<xsl:if test="$PopupCategories and category">
-								<xsl:if test="$PopupTimes or ($PopupRating and rating) or ($PopupSubtitle and sub-title) or ($PopupDescription and desc) or ($PopupDate and date)">&lt;hr class="popuphr3"/&gt;</xsl:if>
-								&lt;ul class="popupcategorylist">
-								<xsl:for-each select="category">
-									<xsl:if test="($Grabber='tv_grab_de' and string(number(.))='NaN') or $Grabber!='tv_grab_de'">
-									&lt;li><xsl:value-of select="." />&lt;/li>
-									</xsl:if>
-								</xsl:for-each>
-								&lt;/ul>
-							</xsl:if>
-							<xsl:if test="$PopupStarRating and star-rating">
-								<xsl:if test="$PopupTimes or ($PopupRating and rating) or ($PopupSubtitle and sub-title) or ($PopupDescription and desc) or ($PopupDate and date) or ($PopupCategories and category)">&lt;hr class="popuphr4"/&gt;</xsl:if>
-								<xsl:variable name="Stars">
-									<xsl:choose>
-									<xsl:when test="contains(substring-before(star-rating,'/'),'.')">
-										<xsl:value-of select="number(substring-before(substring-before(star-rating,'/'),'.'))"/>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of select="number(substring-before(star-rating,'/'))"/>
-									</xsl:otherwise>
-									</xsl:choose>
-								</xsl:variable>
-								<xsl:variable name="StarsHalf">
-									<xsl:choose>
-										<xsl:when test="contains(substring-before(star-rating,'/'),'.')">
-											<xsl:choose>
-												<xsl:when test="substring-after(substring-before(star-rating,'/'),'.') &lt; 5">
-													<xsl:text>0</xsl:text>
-												</xsl:when>
-												<xsl:otherwise>
-													<xsl:text>1</xsl:text>
-												</xsl:otherwise>
-											</xsl:choose>
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:text>0</xsl:text>
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:variable>
-								<xsl:variable name="StarsOutOf"><xsl:value-of select="number(substring-after(star-rating,'/'))"/></xsl:variable>
-								&lt;ul class="starlist"&gt;
-	 							<xsl:call-template name="starrating">
-									<xsl:with-param name="i">1</xsl:with-param>
-									<xsl:with-param name="count"><xsl:value-of select="$Stars"/></xsl:with-param>
-									<xsl:with-param name="type">filled</xsl:with-param>
-								</xsl:call-template>
-	 							<xsl:call-template name="starrating">
-									<xsl:with-param name="i">1</xsl:with-param>
-									<xsl:with-param name="count"><xsl:value-of select="$StarsHalf"/></xsl:with-param>
-									<xsl:with-param name="type">half</xsl:with-param>
-								</xsl:call-template>
-	 							<xsl:call-template name="starrating">
-									<xsl:with-param name="i">1</xsl:with-param>
-									<xsl:with-param name="count"><xsl:value-of select="$StarsOutOf - $StarsHalf - $Stars"/></xsl:with-param>
-									<xsl:with-param name="type">empty</xsl:with-param>
-								</xsl:call-template>
-								&lt;/ul&gt;
-							</xsl:if>
-							</xsl:if>
-							<xsl:text>] cssheader=[popupheader] cssbody=[popupbody] delay=[</xsl:text>
-							<xsl:value-of select="$PopupDelay"/>
-							<xsl:text>]</xsl:text>
-						</xsl:attribute>
-					</xsl:if>
-
-		<table class="internal"><tr>
-		<xsl:if test="number($StartTime) &lt; number($StartDisplayCode)">
-			<td class="extendleft"><span><xsl:value-of select="$ExtendLeftText" /></span></td>
-		</xsl:if>
-		<td class="program">
-			<xsl:value-of select="title" />
-			<xsl:if test="$PrintDates and string-length(date) = 4">
-				(<xsl:value-of select="date"/>)
-			</xsl:if>
-		</td>
-		<xsl:if test="number($StopTime) &gt; number($StopDisplayCode)">
-			<td class="extendright"><span><xsl:value-of select="$ExtendRightText" /></span></td>
-		</xsl:if>
-		</tr></table>
-
-		</td>
-		<xsl:if test="$FixGaps = 1 and position()!=last() and number($StopTime) &lt; number($NextStartTime)"><td class="empty" colspan="{number($NextStartTime)-number($StopTime)}"></td></xsl:if>
-		<xsl:if test="position()=last() and number($StopTime) &lt; number($StopDisplayCode)"><td class="empty" colspan="{number($StopDisplayCode)-number($StopTime)}"></td></xsl:if>
+		    <xsl:sort select="@start"/>
+		    <xsl:variable name="StartTime">
+		    	<xsl:choose>
+		    		<xsl:when test="number(substring($StartTimeString,1,8)) &lt; number(substring(@start,1,8))">  <!--it must be starting tomorrow ... Add the number of minutes in a day. -->
+		    			<xsl:value-of select="(number((number(substring(@start,9,2))*60)+number(substring(@start,11,2)))) + 1440"/>
+		    		</xsl:when>
+		    		<xsl:when test="number(substring($StartTimeString,1,8)) &gt; number(substring(@start,1,8))">  <!--it have started yesterday ... Subtract the number of minutes in a day. -->
+		    			<xsl:value-of select="(number((number(substring(@start,9,2))*60)+number(substring(@start,11,2)))) - 1440"/>
+		    		</xsl:when>
+		    		<xsl:otherwise> <!--otherwise it must be starting tomorrow ... Add the number of minutes in a day. -->
+		    			<xsl:value-of select="number((number(substring(@start,9,2))*60)+number(substring(@start,11,2)))"/>
+		    		</xsl:otherwise>
+		    	</xsl:choose>
+		    </xsl:variable>
+		    <xsl:variable name="NextStartTime">
+		    	<xsl:choose>
+		    		<xsl:when test="$FixGaps">
+		    				<xsl:choose>
+		    					<xsl:when test="number(substring($StartTimeString,1,8)) &lt; number(substring(following::programme[1]/@start,1,8))">
+		    						<xsl:value-of select="(number((number(substring(following::programme[1]/@start,9,2))*60)+number(substring(following::programme[1]/@start,11,2)))) + 1440"/>
+		    					</xsl:when>
+		    					<xsl:when test="number(substring($StartTimeString,1,8)) &gt; number(substring(following::programme[1]/@start,1,8))">
+		    						<xsl:value-of select="(number((number(substring(following::programme[1]/@start,9,2))*60)+number(substring(following::programme[1]/@start,11,2)))) - 1440"/>
+		    					</xsl:when>
+		    					<xsl:otherwise>
+		    						<xsl:value-of select="number((number(substring(following::programme[1]/@start,9,2))*60)+number(substring(following::programme[1]/@start,11,2)))"/>
+		    					</xsl:otherwise>
+		    				</xsl:choose>
+		    		</xsl:when>
+		    		<xsl:otherwise>
+		    			<xsl:text>0</xsl:text>
+		    		</xsl:otherwise>
+		    	</xsl:choose>
+		    </xsl:variable>
+		    <xsl:variable name="Length">
+		    	<xsl:choose>
+		    		<xsl:when test="@stop">
+		    			<xsl:choose>
+		    				<xsl:when test="((number(substring(@stop,9,2))*60)+number(substring(@stop,11,2))) > ((number(substring(@start,9,2))*60)+number(substring(@start,11,2)))">
+		    					<xsl:value-of select="(((number(substring(@stop,9,2))*60)+number(substring(@stop,11,2)))-((number(substring(@start,9,2))*60)+number(substring(@start,11,2))))"/>
+		    				</xsl:when>
+		    				<xsl:otherwise> <!--otherwise it must be concluding tomorrow, so the result will be negative. Add the number of minutes in a day. -->
+		    					<xsl:value-of select="(((number(substring(@stop,9,2))*60)+number(substring(@stop,11,2)))-((number(substring(@start,9,2))*60)+number(substring(@start,11,2)))) + 1440"/>
+		    				</xsl:otherwise>
+		    			</xsl:choose>
+		    		</xsl:when>
+		    		<xsl:otherwise>
+		    			<xsl:value-of select="$StopDisplayCode - $StartTime"/>
+		    		</xsl:otherwise>
+		    	</xsl:choose>
+		    </xsl:variable>
+		    <xsl:variable name="StopTime" select="$StartTime+$Length"/>
+		    <xsl:variable name="RatingRounded">
+		    	<xsl:choose>
+		    		<xsl:when test="contains(substring-before(star-rating,'/'),'.')">
+		    			<xsl:value-of select="number(substring-before(substring-before(star-rating,'/'),'.'))"/>
+		    		</xsl:when>
+		    		<xsl:otherwise>
+		    			<xsl:value-of select="number(substring-before(star-rating,'/'))"/>
+		    		</xsl:otherwise>
+		    	</xsl:choose>
+		    </xsl:variable>
+    
+		    <xsl:if test="position()=1 and number($StartTime) &gt; number($StartDisplayCode)"><td class="empty" colspan="{number($StartTime)-number($StartDisplayCode)}"></td></xsl:if>
+		    <td>
+		    	<xsl:choose>
+		    		<xsl:when test="$OnClick='IMDB'">
+		    			<xsl:attribute name="onclick">
+		    				<xsl:text>window.open('http://www.imdb.com/find?q=</xsl:text>
+		    					<xsl:call-template name="replace">
+		    						<xsl:with-param name="string">
+		    						<xsl:call-template name="replace">
+		    							<xsl:with-param name="string">
+		    								<xsl:call-template name="replace">
+		    									<xsl:with-param name="string">
+		    										<xsl:call-template name="fixquotes">
+		    										<xsl:with-param name="string" select="translate(title,' ','+')" />
+		    										</xsl:call-template>
+		    									</xsl:with-param>
+		    									<xsl:with-param name="pattern" select="'&amp;'"/>
+		    									<xsl:with-param name="replacement" select="'%26'"/>
+		    								</xsl:call-template>
+		    							</xsl:with-param>
+		    							<xsl:with-param name="pattern" select="'='"/>
+		    							<xsl:with-param name="replacement" select="'%3d'"/>
+		    							</xsl:call-template>
+		    						</xsl:with-param>
+		    						<xsl:with-param name="pattern" select="'?'"/>
+		    						<xsl:with-param name="replacement" select="'%3f'"/>
+		    					</xsl:call-template>
+		    				<xsl:text>')</xsl:text>
+		    			</xsl:attribute>
+		    		</xsl:when>
+		    		<xsl:when test="$OnClick='URL'">
+		    			<xsl:if test="url">
+		    				<xsl:attribute name="onclick">
+		    					<xsl:text>window.open('</xsl:text><xsl:value-of select="url"/><xsl:text>')</xsl:text>
+		    				</xsl:attribute>
+		    			</xsl:if>
+		    		</xsl:when>
+		    	</xsl:choose>
+     
+    
+		    <xsl:choose>
+		    	<xsl:when test="number($StartTime) &gt;= number($StartDisplayCode) and $StopTime &lt;= $StopDisplayCode">
+		    		<!-- Program starts during and concludes during display window. Putting first since most likely.-->
+		    		<xsl:attribute name="colspan"><xsl:value-of select="$Length"/></xsl:attribute>
+		    	</xsl:when>
+		    	<xsl:when test="number($StartTime) &lt; number($StartDisplayCode) and $StopTime &lt;= $StopDisplayCode">
+		    		<!-- Program starts before and concludes during display window-->
+		    		<xsl:attribute name="colspan"><xsl:value-of select="(($Length - ($StartDisplayCode - $StartTime)))"/></xsl:attribute>
+		    	</xsl:when>
+		    	<xsl:when test="$StartTime &gt;= $StartDisplayCode and $StopTime &gt; $StopDisplayCode">
+		    		<!-- Program starts during and concludes after display window -->
+		    		<xsl:attribute name="colspan"><xsl:value-of select="(($Length - ($StopTime - $StopDisplayCode)))"/></xsl:attribute>
+		    	</xsl:when>
+		    	<xsl:when test="$StartTime &lt; $StartDisplayCode and $StopTime &gt; $StopDisplayCode">
+		    		<!-- Program starts before and concludes after display window. Least likely. -->
+		    		<xsl:attribute name="colspan"><xsl:value-of select="(($Length - ($StopTime - $StopDisplayCode) - ($StartDisplayCode - $StartTime)))"/></xsl:attribute>
+		    	</xsl:when>
+		    	</xsl:choose>
+		    			<xsl:attribute name="class">
+		    				<xsl:if test="$Categories">
+		    					<xsl:value-of select="substring(episode-num[@system='dd_progid'],1,2)"/><xsl:text> </xsl:text>
+		    					<xsl:for-each select="category">
+		    						<xsl:value-of select="translate(.,' ','_')" /><xsl:text> </xsl:text>
+		    					</xsl:for-each>
+		    					<xsl:if test="$Grabber='tv_grab_de' and string(number(category))!='NaN'">
+		    						MV
+		    					</xsl:if>
+		    					<xsl:if test="$Length &gt; 69">
+		    						Longshow
+		    					</xsl:if>
+		    				</xsl:if>
+		    				<xsl:if test="($Length &gt; 69) and (number($RatingRounded) &gt;= number($HighlightMovies))">
+		    					Goodmovie
+		    				</xsl:if> 
+		    				<xsl:if test="$HighlightClickable and ($OnClick='IMDB' or ($OnClick='URL' and url))">
+		    					Clickable
+		    				</xsl:if>
+		    				<xsl:if test="$HighlightNew and string-length(date) = 8">
+		    					<xsl:if test="(substring(date,1,4)=$CurrentYear) and (substring(date,5,2)=$CurrentMonth) and (substring(date,7,2)=$CurrentDay)">
+		    						Newshow
+		    					</xsl:if>
+		    				</xsl:if>
+		    			</xsl:attribute>
+		    			<xsl:if test="$DescriptionPopups">
+		    				<xsl:attribute name="title">
+		    					<xsl:text>header=[</xsl:text>
+		    					<xsl:value-of select="title" />
+		    					<xsl:text>] body=[</xsl:text>
+		    					<xsl:if test="$PopupTimes or ($PopupRating and rating) or ($PopupSubtitle and sub-title) or ($PopupDescription and desc) or ($PopupDate and date) or ($PopupCategories and category) or ($PopupStarRating and star-rating)">
+		    					<xsl:if test="$PopupTimes">
+		    						&lt;span class="popuptimes"&gt;
+		    						<xsl:value-of select="number(substring(@start,9,2))"/>:<xsl:value-of select="substring(@start,11,2)"/>-<xsl:choose><xsl:when test="@stop"><xsl:value-of select="number(substring(@stop,9,2))"/>:<xsl:value-of select="substring(@stop,11,2)"/></xsl:when><xsl:otherwise>???</xsl:otherwise></xsl:choose>
+		    						&lt;/span&gt;
+		    					</xsl:if>
+		    					<xsl:if test="$PopupRating">
+		    						&lt;span class="popuprating"&gt;<xsl:value-of select="rating/value" />&lt;/span&gt;
+		    					</xsl:if>
+		    					<xsl:if test="($PopupTimes or ($PopupRating and rating)) and (($PopupSubtitle and sub-title) or ($PopupDescription and desc))">
+		    						&lt;hr class="popuphr1"/&gt;
+		    					</xsl:if>
+		    					<xsl:if test="$PopupSubtitle and sub-title">
+		    						&lt;span class="subtitle"&gt;
+		    						<xsl:value-of select="sub-title"/>
+		    						&lt;/span&gt;
+		    						&lt;br /&gt;
+		    					</xsl:if>
+		    					<xsl:if test="$PopupDescription">
+		    						&lt;span class="popupdesc"&gt;
+		    						<xsl:choose>
+		    							<xsl:when test="$DescriptionBR">
+		    								<xsl:call-template name="lf2br"><xsl:with-param name="StringToTransform" select="desc"/></xsl:call-template>
+		    							</xsl:when>
+		    							<xsl:otherwise>
+		    								<xsl:value-of select="desc"/>
+		    							</xsl:otherwise>
+		    						</xsl:choose>
+		    						&lt;/span&gt;
+		    					</xsl:if>
+		    					<xsl:if test="$PopupDate and date">
+		    						<xsl:if test="$PopupTimes or ($PopupRating and rating) or ($PopupSubtitle and sub-title) or ($PopupDescription and desc)">&lt;hr class="popuphr2"/&gt;</xsl:if>
+		    						&lt;span class="popupdate"&gt;
+		    						<xsl:choose>
+		    							<xsl:when test="string-length(date) = 8">
+		    								<xsl:choose>
+		    									<xsl:when test="$DayFirst">
+		    										<xsl:value-of select="concat(substring(date,7,2),'/',substring(date,5,2),'/',substring(date,1,4))" />
+		    									</xsl:when>
+		    									<xsl:otherwise>
+		    										<xsl:value-of select="concat(substring(date,5,2),'/',substring(date,7,2),'/',substring(date,1,4))" />
+		    									</xsl:otherwise>
+		    								</xsl:choose>
+		    							</xsl:when>
+		    							<xsl:when test="string-length(date) = 4">
+		    								<xsl:value-of select="date" />
+		    							</xsl:when>
+		    						</xsl:choose>
+		    						&lt;/span&gt;
+    
+		    					</xsl:if>
+		    					<xsl:if test="$PopupDate and $Grabber='tv_grab_de' and string(number(category))!='NaN'">
+		    						<xsl:if test="$PopupTimes or ($PopupRating and rating) or ($PopupSubtitle and sub-title) or ($PopupDescription and desc)">&lt;hr class="popuphr2"/&gt;</xsl:if>
+		    						&lt;span class="popupdate"&gt;
+		    								<xsl:value-of select="category" />
+		    						&lt;/span&gt;
+		    					</xsl:if>
+		    					<xsl:if test="$PopupCategories and category">
+		    						<xsl:if test="$PopupTimes or ($PopupRating and rating) or ($PopupSubtitle and sub-title) or ($PopupDescription and desc) or ($PopupDate and date)">&lt;hr class="popuphr3"/&gt;</xsl:if>
+		    						&lt;ul class="popupcategorylist">
+		    						<xsl:for-each select="category">
+		    							<xsl:if test="($Grabber='tv_grab_de' and string(number(.))='NaN') or $Grabber!='tv_grab_de'">
+		    							&lt;li><xsl:value-of select="." />&lt;/li>
+		    							</xsl:if>
+		    						</xsl:for-each>
+		    						&lt;/ul>
+		    					</xsl:if>
+		    					<xsl:if test="$PopupStarRating and star-rating">
+		    						<xsl:if test="$PopupTimes or ($PopupRating and rating) or ($PopupSubtitle and sub-title) or ($PopupDescription and desc) or ($PopupDate and date) or ($PopupCategories and category)">&lt;hr class="popuphr4"/&gt;</xsl:if>
+		    						<xsl:variable name="Stars">
+		    							<xsl:choose>
+		    							<xsl:when test="contains(substring-before(star-rating,'/'),'.')">
+		    								<xsl:value-of select="number(substring-before(substring-before(star-rating,'/'),'.'))"/>
+		    							</xsl:when>
+		    							<xsl:otherwise>
+		    								<xsl:value-of select="number(substring-before(star-rating,'/'))"/>
+		    							</xsl:otherwise>
+		    							</xsl:choose>
+		    						</xsl:variable>
+		    						<xsl:variable name="StarsHalf">
+		    							<xsl:choose>
+		    								<xsl:when test="contains(substring-before(star-rating,'/'),'.')">
+		    									<xsl:choose>
+		    										<xsl:when test="substring-after(substring-before(star-rating,'/'),'.') &lt; 5">
+		    											<xsl:text>0</xsl:text>
+		    										</xsl:when>
+		    										<xsl:otherwise>
+		    											<xsl:text>1</xsl:text>
+		    										</xsl:otherwise>
+		    									</xsl:choose>
+		    								</xsl:when>
+		    								<xsl:otherwise>
+		    									<xsl:text>0</xsl:text>
+		    								</xsl:otherwise>
+		    							</xsl:choose>
+		    						</xsl:variable>
+		    						<xsl:variable name="StarsOutOf"><xsl:value-of select="number(substring-after(star-rating,'/'))"/></xsl:variable>
+		    						&lt;ul class="starlist"&gt;
+	 	    						<xsl:call-template name="starrating">
+		    							<xsl:with-param name="i">1</xsl:with-param>
+		    							<xsl:with-param name="count"><xsl:value-of select="$Stars"/></xsl:with-param>
+		    							<xsl:with-param name="type">filled</xsl:with-param>
+		    						</xsl:call-template>
+	 	    						<xsl:call-template name="starrating">
+		    							<xsl:with-param name="i">1</xsl:with-param>
+		    							<xsl:with-param name="count"><xsl:value-of select="$StarsHalf"/></xsl:with-param>
+		    							<xsl:with-param name="type">half</xsl:with-param>
+		    						</xsl:call-template>
+	 	    						<xsl:call-template name="starrating">
+		    							<xsl:with-param name="i">1</xsl:with-param>
+		    							<xsl:with-param name="count"><xsl:value-of select="$StarsOutOf - $StarsHalf - $Stars"/></xsl:with-param>
+		    							<xsl:with-param name="type">empty</xsl:with-param>
+		    						</xsl:call-template>
+		    						&lt;/ul&gt;
+		    					</xsl:if>
+		    					</xsl:if>
+		    					<xsl:text>] cssheader=[popupheader] cssbody=[popupbody] delay=[</xsl:text>
+		    					<xsl:value-of select="$PopupDelay"/>
+		    					<xsl:text>]</xsl:text>
+		    				</xsl:attribute>
+		    			</xsl:if>
+    
+		    <table class="internal"><tr>
+		    <xsl:if test="number($StartTime) &lt; number($StartDisplayCode)">
+		    	<td class="extendleft"><span><xsl:value-of select="$ExtendLeftText" /></span></td>
+		    </xsl:if>
+		    <td class="program">
+		    	<xsl:value-of select="title" />
+		    	<xsl:if test="$PrintDates and string-length(date) = 4">
+		    		(<xsl:value-of select="date"/>)
+		    	</xsl:if>
+		    </td>
+		    <xsl:if test="number($StopTime) &gt; number($StopDisplayCode)">
+		    	<td class="extendright"><span><xsl:value-of select="$ExtendRightText" /></span></td>
+		    </xsl:if>
+		    </tr></table>
+    
+		    </td>
+		    <xsl:if test="$FixGaps = 1 and position()!=last() and number($StopTime) &lt; number($NextStartTime)"><td class="empty" colspan="{number($NextStartTime)-number($StopTime)}"></td></xsl:if>
+		    <xsl:if test="position()=last() and number($StopTime) &lt; number($StopDisplayCode)"><td class="empty" colspan="{number($StopDisplayCode)-number($StopTime)}"></td></xsl:if>
 		</xsl:for-each>
 		<!--check for a row with no programs and fill it in with an empty row-->
 		<xsl:if test="not($theseprogrammes)"><td class="empty" colspan="{number($StopDisplayCode)-number($StartDisplayCode)}"></td></xsl:if>
