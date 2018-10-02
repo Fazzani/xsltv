@@ -345,6 +345,7 @@ hr {
 
 .leftchanneltable .leftlogocell img {
     border: 0px;
+    max-height: 50px;
 }
 
 .leftchanneltable .leftnumbercell {
