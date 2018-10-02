@@ -11,19 +11,15 @@ $(function () {
 
     var processor = new XSLTProcessor();
     var sortstring;
-    var xmlfileneeded = '';
-    var xmlfileloaded;
 
     var currenttime = new Date();
 
     $xmltv_list.change(function () {
-        console.log($xmltv_list.val());
         loadXSL($xmltv_list.val());
     });
 
     var {
         offsetminutes,
-        dailyfiles,
         hours,
         fixgaps,
         popupdelay,
@@ -124,7 +120,6 @@ $(function () {
         if (fileMonth < 10) {
             fileMonth = "0" + fileMonth;
         }
-
 
         intHours = startDate.getHours();
         intMinutes = startDate.getMinutes();
@@ -244,8 +239,6 @@ function initFromCookie() {
     var dayfirst = cookie ? cookie : false;
     cookie = Cookies.get("xsltvcategorycolors");
     var categorycolors = cookie ? cookie : true;
-    cookie = Cookies.get("xsltvdailyfiles");
-    var dailyfiles = cookie ? cookie : false;
     cookie = Cookies.get("xsltvtwelvehour");
     var twelvehour = cookie ? cookie : false;
     cookie = Cookies.get("xsltvloadonclick");
@@ -268,7 +261,6 @@ function initFromCookie() {
     var showbarclock = cookie ? cookie : false;
     return {
         offsetminutes,
-        dailyfiles,
         hours,
         fixgaps,
         popupdelay,
