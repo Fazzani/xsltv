@@ -21,7 +21,32 @@ $(function () {
         loadXSL($xmltv_list.val());
     });
 
-    var { offsetminutes, dailyfiles, hours, fixgaps, popupdelay, timebarfrequency, channelpopups, descriptionpopups, absoluteicons, popuptimes, popuprating, popupsubtitle, popupdescription, popupdate, popupcategories, popupstarrating, grabber, highlightclickable, highlightmovies, printdates, dayfirst, categorycolors, highlightnew, loadonclick } = initFromCookie();
+    var {
+        offsetminutes,
+        dailyfiles,
+        hours,
+        fixgaps,
+        popupdelay,
+        timebarfrequency,
+        channelpopups,
+        descriptionpopups,
+        absoluteicons,
+        popuptimes,
+        popuprating,
+        popupsubtitle,
+        popupdescription,
+        popupdate,
+        popupcategories,
+        popupstarrating,
+        grabber,
+        highlightclickable,
+        highlightmovies,
+        printdates,
+        dayfirst,
+        categorycolors,
+        highlightnew,
+        loadonclick
+    } = initFromCookie();
 
     var myDate = new Date(currenttime);
     myDate.setMinutes(myDate.getMinutes() + (60 - offsetminutes));
@@ -32,8 +57,8 @@ $(function () {
         $('#loading').css('display', 'block');
         $('#loading').html("index.xsl");
         fetch("index.xsl", {
-            method: 'GET'
-        }).then(response => response.text())
+                method: 'GET'
+            }).then(response => response.text())
             .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
             .then(x => {
                 xsl = x;
@@ -58,8 +83,8 @@ $(function () {
             if (window.XMLHttpRequest && window.XSLTProcessor) {
 
                 fetch(xmlfileneeded, {
-                    method: 'GET'
-                }).then(response => response.text())
+                        method: 'GET'
+                    }).then(response => response.text())
                     .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
                     .then(x => {
                         xml = x;
@@ -175,8 +200,11 @@ $(function () {
 
     window.Init = Init;
     $('#loading').css("display", "block");
-    // loadXSL($xmltv_list.val());
-
+    if ($xmltv_list.find('option').length > 1) {
+        let selected =$($xmltv_list.find('option')[1]);
+        selected.prop("selected", "selected");
+        loadXSL(selected.val());
+    }
 });
 
 function initFromCookie() {
@@ -238,5 +266,30 @@ function initFromCookie() {
     var showclock = cookie ? cookie : true;
     cookie = Cookies.get("xsltvshowbarclock");
     var showbarclock = cookie ? cookie : false;
-    return { offsetminutes, dailyfiles, hours, fixgaps, popupdelay, timebarfrequency, channelpopups, descriptionpopups, absoluteicons, popuptimes, popuprating, popupsubtitle, popupdescription, popupdate, popupcategories, popupstarrating, grabber, highlightclickable, highlightmovies, printdates, dayfirst, categorycolors, highlightnew, loadonclick };
+    return {
+        offsetminutes,
+        dailyfiles,
+        hours,
+        fixgaps,
+        popupdelay,
+        timebarfrequency,
+        channelpopups,
+        descriptionpopups,
+        absoluteicons,
+        popuptimes,
+        popuprating,
+        popupsubtitle,
+        popupdescription,
+        popupdate,
+        popupcategories,
+        popupstarrating,
+        grabber,
+        highlightclickable,
+        highlightmovies,
+        printdates,
+        dayfirst,
+        categorycolors,
+        highlightnew,
+        loadonclick
+    };
 }
