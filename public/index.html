@@ -3,7 +3,7 @@
 
 <head>
     <title>TV Listings</title>
-    <base href="/xsltv/public/">
+    <!-- <base href="/xsltv/public/"> -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <!--XSLTv is Copyright 2008 Eric Lofgren. See http://www.ericandchar.com/xsltvgrid/ -->
@@ -12,7 +12,12 @@
 </head>
 
 <body>
-    <nav class="navbar fixed-top navbar-dark bg-dark justify-content-between">
+    <span id="barclock">
+        <p class="date"></p>
+        <p class="time"></p>
+    </span>
+
+    <nav class="navbar fixed-bottom navbar-dark bg-dark justify-content-between">
         <form class="form-inline" id="xmltv_source">
             <select class="form-control mr-sm-2" id="xmlt_list">
                 <option selected>Select one xmltv file</option>
@@ -21,7 +26,6 @@
                 <option value="https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv">https://raw.githubusercontent.com/Fazzani/grab/master/ar_bein.xmltv</option>
             </select>
         </form>
-        <span id="barclock"></span>
     </nav>
 
     <section class="row-section">
@@ -29,12 +33,10 @@
             <div class="row">
                 <h2 class="text-center"><span>Xmltv viewer</span>Created with <i class="fa fa-heart"></i> from<a href="http://synker.ovh"> Synker.ovh</a></h2>
             </div>
-            <div class="col-md-10 offset-md-1 row-block">
-                <div class="row">
-                    <div id="tvframe"></div>
-                    <div id="loadingcontainer">
-                        <div id="loading">
-                        </div>
+            <div class="row">
+                <div id="tvframe"></div>
+                <div id="loadingcontainer">
+                    <div id="loading">
                     </div>
                 </div>
             </div>
@@ -48,4 +50,5 @@
     <script type="text/javascript" src="lang/english.js"></script>
     <script type="text/javascript" src="js/init.js"></script>
 </body>
+
 </html>

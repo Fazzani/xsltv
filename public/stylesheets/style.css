@@ -3,13 +3,11 @@
 
 body {
     margin: 0;
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     color: #212529;
-    background-color: #f7f7f7;
-    height:100vh;
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background-color: #191925 !important;
+    height: 100vh;
 }
 
 .navbar {
@@ -22,37 +20,38 @@ body {
     -ms-flex-pack: justify;
     justify-content: space-between;
     padding: 5px;
-    color:white;
+    color: white;
 }
+
 .row-section {
-    float: left;
-    margin-top: 50px;
+    margin-bottom: 50px;
+    background-color: #191925;
     width: 100%;
-    background: #42275a; /* fallback for old browsers */
-    background: -webkit-linear-gradient(to bottom, #734b6d, #42275a); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to bottom, #734b6d, #42275a); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
-    .row-section h2 {
-        float: left;
-        width: 100%;
-        color: #fff;
-        margin-bottom: 30px;
-        font-size: 14px;
-    }
 
-        .row-section h2 span {
-            font-family: 'Libre Baskerville', serif;
-            display: block;
-            font-size: 45px;
-            text-transform: none;
-            margin-bottom: 20px;
-            margin-top: 30px;
-            font-weight: 700;
-        }
+.row-section h2 {
+    float: left;
+    width: 100%;
+    color: #000;
+    margin-bottom: 30px;
+    font-size: 14px;
+}
 
-        .row-section h2 a {
-            color: #d2abce;
-        }
+.row-section h2 span {
+    font-family: 'Libre Baskerville', serif;
+    display: block;
+    font-size: 45px;
+    text-transform: none;
+    margin-bottom: 20px;
+    margin-top: 30px;
+    font-weight: 700;
+    text-shadow: 2px 2px #222136;
+}
+
+.row-section h2 a {
+    color: #d2abce;
+}
+
 .selector-for-some-widget {
     box-sizing: content-box;
 }
@@ -73,7 +72,12 @@ body {
     margin-left: auto;
     margin-right: auto;
     text-align: left;
-    border: 2px solid #f5f5f5;
+    box-shadow: -1px 0px 3px 0px #0000006b;
+}
+
+#listings tr {
+    border-bottom: 1px solid #231c1c;
+    box-shadow: -1px 0px 3px 0px #0000006b;
 }
 
 table.internal {
@@ -83,6 +87,7 @@ table.internal {
     margin: 0px;
     text-align: left;
     border: 0px;
+    height: 100%;
 }
 
 
@@ -96,9 +101,9 @@ td.extendleft {
     font-size: small;
 }
 
-    td.extendleft span {
-        display: none;
-    }
+td.extendleft span {
+    display: none;
+}
 
 td.extendright {
     margin: 0px;
@@ -111,9 +116,9 @@ td.extendright {
     background: #FFF url(../images/yahoonewprogrambg.gif) repeat-x 0 0;
 }
 
-    td.extendright span {
-        display: none;
-    }
+td.extendright span {
+    display: none;
+}
 
 td.program {
     text-align: left;
@@ -148,14 +153,14 @@ td {
     white-space: nowrap;
 }
 
-    td.extendright td.program {
-        padding: 0px;
-        border: 0px;
-    }
+td.extendright td.program {
+    padding: 0px;
+    border: 0px;
+}
 
-    td.empty {
-        background-image: url(../images/empty.gif);
-    }
+td.empty {
+    background-image: url(../images/empty.gif);
+}
 
 th {
     font-family: arial, sans-serif;
@@ -164,18 +169,17 @@ th {
     overflow: hidden;
 }
 
-    th.channel {
-        text-align: center;
-        padding: 0px;
-        overflow: hidden;
-        border: 1px solid #dcddcb;
-        background: #ececec url(../images/yahoochannelbg.gif) repeat-x 0 0;
-        color: #0BC6EF;
-        font-size: 8pt
-    }
+th.channel {
+    text-align: center;
+    padding: 0px;
+    overflow: hidden;
+    color: #0BC6EF;
+    background-color: #191925;
+    font-size: 8pt
+}
 
 tr.timebar {
-    background-color: #666;
+    background-color: #191925;
 }
 
 th.time {
@@ -213,9 +217,9 @@ th.topleftcorner {
     width: 120px;
 }
 
-    th.topleftcorner:hover {
-        background-image: url(../images/yahoonewearlier2.gif);
-    }
+th.topleftcorner:hover {
+    background-image: url(../images/yahoonewearlier2.gif);
+}
 
 th.toprightcorner {
     height: 22px;
@@ -237,23 +241,38 @@ th.toprightcorner {
     width: 40px;
 }
 
-    th.toprightcorner:hover {
-        background-image: url(../images/yahoonewlater2.gif);
-    }
+
 /*SPORTS*/
-.Sports_non-event td.program, .Sports_talk td.program, .Sports_event td.program, .sport td.program, .Sport td.program, .DEPORTES td.program, .SP td.program {
+.Sports_non-event td.program,
+.Sports_talk td.program,
+.Sports_event td.program,
+.sport td.program,
+.Sport td.program,
+.DEPORTES td.program,
+.SP td.program {
     background: transparent url(../images/yahoonewsportsbg.gif) repeat-x 0 0;
 }
+
 /*MOVIES*/
-.MV td.program, .film td.program, .Film td.program, .téléfilm td.program, .CINE td.program {
+.MV td.program,
+.film td.program,
+.Film td.program,
+.téléfilm td.program,
+.CINE td.program {
     background: transparent url(../images/yahoonewmoviebg.gif) repeat-x 0 0;
 }
+
 /*NEWS*/
-.News td.program, .information td.program, .Noticias td.program {
+.News td.program,
+.information td.program,
+.Noticias td.program {
     background: transparent url(../images/yahoonewnewsbg.gif) repeat-x 0 0;
 }
+
 /*CHILDREN*/
-.Children td.program, .INFANTILES td.program, .emission_jeunesse td.program {
+.Children td.program,
+.INFANTILES td.program,
+.emission_jeunesse td.program {
     background: transparent url(../images/yahoonewkidsbg.gif) repeat-x 0 0;
 }
 
@@ -279,29 +298,29 @@ hr {
     position: relative;
 }
 
-    .starlist li {
-        padding: 0px;
-        margin: 0px;
-        width: 15px;
-        height: 15px;
-        float: left;
-    }
+.starlist li {
+    padding: 0px;
+    margin: 0px;
+    width: 15px;
+    height: 15px;
+    float: left;
+}
 
-        .starlist li span {
-            display: none;
-        }
+.starlist li span {
+    display: none;
+}
 
-        .starlist li.starempty {
-            background-image: url(../images/starempty.gif);
-        }
+.starlist li.starempty {
+    background-image: url(../images/starempty.gif);
+}
 
-        .starlist li.starhalf {
-            background-image: url(../images/starhalf.gif);
-        }
+.starlist li.starhalf {
+    background-image: url(../images/starhalf.gif);
+}
 
-        .starlist li.starfilled {
-            background-image: url(../images/starfilled.gif);
-        }
+.starlist li.starfilled {
+    background-image: url(../images/starfilled.gif);
+}
 
 /*End Popup section*/
 
@@ -320,60 +339,57 @@ hr {
     height: 50px;
 }
 
-    .leftchanneltable .leftlogocell {
-        border: 0px;
-    }
+.leftchanneltable .leftlogocell {
+    border: 0px;
+}
 
-        .leftchanneltable .leftlogocell img {
-            border: 0px;
-        }
+.leftchanneltable .leftlogocell img {
+    border: 0px;
+}
 
-    .leftchanneltable .leftnumbercell {
-        display: none;
-    }
+.leftchanneltable .leftnumbercell {
+    display: none;
+}
 
-    .leftchanneltable .middlecell {
-        padding: 0px;
-        overflow: visible;
-        border: 0px;
-        text-align: left;
-    }
+.leftchanneltable .middlecell {
+    padding: 0px;
+    overflow: visible;
+    border: 0px;
+    text-align: left;
+}
 
-    .leftchanneltable .leftnumber {
-        font-size: 160%;
-        font-weight: bold;
-    }
+.leftchanneltable .leftnumber {
+    font-size: 160%;
+    font-weight: bold;
+}
 
-    .leftchanneltable .leftchannelbr {
-    }
+.leftchanneltable .leftnbsp {
+    display: none
+}
 
-    .leftchanneltable .leftnbsp {
-        display: none
-    }
+.leftchanneltable .channelname {
+    font-weight: bold;
+}
 
-    .leftchanneltable .channelname {
-        font-weight: bold;
-    }
+.leftchanneltable .rightchannelbr {
+    display: none;
+}
 
-    .leftchanneltable .rightchannelbr {
-        display: none;
-    }
+.leftchanneltable .rightnbsp {
+    display: none;
+}
 
-    .leftchanneltable .rightnbsp {
-        display: none;
-    }
+.leftchanneltable .rightnumber {
+    display: none;
+}
 
-    .leftchanneltable .rightnumber {
-        display: none;
-    }
+.leftchanneltable .rightlogocell {
+    display: none;
+}
 
-    .leftchanneltable .rightlogocell {
-        display: none;
-    }
-
-    .leftchanneltable .rightnumbercell {
-        display: none;
-    }
+.leftchanneltable .rightnumbercell {
+    display: none;
+}
 
 .rightchanneltable {
     table-layout: fixed;
@@ -385,62 +401,62 @@ hr {
     padding: 0px;
 }
 
-    .rightchanneltable .leftlogocell {
-        display: none;
-    }
+.rightchanneltable .leftlogocell {
+    display: none;
+}
 
-        .rightchanneltable .leftlogocell img {
-            display: none;
-        }
+.rightchanneltable .leftlogocell img {
+    display: none;
+}
 
-    .rightchanneltable .leftnumbercell {
-        width: 13px;
-        background-color: transparent;
-        padding: 0px;
-        overflow: visible;
-        border: 0px;
-        text-align: center;
-    }
+.rightchanneltable .leftnumbercell {
+    width: 13px;
+    background-color: transparent;
+    padding: 0px;
+    overflow: visible;
+    border: 0px;
+    text-align: center;
+}
 
-    .rightchanneltable .middlecell {
-        display: none;
-    }
+.rightchanneltable .middlecell {
+    display: none;
+}
 
-    .rightchanneltable .leftnumber {
-        display: none;
-    }
+.rightchanneltable .leftnumber {
+    display: none;
+}
 
-    .rightchanneltable .leftchannelbr {
-        display: none;
-    }
+.rightchanneltable .leftchannelbr {
+    display: none;
+}
 
-    .rightchanneltable .leftnbsp {
-        display: none
-    }
+.rightchanneltable .leftnbsp {
+    display: none
+}
 
-    .rightchanneltable .channelname {
-        display: none;
-    }
+.rightchanneltable .channelname {
+    display: none;
+}
 
-    .rightchanneltable .rightchannelbr {
-        display: none;
-    }
+.rightchanneltable .rightchannelbr {
+    display: none;
+}
 
-    .rightchanneltable .rightnbsp {
-        display: none;
-    }
+.rightchanneltable .rightnbsp {
+    display: none;
+}
 
-    .rightchanneltable .rightnumber {
-        display: none;
-    }
+.rightchanneltable .rightnumber {
+    display: none;
+}
 
-    .rightchanneltable .rightlogocell {
-        display: none;
-    }
+.rightchanneltable .rightlogocell {
+    display: none;
+}
 
-    .rightchanneltable .rightnumbercell {
-        display: none;
-    }
+.rightchanneltable .rightnumbercell {
+    display: none;
+}
 
 
 
@@ -477,17 +493,17 @@ tr.evenrow td.Goodmovie {
     background-color: #ff9;
 }
 
-    tr.evenrow td.Goodmovie table td {
-        background-color: #ff9;
-    }
+tr.evenrow td.Goodmovie table td {
+    background-color: #ff9;
+}
 
 tr.oddrow td.Goodmovie {
     background-color: #ff9;
 }
 
-    tr.oddrow td.Goodmovie table td {
-        background-color: #ff9;
-    }
+tr.oddrow td.Goodmovie table td {
+    background-color: #ff9;
+}
 
 td.program {
     cursor: pointer;
@@ -495,4 +511,37 @@ td.program {
 
 .Newshow {
     border: 2px solid #666;
+}
+
+#barclock {
+    position: fixed;
+    top: 55px;
+    right: 1px;
+    font-family: 'Share Tech Mono', monospace;
+    color: #ffffff;
+    text-align: center;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    color: #daf6ff;
+    text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+}
+
+#barclock .time {
+    letter-spacing: 0.05em;
+    font-size: 25px;
+}
+
+#barclock .date {
+    letter-spacing: 0.1em;
+    font-size: 20px;
+}
+
+.table-dark td,
+.table-dark th,
+.table-dark thead th {
+    border-color: #8daf2e !important;
+}
+
+.table-dark {
+    background-color: #0f121b !important;
 }
