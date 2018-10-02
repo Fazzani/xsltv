@@ -64,8 +64,8 @@
       <!-- These are for selecting the appropriate programmes -->
       <xsl:variable name="programmes" select="/tv/programme[((substring(@stop,1,12) &gt; $StartTimeString and substring(@stop,1,12) &lt;= $StopTimeString) or (substring(@start,1,12) &gt;= $StartTimeString and substring(@start,1,12) &lt; $StopTimeString) or (substring(@start,1,12) &lt;= $StartTimeString and substring(@stop,1,12) &gt;= $StopTimeString))]"/>
 
-      <table id="listings" class="container">
-
+      <table id="listings" class="container table-dark">
+ 
         <xsl:for-each select="/tv/channel">
           <xsl:sort select="display-name[3]" data-type="number"></xsl:sort>
 
