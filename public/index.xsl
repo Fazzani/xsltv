@@ -145,16 +145,16 @@
               </xsl:if>
               <table class="leftchanneltable">
                 <tr>
-                  <td class="leftlogocell">
                     <xsl:if test="string-length($iconname) &gt; 0">
+                  <td class="leftlogocell">
                       <img>
                         <xsl:attribute name="src">
                           <xsl:value-of select="icon/@src"/>
                         </xsl:attribute>
                         <xsl:attribute name="class">channelimage</xsl:attribute>
                       </img>
-                    </xsl:if>
                   </td>
+                    </xsl:if>
 
                   <td class="middlecell">
 
@@ -326,12 +326,10 @@
                     <xsl:value-of select="substring(episode-num[@system='dd_progid'],1,2)"/>
                     <xsl:text> </xsl:text>
                     <xsl:for-each select="category">
-                      <xsl:value-of select="translate(.,' ','_')" />
+                    <xsl:value-of select="translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')" />
                       <xsl:text> </xsl:text>
                     </xsl:for-each>
-                    <xsl:if test="$Grabber='tv_grab_de' and string(number(category))!='NaN'">
-                      MV
-                    </xsl:if>
+                   
                     <xsl:if test="$Length &gt; 69">
                       Longshow
                     </xsl:if>
@@ -546,16 +544,16 @@
               </xsl:if>
               <table class="rightchanneltable">
                 <tr>
-                  <td class="leftlogocell">
-                    <xsl:if test="string-length($iconname) &gt; 0">
-                      <img>
-                        <xsl:attribute name="src">
-                          <xsl:value-of select="icon/@src"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="class">channelimage</xsl:attribute>
-                      </img>
-                    </xsl:if>
-                  </td>
+                  <xsl:if test="string-length($iconname) &gt; 0">
+                    <td class="leftlogocell">
+                        <img>
+                          <xsl:attribute name="src">
+                            <xsl:value-of select="icon/@src"/>
+                          </xsl:attribute>
+                          <xsl:attribute name="class">channelimage</xsl:attribute>
+                        </img>
+                    </td>
+                  </xsl:if>
 
                   <td class="middlecell">
 

@@ -400,10 +400,23 @@ td.program {
     cursor: pointer;
 }
 
-.Newshow {
+td.movie,
+td.film,
+td.Newshow {
     border: 2px solid #666;
+    background-color: rgb(64, 17, 50) !important;
 }
 
+td[class*='foot'].Longshow,
+td[class*='fudbal'].Longshow,
+td[class*='match'].Longshow,
+td[class*='tennis'].Longshow,
+td[class*='league'].Longshow,
+td[class*='copa'].Longshow,
+td[class*='cup'].Longshow {  
+    border: 2px solid #666;
+    background-color: rgb(20, 54, 5) !important
+}
 
 .table-dark th,
 .table-dark thead th {

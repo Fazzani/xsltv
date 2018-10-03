@@ -230,34 +230,23 @@ function initFromCookie() {
     var absoluteicons = cookie ? cookie : false;
     cookie = Cookies.get("xsltvoffsetminutes");
     var offsetminutes = cookie ? Number(cookie) : 60;
-    cookie = Cookies.get("xsltvrefreshonthe");
-    var refreshonthe = cookie ? Number(cookie) : -1;
     cookie = Cookies.get("xsltvgrabber");
     var grabber = cookie ? cookie : "tv_grab_na_dd";
     cookie = Cookies.get("xsltvdayfirst");
     var dayfirst = cookie ? cookie : false;
     cookie = Cookies.get("xsltvcategorycolors");
     var categorycolors = cookie ? cookie : true;
-    cookie = Cookies.get("xsltvtwelvehour");
-    var twelvehour = cookie ? cookie : false;
     cookie = Cookies.get("xsltvloadonclick");
     var loadonclick = cookie ? cookie : 'IMDB';
-    cookie = Cookies.get("xsltvlanguage");
-    var language = cookie ? cookie : 'english';
     cookie = Cookies.get("xsltvhighlightclickable");
-    var highlightclickable = cookie ? cookie : false;
-    cookie = Cookies.get("xsltvhighlightmovies");
-    var highlightmovies = cookie ? Number(cookie) : 10;
+    var highlightclickable = cookie ? cookie : true;
+    var highlightmovies = 3,
     cookie = Cookies.get("xsltvhighlightnew");
-    var highlightnew = cookie ? cookie : false;
+    var highlightnew = cookie ? cookie : true;
     cookie = Cookies.get("xsltvprintdates");
     var printdates = cookie ? cookie : true;
     cookie = Cookies.get("xsltvtimebarfrequency");
     var timebarfrequency = cookie ? cookie : -1;
-    cookie = Cookies.get("xsltvshowclock");
-    var showclock = cookie ? cookie : true;
-    cookie = Cookies.get("xsltvshowbarclock");
-    var showbarclock = cookie ? cookie : false;
     return {
         offsetminutes,
         hours,
