@@ -36,7 +36,6 @@
   <xsl:param name="PopupStarRating"/>
   <xsl:param name="Categories"/>
   <!--<xsl:param name="AbsoluteIcons"/>-->
-  <xsl:param name="Grabber"/>
   <xsl:param name="DayFirst"/>
   <xsl:param name="EarlierText"/>
   <xsl:param name="LaterText"/>
@@ -409,19 +408,12 @@
                         &lt;/span&gt;
 
                       </xsl:if>
-                      <xsl:if test="$PopupDate and $Grabber='tv_grab_de' and string(number(category))!='NaN'">
-                        <xsl:if test="$PopupTimes or ($PopupRating and rating) or ($PopupSubtitle and sub-title) or ($PopupDescription and desc)">&lt;hr class="popuphr2"/&gt;</xsl:if>
-                        &lt;span class="popupdate"&gt;
-                        <xsl:value-of select="category" />
-                        &lt;/span&gt;
-                      </xsl:if>
+                      
                       <xsl:if test="$PopupCategories and category">
                         <xsl:if test="$PopupTimes or ($PopupRating and rating) or ($PopupSubtitle and sub-title) or ($PopupDescription and desc) or ($PopupDate and date)">&lt;hr class="popuphr3"/&gt;</xsl:if>
                         &lt;ul class="popupcategorylist">
                         <xsl:for-each select="category">
-                          <xsl:if test="($Grabber='tv_grab_de' and string(number(.))='NaN') or $Grabber!='tv_grab_de'">
                             &lt;li><xsl:value-of select="." />&lt;/li>
-                          </xsl:if>
                         </xsl:for-each>
                         &lt;/ul>
                       </xsl:if>

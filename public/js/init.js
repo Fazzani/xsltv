@@ -33,7 +33,6 @@ $(function () {
         popupdate,
         popupcategories,
         popupstarrating,
-        grabber,
         highlightclickable,
         highlightmovies,
         printdates,
@@ -173,7 +172,6 @@ $(function () {
         processor.setParameter(null, "PopupDate", popupdate.toString() === "true" ? 1 : 0);
         processor.setParameter(null, "PopupCategories", popupcategories.toString() === "true" ? 1 : 0);
         processor.setParameter(null, "PopupStarRating", popupstarrating.toString() === "true" ? 1 : 0);
-        processor.setParameter(null, "Grabber", grabber);
         processor.setParameter(null, "HighlightClickable", highlightclickable.toString() === "true" ? 1 : 0);
         processor.setParameter(null, "HighlightMovies", highlightmovies);
         processor.setParameter(null, "PrintDates", printdates.toString() === "true" ? 1 : 0);
@@ -230,8 +228,6 @@ function initFromCookie() {
     var absoluteicons = cookie ? cookie : false;
     cookie = Cookies.get("xsltvoffsetminutes");
     var offsetminutes = cookie ? Number(cookie) : 60;
-    cookie = Cookies.get("xsltvgrabber");
-    var grabber = cookie ? cookie : "tv_grab_na_dd";
     cookie = Cookies.get("xsltvdayfirst");
     var dayfirst = cookie ? cookie : false;
     cookie = Cookies.get("xsltvcategorycolors");
@@ -263,7 +259,6 @@ function initFromCookie() {
         popupdate,
         popupcategories,
         popupstarrating,
-        grabber,
         highlightclickable,
         highlightmovies,
         printdates,
