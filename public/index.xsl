@@ -141,15 +141,12 @@
                         </img>
                     </span>
                   </xsl:if>
-
                   <span class="middlecell">
                     <br class="leftchannelbr" />
-                    <span class="leftnbsp">&#160;</span>
                     <span class="channelname">
                       <xsl:value-of select="$channelshortname"/>
                     </span>
                     <br class="rightchannelbr" />
-                    <span class="rightnbsp">&#160;</span>
                   </span>
               </div>
             </th>
