@@ -32,7 +32,7 @@ body {
 .row-section h2 {
     float: left;
     width: 100%;
-    color: #000;
+    color: white;
     margin-bottom: 30px;
     font-size: 14px;
 }
@@ -45,7 +45,7 @@ body {
     margin-bottom: 20px;
     margin-top: 30px;
     font-weight: 700;
-    text-shadow: 2px 2px #222136;
+    text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
 }
 
 .row-section h2 a {
@@ -191,8 +191,8 @@ th.time::before {
     font: normal normal normal 14px/1 FontAwesome !important;
     display: inline-block;
     padding-right: 3px;
-    vertical-align: middle; 
-    content:"\f142";
+    vertical-align: middle;
+    content: "\f142";
     color: #ffff88;
 }
 
@@ -417,7 +417,7 @@ td.program {
 /********************************************  clock ************************************************/
 
 #barclock {
-  
+
     font-family: 'Share Tech Mono', monospace;
     color: #ffffff;
     text-align: center;
