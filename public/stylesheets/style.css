@@ -252,8 +252,6 @@ hr {
 
 /*End Popup section*/
 .leftchannel {
-    display:flex; 
-    flex-direction:row;
     width: 100%;
     margin: 0px;
     border: 0px;
@@ -264,6 +262,11 @@ hr {
 .leftchannel .leftlogocell {
     border: 0px;
     max-width: 50px;
+}
+
+.leftchannel .leftlogocell img {
+    max-width: 70%;
+    max-height: 100%;
 }
 
 td.Goodmovie {
@@ -291,7 +294,7 @@ td[class*='match'].Longshow,
 td[class*='tennis'].Longshow,
 td[class*='league'].Longshow,
 td[class*='copa'].Longshow,
-td[class*='cup'].Longshow {  
+td[class*='cup'].Longshow {
     border: 2px solid #666;
     background-color: rgb(20, 54, 5) !important
 }
@@ -319,7 +322,7 @@ td[class*='cup'].Longshow {
 }
 
 #barclock .time {
-    position: fixed;
+    position: absolute;
     top: 7px;
     right: 9px;
     letter-spacing: 0.05em;

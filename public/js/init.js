@@ -2,11 +2,14 @@ $(function () {
     var $clock = $('#barclock');
     var vline = $('#vline');
     var $xmltv_list = $("#xmlt_list");
+    var $tvFrame = $("#tvframe");
 
     setInterval(function () {
         $clock.find('.time').text(moment(new Date()).format("LLLL"));
         vline.css('left', parseInt(vline.css('left')) + 1);
     }, 1000);
+
+    $('[data-toggle="tooltip"]').tooltip();
 
     var processor = new XSLTProcessor();
     var sortstring;
@@ -182,16 +185,15 @@ $(function () {
         $('#loading').hide();
         far = $(fragment);
         far.append($('<div id="vline"></div>'));
-        $("#tvframe").append(far);
-        if (self.scanDOM) scanDOM(document); //refresh popups?
-        $('#tvframe').css("display", "block");
-        $('#tvframe').find('#listings').addClass("container-fluid");
+        $tvFrame.append(far);
+        $('[data-toggle="tooltip"]').tooltip();
+        $tvFrame.show();
     }
 
     window.Init = Init;
     $('#loading').css("display", "block");
     if ($xmltv_list.find('option').length > 1) {
-        let selected =$($xmltv_list.find('option')[1]);
+        let selected = $($xmltv_list.find('option')[1]);
         selected.prop("selected", "selected");
         loadXSL(selected.val());
     }
@@ -233,7 +235,7 @@ function initFromCookie() {
     cookie = Cookies.get("xsltvhighlightclickable");
     var highlightclickable = cookie ? cookie : true;
     var highlightmovies = 3,
-    cookie = Cookies.get("xsltvhighlightnew");
+        cookie = Cookies.get("xsltvhighlightnew");
     var highlightnew = cookie ? cookie : true;
     cookie = Cookies.get("xsltvprintdates");
     var printdates = cookie ? cookie : true;

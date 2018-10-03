@@ -129,28 +129,31 @@
                   <xsl:text>]</xsl:text>
                 </xsl:attribute>
               </xsl:if>
-              <div class="leftchannel">
+              <div class="leftchannel" >
                 
-                  <xsl:if test="string-length($iconname) &gt; 0">
+                <xsl:choose>
+                   <xsl:when test="string-length($iconname) &gt; 0">
                     <span class="leftlogocell">
-                        <img>
+                        <img data-toggle="tooltip" data-placement="top">
                           <xsl:attribute name="src">
                             <xsl:value-of select="icon/@src"/>
                           </xsl:attribute>
                           <xsl:attribute name="class">channelimage</xsl:attribute>
+                          <xsl:attribute name="alt" >
+                            <xsl:value-of select="$channelshortname"/>
+                          </xsl:attribute>
+                          <xsl:attribute name="title" >
+                            <xsl:value-of select="$channelshortname"/>
+                          </xsl:attribute>
                         </img>
                     </span>
-                  </xsl:if>
-
-                  <span class="middlecell">
-                    <br class="leftchannelbr" />
-                    <span class="leftnbsp">&#160;</span>
+                   </xsl:when>
+                   <xsl:otherwise>
                     <span class="channelname">
                       <xsl:value-of select="$channelshortname"/>
                     </span>
-                    <br class="rightchannelbr" />
-                    <span class="rightnbsp">&#160;</span>
-                  </span>
+                   </xsl:otherwise>
+                  </xsl:choose>
               </div>
             </th>
             <xsl:variable name="theseprogrammes" select="$programmes[@channel=current()/@id]"/>
@@ -507,43 +510,6 @@
                   <xsl:text>]</xsl:text>
                 </xsl:attribute>
               </xsl:if>
-              <table class="rightchanneltable">
-                <tr>
-                  <xsl:if test="string-length($iconname) &gt; 0">
-                    <td class="leftlogocell">
-                        <img>
-                          <xsl:attribute name="src">
-                            <xsl:value-of select="icon/@src"/>
-                          </xsl:attribute>
-                          <xsl:attribute name="class">channelimage</xsl:attribute>
-                        </img>
-                    </td>
-                  </xsl:if>
-
-                  <td class="middlecell">
-
-                    <br class="leftchannelbr" />
-                    <span class="leftnbsp">&#160;</span>
-                    <span class="channelname">
-                      <xsl:value-of select="$channelshortname"/>
-                    </span>
-                    <br class="rightchannelbr" />
-                    <span class="rightnbsp">&#160;</span>
-
-                  </td>
-
-                  <td class="rightlogocell">
-                    <xsl:if test="string-length($iconname) &gt; 0">
-                      <img>
-                        <xsl:attribute name="src">
-                          <xsl:value-of select="icon/@src"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="class">channelimage</xsl:attribute>
-                      </img>
-                    </xsl:if>
-                  </td>
-                </tr>
-              </table>
             </th>
           </tr>
         </xsl:for-each>
