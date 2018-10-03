@@ -370,14 +370,22 @@ td[class*='cup'].Longshow {
 
 .popover {
     color: white !important;
-    background-color: #000000b0;
+    background-color: transparent !important;
 }
 
 .popover-header {
-    background-color: transparent !important;
+    font-family: 'Charmonman', cursive;
+    background-color: #000000 !important;
+    color: yellow;
+    text-align: center
 }
 
 .popover .popover-body {
     color: white !important;
-    background-color: transparent !important;
+    background-color: #000000c4;
+}
+
+.popover .popover-body img.popupimage {
+    margin: 10px;
+    border: 1px solid #1b1b17;
 }

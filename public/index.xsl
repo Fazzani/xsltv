@@ -295,6 +295,11 @@
                         </xsl:choose>
                         &lt;/span&gt;
                       </xsl:if>
+                      <xsl:if test="string-length($iconname) &gt; 0">
+                        <xsl:text>&lt;img src="</xsl:text>
+                        <xsl:value-of select="icon/@src"/>
+                        <xsl:text>" alt="" class="popupimage"/></xsl:text>
+                      </xsl:if>
                       <xsl:if test="$PopupRating">
                         &lt;span class="popuprating"&gt;<xsl:value-of select="rating/value" />&lt;/span&gt;
                       </xsl:if>
