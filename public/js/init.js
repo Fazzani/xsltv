@@ -188,21 +188,27 @@ $(function () {
         $tvFrame.append(far);
         $('[data-toggle="tooltip"]').tooltip();
 
-       var popperTab = [];
+        var popperTab = [];
         $('[data-toggle="popover"]').popover({
             html: true,
         }).on('shown.bs.popover', function (data) {
             popperTab.push($(data.target));
-          });
+        });
 
         $(document).on('click touchend', function (e) {
-            popperTab.forEach(x=> x.popover('hide'));
+            var target = $(e.target);
+            popperTab.forEach(x => {
+                if (!target.is(x)) {
+                    x.popover('hide');
+                    popperTab = popperTab.slice(popperTab.indexOf(x), 1);
+                }
+            });
         });
 
         $tvFrame.show();
     }
 
-   
+
     window.Init = Init;
     $('#loading').css("display", "block");
     if ($xmltv_list.find('option').length > 1) {
