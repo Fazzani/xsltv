@@ -456,30 +456,21 @@
                   </xsl:attribute>
                 </xsl:if>
 
-                <table class="internal">
-                  <tr>
-                    <xsl:if test="number($StartTime) &lt; number($StartDisplayCode)">
-                      <td class="extendleft">
-                        <span>
-                          <xsl:value-of select="$ExtendLeftText" />
-                        </span>
-                      </td>
-                    </xsl:if>
-                    <td class="program">
+                <div class="internal">
+                    <div class="program">
+                      <xsl:if test="number($StartTime) &lt; number($StartDisplayCode)">
+                        <xsl:attribute name="class">program extendleft</xsl:attribute>
+                      </xsl:if>
+                       <xsl:if test="number($StopTime) &gt; number($StopDisplayCode)">
+                        <xsl:attribute name="class">program extendright</xsl:attribute>
+                      </xsl:if>
                       <xsl:value-of select="title" />
                       <xsl:if test="$PrintDates and string-length(date) = 4">
                         (<xsl:value-of select="date"/>)
                       </xsl:if>
-                    </td>
-                    <xsl:if test="number($StopTime) &gt; number($StopDisplayCode)">
-                      <td class="extendright">
-                        <span>
-                          <xsl:value-of select="$ExtendRightText" />
-                        </span>
-                      </td>
-                    </xsl:if>
-                  </tr>
-                </table>
+                     
+                    </div>
+                </div>
 
               </td>
               <xsl:if test="$FixGaps = 1 and position()!=last() and number($StopTime) &lt; number($NextStartTime)">
