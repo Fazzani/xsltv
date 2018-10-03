@@ -72,12 +72,11 @@ body {
     margin-left: auto;
     margin-right: auto;
     text-align: left;
-    box-shadow: -1px 0px 3px 0px #0000006b;
+    box-shadow: -1px 3px 6px 0px #0000006b;
 }
 
 #listings tr {
     border-bottom: 1px solid #231c1c;
-    box-shadow: -1px 0px 3px 0px #0000006b;
 }
 
 table.internal {
@@ -169,6 +168,7 @@ th {
     overflow: hidden;
 }
 
+
 th.channel {
     text-align: center;
     padding: 0px;
@@ -184,17 +184,16 @@ tr.timebar {
 
 th.time {
     text-align: left;
-    height: 22px;
-    padding: 0px;
-    margin: 0px;
-    border-left: 0px;
-    border-right: 0px;
-    border-bottom: 0px;
-    border-top: 0px solid #fff;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: bold;
     cursor: pointer;
+}
+
+th.time::before {
+    font: normal normal normal 14px/1 FontAwesome !important;
+    display: inline-block;
+    padding-right: 3px;
+    vertical-align: middle; 
+    content:"\f142";
+    color: #ffff88;
 }
 
 th.topleftcorner {
@@ -388,6 +387,56 @@ hr {
     display: none;
 }
 
+
+td.Goodmovie {
+    background-color: #ff9 !important;
+}
+
+td.Goodmovie table td {
+    background-color: #ff9;
+}
+
+td.program {
+    cursor: pointer;
+}
+
+.Newshow {
+    border: 2px solid #666;
+}
+
+
+.table-dark th,
+.table-dark thead th {
+    border-color: #001224 !important;
+}
+
+.table-dark {
+    background-color: #0f121b !important;
+}
+
+/********************************************  clock ************************************************/
+
+#barclock {
+  
+    font-family: 'Share Tech Mono', monospace;
+    color: #ffffff;
+    text-align: center;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    color: #daf6ff;
+    text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
+}
+
+#barclock .time {
+    position: fixed;
+    top: 7px;
+    right: 9px;
+    letter-spacing: 0.05em;
+    font-size: 20px;
+}
+
+/********************************************  Loading ************************************************/
+
 #loading {
     position: absolute;
     top: 5px;
@@ -415,64 +464,4 @@ hr {
     left: -100px;
     z-index: 10;
     display: none;
-}
-
-tr.evenrow td.Goodmovie {
-    background-color: #ff9;
-}
-
-tr.evenrow td.Goodmovie table td {
-    background-color: #ff9;
-}
-
-tr.oddrow td.Goodmovie {
-    background-color: #ff9;
-}
-
-tr.oddrow td.Goodmovie table td {
-    background-color: #ff9;
-}
-
-td.program {
-    cursor: pointer;
-}
-
-.Newshow {
-    border: 2px solid #666;
-}
-
-#barclock {
-    position: fixed;
-    top: 55px;
-    right: 1px;
-    font-family: 'Share Tech Mono', monospace;
-    color: #ffffff;
-    text-align: center;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-    color: #daf6ff;
-    text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
-}
-
-#barclock .time {
-    letter-spacing: 0.05em;
-    font-size: 25px;
-}
-
-#barclock .date {
-    letter-spacing: 0.1em;
-    font-size: 20px;
-}
-
-.table-dark th,
-.table-dark thead th {
-    border-color: #001224 !important;
-}
-
-.table-dark td{
-    border: 1px solid #001224  !important;
-}
-
-.table-dark {
-    background-color: #0f121b !important;
 }

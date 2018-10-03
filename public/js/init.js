@@ -4,8 +4,7 @@ $(function () {
     var $xmltv_list = $("#xmlt_list");
 
     setInterval(function () {
-        $clock.find('.date').text(moment(new Date()).format("DD/MM/YYYY"));
-        $clock.find('.time').text(moment(new Date()).format("hh:mm:ss"));
+        $clock.find('.time').text(moment(new Date()).format("LLLL"));
         vline.css('left', parseInt(vline.css('left')) + 1);
     }, 1000);
 
