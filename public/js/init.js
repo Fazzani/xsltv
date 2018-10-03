@@ -25,7 +25,6 @@ $(function () {
         timebarfrequency,
         channelpopups,
         descriptionpopups,
-        absoluteicons,
         popuptimes,
         popuprating,
         popupsubtitle,
@@ -164,7 +163,6 @@ $(function () {
         processor.setParameter(null, "TimeBarFrequency", timebarfrequency);
         processor.setParameter(null, "ChannelPopups", channelpopups.toString() === "true" ? 1 : 0);
         processor.setParameter(null, "DescriptionPopups", descriptionpopups.toString() === "true" ? 1 : 0);
-        processor.setParameter(null, "AbsoluteIcons", absoluteicons.toString() === "true" ? 1 : 0);
         processor.setParameter(null, "PopupTimes", popuptimes.toString() === "true" ? 1 : 0);
         processor.setParameter(null, "PopupRating", popuprating.toString() === "true" ? 1 : 0);
         processor.setParameter(null, "PopupSubtitle", popupsubtitle.toString() === "true" ? 1 : 0);
@@ -224,8 +222,6 @@ function initFromCookie() {
     var popupcategories = cookie ? cookie : true;
     cookie = Cookies.get("xsltvpopupstarrating");
     var popupstarrating = cookie ? cookie : true;
-    cookie = Cookies.get("xsltvabsoluteicons");
-    var absoluteicons = cookie ? cookie : false;
     cookie = Cookies.get("xsltvoffsetminutes");
     var offsetminutes = cookie ? Number(cookie) : 60;
     cookie = Cookies.get("xsltvdayfirst");
@@ -251,7 +247,6 @@ function initFromCookie() {
         timebarfrequency,
         channelpopups,
         descriptionpopups,
-        absoluteicons,
         popuptimes,
         popuprating,
         popupsubtitle,

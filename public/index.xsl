@@ -35,7 +35,6 @@
   <xsl:param name="PopupCategories"/>
   <xsl:param name="PopupStarRating"/>
   <xsl:param name="Categories"/>
-  <!--<xsl:param name="AbsoluteIcons"/>-->
   <xsl:param name="DayFirst"/>
   <xsl:param name="EarlierText"/>
   <xsl:param name="LaterText"/>
