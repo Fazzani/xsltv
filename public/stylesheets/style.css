@@ -4,7 +4,6 @@
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    color: #212529;
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     background-color: #191925 !important;
     height: 100vh;
@@ -364,4 +363,21 @@ td[class*='cup'].Longshow {
     left: -100px;
     z-index: 10;
     display: none;
+}
+
+/****** Popper js ********/
+
+
+.popover {
+    color: white !important;
+    background-color: #000000b0;
+}
+
+.popover-header {
+    background-color: transparent !important;
+}
+
+.popover .popover-body {
+    color: white !important;
+    background-color: transparent !important;
 }

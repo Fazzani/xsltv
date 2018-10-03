@@ -187,9 +187,22 @@ $(function () {
         far.append($('<div id="vline"></div>'));
         $tvFrame.append(far);
         $('[data-toggle="tooltip"]').tooltip();
+
+       var popperTab = [];
+        $('[data-toggle="popover"]').popover({
+            html: true,
+        }).on('shown.bs.popover', function (data) {
+            popperTab.push($(data.target));
+          });
+
+        $(document).on('click touchend', function (e) {
+            popperTab.forEach(x=> x.popover('hide'));
+        });
+
         $tvFrame.show();
     }
 
+   
     window.Init = Init;
     $('#loading').css("display", "block");
     if ($xmltv_list.find('option').length > 1) {
@@ -231,7 +244,7 @@ function initFromCookie() {
     cookie = Cookies.get("xsltvcategorycolors");
     var categorycolors = cookie ? cookie : true;
     cookie = Cookies.get("xsltvloadonclick");
-    var loadonclick = cookie ? cookie : 'IMDB';
+    var loadonclick = cookie ? cookie : 'POPER'; //IMDB URL
     cookie = Cookies.get("xsltvhighlightclickable");
     var highlightclickable = cookie ? cookie : true;
     var highlightmovies = 3,
