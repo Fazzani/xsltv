@@ -112,18 +112,6 @@
             </xsl:call-template>
           </xsl:variable>
           <tr>
-            <xsl:choose>
-              <xsl:when test="(position() mod 2 = 1)">
-                <xsl:attribute name="class">
-                  oddrow
-                </xsl:attribute>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:attribute name="class">
-                  evenrow
-                </xsl:attribute>
-              </xsl:otherwise>
-            </xsl:choose>
             <th class="channel">
               <xsl:if test="$ChannelPopups">
                 <xsl:attribute name="title">
