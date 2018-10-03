@@ -251,15 +251,9 @@ hr {
 }
 
 /*End Popup section*/
-
-/* Channel display classes (in this order):*/
-/* <-------------------------------------left/rightchanneltable---------------------------------->*/
-/* leftlogocell leftnumbercell             / middlecell \           rightnumbercell rightlogocell */
-/* <---------------------------------------              ---------------------------------------->*/
-/*       leftnumber leftchannelbr leftnbsp channelname rightchannelbr rightnbsp rightnumber       */
-.leftchanneltable {
-    table-layout: fixed;
-    border-collapse: collapse;
+.leftchannel {
+    display:flex; 
+    flex-direction:row;
     width: 100%;
     margin: 0px;
     border: 0px;
@@ -267,126 +261,10 @@ hr {
     height: 50px;
 }
 
-.leftchanneltable .leftlogocell {
+.leftchannel .leftlogocell {
     border: 0px;
+    max-width: 50px;
 }
-
-.leftchanneltable .leftlogocell img {
-    border: 0px;
-    max-height: 50px;
-}
-
-.leftchanneltable .leftnumbercell {
-    display: none;
-}
-
-.leftchanneltable .middlecell {
-    padding: 0px;
-    overflow: visible;
-    border: 0px;
-    text-align: left;
-}
-
-.leftchanneltable .leftnumber {
-    font-size: 160%;
-    font-weight: bold;
-}
-
-.leftchanneltable .leftnbsp {
-    display: none
-}
-
-.leftchanneltable .channelname {
-    font-weight: bold;
-}
-
-.leftchanneltable .rightchannelbr {
-    display: none;
-}
-
-.leftchanneltable .rightnbsp {
-    display: none;
-}
-
-.leftchanneltable .rightnumber {
-    display: none;
-}
-
-.leftchanneltable .rightlogocell {
-    display: none;
-}
-
-.leftchanneltable .rightnumbercell {
-    display: none;
-}
-
-.rightchanneltable {
-    table-layout: fixed;
-    border-collapse: collapse;
-    width: 31px;
-    margin: 0px;
-    border: 0px;
-    background-color: transparent;
-    padding: 0px;
-}
-
-.rightchanneltable .leftlogocell {
-    display: none;
-}
-
-.rightchanneltable .leftlogocell img {
-    display: none;
-}
-
-.rightchanneltable .leftnumbercell {
-    width: 13px;
-    background-color: transparent;
-    padding: 0px;
-    overflow: visible;
-    border: 0px;
-    text-align: center;
-}
-
-.rightchanneltable .middlecell {
-    display: none;
-}
-
-.rightchanneltable .leftnumber {
-    display: none;
-}
-
-.rightchanneltable .leftchannelbr {
-    display: none;
-}
-
-.rightchanneltable .leftnbsp {
-    display: none
-}
-
-.rightchanneltable .channelname {
-    display: none;
-}
-
-.rightchanneltable .rightchannelbr {
-    display: none;
-}
-
-.rightchanneltable .rightnbsp {
-    display: none;
-}
-
-.rightchanneltable .rightnumber {
-    display: none;
-}
-
-.rightchanneltable .rightlogocell {
-    display: none;
-}
-
-.rightchanneltable .rightnumbercell {
-    display: none;
-}
-
 
 td.Goodmovie {
     background-color: #ff9 !important;

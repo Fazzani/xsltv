@@ -129,21 +129,20 @@
                   <xsl:text>]</xsl:text>
                 </xsl:attribute>
               </xsl:if>
-              <table class="leftchanneltable">
-                <tr>
-                    <xsl:if test="string-length($iconname) &gt; 0">
-                  <td class="leftlogocell">
-                      <img>
-                        <xsl:attribute name="src">
-                          <xsl:value-of select="icon/@src"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="class">channelimage</xsl:attribute>
-                      </img>
-                  </td>
-                    </xsl:if>
+              <div class="leftchannel">
+                
+                  <xsl:if test="string-length($iconname) &gt; 0">
+                    <span class="leftlogocell">
+                        <img>
+                          <xsl:attribute name="src">
+                            <xsl:value-of select="icon/@src"/>
+                          </xsl:attribute>
+                          <xsl:attribute name="class">channelimage</xsl:attribute>
+                        </img>
+                    </span>
+                  </xsl:if>
 
-                  <td class="middlecell">
-
+                  <span class="middlecell">
                     <br class="leftchannelbr" />
                     <span class="leftnbsp">&#160;</span>
                     <span class="channelname">
@@ -151,21 +150,8 @@
                     </span>
                     <br class="rightchannelbr" />
                     <span class="rightnbsp">&#160;</span>
-
-                  </td>
-
-                  <td class="rightlogocell">
-                    <xsl:if test="string-length($iconname) &gt; 0">
-                      <img>
-                        <xsl:attribute name="src">
-                          <xsl:value-of select="icon/@src"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="class">channelimage</xsl:attribute>
-                      </img>
-                    </xsl:if>
-                  </td>
-                </tr>
-              </table>
+                  </span>
+              </div>
             </th>
             <xsl:variable name="theseprogrammes" select="$programmes[@channel=current()/@id]"/>
             <xsl:for-each select="$theseprogrammes">
