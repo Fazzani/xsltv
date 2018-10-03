@@ -76,7 +76,8 @@
                   <xsl:attribute name="onclick">
                     <xsl:value-of select="concat('Init','(',$DisplayLength,',',$PrevHour,',',$PrevDay,',',$PrevMonth,',',$PrevYear,')')" />
                   </xsl:attribute>
-                  <xsl:value-of select="$EarlierText"/>
+                  <!-- <xsl:value-of select="$EarlierText"/> -->
+                  <i class="fa fa-chevron-circle-left" style="font-size:24px"></i>
                 </th>
                 <xsl:call-template name="for.loop">
                   <xsl:with-param name="i">
@@ -93,7 +94,8 @@
                   <xsl:attribute name="onclick">
                     <xsl:value-of select="concat('Init','(',$DisplayLength,',',$StopHour,',',$StopDay,',',$StopMonth,',',$StopYear,')')" />
                   </xsl:attribute>
-                  <xsl:value-of select="$LaterText"/>
+                  <!-- <xsl:value-of select="$LaterText"/> -->
+                  <i class="fa fa-chevron-circle-right" style="font-size:24px"></i>
                 </th>
               </tr>
             </xsl:when>

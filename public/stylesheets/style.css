@@ -173,9 +173,9 @@ th.channel {
     text-align: center;
     padding: 0px;
     overflow: hidden;
-    color: #0BC6EF;
     background-color: #191925;
-    font-size: 8pt
+    color: #d3ef01;
+    font-size: 8pt;
 }
 
 tr.timebar {
@@ -199,85 +199,14 @@ th.time {
 
 th.topleftcorner {
     height: 22px;
-    padding: 0px;
-    margin: 0px;
-    border-left: 0px;
-    border-right: 0px;
-    border-bottom: 0px;
-    border-top: 0px solid #fff;
-    background-image: url(../images/yahoonewearlier.gif);
-    background-repeat: no-repeat;
-    background-position: center center;
-    text-decoration: none;
-    color: #FDFAD6;
-    font-size: 13px;
-    font-weight: bold;
-    text-indent: -5000px;
     cursor: pointer;
     width: 120px;
 }
 
-th.topleftcorner:hover {
-    background-image: url(../images/yahoonewearlier2.gif);
-}
-
 th.toprightcorner {
     height: 22px;
-    padding: 0px;
-    margin: 0px;
-    border-left: 0px;
-    border-right: 0px;
-    border-bottom: 0px;
-    border-top: 0px solid #fff;
-    background-image: url(../images/yahoonewlater.gif);
-    background-repeat: no-repeat;
-    background-position: left center;
-    text-decoration: none;
-    color: #FDFAD6;
-    font-size: 13px;
-    font-weight: bold;
-    text-indent: -5000px;
     cursor: pointer;
-    width: 40px;
-}
-
-
-/*SPORTS*/
-.Sports_non-event td.program,
-.Sports_talk td.program,
-.Sports_event td.program,
-.sport td.program,
-.Sport td.program,
-.DEPORTES td.program,
-.SP td.program {
-    background: transparent url(../images/yahoonewsportsbg.gif) repeat-x 0 0;
-}
-
-/*MOVIES*/
-.MV td.program,
-.film td.program,
-.Film td.program,
-.téléfilm td.program,
-.CINE td.program {
-    background: transparent url(../images/yahoonewmoviebg.gif) repeat-x 0 0;
-}
-
-/*NEWS*/
-.News td.program,
-.information td.program,
-.Noticias td.program {
-    background: transparent url(../images/yahoonewnewsbg.gif) repeat-x 0 0;
-}
-
-/*CHILDREN*/
-.Children td.program,
-.INFANTILES td.program,
-.emission_jeunesse td.program {
-    background: transparent url(../images/yahoonewkidsbg.gif) repeat-x 0 0;
-}
-
-.Goodmovie {
-    background-color: #ff9;
+    width: 48px;
 }
 
 hr {
@@ -459,24 +388,22 @@ hr {
     display: none;
 }
 
-
-
 #loading {
     position: absolute;
     top: 5px;
     right: 5px;
-    border: 1px solid #B0B0B0;
+    border: 1px solid #000000;
     font-family: arial, sans-serif;
     font-size: 10pt;
     font-weight: bold;
-    background: #02B4E2 url(../images/yahoonewprefbg.gif) repeat-x 0 0;
     color: white;
+    background-color: #033647;
     text-align: center;
     padding: 10px;
 }
 
 #loadingcontainer {
-    width: 200px;
+    width: 100vh;
     position: absolute;
     left: 50%;
     top: 30%;
@@ -537,10 +464,13 @@ td.program {
     font-size: 20px;
 }
 
-.table-dark td,
 .table-dark th,
 .table-dark thead th {
-    border-color: #8daf2e !important;
+    border-color: #001224 !important;
+}
+
+.table-dark td{
+    border: 1px solid #001224  !important;
 }
 
 .table-dark {
