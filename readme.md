@@ -7,9 +7,7 @@ Epg viewer for XMLTV format based on xsltv project.
 
 ## TODO
 
-- [ ] Loading xmltv file from QueryString
-- [ ] Saving user pref to localstorage
-- [ ] Dynamic xmltv file loading (api, user input)
+- [ ] Loading xmltv file from QueryString && user input
 - [ ] Fix loader
 - [ ] Fix mobile version
 - [ ] Highlight movies and sports by filter (multiselect)

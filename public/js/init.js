@@ -1,4 +1,5 @@
 ///var $ = require('jquery');
+const api_files_url = 'https://api.myjson.com/bins/8tvgs';
 
 $(function () {
 
@@ -66,6 +67,19 @@ $(function () {
     var $xmltv_list = $("#xmlt_list");
     var $tvFrame = $("#tvframe");
     var $loading = $('#loading');
+
+    fetch(api_files_url)
+        .then(res => res.json())
+        .then(res => {
+            $xmltv_list.empty().append('<option selected>Select one xmltv file</option>');
+            if (res && res.files.length > 0) {
+                res.files.forEach(file => $xmltv_list.append(`<option value="${file.url}">${file.name}</option>`));
+                let selected = $($xmltv_list.find('option')[1]);
+                selected.prop("selected", "selected");
+                loadXSL(selected.val());
+            }
+        }).catch(e => console.error({ ...e
+        }));
 
     setInterval(() => {
         $clock.find('.time').text(moment(new Date()).format("LLLL"));
@@ -274,11 +288,7 @@ $(function () {
 
     window.Init = Init;
     $loading.css("display", "block");
-    if ($xmltv_list.find('option').length > 1) {
-        let selected = $($xmltv_list.find('option')[1]);
-        selected.prop("selected", "selected");
-        loadXSL(selected.val());
-    }
+    
 });
 
 
