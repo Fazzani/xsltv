@@ -54,20 +54,24 @@ body {
 .selector-for-some-widget {
     box-sizing: content-box;
 }
-#tvframe{
+
+#tvframe {
     position: relative;
 }
+
 #vline {
     position: absolute;
     height: 100%;
     width: 0px;
-    border: 1px solid red;
     top: 0;
     left: 0;
-    z-index: 1000000
+    z-index: 25;
+    border-right: 3px #800808 solid;
+    box-shadow: 4px 8px 16px 3px #805353;
 }
 
 #listings {
+
     table-layout: fixed;
     border-collapse: collapse;
     margin-left: auto;
