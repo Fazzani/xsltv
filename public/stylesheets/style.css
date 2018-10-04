@@ -86,8 +86,6 @@ body {
     width: 42px;
     height: 27px;
     background-color: #800808;
-    box-shadow: -7px 20px 9px -9px #6b3d3d, 5px 6px 9px -9px black;
-    -moz-box-shadow: 6px 5px 9px -9px black, 5px 6px 9px -9px black;
 }
 
 #listings {
