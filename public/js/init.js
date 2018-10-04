@@ -19,7 +19,7 @@ $(function () {
             if ('serviceWorker' in navigator) {
                 let newWorker;
                 navigator.serviceWorker
-                    .register('../service-worker.js')
+                    .register('service-worker.js')
                     .then(reg => {
                         console.log('Service Worker Registered');
                         reg.addEventListener('updatefound', () => {

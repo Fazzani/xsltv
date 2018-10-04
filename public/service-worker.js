@@ -2,6 +2,7 @@ var CACHE_NAME = 'pwa-xviewers-asset-cache-0';
 var RESOURCES_TO_PRELOAD = [
     '/',
     '/index.html',
+    '/index.xsl',
     '/js/init.js',
     '/lang/english.js',
     '/stylesheets/style.css',
