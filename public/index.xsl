@@ -147,14 +147,13 @@
                           </xsl:attribute>
                         </img>
                     </span>
-                  </xsl:if>
-                  <span class="middlecell">
-                    <br class="leftchannelbr" />
+                   </xsl:when>
+                   <xsl:otherwise>
                     <span class="channelname">
                       <xsl:value-of select="$channelshortname"/>
                     </span>
-                    <br class="rightchannelbr" />
-                  </span>
+                   </xsl:otherwise>
+                  </xsl:choose>
               </div>
             </th>
             <xsl:variable name="theseprogrammes" select="$programmes[@channel=current()/@id]"/>
