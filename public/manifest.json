@@ -3,7 +3,7 @@
   "name": "EPG Xmltv viewer",
   "theme_color": "#191925",
   "background_color": "#191925",
-  "scope": "/xsltv",
+  "scope": "/",
   "start_url": "/xsltv/public",
   "display": "fullscreen",
   "orientation": "portrait",
