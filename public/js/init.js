@@ -184,7 +184,7 @@ $(function () {
         var fragment = processor.transformToFragment(xml, document);
         $loading.hide();
         $far = $(fragment);
-        let $vline = $('<div id="vline"><span class="vheader"><i class="fa fa-chevron-up"></i></span></div>');
+        let $vline = $('<div id="vline"><span class="vheader"></span></div>');
         $far.append($vline);
         $tvFrame.append($far);
         $('[data-toggle="tooltip"]').tooltip();

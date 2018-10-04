@@ -73,8 +73,21 @@ body {
 #vline .vheader {
     position: absolute;
     top: 0;
-    left: -6px;
-    color: #b031b0;
+    left: -16px;
+    width: 36px;
+    height: 14px;
+    overflow: hidden;
+}
+
+#vline .vheader::after {
+    content: "";
+    position: absolute;
+    left: -3px;
+    width: 42px;
+    height: 27px;
+    background-color: #800808;
+    box-shadow: -7px 20px 9px -9px #6b3d3d, 5px 6px 9px -9px black;
+    -moz-box-shadow: 6px 5px 9px -9px black, 5px 6px 9px -9px black;
 }
 
 #listings {
