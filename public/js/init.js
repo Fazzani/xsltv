@@ -206,17 +206,7 @@ $(function () {
             });
         });
 
-        console.log({
-            tvframe_width: $tvFrame.width()
-        });
-
-        let startTimeInit = $tvFrame.find('th.time[onclick^=Init]').attr('onclick');
-        let startTime = (startTimeInit.split('Init(')[1].split(')')[0]).split(',');
-        let startTimeMoment = moment(`${startTime[1]}-${startTime[2]}-${startTime[3]}-${startTime[4]}`, 'hh-dd-MM-yyyy');
-        debugger;
-        setInterval(() => {
-            $vline.css('margin-left', parseInt(percentElapsedTimeNowByDay(startTimeMoment)));
-        }, 1000);
+        InitTimeline($tvFrame, $vline);
 
         $tvFrame.show();
     }
@@ -231,14 +221,35 @@ $(function () {
 });
 
 
-function percentElapsedTimeNowByDay(startDay) {
+function InitTimeline($tvFrame, $vline) {
+    let startTimeInit = $tvFrame.find('th.time[onclick^=Init]').attr('onclick');
+    let startTime = (startTimeInit.split('Init(')[1].split(')')[0]).split(',');
+    let startTimeMoment = `${startTime[2]}-${startTime[3]}-${startTime[4]} ${startTime[1]}:00:00`;
+    var paddingLeft = undefined;
 
-    elapsedDuration = moment.duration(moment().diff(startDay));
-    var percent = (elapsedDuration / 86400000) * 100;
+    setInterval(() => {
+        if (undefined == paddingLeft) {
+            paddingLeft = ($('div.leftchannel').width() / $tvFrame.width()) * 100;
+        }
+        $vline.css('margin-left', (percentElapsedTimeNowByDay(startTimeMoment) + paddingLeft) + '%');
+    }, 1000);
+}
+
+function percentElapsedTimeNowByDay(startDay) {
+    const from = moment(startDay, 'DD-MM-YYYY hh:mm:ss');
+    const diff = moment().diff(from);
+    const elapsedDuration = moment.duration(diff);
+    var percent = (elapsedDuration.asMinutes() / (60 * 4)) * 100;
+
+
+    var s = Math.floor(elapsedDuration.asHours()) + moment(diff).format(":mm:ss");
     console.log({
+        from,
+        diff,
+        elapsedDuration: s,
         percent
     });
-    return percent;
+    return Math.floor(parseInt(percent));
 }
 
 function initFromCookie() {
