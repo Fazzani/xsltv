@@ -1,6 +1,67 @@
 ///var $ = require('jquery');
 
 $(function () {
+
+    // Check to make sure service workers are supported in the current browser,
+    // and that the current page is accessed from a secure origin. Using a
+    // service worker from an insecure origin will trigger JS console errors.
+    const isLocalhost = Boolean(window.location.hostname === 'localhost' ||
+        // [::1] is the IPv6 localhost address.
+        window.location.hostname === '[::1]' ||
+        // 127.0.0.1/8 is considered localhost for IPv4.
+        window.location.hostname.match(
+            /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
+        )
+    );
+    window.addEventListener('load', function () {
+        if ('serviceWorker' in navigator &&
+            (window.location.protocol === 'https:' || isLocalhost)) {
+            if ('serviceWorker' in navigator) {
+                let newWorker;
+                navigator.serviceWorker
+                    .register('../service-worker.js')
+                    .then(reg => {
+                        console.log('Service Worker Registered');
+                        reg.addEventListener('updatefound', () => {
+                            // A wild service worker has appeared in reg.installing!
+                            if (navigator.serviceWorker.controller) {
+                                newWorker = reg.installing;
+                                if (newWorker != null) {
+                                    newWorker.addEventListener('statechange', () => {
+                                        // Has network.state changed?
+                                        switch (newWorker.state) {
+                                            case 'installed':
+                                                // new update available
+                                                showUpdateBar();
+                                                break;
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    });
+
+                let refreshing;
+                navigator.serviceWorker.addEventListener('controllerchange', function () {
+                    if (refreshing) return;
+                    window.location.reload();
+                    refreshing = true;
+                });
+
+                function showUpdateBar() {
+                    let snackbar = document.getElementById('snackbar');
+                    snackbar.className = 'show';
+                }
+                // The click event on the pop up notification
+                document.getElementById('reload').addEventListener('click', function () {
+                    newWorker.postMessage({
+                        action: 'skipWaiting'
+                    });
+                });
+            }
+        }
+    });
+
     var $clock = $('#barclock');
     var $xmltv_list = $("#xmlt_list");
     var $tvFrame = $("#tvframe");
@@ -252,47 +313,47 @@ function percentElapsedTimeNowByDay(startDay, hours) {
 }
 
 function initFromCookie() {
-    var cookie = Cookies.get("xsltvhours");
-    var hours = cookie ? Number(cookie) : 4;
-    cookie = Cookies.get("xsltvfixgaps");
-    var fixgaps = cookie ? cookie : false;
-    cookie = Cookies.get("xsltvchannelpopups");
-    var channelpopups = cookie ? cookie : true;
-    cookie = Cookies.get("xsltvdescriptionpopups");
-    var descriptionpopups = cookie ? cookie : true;
-    cookie = Cookies.get("xsltvpopupdelay");
-    var popupdelay = cookie ? Number(cookie) : 0;
-    cookie = Cookies.get("xsltvpopuptimes");
-    var popuptimes = cookie ? cookie : true;
-    cookie = Cookies.get("xsltvpopuprating");
-    var popuprating = cookie ? cookie : true;
-    cookie = Cookies.get("xsltvpopupsubtitle");
-    var popupsubtitle = cookie ? cookie : true;
-    cookie = Cookies.get("xsltvpopupdescription");
-    var popupdescription = cookie ? cookie : true;
-    cookie = Cookies.get("xsltvpopupdate");
-    var popupdate = cookie ? cookie : true;
-    cookie = Cookies.get("xsltvpopupcategories");
-    var popupcategories = cookie ? cookie : true;
-    cookie = Cookies.get("xsltvpopupstarrating");
-    var popupstarrating = cookie ? cookie : true;
-    cookie = Cookies.get("xsltvoffsetminutes");
-    var offsetminutes = cookie ? Number(cookie) : 60;
-    cookie = Cookies.get("xsltvdayfirst");
-    var dayfirst = cookie ? cookie : false;
-    cookie = Cookies.get("xsltvcategorycolors");
-    var categorycolors = cookie ? cookie : true;
-    cookie = Cookies.get("xsltvloadonclick");
-    var loadonclick = cookie ? cookie : 'POPER'; //IMDB URL
-    cookie = Cookies.get("xsltvhighlightclickable");
-    var highlightclickable = cookie ? cookie : true;
+    var item = localStorage.getItem("xsltvhours");
+    var hours = item ? Number(item) : 4;
+    item = localStorage.getItem("xsltvfixgaps");
+    var fixgaps = item ? item : false;
+    item = localStorage.getItem("xsltvchannelpopups");
+    var channelpopups = item ? item : true;
+    item = localStorage.getItem("xsltvdescriptionpopups");
+    var descriptionpopups = item ? item : true;
+    item = localStorage.getItem("xsltvpopupdelay");
+    var popupdelay = item ? Number(item) : 0;
+    item = localStorage.getItem("xsltvpopuptimes");
+    var popuptimes = item ? item : true;
+    item = localStorage.getItem("xsltvpopuprating");
+    var popuprating = item ? item : true;
+    item = localStorage.getItem("xsltvpopupsubtitle");
+    var popupsubtitle = item ? item : true;
+    item = localStorage.getItem("xsltvpopupdescription");
+    var popupdescription = item ? item : true;
+    item = localStorage.getItem("xsltvpopupdate");
+    var popupdate = item ? item : true;
+    item = localStorage.getItem("xsltvpopupcategories");
+    var popupcategories = item ? item : true;
+    item = localStorage.getItem("xsltvpopupstarrating");
+    var popupstarrating = item ? item : true;
+    item = localStorage.getItem("xsltvoffsetminutes");
+    var offsetminutes = item ? Number(item) : 60;
+    item = localStorage.getItem("xsltvdayfirst");
+    var dayfirst = item ? item : false;
+    item = localStorage.getItem("xsltvcategorycolors");
+    var categorycolors = item ? item : true;
+    item = localStorage.getItem("xsltvloadonclick");
+    var loadonclick = item ? item : 'POPER'; //IMDB URL
+    item = localStorage.getItem("xsltvhighlightclickable");
+    var highlightclickable = item ? item : true;
     var highlightmovies = 3,
-        cookie = Cookies.get("xsltvhighlightnew");
-    var highlightnew = cookie ? cookie : true;
-    cookie = Cookies.get("xsltvprintdates");
-    var printdates = cookie ? cookie : true;
-    cookie = Cookies.get("xsltvtimebarfrequency");
-    var timebarfrequency = cookie ? cookie : -1;
+        item = localStorage.getItem("xsltvhighlightnew");
+    var highlightnew = item ? item : true;
+    item = localStorage.getItem("xsltvprintdates");
+    var printdates = item ? item : true;
+    item = localStorage.getItem("xsltvtimebarfrequency");
+    var timebarfrequency = item ? item : -1;
     return {
         offsetminutes,
         hours,
