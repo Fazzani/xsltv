@@ -1,19 +1,19 @@
+///var $ = require('jquery');
+
 $(function () {
     var $clock = $('#barclock');
-    var vline = $('#vline');
     var $xmltv_list = $("#xmlt_list");
     var $tvFrame = $("#tvframe");
+    var $loading = $('#loading');
 
-    setInterval(function () {
+    setInterval(() => {
         $clock.find('.time').text(moment(new Date()).format("LLLL"));
-        vline.css('left', parseInt(vline.css('left')) + 1);
     }, 1000);
 
     $('[data-toggle="tooltip"]').tooltip();
 
     var processor = new XSLTProcessor();
     var sortstring;
-
     var currenttime = new Date();
 
     $xmltv_list.change(function () {
@@ -50,8 +50,8 @@ $(function () {
     sortstring = "display-name[3]";
 
     function loadXSL(xmlfileneeded) {
-        $('#loading').css('display', 'block');
-        $('#loading').html("index.xsl");
+        $loading.css('display', 'block');
+        $loading.html("index.xsl");
         fetch("index.xsl", {
                 method: 'GET'
             }).then(response => response.text())
@@ -67,15 +67,15 @@ $(function () {
                 loadXML(xmlfileneeded);
             }).catch(function (error) {
                 var errorstring = error.message + ": " + filetext + " " + xmlfileneeded + " " + notfoundtext + ".";
-                $('#loading').text(errorstring);
+                $loading.text(errorstring);
             });
     }
 
     function loadXML(xmlfileneeded) {
         if (xmlfileneeded) {
 
-            $('#loading').css("display", "block");
-            $('#loading').text(xmlfileneeded);
+            $loading.css("display", "block");
+            $loading.text(xmlfileneeded);
             if (window.XMLHttpRequest && window.XSLTProcessor) {
 
                 fetch(xmlfileneeded, {
@@ -85,12 +85,12 @@ $(function () {
                     .then(x => {
                         xml = x;
                         xmlfileloaded = xmlfileneeded;
-                        $('#loading').css("display", "block");
-                        $('#loading').text("Preparing grid...");
+                        $loading.css("display", "block");
+                        $loading.text("Preparing grid...");
                         Init(hours, myDate.getHours(), myDate.getDate(), myDate.getMonth() + 1, myDate.getFullYear());
                     }).catch(function (error) {
                         var errorstring = error.message + ": " + filetext + " " + xmlfileneeded + " " + notfoundtext + ".";
-                        $('#loading').text(errorstring);
+                        $loading.text(errorstring);
                     });
             } else {
                 alert('Your browser can\'t handle this script');
@@ -101,9 +101,9 @@ $(function () {
 
     function Init(dl, ch, cd, cm, cy, offset) {
         /*This stuff needs to be done each time the time changes */
-        $('#loading').show();
-        $("#tvframe").hide();
-        $("#tvframe").text("");
+        $loading.show();
+        $tvFrame.hide();
+        $tvFrame.text("");
         var startDate = new Date(cy, cm - 1, cd, ch, 0, 0);
         myDate = new Date(cy, cm - 1, cd, ch, 0, 0);
         var endDate = new Date(cy, cm - 1, cd, ch, 0, 0);
@@ -182,10 +182,11 @@ $(function () {
         processor.setParameter(null, "OnClick", loadonclick);
 
         var fragment = processor.transformToFragment(xml, document);
-        $('#loading').hide();
-        far = $(fragment);
-        far.append($('<div id="vline"></div>'));
-        $tvFrame.append(far);
+        $loading.hide();
+        $far = $(fragment);
+        let $vline = $('<div id="vline"></div>');
+        $far.append($vline);
+        $tvFrame.append($far);
         $('[data-toggle="tooltip"]').tooltip();
 
         var popperTab = [];
@@ -205,18 +206,40 @@ $(function () {
             });
         });
 
+        console.log({
+            tvframe_width: $tvFrame.width()
+        });
+
+        let startTimeInit = $tvFrame.find('th.time[onclick^=Init]').attr('onclick');
+        let startTime = (startTimeInit.split('Init(')[1].split(')')[0]).split(',');
+        let startTimeMoment = moment(`${startTime[1]}-${startTime[2]}-${startTime[3]}-${startTime[4]}`, 'hh-dd-MM-yyyy');
+        debugger;
+        setInterval(() => {
+            $vline.css('margin-left', parseInt(percentElapsedTimeNowByDay(startTimeMoment)));
+        }, 1000);
+
         $tvFrame.show();
     }
 
-
     window.Init = Init;
-    $('#loading').css("display", "block");
+    $loading.css("display", "block");
     if ($xmltv_list.find('option').length > 1) {
         let selected = $($xmltv_list.find('option')[1]);
         selected.prop("selected", "selected");
         loadXSL(selected.val());
     }
 });
+
+
+function percentElapsedTimeNowByDay(startDay) {
+
+    elapsedDuration = moment.duration(moment().diff(startDay));
+    var percent = (elapsedDuration / 86400000) * 100;
+    console.log({
+        percent
+    });
+    return percent;
+}
 
 function initFromCookie() {
     var cookie = Cookies.get("xsltvhours");

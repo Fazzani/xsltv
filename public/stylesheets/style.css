@@ -54,9 +54,11 @@ body {
 .selector-for-some-widget {
     box-sizing: content-box;
 }
-
+#tvframe{
+    position: relative;
+}
 #vline {
-    position: fixed;
+    position: absolute;
     height: 100%;
     width: 0px;
     border: 1px solid red;
