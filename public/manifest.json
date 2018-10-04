@@ -4,7 +4,7 @@
   "theme_color": "#191925",
   "background_color": "#191925",
   "scope": "/xsltv",
-  "start_url": "/xsltv",
+  "start_url": "/xsltv/public",
   "display": "fullscreen",
   "orientation": "portrait",
   "lang": "en-US",
