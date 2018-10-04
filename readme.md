@@ -8,7 +8,7 @@ Epg viewer for XMLTV format based on xsltv project.
 - [ ] Dynamic xmltv file loading
 - [ ] Vertical timeline
 - [ ] Fix loader
-- [ ] Fix popup
+- [ ] Fix mobile version
 - [ ] Highlight movies and sports by filter (multiselect)
 
 [example]: https://fazzani.github.io/xsltv/public/

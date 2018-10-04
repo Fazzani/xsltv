@@ -129,15 +129,22 @@
                   <xsl:text>]</xsl:text>
                 </xsl:attribute>
               </xsl:if>
-              <div class="leftchannel">
+              <div class="leftchannel" >
                 
-                  <xsl:if test="string-length($iconname) &gt; 0">
+                <xsl:choose>
+                   <xsl:when test="string-length($iconname) &gt; 0">
                     <span class="leftlogocell">
-                        <img>
+                        <img data-toggle="tooltip" data-placement="top">
                           <xsl:attribute name="src">
                             <xsl:value-of select="icon/@src"/>
                           </xsl:attribute>
                           <xsl:attribute name="class">channelimage</xsl:attribute>
+                          <xsl:attribute name="alt" >
+                            <xsl:value-of select="$channelshortname"/>
+                          </xsl:attribute>
+                          <xsl:attribute name="title" >
+                            <xsl:value-of select="$channelshortname"/>
+                          </xsl:attribute>
                         </img>
                     </span>
                   </xsl:if>
@@ -223,47 +230,7 @@
               <xsl:if test="position()=1 and number($StartTime) &gt; number($StartDisplayCode)">
                 <td class="empty" colspan="{number($StartTime)-number($StartDisplayCode)}"></td>
               </xsl:if>
-              <td>
-                <xsl:choose>
-                  <xsl:when test="$OnClick='IMDB'">
-                    <xsl:attribute name="onclick">
-                      <xsl:text>window.open('http://www.imdb.com/find?q=</xsl:text>
-                      <xsl:call-template name="replace">
-                        <xsl:with-param name="string">
-                          <xsl:call-template name="replace">
-                            <xsl:with-param name="string">
-                              <xsl:call-template name="replace">
-                                <xsl:with-param name="string">
-                                  <xsl:call-template name="fixquotes">
-                                    <xsl:with-param name="string" select="translate(title,' ','+')" />
-                                  </xsl:call-template>
-                                </xsl:with-param>
-                                <xsl:with-param name="pattern" select="'&amp;'"/>
-                                <xsl:with-param name="replacement" select="'%26'"/>
-                              </xsl:call-template>
-                            </xsl:with-param>
-                            <xsl:with-param name="pattern" select="'='"/>
-                            <xsl:with-param name="replacement" select="'%3d'"/>
-                          </xsl:call-template>
-                        </xsl:with-param>
-                        <xsl:with-param name="pattern" select="'?'"/>
-                        <xsl:with-param name="replacement" select="'%3f'"/>
-                      </xsl:call-template>
-                      <xsl:text>')</xsl:text>
-                    </xsl:attribute>
-                  </xsl:when>
-                  <xsl:when test="$OnClick='URL'">
-                    <xsl:if test="url">
-                      <xsl:attribute name="onclick">
-                        <xsl:text>window.open('</xsl:text>
-                        <xsl:value-of select="url"/>
-                        <xsl:text>')</xsl:text>
-                      </xsl:attribute>
-                    </xsl:if>
-                  </xsl:when>
-                </xsl:choose>
-
-
+              <td data-toggle="popover" data-placement="right">
                 <xsl:choose>
                   <xsl:when test="number($StartTime) &gt;= number($StartDisplayCode) and $StopTime &lt;= $StopDisplayCode">
                     <!-- Program starts during and concludes during display window. Putting first since most likely.-->
@@ -315,11 +282,9 @@
                     </xsl:if>
                   </xsl:if>
                 </xsl:attribute>
+                <!--____________________________________ ToolTIP____________________________________ -->
                 <xsl:if test="$DescriptionPopups">
-                  <xsl:attribute name="title">
-                    <xsl:text>header=[</xsl:text>
-                    <xsl:value-of select="title" />
-                    <xsl:text>] body=[</xsl:text>
+                  <xsl:attribute name="data-content">
                     <xsl:if test="$PopupTimes or ($PopupRating and rating) or ($PopupSubtitle and sub-title) or ($PopupDescription and desc) or ($PopupDate and date) or ($PopupCategories and category) or ($PopupStarRating and star-rating)">
                       <xsl:if test="$PopupTimes">
                         &lt;span class="popuptimes"&gt;
@@ -330,6 +295,11 @@
                           <xsl:otherwise>???</xsl:otherwise>
                         </xsl:choose>
                         &lt;/span&gt;
+                      </xsl:if>
+                      <xsl:if test="string-length($iconname) &gt; 0">
+                        <xsl:text>&lt;img src="</xsl:text>
+                        <xsl:value-of select="icon/@src"/>
+                        <xsl:text>" alt="" class="popupimage"/></xsl:text>
                       </xsl:if>
                       <xsl:if test="$PopupRating">
                         &lt;span class="popuprating"&gt;<xsl:value-of select="rating/value" />&lt;/span&gt;
@@ -444,36 +414,69 @@
                         &lt;/ul&gt;
                       </xsl:if>
                     </xsl:if>
-                    <xsl:text>] cssheader=[popupheader] cssbody=[popupbody] delay=[</xsl:text>
-                    <xsl:value-of select="$PopupDelay"/>
-                    <xsl:text>]</xsl:text>
                   </xsl:attribute>
                 </xsl:if>
-
-                <table class="internal">
-                  <tr>
-                    <xsl:if test="number($StartTime) &lt; number($StartDisplayCode)">
-                      <td class="extendleft">
-                        <span>
-                          <xsl:value-of select="$ExtendLeftText" />
-                        </span>
-                      </td>
+                <!--____________________________________ END ToolTIP  ___________________________________ -->
+                <!--____________________________________ OnClick IMDB ___________________________________ -->
+                <xsl:choose>
+                  <xsl:when test="$OnClick='IMDB'">
+                    <xsl:attribute name="onclick">
+                      <xsl:text>window.open('http://www.imdb.com/find?q=</xsl:text>
+                      <xsl:call-template name="replace">
+                        <xsl:with-param name="string">
+                          <xsl:call-template name="replace">
+                            <xsl:with-param name="string">
+                              <xsl:call-template name="replace">
+                                <xsl:with-param name="string">
+                                  <xsl:call-template name="fixquotes">
+                                    <xsl:with-param name="string" select="translate(title,' ','+')" />
+                                  </xsl:call-template>
+                                </xsl:with-param>
+                                <xsl:with-param name="pattern" select="'&amp;'"/>
+                                <xsl:with-param name="replacement" select="'%26'"/>
+                              </xsl:call-template>
+                            </xsl:with-param>
+                            <xsl:with-param name="pattern" select="'='"/>
+                            <xsl:with-param name="replacement" select="'%3d'"/>
+                          </xsl:call-template>
+                        </xsl:with-param>
+                        <xsl:with-param name="pattern" select="'?'"/>
+                        <xsl:with-param name="replacement" select="'%3f'"/>
+                      </xsl:call-template>
+                      <xsl:text>')</xsl:text>
+                    </xsl:attribute>
+                  </xsl:when>
+                  <xsl:when test="$OnClick='URL'">
+                    <xsl:if test="url">
+                      <xsl:attribute name="onclick">
+                        <xsl:text>window.open('</xsl:text>
+                        <xsl:value-of select="url"/>
+                        <xsl:text>')</xsl:text>
+                      </xsl:attribute>
                     </xsl:if>
-                    <td class="program">
+                  </xsl:when>
+                   <xsl:when test="$OnClick='POPER'">
+                      <xsl:attribute name="title">
+                        <xsl:value-of select="title"/>
+                      </xsl:attribute>
+                  </xsl:when>
+                </xsl:choose>
+                 <!--__________________________ END OnClick IMDB ___________________________ -->
+                <div class="internal">
+                    <div class="program">
+                      <xsl:if test="number($StartTime) &lt; number($StartDisplayCode)">
+                        <xsl:attribute name="class">program extendleft</xsl:attribute>
+                      </xsl:if>
+                       <xsl:if test="number($StopTime) &gt; number($StopDisplayCode)">
+                        <xsl:attribute name="class">program extendright</xsl:attribute>
+                      </xsl:if>
                       <xsl:value-of select="title" />
                       <xsl:if test="$PrintDates and string-length(date) = 4">
                         (<xsl:value-of select="date"/>)
                       </xsl:if>
-                    </td>
-                    <xsl:if test="number($StopTime) &gt; number($StopDisplayCode)">
-                      <td class="extendright">
-                        <span>
-                          <xsl:value-of select="$ExtendRightText" />
-                        </span>
-                      </td>
-                    </xsl:if>
-                  </tr>
-                </table>
+                     
+                    </div>
+                </div>
 
               </td>
               <xsl:if test="$FixGaps = 1 and position()!=last() and number($StopTime) &lt; number($NextStartTime)">
@@ -504,43 +507,6 @@
                   <xsl:text>]</xsl:text>
                 </xsl:attribute>
               </xsl:if>
-              <table class="rightchanneltable">
-                <tr>
-                  <xsl:if test="string-length($iconname) &gt; 0">
-                    <td class="leftlogocell">
-                        <img>
-                          <xsl:attribute name="src">
-                            <xsl:value-of select="icon/@src"/>
-                          </xsl:attribute>
-                          <xsl:attribute name="class">channelimage</xsl:attribute>
-                        </img>
-                    </td>
-                  </xsl:if>
-
-                  <td class="middlecell">
-
-                    <br class="leftchannelbr" />
-                    <span class="leftnbsp">&#160;</span>
-                    <span class="channelname">
-                      <xsl:value-of select="$channelshortname"/>
-                    </span>
-                    <br class="rightchannelbr" />
-                    <span class="rightnbsp">&#160;</span>
-
-                  </td>
-
-                  <td class="rightlogocell">
-                    <xsl:if test="string-length($iconname) &gt; 0">
-                      <img>
-                        <xsl:attribute name="src">
-                          <xsl:value-of select="icon/@src"/>
-                        </xsl:attribute>
-                        <xsl:attribute name="class">channelimage</xsl:attribute>
-                      </img>
-                    </xsl:if>
-                  </td>
-                </tr>
-              </table>
             </th>
           </tr>
         </xsl:for-each>
