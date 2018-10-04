@@ -15,7 +15,7 @@ $(function () {
     );
     window.addEventListener('load', function () {
         if ('serviceWorker' in navigator &&
-            (window.location.protocol === 'https:' || isLocalhost)) {
+            (window.location.protocol === 'https:' || window.location.protocol === 'http:' || isLocalhost)) {
             if ('serviceWorker' in navigator) {
                 let newWorker;
                 navigator.serviceWorker
