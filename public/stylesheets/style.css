@@ -73,8 +73,8 @@ body {
 #vline .vheader{
     position: absolute;
     top:0;
-    left: -10px;
-    width: 20px;
+    left: -6px;
+    width: 10px;
     height: 20px;
     /* content:"\f077"; */
     color: #b031b0;
