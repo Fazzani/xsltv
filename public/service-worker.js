@@ -47,7 +47,7 @@ self.addEventListener('fetch', event => {
     //It should return a response object
     const getCustomResponsePromise = async function () {
         console.log(`URL ${event.request.url}`, `location origin ${location}`)
-        if ((event.request.url.indexOf('http') === 0)) {
+        if ((event.request.url.indexOf('https') === 0)) {
             try {
                 //Try to get the cached response
                 const cachedResponse = await caches.match(event.request)
