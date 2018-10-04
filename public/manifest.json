@@ -1,8 +1,8 @@
 {
   "short_name": "XViewer",
   "name": "EPG Xmltv viewer",
-  "theme_color": "#303030",
-  "background_color": "#034162",
+  "theme_color": "#191925",
+  "background_color": "#191925",
   "scope": "/",
   "start_url": "/",
   "display": "fullscreen",
