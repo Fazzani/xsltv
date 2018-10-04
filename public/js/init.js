@@ -67,11 +67,17 @@ $(function () {
     var $xmltv_list = $("#xmlt_list");
     var $tvFrame = $("#tvframe");
     var $loading = $('#loading');
+    var queryStringParams = parseQueryString();
 
     fetch(api_files_url)
         .then(res => res.json())
         .then(res => {
             $xmltv_list.empty().append('<option selected>Select one xmltv file</option>');
+
+            //Loading file from queryString (ex: http://localhost:3000/?file=https://raw.githubusercontent.com/steventrux/epg/master/guide.xml)
+            if (queryStringParams['file']) {
+                $xmltv_list.append(`<option value="${queryStringParams['file']}">${queryStringParams['file']}</option>`);
+            }
             if (res && res.files.length > 0) {
                 res.files.forEach(file => $xmltv_list.append(`<option value="${file.url}">${file.name}</option>`));
                 let selected = $($xmltv_list.find('option')[1]);
@@ -288,7 +294,7 @@ $(function () {
 
     window.Init = Init;
     $loading.css("display", "block");
-    
+
 });
 
 
@@ -388,3 +394,17 @@ function initFromCookie() {
         loadonclick
     };
 }
+
+var parseQueryString = () => {
+
+    var str = window.location.search;
+    var objURL = {};
+
+    str.replace(
+        new RegExp("([^?=&]+)(=([^&]*))?", "g"),
+        function ($0, $1, $2, $3) {
+            objURL[$1] = $3;
+        }
+    );
+    return objURL;
+};
