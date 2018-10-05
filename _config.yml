@@ -2,5 +2,6 @@ theme: jekyll-theme-cayman
 lang: en-US
 title: XViewer
 email: fazzani.heni@outlook.com
-description: Xmltv viewer
+description: > 
+  Xmltv (EPG) files viewer.
 baseurl: /xsltv/docs/
