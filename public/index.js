@@ -139,7 +139,7 @@ $(function () {
     sortstring = "display-name[3]";
 
     function loadXSL(xmlfileneeded) {
-        $loading.css('display', 'block');
+        $loading.show();
         $loading.html("index.xsl");
         fetch(index_xsl, {
                 method: 'GET'
@@ -163,7 +163,7 @@ $(function () {
     function loadXML(xmlfileneeded) {
         if (xmlfileneeded) {
 
-            $loading.css("display", "block");
+            $loading.show();
             $loading.text(xmlfileneeded);
             if (window.XMLHttpRequest && window.XSLTProcessor) {
 
@@ -174,7 +174,7 @@ $(function () {
                     .then(x => {
                         xml = x;
                         xmlfileloaded = xmlfileneeded;
-                        $loading.css("display", "block");
+                        $loading.show();
                         $loading.text("Preparing grid...");
                         Init(hours, myDate.getHours(), myDate.getDate(), myDate.getMonth() + 1, myDate.getFullYear());
                     }).catch(function (error) {
@@ -301,7 +301,7 @@ $(function () {
     }
 
     window.Init = Init;
-    $loading.css("display", "block");
+    $loading.show();
 
 });
 

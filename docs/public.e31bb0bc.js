@@ -22361,7 +22361,7 @@ var api_files_url = 'https://api.myjson.com/bins/8tvgs';
   sortstring = "display-name[3]";
 
   function loadXSL(xmlfileneeded) {
-    $loading.css('display', 'block');
+    $loading.show();
     $loading.html("index.xsl");
     fetch(_index.default, {
       method: 'GET'
@@ -22389,7 +22389,7 @@ var api_files_url = 'https://api.myjson.com/bins/8tvgs';
 
   function loadXML(xmlfileneeded) {
     if (xmlfileneeded) {
-      $loading.css("display", "block");
+      $loading.show();
       $loading.text(xmlfileneeded);
 
       if (window.XMLHttpRequest && window.XSLTProcessor) {
@@ -22402,7 +22402,7 @@ var api_files_url = 'https://api.myjson.com/bins/8tvgs';
         }).then(function (x) {
           xml = x;
           xmlfileloaded = xmlfileneeded;
-          $loading.css("display", "block");
+          $loading.show();
           $loading.text("Preparing grid...");
           Init(hours, myDate.getHours(), myDate.getDate(), myDate.getMonth() + 1, myDate.getFullYear());
         }).catch(function (error) {
@@ -22529,7 +22529,7 @@ var api_files_url = 'https://api.myjson.com/bins/8tvgs';
   }
 
   window.Init = Init;
-  $loading.css("display", "block");
+  $loading.show();
 });
 
 var InitTimeline = function InitTimeline($tvFrame, $vline, hours) {
@@ -22666,7 +22666,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58473" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64495" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
