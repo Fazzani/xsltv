@@ -2,11 +2,12 @@
   "name": "xsltv",
   "version": "1.0.0",
   "description": "EPG viewer for xmltv files",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:dev": "nodemon -L --watch public -e js,html,xsl server.js",
-    "start": "node server.js"
+    "start": "parcel public/index.html --out-dir docs",
+    "build": "parcel build public/index.html --out-dir docs --detailed-report --public-url ./",
+    "deploy": "npm run build && git add . && git commit -a -m 'latest build' && git push origin master"
   },
   "repository": {
     "type": "git",
@@ -14,22 +15,29 @@
   },
   "keywords": [
     "epg",
-    "xmltv"
+    "xmltv",
+    "viewer"
   ],
   "author": "Fazzani Heni",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Fazzani/xsltv/issues"
   },
-  "homepage": "https://github.com/Fazzani/xsltv#readme",
+  "homepage": "https://github.com/Fazzani/xsltv/public/index.html",
   "dependencies": {
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
     "body-parser": "^1.18.3",
-    "cookie-parser": "^1.4.3",
+    "bootstrap": "^4.1.3",
     "csurf": "^1.9.0",
-    "express": "^4.16.3",
-    "moment": "^2.22.2"
+    "jquery": "^3.3.1",
+    "jquery.cookie": "^1.4.1",
+    "moment": "^2.22.2",
+    "parcel-bundler": "^1.10.1",
+    "popper": "^1.0.1",
+    "popper.js": "^1.14.4"
   },
   "devDependencies": {
-    "nodemon": "^1.18.4"
+    "babel-core": "^6.26.3"
   }
 }

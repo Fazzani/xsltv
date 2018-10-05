@@ -1,12 +1,6 @@
 var CACHE_NAME = 'pwa-xviewers-asset-cache-0';
 var RESOURCES_TO_PRELOAD = [
-    '/xsltv/public/index.html',
-    '/xsltv/public/index.xsl',
-    '/xsltv/public/js/init.js',
-    '/xsltv/public/lang/english.js',
-    '/xsltv/public/stylesheets/style.css',
-    '/xsltv/public/images/yahoonewprogrambg.gif',
-    '/xsltv/public/images/empty.gif'
+    'index.html'
 ];
 
 // Preload some resources during install
