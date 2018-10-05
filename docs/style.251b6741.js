@@ -104,52 +104,79 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   // Override the current require with this new one
   return newRequire;
-})({"manifest.json":[function(require,module,exports) {
-module.exports = {
-  "short_name": "XViewer",
-  "name": "EPG Xmltv viewer",
-  "theme_color": "#191925",
-  "background_color": "#191925",
-  "scope": "/",
-  "start_url": "/xviewer/public",
-  "display": "fullscreen",
-  "orientation": "portrait",
-  "lang": "en-US",
-  "icons": [{
-    "src": "images/icons/icon-72x72.png",
-    "sizes": "72x72",
-    "type": "image/png"
-  }, {
-    "src": "images/icons/icon-96x96.png",
-    "sizes": "96x96",
-    "type": "image/png"
-  }, {
-    "src": "images/icons/icon-128x128.png",
-    "sizes": "128x128",
-    "type": "image/png"
-  }, {
-    "src": "assets/icons/synker-144x144.png",
-    "sizes": "144x144",
-    "type": "image/png"
-  }, {
-    "src": "images/icons/icon-152x152.png",
-    "sizes": "152x152",
-    "type": "image/png"
-  }, {
-    "src": "assets/icons/synker-192x192.png",
-    "sizes": "192x192",
-    "type": "image/png"
-  }, {
-    "src": "images/icons/icon-384x384.png",
-    "sizes": "384x384",
-    "type": "image/png"
-  }, {
-    "src": "images/icons/icon-512x512.png",
-    "sizes": "512x512",
-    "type": "image/png"
-  }]
-};
-},{}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+})({"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
+
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
+  }
+
+  return bundleURL;
+}
+
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp):\/\/[^)\n]+/g);
+
+    if (matches) {
+      return getBaseURL(matches[0]);
+    }
+  }
+
+  return '/';
+}
+
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp):\/\/.+)\/[^/]+$/, '$1') + '/';
+}
+
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"../node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
+
+function updateLink(link) {
+  var newLink = link.cloneNode();
+
+  newLink.onload = function () {
+    link.remove();
+  };
+
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+
+var cssTimeout = null;
+
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
+  }
+
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
+      }
+    }
+
+    cssTimeout = null;
+  }, 50);
+}
+
+module.exports = reloadCSS;
+},{"./bundle-url":"../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"styles/style.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"./..\\images\\empty.gif":[["empty.d0b8fc41.gif","images/empty.gif"],"images/empty.gif"],"./..\\images\\starempty.png":[["starempty.cf8af87e.png","images/starempty.png"],"images/starempty.png"],"./..\\images\\starhalf.png":[["starhalf.bc55ac13.png","images/starhalf.png"],"images/starhalf.png"],"./..\\images\\starfilled.png":[["starfilled.ff5b9747.png","images/starfilled.png"],"images/starfilled.png"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -318,4 +345,4 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},["../node_modules/parcel-bundler/src/builtins/hmr-runtime.js","manifest.json"], null)
+},{}]},{},["../node_modules/parcel-bundler/src/builtins/hmr-runtime.js"], null)

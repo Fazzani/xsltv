@@ -17431,285 +17431,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     value: true
   });
 });
-},{"jquery":"../node_modules/jquery/dist/jquery.js","popper.js":"../node_modules/popper.js/dist/esm/popper.js"}],"lang/english.js":[function(require,module,exports) {
-var loadingtext = 'Loading';
-var errortext = 'Error';
-var filetext = 'File';
-var notfoundtext = 'not found';
-var preferenceslink = 'Preferences';
-var datepickerbutton = 'Go!';
-var earliertext = 'Earlier';
-var latertext = 'Later';
-var gridtab = 'Grid';
-var displayhourslabel = 'Display Hours';
-var displayhourshint = 'Select the number of hours to display.';
-var autosizelabel = 'Automatic table size';
-var autosizehint = 'Check to automatically select a table width based on number of columns. Uncheck to enable the next field.';
-var tablewidthlabel = 'Table width (in pixels)';
-var tablewidthhint = 'Specify the width of the table in pixels. Check the above box to set this automatically.';
-var offsetminuteslabel = 'Start with next hour after';
-var offsetminuteshint = 'Set the minutes portion of the time after which the grid will start with the next hour on initial load.';
-var refreshonthelabel = 'Refresh every hour at';
-var refreshonthehint = 'XSLTv can automatically refresh the listings every hour to keep the grid up-to-date, if the browser is kept open. Select the time each hour to perform the refresh.';
-var norefreshoption = 'Do not refresh';
-var timebarfrequencylabel = 'Time Bar Frequency';
-var timebarfrequencyhint = 'How often to repeat the time header row.';
-var toponlyoption = 'Top Line Only';
-var popupstab = 'Popups';
-var channelpopupslabel = 'Channel Popups';
-var channelpopupshint = 'Check to enable the popups when the mouse is over the channel names.';
-var descriptionpopupslabel = 'Description Popups';
-var descriptionpopupshint = 'Check to enable the popups when the mouse is over a program.';
-var popupdelaylabel = 'Popup Delay (in ms)';
-var popupdelayhint = 'Set the delay in milliseconds before popups will appear. Set at 0 to disable delay.';
-var popuptimeslabel = 'Times';
-var popuptimeshint = 'Check to show start and end times in the program popups.';
-var popupratinglabel = 'Rating';
-var popupratinghint = 'Check to show MPAA ratings in the program popups.';
-var popupsubtitlelabel = 'Subtitle';
-var popupsubtitlehint = 'Check to show program subtitles in the program popups.';
-var popupdescriptionlabel = 'Description';
-var popupdescriptionhint = 'Check to show program descriptions in the program popups.';
-var popupdatelabel = 'Date';
-var popupdatehint = 'Check to show dates in the program popups. Dates are either release dates for movies or first-aired dates for shows.';
-var popupcategorieslabel = 'Categories';
-var popupcategorieshint = 'Check to show show categories or genres in the program popups.';
-var popupstarratinglabel = 'Star Rating';
-var popupstarratinghint = 'Check to show a graphical star rating in the program popups.';
-var localoptionstab = 'Local Options';
-var languagelabel = 'Language';
-var fixgapslabel = 'Fix gaps in listings';
-var fixgapshint = 'Check to enable gap-detection in listings which are not contiguous. This option requires listings to be sorted with --by-channel to work. This option will cause listings to load much more slowly, so do not check unnecessarily.';
-var fixgapsconfirm = 'To fill gaps in listings, please ensure the XML file has been sorted with the --by-channel option!';
-var absoluteiconslabel = 'Absolute icon references';
-var absoluteiconshint = 'XSLTv looks for channel icons in an \'icons\' directory. Check this box if your xml file contains absolute url references to icons.';
-var dayfirstlabel = 'Display day first in dates';
-var dayfirsthint = 'Check this box to show dates in dd/mm/yyyy format. Uncheck for mm/dd/yyyy format.';
-var grabberlabel = 'Grabber: tv_grab_';
-var grabberhint = 'Select your grabber to apply localized channel-name settings.';
-var otheroptionstab = 'Other Options';
-var loadonclicklabel = 'On click:';
-var loadonclicknothing = 'Do Nothing';
-var loadonclickIMDB = 'Search IMDB';
-var loadonclickURL = 'URL in XML';
-var categorycolorslabel = 'Category Highlighting';
-var categorycolorshint = 'Select to enable category highlighting (colors must be defined in CSS files). Deselect for a small speed improvement. This is separate from the ratings-based highlighting.';
-var dailyfileslabel = 'Use daily files';
-var dailyfileshint = 'Select to use daily files in the format YYYYMMDD.xml instead of a single tv.xml file.';
-var highlightclickablelabel = 'Highlight linked programs';
-var highlightclickablehint = 'Highlight programs which are linked to a URL (set above). The type of highlighting depends on the stylesheet. It is recommended to disable this if all programs are to be links, or if none are.';
-var highlightmovieslabel = 'Highlight movies rated at or over:';
-var highlightmovieshint = 'Highlight movies rated at or over this number of stars. The type of highlighting depends on the stylesheet, but is generally a brighter color. This is separate from the category highlighting below.';
-var highlightnewlabel = 'Highlight new shows';
-var highlightnewhint = 'Highlight shows which are airing for the first time. The highlighting is generally a darker or thicker border.';
-var printdateslabel = 'Show movie release dates';
-var printdateshint = 'Show movie release dates in the grid. This is separate from the dates in the popup, and only applies to movies.';
-var twelvehourlabel = 'Use twelve-hour clock';
-var twelvehourhint = 'Use twelve-hour (with AM and PM) instead of twenty-four-hour clock.';
-var showclocklabel = 'Show clock in upper right';
-var showclockhint = 'Check to show current time and date in the top right of page.';
-var showbarclocklabel = 'Show clock in top bar';
-var showbarclockhint = 'Check to show current time in the top bar.';
-var reloadbutton = 'Reload';
-var monthnames = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
-var shortmonthnames = new Array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
-var daynames = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
-var dayletters = new Array('S', 'M', 'T', 'W', 'T', 'F', 'S');
-var alllabel = 'All';
-var nonelabel = 'None';
-},{}],"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
-var bundleURL = null;
-
-function getBundleURLCached() {
-  if (!bundleURL) {
-    bundleURL = getBundleURL();
-  }
-
-  return bundleURL;
-}
-
-function getBundleURL() {
-  // Attempt to find the URL of the current script and use that as the base URL
-  try {
-    throw new Error();
-  } catch (err) {
-    var matches = ('' + err.stack).match(/(https?|file|ftp):\/\/[^)\n]+/g);
-
-    if (matches) {
-      return getBaseURL(matches[0]);
-    }
-  }
-
-  return '/';
-}
-
-function getBaseURL(url) {
-  return ('' + url).replace(/^((?:https?|file|ftp):\/\/.+)\/[^/]+$/, '$1') + '/';
-}
-
-exports.getBundleURL = getBundleURLCached;
-exports.getBaseURL = getBaseURL;
-},{}],"../node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
-var bundle = require('./bundle-url');
-
-function updateLink(link) {
-  var newLink = link.cloneNode();
-
-  newLink.onload = function () {
-    link.remove();
-  };
-
-  newLink.href = link.href.split('?')[0] + '?' + Date.now();
-  link.parentNode.insertBefore(newLink, link.nextSibling);
-}
-
-var cssTimeout = null;
-
-function reloadCSS() {
-  if (cssTimeout) {
-    return;
-  }
-
-  cssTimeout = setTimeout(function () {
-    var links = document.querySelectorAll('link[rel="stylesheet"]');
-
-    for (var i = 0; i < links.length; i++) {
-      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
-        updateLink(links[i]);
-      }
-    }
-
-    cssTimeout = null;
-  }, 50);
-}
-
-module.exports = reloadCSS;
-},{"./bundle-url":"../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"styles/style.css":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
-
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"./..\\images\\empty.gif":[["empty.d0b8fc41.gif","images/empty.gif"],"images/empty.gif"],"./..\\images\\starempty.png":[["starempty.cf8af87e.png","images/starempty.png"],"images/starempty.png"],"./..\\images\\starhalf.png":[["starhalf.bc55ac13.png","images/starhalf.png"],"images/starhalf.png"],"./..\\images\\starfilled.png":[["starfilled.ff5b9747.png","images/starfilled.png"],"images/starfilled.png"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/jquery.cookie/jquery.cookie.js":[function(require,module,exports) {
-var define;
-/*!
- * jQuery Cookie Plugin v1.4.1
- * https://github.com/carhartl/jquery-cookie
- *
- * Copyright 2013 Klaus Hartl
- * Released under the MIT license
- */
-(function (factory) {
-	if (typeof define === 'function' && define.amd) {
-		// AMD
-		define(['jquery'], factory);
-	} else if (typeof exports === 'object') {
-		// CommonJS
-		factory(require('jquery'));
-	} else {
-		// Browser globals
-		factory(jQuery);
-	}
-}(function ($) {
-
-	var pluses = /\+/g;
-
-	function encode(s) {
-		return config.raw ? s : encodeURIComponent(s);
-	}
-
-	function decode(s) {
-		return config.raw ? s : decodeURIComponent(s);
-	}
-
-	function stringifyCookieValue(value) {
-		return encode(config.json ? JSON.stringify(value) : String(value));
-	}
-
-	function parseCookieValue(s) {
-		if (s.indexOf('"') === 0) {
-			// This is a quoted cookie as according to RFC2068, unescape...
-			s = s.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\');
-		}
-
-		try {
-			// Replace server-side written pluses with spaces.
-			// If we can't decode the cookie, ignore it, it's unusable.
-			// If we can't parse the cookie, ignore it, it's unusable.
-			s = decodeURIComponent(s.replace(pluses, ' '));
-			return config.json ? JSON.parse(s) : s;
-		} catch(e) {}
-	}
-
-	function read(s, converter) {
-		var value = config.raw ? s : parseCookieValue(s);
-		return $.isFunction(converter) ? converter(value) : value;
-	}
-
-	var config = $.cookie = function (key, value, options) {
-
-		// Write
-
-		if (value !== undefined && !$.isFunction(value)) {
-			options = $.extend({}, config.defaults, options);
-
-			if (typeof options.expires === 'number') {
-				var days = options.expires, t = options.expires = new Date();
-				t.setTime(+t + days * 864e+5);
-			}
-
-			return (document.cookie = [
-				encode(key), '=', stringifyCookieValue(value),
-				options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
-				options.path    ? '; path=' + options.path : '',
-				options.domain  ? '; domain=' + options.domain : '',
-				options.secure  ? '; secure' : ''
-			].join(''));
-		}
-
-		// Read
-
-		var result = key ? undefined : {};
-
-		// To prevent the for loop in the first place assign an empty array
-		// in case there are no cookies at all. Also prevents odd result when
-		// calling $.cookie().
-		var cookies = document.cookie ? document.cookie.split('; ') : [];
-
-		for (var i = 0, l = cookies.length; i < l; i++) {
-			var parts = cookies[i].split('=');
-			var name = decode(parts.shift());
-			var cookie = parts.join('=');
-
-			if (key && key === name) {
-				// If second argument (value) is a function it's a converter...
-				result = read(cookie, value);
-				break;
-			}
-
-			// Prevent storing a cookie that we couldn't decode.
-			if (!key && (cookie = read(cookie)) !== undefined) {
-				result[name] = cookie;
-			}
-		}
-
-		return result;
-	};
-
-	config.defaults = {};
-
-	$.removeCookie = function (key, options) {
-		if ($.cookie(key) === undefined) {
-			return false;
-		}
-
-		// Must not alter options, thus extending a fresh object...
-		$.cookie(key, '', $.extend({}, options, { expires: -1 }));
-		return !$.cookie(key);
-	};
-
-}));
-
-},{"jquery":"../node_modules/jquery/dist/jquery.js"}],"../node_modules/moment/moment.js":[function(require,module,exports) {
+},{"jquery":"../node_modules/jquery/dist/jquery.js","popper.js":"../node_modules/popper.js/dist/esm/popper.js"}],"../node_modules/moment/moment.js":[function(require,module,exports) {
 var define;
 var global = arguments[3];
 //! moment.js
@@ -22219,7 +21941,213 @@ var global = arguments[3];
 
 })));
 
-},{}],"index.xsl":[function(require,module,exports) {
+},{}],"lang/english.js":[function(require,module,exports) {
+var loadingtext = 'Loading';
+var errortext = 'Error';
+var filetext = 'File';
+var notfoundtext = 'not found';
+var preferenceslink = 'Preferences';
+var datepickerbutton = 'Go!';
+var earliertext = 'Earlier';
+var latertext = 'Later';
+var gridtab = 'Grid';
+var displayhourslabel = 'Display Hours';
+var displayhourshint = 'Select the number of hours to display.';
+var autosizelabel = 'Automatic table size';
+var autosizehint = 'Check to automatically select a table width based on number of columns. Uncheck to enable the next field.';
+var tablewidthlabel = 'Table width (in pixels)';
+var tablewidthhint = 'Specify the width of the table in pixels. Check the above box to set this automatically.';
+var offsetminuteslabel = 'Start with next hour after';
+var offsetminuteshint = 'Set the minutes portion of the time after which the grid will start with the next hour on initial load.';
+var refreshonthelabel = 'Refresh every hour at';
+var refreshonthehint = 'XSLTv can automatically refresh the listings every hour to keep the grid up-to-date, if the browser is kept open. Select the time each hour to perform the refresh.';
+var norefreshoption = 'Do not refresh';
+var timebarfrequencylabel = 'Time Bar Frequency';
+var timebarfrequencyhint = 'How often to repeat the time header row.';
+var toponlyoption = 'Top Line Only';
+var popupstab = 'Popups';
+var channelpopupslabel = 'Channel Popups';
+var channelpopupshint = 'Check to enable the popups when the mouse is over the channel names.';
+var descriptionpopupslabel = 'Description Popups';
+var descriptionpopupshint = 'Check to enable the popups when the mouse is over a program.';
+var popupdelaylabel = 'Popup Delay (in ms)';
+var popupdelayhint = 'Set the delay in milliseconds before popups will appear. Set at 0 to disable delay.';
+var popuptimeslabel = 'Times';
+var popuptimeshint = 'Check to show start and end times in the program popups.';
+var popupratinglabel = 'Rating';
+var popupratinghint = 'Check to show MPAA ratings in the program popups.';
+var popupsubtitlelabel = 'Subtitle';
+var popupsubtitlehint = 'Check to show program subtitles in the program popups.';
+var popupdescriptionlabel = 'Description';
+var popupdescriptionhint = 'Check to show program descriptions in the program popups.';
+var popupdatelabel = 'Date';
+var popupdatehint = 'Check to show dates in the program popups. Dates are either release dates for movies or first-aired dates for shows.';
+var popupcategorieslabel = 'Categories';
+var popupcategorieshint = 'Check to show show categories or genres in the program popups.';
+var popupstarratinglabel = 'Star Rating';
+var popupstarratinghint = 'Check to show a graphical star rating in the program popups.';
+var localoptionstab = 'Local Options';
+var languagelabel = 'Language';
+var fixgapslabel = 'Fix gaps in listings';
+var fixgapshint = 'Check to enable gap-detection in listings which are not contiguous. This option requires listings to be sorted with --by-channel to work. This option will cause listings to load much more slowly, so do not check unnecessarily.';
+var fixgapsconfirm = 'To fill gaps in listings, please ensure the XML file has been sorted with the --by-channel option!';
+var absoluteiconslabel = 'Absolute icon references';
+var absoluteiconshint = 'XSLTv looks for channel icons in an \'icons\' directory. Check this box if your xml file contains absolute url references to icons.';
+var dayfirstlabel = 'Display day first in dates';
+var dayfirsthint = 'Check this box to show dates in dd/mm/yyyy format. Uncheck for mm/dd/yyyy format.';
+var grabberlabel = 'Grabber: tv_grab_';
+var grabberhint = 'Select your grabber to apply localized channel-name settings.';
+var otheroptionstab = 'Other Options';
+var loadonclicklabel = 'On click:';
+var loadonclicknothing = 'Do Nothing';
+var loadonclickIMDB = 'Search IMDB';
+var loadonclickURL = 'URL in XML';
+var categorycolorslabel = 'Category Highlighting';
+var categorycolorshint = 'Select to enable category highlighting (colors must be defined in CSS files). Deselect for a small speed improvement. This is separate from the ratings-based highlighting.';
+var dailyfileslabel = 'Use daily files';
+var dailyfileshint = 'Select to use daily files in the format YYYYMMDD.xml instead of a single tv.xml file.';
+var highlightclickablelabel = 'Highlight linked programs';
+var highlightclickablehint = 'Highlight programs which are linked to a URL (set above). The type of highlighting depends on the stylesheet. It is recommended to disable this if all programs are to be links, or if none are.';
+var highlightmovieslabel = 'Highlight movies rated at or over:';
+var highlightmovieshint = 'Highlight movies rated at or over this number of stars. The type of highlighting depends on the stylesheet, but is generally a brighter color. This is separate from the category highlighting below.';
+var highlightnewlabel = 'Highlight new shows';
+var highlightnewhint = 'Highlight shows which are airing for the first time. The highlighting is generally a darker or thicker border.';
+var printdateslabel = 'Show movie release dates';
+var printdateshint = 'Show movie release dates in the grid. This is separate from the dates in the popup, and only applies to movies.';
+var twelvehourlabel = 'Use twelve-hour clock';
+var twelvehourhint = 'Use twelve-hour (with AM and PM) instead of twenty-four-hour clock.';
+var showclocklabel = 'Show clock in upper right';
+var showclockhint = 'Check to show current time and date in the top right of page.';
+var showbarclocklabel = 'Show clock in top bar';
+var showbarclockhint = 'Check to show current time in the top bar.';
+var reloadbutton = 'Reload';
+var monthnames = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+var shortmonthnames = new Array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
+var daynames = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+var dayletters = new Array('S', 'M', 'T', 'W', 'T', 'F', 'S');
+var alllabel = 'All';
+var nonelabel = 'None';
+},{}],"../node_modules/jquery.cookie/jquery.cookie.js":[function(require,module,exports) {
+var define;
+/*!
+ * jQuery Cookie Plugin v1.4.1
+ * https://github.com/carhartl/jquery-cookie
+ *
+ * Copyright 2013 Klaus Hartl
+ * Released under the MIT license
+ */
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD
+		define(['jquery'], factory);
+	} else if (typeof exports === 'object') {
+		// CommonJS
+		factory(require('jquery'));
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function ($) {
+
+	var pluses = /\+/g;
+
+	function encode(s) {
+		return config.raw ? s : encodeURIComponent(s);
+	}
+
+	function decode(s) {
+		return config.raw ? s : decodeURIComponent(s);
+	}
+
+	function stringifyCookieValue(value) {
+		return encode(config.json ? JSON.stringify(value) : String(value));
+	}
+
+	function parseCookieValue(s) {
+		if (s.indexOf('"') === 0) {
+			// This is a quoted cookie as according to RFC2068, unescape...
+			s = s.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+		}
+
+		try {
+			// Replace server-side written pluses with spaces.
+			// If we can't decode the cookie, ignore it, it's unusable.
+			// If we can't parse the cookie, ignore it, it's unusable.
+			s = decodeURIComponent(s.replace(pluses, ' '));
+			return config.json ? JSON.parse(s) : s;
+		} catch(e) {}
+	}
+
+	function read(s, converter) {
+		var value = config.raw ? s : parseCookieValue(s);
+		return $.isFunction(converter) ? converter(value) : value;
+	}
+
+	var config = $.cookie = function (key, value, options) {
+
+		// Write
+
+		if (value !== undefined && !$.isFunction(value)) {
+			options = $.extend({}, config.defaults, options);
+
+			if (typeof options.expires === 'number') {
+				var days = options.expires, t = options.expires = new Date();
+				t.setTime(+t + days * 864e+5);
+			}
+
+			return (document.cookie = [
+				encode(key), '=', stringifyCookieValue(value),
+				options.expires ? '; expires=' + options.expires.toUTCString() : '', // use expires attribute, max-age is not supported by IE
+				options.path    ? '; path=' + options.path : '',
+				options.domain  ? '; domain=' + options.domain : '',
+				options.secure  ? '; secure' : ''
+			].join(''));
+		}
+
+		// Read
+
+		var result = key ? undefined : {};
+
+		// To prevent the for loop in the first place assign an empty array
+		// in case there are no cookies at all. Also prevents odd result when
+		// calling $.cookie().
+		var cookies = document.cookie ? document.cookie.split('; ') : [];
+
+		for (var i = 0, l = cookies.length; i < l; i++) {
+			var parts = cookies[i].split('=');
+			var name = decode(parts.shift());
+			var cookie = parts.join('=');
+
+			if (key && key === name) {
+				// If second argument (value) is a function it's a converter...
+				result = read(cookie, value);
+				break;
+			}
+
+			// Prevent storing a cookie that we couldn't decode.
+			if (!key && (cookie = read(cookie)) !== undefined) {
+				result[name] = cookie;
+			}
+		}
+
+		return result;
+	};
+
+	config.defaults = {};
+
+	$.removeCookie = function (key, options) {
+		if ($.cookie(key) === undefined) {
+			return false;
+		}
+
+		// Must not alter options, thus extending a fresh object...
+		$.cookie(key, '', $.extend({}, options, { expires: -1 }));
+		return !$.cookie(key);
+	};
+
+}));
+
+},{"jquery":"../node_modules/jquery/dist/jquery.js"}],"index.xsl":[function(require,module,exports) {
 module.exports = "/public.785ca178.xsl";
 },{}],"index.js":[function(require,module,exports) {
 "use strict";
@@ -22230,19 +22158,16 @@ require("bootstrap");
 
 var _jquery = _interopRequireDefault(require("jquery"));
 
+var _moment = _interopRequireDefault(require("moment"));
+
 require("./lang/english");
 
-require("./styles/style.css");
-
 require("jquery.cookie");
-
-var _moment = _interopRequireDefault(require("moment"));
 
 var _index = _interopRequireDefault(require("./index.xsl"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import 'service-worker';
 var api_files_url = 'https://api.myjson.com/bins/8tvgs';
 (0, _jquery.default)(function () {
   // Check to make sure service workers are supported in the current browser,
@@ -22639,7 +22564,7 @@ var parseQueryString = function parseQueryString() {
   });
   return objURL;
 };
-},{"@babel/runtime-corejs2/core-js/parse-int":"../node_modules/@babel/runtime-corejs2/core-js/parse-int.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","jquery":"../node_modules/jquery/dist/jquery.js","./lang/english":"lang/english.js","./styles/style.css":"styles/style.css","jquery.cookie":"../node_modules/jquery.cookie/jquery.cookie.js","moment":"../node_modules/moment/moment.js","./index.xsl":"index.xsl","./service-worker.js":[["service-worker.js","service-worker.js"],"service-worker.map","service-worker.js"]}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/core-js/parse-int":"../node_modules/@babel/runtime-corejs2/core-js/parse-int.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","jquery":"../node_modules/jquery/dist/jquery.js","moment":"../node_modules/moment/moment.js","./lang/english":"lang/english.js","jquery.cookie":"../node_modules/jquery.cookie/jquery.cookie.js","./index.xsl":"index.xsl","./service-worker.js":[["service-worker.js","service-worker.js"],"service-worker.map","service-worker.js"]}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -22666,7 +22591,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64495" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56730" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

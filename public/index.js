@@ -1,11 +1,9 @@
 import 'bootstrap';
 import $ from 'jquery';
-import './lang/english';
-import './styles/style.css'
-import 'jquery.cookie';
 import moment from 'moment';
+import './lang/english';
+import 'jquery.cookie';
 import index_xsl from './index.xsl';
-// import 'service-worker';
 
 const api_files_url = 'https://api.myjson.com/bins/8tvgs';
 

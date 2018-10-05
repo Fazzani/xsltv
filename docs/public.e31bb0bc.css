@@ -70,6 +70,8 @@ body {
     z-index: 25;
     border-right: 3px #800808 solid;
     box-shadow: 4px 8px 16px 3px #805353;
+    transition: all ease-in 1ms;
+
 }
 
 #vline .vheader {
@@ -88,7 +90,7 @@ body {
     width: 42px;
     height: 27px;
     background-color: #ff0002;
-    background: radial-gradient(#ff0002 6%, #000000);
+    background: radial-gradient(#eecc02 6%, #000000);
 }
 
 #listings {

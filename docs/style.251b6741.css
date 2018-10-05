@@ -194,7 +194,7 @@ td.extendright td.program {
 }
 
 td.empty {
-    background-image: url(../images/empty.gif);
+    background-image: url(empty.d0b8fc41.gif);
 }
 
 th {
@@ -276,15 +276,15 @@ hr {
 }
 
 .starlist li.starempty {
-    background-image: url(../images/starempty.png);
+    background-image: url(starempty.cf8af87e.png);
 }
 
 .starlist li.starhalf {
-    background-image: url(../images/starhalf.png);
+    background-image: url(starhalf.bc55ac13.png);
 }
 
 .starlist li.starfilled {
-    background-image: url(../images/starfilled.png);
+    background-image: url(starfilled.ff5b9747.png);
 }
 
 /*End Popup section*/
@@ -304,6 +304,7 @@ hr {
 .leftchannel .leftlogocell img {
     max-width: 70%;
     max-height: 100%;
+    box-shadow: black -1px 14px 2px 3px;
 }
 
 td.Goodmovie {
