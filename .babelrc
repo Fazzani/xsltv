@@ -1,7 +1,7 @@
 {
     "plugins": [
-        ["transform-react-jsx", {
-            "pragma": "h"
+        ["@babel/plugin-transform-runtime", {
+            "corejs": 2
         }]
     ]
 }

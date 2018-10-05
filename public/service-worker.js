@@ -1,6 +1,6 @@
-var CACHE_NAME = 'pwa-xviewers-asset-cache-0';
+var CACHE_NAME = 'pwa-xviewers-asset-cache-1';
 var RESOURCES_TO_PRELOAD = [
-    'index.html'
+    '/'
 ];
 
 // Preload some resources during install
@@ -41,32 +41,30 @@ self.addEventListener('fetch', event => {
     //It should return a response object
     const getCustomResponsePromise = async function () {
         console.log(`URL ${event.request.url}`, `location origin ${location}`)
-        if ((event.request.url.indexOf('https') === 0)) {
-            try {
-                //Try to get the cached response
-                const cachedResponse = await caches.match(event.request)
-                if (cachedResponse) {
-                    //Return the cached response if present
-                    console.log(`Cached response ${cachedResponse}`)
-                    return cachedResponse
-                }
-
-                //Get the network response if no cached response is present
-                const netResponse = await fetch(event.request)
-                console.log(`adding net response to cache`)
-
-                //Here, we add the network response to the cache
-                let cache = await caches.open(CACHE_NAME)
-
-                //We must provide a clone of the response here
-                cache.put(event.request, netResponse.clone())
-
-                //return the network response
-                return netResponse
-            } catch (err) {
-                console.error(`Error ${err}`)
-                throw err
+        try {
+            //Try to get the cached response
+            const cachedResponse = await caches.match(event.request)
+            if (cachedResponse) {
+                //Return the cached response if present
+                console.log(`Cached response ${cachedResponse}`)
+                return cachedResponse
             }
+
+            //Get the network response if no cached response is present
+            const netResponse = await fetch(event.request)
+            console.log(`adding net response to cache`)
+
+            //Here, we add the network response to the cache
+            let cache = await caches.open(CACHE_NAME)
+
+            //We must provide a clone of the response here
+            cache.put(event.request, netResponse.clone())
+
+            //return the network response
+            return netResponse
+        } catch (err) {
+            console.error(`Error ${err}`)
+            throw err
         }
     };
 

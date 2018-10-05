@@ -1,11 +1,11 @@
 import 'bootstrap';
 import $ from 'jquery';
-import '../lang/english';
-import '../stylesheets/style.css'
+import './lang/english';
+import './styles/style.css'
 import 'jquery.cookie';
-//import 'popper';
 import moment from 'moment';
-import index_xsl from '../index.xsl';
+import index_xsl from './index.xsl';
+// import 'service-worker';
 
 const api_files_url = 'https://api.myjson.com/bins/8tvgs';
 
@@ -28,7 +28,7 @@ $(function () {
             if ('serviceWorker' in navigator) {
                 let newWorker;
                 navigator.serviceWorker
-                    .register('/service-worker.js')
+                    .register('./service-worker.js')
                     .then(reg => {
                         console.log('Service Worker Registered');
                         reg.addEventListener('updatefound', () => {
