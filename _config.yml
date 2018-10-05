@@ -3,4 +3,4 @@ lang: en-US
 title: XViewer
 email: fazzani.heni@outlook.com
 description: Xmltv viewer
-baseurl: /public/index.html
+baseurl: /docs/index.html
