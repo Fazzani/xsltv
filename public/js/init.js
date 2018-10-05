@@ -1,4 +1,12 @@
-///var $ = require('jquery');
+import 'bootstrap';
+import $ from 'jquery';
+import '../lang/english';
+import '../stylesheets/style.css'
+import 'jquery.cookie';
+//import 'popper';
+import moment from 'moment';
+import index_xsl from '../index.xsl';
+
 const api_files_url = 'https://api.myjson.com/bins/8tvgs';
 
 $(function () {
@@ -20,7 +28,7 @@ $(function () {
             if ('serviceWorker' in navigator) {
                 let newWorker;
                 navigator.serviceWorker
-                    .register('service-worker.js')
+                    .register('/service-worker.js')
                     .then(reg => {
                         console.log('Service Worker Registered');
                         reg.addEventListener('updatefound', () => {
@@ -68,6 +76,8 @@ $(function () {
     var $tvFrame = $("#tvframe");
     var $loading = $('#loading');
     var queryStringParams = parseQueryString();
+    var xmlfileloaded, fileDate, fileMonth, intHours, intMinutes, starthours, startminutes, endhours, endminutes, gridstarttimestring, gridendtimestring, earliertext, latertext, xsl, xml;
+    var sortstring;
 
     fetch(api_files_url)
         .then(res => res.json())
@@ -84,8 +94,7 @@ $(function () {
                 selected.prop("selected", "selected");
                 loadXSL(selected.val());
             }
-        }).catch(e => console.error({ ...e
-        }));
+        }).catch(e => console.error(e));
 
     setInterval(() => {
         $clock.find('.time').text(moment(new Date()).format("LLLL"));
@@ -94,7 +103,6 @@ $(function () {
     $('[data-toggle="tooltip"]').tooltip();
 
     var processor = new XSLTProcessor();
-    var sortstring;
     var currenttime = new Date();
 
     $xmltv_list.change(function () {
@@ -133,13 +141,13 @@ $(function () {
     function loadXSL(xmlfileneeded) {
         $loading.css('display', 'block');
         $loading.html("index.xsl");
-        fetch("index.xsl", {
+        fetch(index_xsl, {
                 method: 'GET'
             }).then(response => response.text())
             .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
             .then(x => {
                 xsl = x;
-                sortTag = xsl.getElementsByTagName('xsl:sort'); //for firefox 3
+                var sortTag = xsl.getElementsByTagName('xsl:sort'); //for firefox 3
                 if (!sortTag.item(0)) {
                     sortTag = xsl.getElementsByTagName('sort');
                 } //for firefox 2
@@ -147,7 +155,7 @@ $(function () {
                 processor.importStylesheet(xsl);
                 loadXML(xmlfileneeded);
             }).catch(function (error) {
-                var errorstring = error.message + ": " + filetext + " " + xmlfileneeded + " " + notfoundtext + ".";
+                var errorstring = error.message;
                 $loading.text(errorstring);
             });
     }
@@ -170,7 +178,7 @@ $(function () {
                         $loading.text("Preparing grid...");
                         Init(hours, myDate.getHours(), myDate.getDate(), myDate.getMonth() + 1, myDate.getFullYear());
                     }).catch(function (error) {
-                        var errorstring = error.message + ": " + filetext + " " + xmlfileneeded + " " + notfoundtext + ".";
+                        var errorstring = error.message;
                         $loading.text(errorstring);
                     });
             } else {
@@ -262,9 +270,9 @@ $(function () {
         processor.setParameter(null, "HighlightNew", highlightnew.toString() === "true" ? 1 : 0);
         processor.setParameter(null, "OnClick", loadonclick);
 
-        var fragment = processor.transformToFragment(xml, document);
+        let fragment = processor.transformToFragment(xml, document);
         $loading.hide();
-        $far = $(fragment);
+        let $far = $(fragment);
         let $vline = $('<div id="vline"><span class="vheader"></span></div>');
         $far.append($vline);
         $tvFrame.append($far);
@@ -298,7 +306,7 @@ $(function () {
 });
 
 
-function InitTimeline($tvFrame, $vline, hours) {
+const InitTimeline = ($tvFrame, $vline, hours) => {
     let startTimeInit = $tvFrame.find('th.time[onclick^=Init]').attr('onclick');
     let startTime = (startTimeInit.split('Init(')[1].split(')')[0]).split(',');
     let startTimeMoment = `${startTime[2]}-${startTime[3]}-${startTime[4]} ${startTime[1]}:00:00`;
@@ -310,13 +318,13 @@ function InitTimeline($tvFrame, $vline, hours) {
         }
         $vline.css('margin-left', (percentElapsedTimeNowByDay(startTimeMoment, hours) + paddingLeft) + '%');
     }, 1000);
-}
+};
 
-function percentElapsedTimeNowByDay(startDay, hours) {
-    const from = moment(startDay, 'DD-MM-YYYY hh:mm:ss');
-    const diff = moment().diff(from);
-    const elapsedDuration = moment.duration(diff);
-    var percent = (elapsedDuration.asMinutes() / (60 * hours)) * 100;
+const percentElapsedTimeNowByDay = (startDay, hours) => {
+    let from = moment(startDay, 'DD-MM-YYYY hh:mm:ss');
+    let diff = moment().diff(from);
+    let elapsedDuration = moment.duration(diff);
+    let percent = (elapsedDuration.asMinutes() / (60 * hours)) * 100;
 
     //var s = Math.floor(elapsedDuration.asHours()) + moment(diff).format(":mm:ss");
     // console.log({
@@ -326,9 +334,9 @@ function percentElapsedTimeNowByDay(startDay, hours) {
     //     percent
     // });
     return Math.floor(parseInt(percent));
-}
+};
 
-function initFromCookie() {
+const initFromCookie = () => {
     var item = localStorage.getItem("xsltvhours");
     var hours = item ? Number(item) : 4;
     item = localStorage.getItem("xsltvfixgaps");
@@ -393,7 +401,7 @@ function initFromCookie() {
         highlightnew,
         loadonclick
     };
-}
+};
 
 var parseQueryString = () => {
 
