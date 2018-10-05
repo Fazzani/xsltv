@@ -22250,7 +22250,7 @@ var api_files_url = 'https://api.myjson.com/bins/8tvgs';
   });
   setInterval(function () {
     $clock.find('.time').text((0, _moment.default)(new Date()).format("LLLL"));
-  }, 1000);
+  }, 60000);
   (0, _jquery.default)('[data-toggle="tooltip"]').tooltip();
   var processor = new XSLTProcessor();
   var currenttime = new Date();
@@ -22591,7 +22591,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56730" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59044" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

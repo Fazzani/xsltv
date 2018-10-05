@@ -16,20 +16,25 @@
 </head>
 
 <body>
-    <span id="barclock">
-        <p class="time"></p>
-    </span>
     <nav class="navbar fixed-bottom navbar-dark bg-dark justify-content-between">
-        <form class="form-inline" id="xmltv_source">
-            <select class="form-control mr-sm-2" id="xmlt_list">
-            </select>
-        </form>
+        <span id="barclock">
+            <p class="time"></p>
+        </span>
+        <small>Created with <i class="fa fa-heart"></i> from<a href="http://synker.ovh"> Synker.ovh</a></small>
     </nav>
-
+    <div class="menu">
+        <div class="title">MENU</div>
+        <div class="container">
+            <form class="form-inline" id="xmltv_source">
+                <select class="mr-sm-2 dropdown-dark" id="xmlt_list">
+                </select>
+            </form>
+        </div>
+    </div>
     <section class="row-section">
         <div class="container">
             <div class="row">
-                <h2 class="text-center text-capitalize"><span><i class="text-danger">X</i>mltv viewer</span>Created with <i class="fa fa-heart"></i> from<a href="http://synker.ovh"> Synker.ovh</a></h2>
+                <h2 class="text-center text-capitalize"><span><i class="text-danger">X</i>mltv viewer</span></h2>
             </div>
             <div class="row">
                 <div id="tvframe"></div>

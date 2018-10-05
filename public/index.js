@@ -96,7 +96,7 @@ $(function () {
 
     setInterval(() => {
         $clock.find('.time').text(moment(new Date()).format("LLLL"));
-    }, 1000);
+    }, 60000);
 
     $('[data-toggle="tooltip"]').tooltip();
 
