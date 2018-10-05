@@ -4,4 +4,4 @@ title: XViewer
 email: fazzani.heni@outlook.com
 description: > 
   Xmltv (EPG) files viewer.
-baseurl: "/docs"
+baseurl: "xsltv/docs"
