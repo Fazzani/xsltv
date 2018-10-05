@@ -104,120 +104,74 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   // Override the current require with this new one
   return newRequire;
-})({"service-worker.js":[function(require,module,exports) {
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+})({"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
 
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
+  }
 
-var CACHE_NAME = 'pwa-xviewers-asset-cache-0';
-var RESOURCES_TO_PRELOAD = ['index.html']; // Preload some resources during install
+  return bundleURL;
+}
 
-self.addEventListener('install', function (event) {
-  event.waitUntil(caches.open(CACHE_NAME).then(function (cache) {
-    return cache.addAll(RESOURCES_TO_PRELOAD); // if any item isn't successfully added to
-    // cache, the whole operation fails.
-  }).catch(function (error) {
-    console.error(error);
-  }));
-}); // Delete obsolete caches during activate
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp):\/\/[^)\n]+/g);
 
-self.addEventListener('activate', function (event) {
-  event.waitUntil(caches.keys().then(function (keyList) {
-    return Promise.all(keyList.map(function (key) {
-      if (key !== CACHE_NAME) {
-        return caches.delete(key);
+    if (matches) {
+      return getBaseURL(matches[0]);
+    }
+  }
+
+  return '/';
+}
+
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp):\/\/.+)\/[^/]+$/, '$1') + '/';
+}
+
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"../node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
+
+function updateLink(link) {
+  var newLink = link.cloneNode();
+
+  newLink.onload = function () {
+    link.remove();
+  };
+
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+
+var cssTimeout = null;
+
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
+  }
+
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
       }
-    }));
-  }));
-});
-/**
- * The fetch event is fired every time the browser sends a request. 
- * In this case, the service worker acts as a proxy. We can for example return the cached
- * version of the ressource matching the request, or send the request to the internet
- * , we can even make our own response from scratch !
- * Here, we are going to use cache first strategy
- */
+    }
 
-self.addEventListener('fetch', function (event) {
-  if (event.request.method !== 'GET' || event.request.url.indexOf('https') !== 0) return; //We defind the promise (the async code block) that return either the cached response or the network one
-  //It should return a response object
+    cssTimeout = null;
+  }, 50);
+}
 
-  var getCustomResponsePromise =
-  /*#__PURE__*/
-  function () {
-    var _ref = _asyncToGenerator(
-    /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee() {
-      var cachedResponse, netResponse, cache;
-      return regeneratorRuntime.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              console.log("URL ".concat(event.request.url), "location origin ".concat(location));
-
-              if (!(event.request.url.indexOf('https') === 0)) {
-                _context.next = 24;
-                break;
-              }
-
-              _context.prev = 2;
-              _context.next = 5;
-              return caches.match(event.request);
-
-            case 5:
-              cachedResponse = _context.sent;
-
-              if (!cachedResponse) {
-                _context.next = 9;
-                break;
-              }
-
-              //Return the cached response if present
-              console.log("Cached response ".concat(cachedResponse));
-              return _context.abrupt("return", cachedResponse);
-
-            case 9:
-              _context.next = 11;
-              return fetch(event.request);
-
-            case 11:
-              netResponse = _context.sent;
-              console.log("adding net response to cache"); //Here, we add the network response to the cache
-
-              _context.next = 15;
-              return caches.open(CACHE_NAME);
-
-            case 15:
-              cache = _context.sent;
-              //We must provide a clone of the response here
-              cache.put(event.request, netResponse.clone()); //return the network response
-
-              return _context.abrupt("return", netResponse);
-
-            case 20:
-              _context.prev = 20;
-              _context.t0 = _context["catch"](2);
-              console.error("Error ".concat(_context.t0));
-              throw _context.t0;
-
-            case 24:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee, this, [[2, 20]]);
-    }));
-
-    return function getCustomResponsePromise() {
-      return _ref.apply(this, arguments);
-    };
-  }(); //In order to override the default fetch behavior, we must provide the result of our custom behavoir to the
-  //event.respondWith method
-
-
-  event.respondWith(getCustomResponsePromise());
-});
-},{}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+module.exports = reloadCSS;
+},{"./bundle-url":"../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -386,5 +340,4 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},["../node_modules/parcel-bundler/src/builtins/hmr-runtime.js","service-worker.js"], null)
-//# sourceMappingURL=/service-worker.map
+},{}]},{},["../node_modules/parcel-bundler/src/builtins/hmr-runtime.js"], null)

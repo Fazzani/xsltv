@@ -22366,7 +22366,7 @@ var parseQueryString = function parseQueryString() {
   });
   return objURL;
 };
-},{"bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","jquery":"../node_modules/jquery/dist/jquery.js","../lang/english":"lang/english.js","../stylesheets/style.css":"stylesheets/style.css","jquery.cookie":"../node_modules/jquery.cookie/jquery.cookie.js","moment":"../node_modules/moment/moment.js","../index.xsl":"index.xsl","C:\\Users\\heni.fazzani\\Source\\Repos\\xsltv\\public\\service-worker.js":[["service-worker.js","service-worker.js"],"service-worker.map","service-worker.js"]}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","jquery":"../node_modules/jquery/dist/jquery.js","../lang/english":"lang/english.js","../stylesheets/style.css":"stylesheets/style.css","jquery.cookie":"../node_modules/jquery.cookie/jquery.cookie.js","moment":"../node_modules/moment/moment.js","../index.xsl":"index.xsl","C:\\Users\\Heni\\Source\\Repos\\xviewer\\public\\service-worker.js":[["service-worker.js","service-worker.js"],"service-worker.map","service-worker.js"]}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -22393,7 +22393,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55256" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56156" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
