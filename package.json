@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel public/index.html --out-dir docs",
     "build": "parcel build public/index.html --out-dir docs --detailed-report --public-url ./",
-    "deploy": "npm run build && git add . && git commit -a -m 'latest build' && git push origin master"
+    "deploy": "npm run build && git add --all && git commit -m 'latest build' && git push origin master"
   },
   "repository": {
     "type": "git",
