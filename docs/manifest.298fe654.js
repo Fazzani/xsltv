@@ -111,7 +111,7 @@ module.exports = {
   "theme_color": "#191925",
   "background_color": "#191925",
   "scope": "/",
-  "start_url": "/xsltv/public",
+  "start_url": "/xviewer/public",
   "display": "fullscreen",
   "orientation": "portrait",
   "lang": "en-US",

@@ -12,5 +12,5 @@ Epg viewer for XMLTV format based on xsltv project.
 - [ ] Fix mobile version
 - [ ] Highlight movies and sports by filter (multiselect)
 
-[live]: https://fazzani.github.io/xsltv/docs/
+[live]: https://fazzani.github.io/xviewer/docs/
 [example_css]: https://codepen.io/blackstockc/pen/eJbbyb

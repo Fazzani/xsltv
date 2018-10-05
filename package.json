@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Fazzani/xsltv.git"
+    "url": "git+https://github.com/Fazzani/xviewer.git"
   },
   "keywords": [
     "epg",
@@ -21,9 +21,9 @@
   "author": "Fazzani Heni",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Fazzani/xsltv/issues"
+    "url": "https://github.com/Fazzani/xviewer/issues"
   },
-  "homepage": "https://github.com/Fazzani/xsltv/public/index.html",
+  "homepage": "https://github.com/Fazzani/xviewer/public/index.html",
   "dependencies": {
     "@babel/runtime-corejs2": "^7.1.2",
     "babel-plugin-transform-react-jsx": "^6.24.1",
