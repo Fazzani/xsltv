@@ -24,28 +24,11 @@
   <xsl:param name="PrevDay"/>
   <xsl:param name="PrevHour"/>
 
-  <xsl:param name="PopupDelay"/>
-  <xsl:param name="DescriptionPopups"/>
-  <xsl:param name="ChannelPopups"/>
-  <xsl:param name="PopupTimes"/>
-  <xsl:param name="PopupRating"/>
-  <xsl:param name="PopupSubtitle"/>
-  <xsl:param name="PopupDescription"/>
-  <xsl:param name="PopupDate"/>
-  <xsl:param name="PopupCategories"/>
-  <xsl:param name="PopupStarRating"/>
-  <xsl:param name="Categories"/>
-  <xsl:param name="DayFirst"/>
-  <xsl:param name="EarlierText"/>
-  <xsl:param name="LaterText"/>
-
   <xsl:param name="OnClick"/>
   <xsl:param name="ClickTarget" select="'_blank'"/>
   <xsl:param name="HighlightClickable" />
   <xsl:param name="HighlightMovies" />
   <xsl:param name="HighlightNew"/>
-  <xsl:param name="PrintDates" />
-  <xsl:param name="TimeBarFrequency" />
 
   <xsl:template match="/">
     <div class="xsldiv">
@@ -68,13 +51,12 @@
           <xsl:sort select="display-name[3]" data-type="number"></xsl:sort>
 
           <xsl:choose>
-            <xsl:when test="(position() mod $TimeBarFrequency = 1) or (position() = 1)">
+            <xsl:when test="(position() = 1)">
               <tr class="timebar">
                 <th class="topleftcorner">
                   <xsl:attribute name="onclick">
                     <xsl:value-of select="concat('Init','(',$DisplayLength,',',$PrevHour,',',$PrevDay,',',$PrevMonth,',',$PrevYear,')')" />
                   </xsl:attribute>
-                  <!-- <xsl:value-of select="$EarlierText"/> -->
                   <i class="fa fa-chevron-circle-left" style="font-size:24px"></i>
                 </th>
                 <xsl:call-template name="for.loop">
@@ -92,7 +74,6 @@
                   <xsl:attribute name="onclick">
                     <xsl:value-of select="concat('Init','(',$DisplayLength,',',$StopHour,',',$StopDay,',',$StopMonth,',',$StopYear,')')" />
                   </xsl:attribute>
-                  <!-- <xsl:value-of select="$LaterText"/> -->
                   <i class="fa fa-chevron-circle-right" style="font-size:24px"></i>
                 </th>
               </tr>
@@ -113,24 +94,7 @@
           </xsl:variable>
           <tr>
             <th class="channel">
-              <xsl:if test="$ChannelPopups">
-                <xsl:attribute name="title">
-                  <xsl:text>header=[</xsl:text>
-                  <xsl:if test="string-length($iconname) &gt; 0">
-                    <xsl:text>&lt;img src="</xsl:text>
-                    <xsl:value-of select="icon/@src"/>
-                    <xsl:text>" alt="" class="popupimage"/></xsl:text>
-                  </xsl:if>
-                  <xsl:value-of select="$channellongname" />
-                  <xsl:text>] body=[</xsl:text>
-                  <xsl:value-of select="display-name[7]"/>
-                  <xsl:text>] cssheader=[popupheader] cssbody=[popupbody] delay=[</xsl:text>
-                  <xsl:value-of select="$PopupDelay"/>
-                  <xsl:text>]</xsl:text>
-                </xsl:attribute>
-              </xsl:if>
-              <div class="leftchannel" >
-                
+              <div class="leftchannel">
                 <xsl:choose>
                    <xsl:when test="string-length($iconname) &gt; 0">
                     <span class="leftlogocell">
@@ -257,18 +221,15 @@
                   </xsl:when>
                 </xsl:choose>
                 <xsl:attribute name="class">
-                  <xsl:if test="$Categories">
                     <xsl:value-of select="substring(episode-num[@system='dd_progid'],1,2)"/>
                     <xsl:text> </xsl:text>
                     <xsl:for-each select="category">
                     <xsl:value-of select="translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')" />
                       <xsl:text> </xsl:text>
                     </xsl:for-each>
-                   
                     <xsl:if test="$Length &gt; 69">
                       Longshow
                     </xsl:if>
-                  </xsl:if>
                   <xsl:if test="($Length &gt; 69) and (number($RatingRounded) &gt;= number($HighlightMovies))">
                     Goodmovie
                   </xsl:if>
@@ -282,10 +243,8 @@
                   </xsl:if>
                 </xsl:attribute>
                 <!--____________________________________ ToolTIP____________________________________ -->
-                <xsl:if test="$DescriptionPopups">
                   <xsl:attribute name="data-content">
-                    <xsl:if test="$PopupTimes or ($PopupRating and rating) or ($PopupSubtitle and sub-title) or ($PopupDescription and desc) or ($PopupDate and date) or ($PopupCategories and category) or ($PopupStarRating and star-rating)">
-                      <xsl:if test="$PopupTimes">
+                    <xsl:if test="rating or sub-title or desc or date or category or star-rating">
                         &lt;span class="popuptimes"&gt;
                         <xsl:value-of select="number(substring(@start,9,2))"/>:<xsl:value-of select="substring(@start,11,2)"/>-<xsl:choose>
                           <xsl:when test="@stop">
@@ -294,25 +253,21 @@
                           <xsl:otherwise>???</xsl:otherwise>
                         </xsl:choose>
                         &lt;/span&gt;
-                      </xsl:if>
                       <xsl:if test="string-length($iconname) &gt; 0">
                         <xsl:text>&lt;img src="</xsl:text>
                         <xsl:value-of select="icon/@src"/>
                         <xsl:text>" alt="" class="popupimage"/></xsl:text>
                       </xsl:if>
-                      <xsl:if test="$PopupRating">
                         &lt;span class="popuprating"&gt;<xsl:value-of select="rating/value" />&lt;/span&gt;
-                      </xsl:if>
-                      <xsl:if test="($PopupTimes or ($PopupRating and rating)) and (($PopupSubtitle and sub-title) or ($PopupDescription and desc))">
+                      <xsl:if test="rating and (sub-title or  desc)">
                         &lt;hr class="popuphr1"/&gt;
                       </xsl:if>
-                      <xsl:if test="$PopupSubtitle and sub-title">
+                      <xsl:if test="sub-title">
                         &lt;span class="subtitle"&gt;
                         <xsl:value-of select="sub-title"/>
                         &lt;/span&gt;
                         &lt;br /&gt;
                       </xsl:if>
-                      <xsl:if test="$PopupDescription">
                         &lt;span class="popupdesc"&gt;
                         <xsl:choose>
                           <xsl:when test="$DescriptionBR">
@@ -325,20 +280,11 @@
                           </xsl:otherwise>
                         </xsl:choose>
                         &lt;/span&gt;
-                      </xsl:if>
-                      <xsl:if test="$PopupDate and date">
-                        <xsl:if test="$PopupTimes or ($PopupRating and rating) or ($PopupSubtitle and sub-title) or ($PopupDescription and desc)">&lt;hr class="popuphr2"/&gt;</xsl:if>
+                      <xsl:if test="date">
                         &lt;span class="popupdate"&gt;
                         <xsl:choose>
                           <xsl:when test="string-length(date) = 8">
-                            <xsl:choose>
-                              <xsl:when test="$DayFirst">
                                 <xsl:value-of select="concat(substring(date,7,2),'/',substring(date,5,2),'/',substring(date,1,4))" />
-                              </xsl:when>
-                              <xsl:otherwise>
-                                <xsl:value-of select="concat(substring(date,5,2),'/',substring(date,7,2),'/',substring(date,1,4))" />
-                              </xsl:otherwise>
-                            </xsl:choose>
                           </xsl:when>
                           <xsl:when test="string-length(date) = 4">
                             <xsl:value-of select="date" />
@@ -348,16 +294,13 @@
 
                       </xsl:if>
                       
-                      <xsl:if test="$PopupCategories and category">
-                        <xsl:if test="$PopupTimes or ($PopupRating and rating) or ($PopupSubtitle and sub-title) or ($PopupDescription and desc) or ($PopupDate and date)">&lt;hr class="popuphr3"/&gt;</xsl:if>
+                      <xsl:if test="category">
                         &lt;ul class="popupcategorylist">
                         <xsl:for-each select="category">
                             &lt;li><xsl:value-of select="." />&lt;/li>
                         </xsl:for-each>
                         &lt;/ul>
                       </xsl:if>
-                      <xsl:if test="$PopupStarRating and star-rating">
-                        <xsl:if test="$PopupTimes or ($PopupRating and rating) or ($PopupSubtitle and sub-title) or ($PopupDescription and desc) or ($PopupDate and date) or ($PopupCategories and category)">&lt;hr class="popuphr4"/&gt;</xsl:if>
                         <xsl:variable name="Stars">
                           <xsl:choose>
                             <xsl:when test="contains(substring-before(star-rating,'/'),'.')">
@@ -411,10 +354,8 @@
                           <xsl:with-param name="type">empty</xsl:with-param>
                         </xsl:call-template>
                         &lt;/ul&gt;
-                      </xsl:if>
                     </xsl:if>
                   </xsl:attribute>
-                </xsl:if>
                 <!--____________________________________ END ToolTIP  ___________________________________ -->
                 <!--____________________________________ OnClick IMDB ___________________________________ -->
                 <xsl:choose>
@@ -470,7 +411,7 @@
                         <xsl:attribute name="class">program extendright</xsl:attribute>
                       </xsl:if>
                       <xsl:value-of select="title" />
-                      <xsl:if test="$PrintDates and string-length(date) = 4">
+                      <xsl:if test="string-length(date) = 4">
                         (<xsl:value-of select="date"/>)
                       </xsl:if>
                      
@@ -489,24 +430,6 @@
             <xsl:if test="not($theseprogrammes)">
               <td class="empty" colspan="{number($StopDisplayCode)-number($StartDisplayCode)}"></td>
             </xsl:if>
-            <th class="channel">
-              <xsl:if test="$ChannelPopups">
-                <xsl:attribute name="title">
-                  <xsl:text>header=[</xsl:text>
-                  <xsl:if test="string-length($iconname) &gt; 0">
-                    <xsl:text>&lt;img src="</xsl:text>
-                    <xsl:value-of select="icon/@src"/>
-                    <xsl:text>" alt="" class="popupimage"/></xsl:text>
-                  </xsl:if>
-                  <xsl:value-of select="$channellongname" />
-                  <xsl:text>] body=[</xsl:text>
-                  <xsl:value-of select="display-name[7]"/>
-                  <xsl:text>] cssheader=[popupheader] cssbody=[popupbody] delay=[</xsl:text>
-                  <xsl:value-of select="$PopupDelay"/>
-                  <xsl:text>]</xsl:text>
-                </xsl:attribute>
-              </xsl:if>
-            </th>
           </tr>
         </xsl:for-each>
       </table>

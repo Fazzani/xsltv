@@ -4,22 +4,12 @@ import moment from 'moment';
 import './lang/english';
 import 'jquery.cookie';
 import index_xsl from './index.xsl';
-
+import XsltvProcessor from './js/xsltvProcessor';
 const api_files_url = 'https://api.myjson.com/bins/8tvgs';
 
 $(function () {
 
-    // Check to make sure service workers are supported in the current browser,
-    // and that the current page is accessed from a secure origin. Using a
-    // service worker from an insecure origin will trigger JS console errors.
-    const isLocalhost = Boolean(window.location.hostname === 'localhost' ||
-        // [::1] is the IPv6 localhost address.
-        window.location.hostname === '[::1]' ||
-        // 127.0.0.1/8 is considered localhost for IPv4.
-        window.location.hostname.match(
-            /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
-        )
-    );
+
     window.addEventListener('load', function () {
         if ('serviceWorker' in navigator &&
             (window.location.protocol === 'https:' || window.location.protocol === 'http:' || isLocalhost)) {
@@ -73,26 +63,26 @@ $(function () {
         $('#fullscreen').html('<span class="glyphicon glyphicon-resize-small"></span>');
         $('#fullscreen').attr('href', 'http://bootsnipp.com/mouse0270/snippets/PbDb5');
         $('#fullscreen').attr('title', 'Back To Bootsnipp');
-    }    
-    $('#fullscreen').on('click', function(event) {
+    }
+    $('#fullscreen').on('click', function (event) {
         event.preventDefault();
-        window.parent.location =  $('#fullscreen').attr('href');
+        window.parent.location = $('#fullscreen').attr('href');
     });
     $('#fullscreen').tooltip();
     /* END DEMO OF JS */
-    
-    $('.navbar-toggler').on('click', function(event) {
-		event.preventDefault();
-		$(this).closest('.navbar-minimal').toggleClass('open');
+
+    $('.navbar-toggler').on('click', function (event) {
+        event.preventDefault();
+        $(this).closest('.navbar-minimal').toggleClass('open');
     })
-    
+
     var $clock = $('#barclock');
     var $xmltv_list = $("#xmlt_list");
     var $tvFrame = $("#tvframe");
     var $loading = $('#loading');
     var queryStringParams = parseQueryString();
-    var xmlfileloaded, fileDate, fileMonth, intHours, intMinutes, starthours, startminutes, endhours, endminutes, gridstarttimestring, gridendtimestring, earliertext, latertext, xsl, xml;
-    var sortstring;
+    var xml;
+    var xsltvProcessor;
 
     fetch(api_files_url)
         .then(res => res.json())
@@ -117,41 +107,9 @@ $(function () {
 
     $('[data-toggle="tooltip"]').tooltip();
 
-    var processor = new XSLTProcessor();
-    var currenttime = new Date();
-
     $xmltv_list.change(function () {
         loadXSL($xmltv_list.val());
     });
-
-    var {
-        offsetminutes,
-        hours,
-        fixgaps,
-        popupdelay,
-        timebarfrequency,
-        channelpopups,
-        descriptionpopups,
-        popuptimes,
-        popuprating,
-        popupsubtitle,
-        popupdescription,
-        popupdate,
-        popupcategories,
-        popupstarrating,
-        highlightclickable,
-        highlightmovies,
-        printdates,
-        dayfirst,
-        categorycolors,
-        highlightnew,
-        loadonclick
-    } = initFromCookie();
-
-    var myDate = new Date(currenttime);
-    myDate.setMinutes(myDate.getMinutes() + (60 - offsetminutes));
-
-    sortstring = "display-name[3]";
 
     function loadXSL(xmlfileneeded) {
         $loading.show();
@@ -160,14 +118,9 @@ $(function () {
                 method: 'GET'
             }).then(response => response.text())
             .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-            .then(x => {
-                xsl = x;
-                var sortTag = xsl.getElementsByTagName('xsl:sort'); //for firefox 3
-                if (!sortTag.item(0)) {
-                    sortTag = xsl.getElementsByTagName('sort');
-                } //for firefox 2
-                sortTag.item(0).setAttribute("select", sortstring);
-                processor.importStylesheet(xsl);
+            .then(xsl => {
+                xsltvProcessor = new XsltvProcessor();
+                xsltvProcessor.processor.importStylesheet(xsl);
                 loadXML(xmlfileneeded);
             }).catch(function (error) {
                 var errorstring = error.message;
@@ -188,10 +141,9 @@ $(function () {
                     .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
                     .then(x => {
                         xml = x;
-                        xmlfileloaded = xmlfileneeded;
                         $loading.show();
                         $loading.text("Preparing grid...");
-                        Init(hours, myDate.getHours(), myDate.getDate(), myDate.getMonth() + 1, myDate.getFullYear());
+                        Init(xsltvProcessor.AppSettings.DisplayLength, ...getParamsCurrentDate());
                     }).catch(function (error) {
                         var errorstring = error.message;
                         $loading.text(errorstring);
@@ -208,93 +160,18 @@ $(function () {
         $loading.show();
         $tvFrame.hide();
         $tvFrame.text("");
-        var startDate = new Date(cy, cm - 1, cd, ch, 0, 0);
-        myDate = new Date(cy, cm - 1, cd, ch, 0, 0);
-        var endDate = new Date(cy, cm - 1, cd, ch, 0, 0);
-        endDate.setHours(endDate.getHours() + dl);
-        var prevDate = new Date(cy, cm - 1, cd, ch, 0, 0);
-        prevDate.setHours(prevDate.getHours() - dl);
 
-        fileDate = startDate.getDate();
-        if (fileDate < 10) {
-            fileDate = "0" + fileDate;
-        }
+        xsltvProcessor.initDate(ch, cd, cm, cy, offset);
+        let fragment = xsltvProcessor.Init(xml, document);
 
-        fileMonth = startDate.getMonth() + 1;
-        if (fileMonth < 10) {
-            fileMonth = "0" + fileMonth;
-        }
-
-        intHours = startDate.getHours();
-        intMinutes = startDate.getMinutes();
-        starthours = intHours + ":";
-        if (intMinutes < 10) {
-            startminutes = "0" + intMinutes;
-        } else {
-            startminutes = intMinutes;
-        }
-        intHours = endDate.getHours();
-        intMinutes = endDate.getMinutes();
-        endhours = intHours + ":";
-        if (intMinutes < 10) {
-            endminutes = "0" + intMinutes;
-        } else {
-            endminutes = intMinutes;
-        }
-        gridstarttimestring = starthours + startminutes + " " + startDate.toDateString();
-        gridendtimestring = endhours + endminutes + " " + endDate.toDateString();
-
-        if (offset) {
-            startDate.setHours(startDate.getHours() + offset);
-            endDate.setHours(endDate.getHours() + offset);
-            prevDate.setHours(prevDate.getHours() + offset);
-        }
-
-        processor.setParameter(null, "DisplayLength", dl);
-        processor.setParameter(null, "CurrentHour", startDate.getHours());
-        processor.setParameter(null, "CurrentDay", startDate.getDate());
-        processor.setParameter(null, "CurrentMonth", startDate.getMonth() + 1);
-        processor.setParameter(null, "CurrentYear", startDate.getFullYear());
-        processor.setParameter(null, "StopHour", endDate.getHours());
-        processor.setParameter(null, "StopDay", endDate.getDate());
-        processor.setParameter(null, "StopMonth", endDate.getMonth() + 1);
-        processor.setParameter(null, "StopYear", endDate.getFullYear());
-        processor.setParameter(null, "PrevHour", prevDate.getHours());
-        processor.setParameter(null, "PrevDay", prevDate.getDate());
-        processor.setParameter(null, "PrevMonth", prevDate.getMonth() + 1);
-        processor.setParameter(null, "PrevYear", prevDate.getFullYear());
-        processor.setParameter(null, "FixGaps", fixgaps.toString() === "true" ? 1 : 0);
-        processor.setParameter(null, "PopupDelay", popupdelay);
-        processor.setParameter(null, "EarlierText", earliertext);
-        processor.setParameter(null, "LaterText", latertext);
-        processor.setParameter(null, "TimeBarFrequency", timebarfrequency);
-        processor.setParameter(null, "ChannelPopups", channelpopups.toString() === "true" ? 1 : 0);
-        processor.setParameter(null, "DescriptionPopups", descriptionpopups.toString() === "true" ? 1 : 0);
-        processor.setParameter(null, "PopupTimes", popuptimes.toString() === "true" ? 1 : 0);
-        processor.setParameter(null, "PopupRating", popuprating.toString() === "true" ? 1 : 0);
-        processor.setParameter(null, "PopupSubtitle", popupsubtitle.toString() === "true" ? 1 : 0);
-        processor.setParameter(null, "PopupDescription", popupdescription.toString() === "true" ? 1 : 0);
-        processor.setParameter(null, "PopupDate", popupdate.toString() === "true" ? 1 : 0);
-        processor.setParameter(null, "PopupCategories", popupcategories.toString() === "true" ? 1 : 0);
-        processor.setParameter(null, "PopupStarRating", popupstarrating.toString() === "true" ? 1 : 0);
-        processor.setParameter(null, "HighlightClickable", highlightclickable.toString() === "true" ? 1 : 0);
-        processor.setParameter(null, "HighlightMovies", highlightmovies);
-        processor.setParameter(null, "PrintDates", printdates.toString() === "true" ? 1 : 0);
-        processor.setParameter(null, "DayFirst", dayfirst.toString() === "true" ? 1 : 0);
-        processor.setParameter(null, "Categories", categorycolors.toString() === "true" ? 1 : 0);
-        processor.setParameter(null, "HighlightNew", highlightnew.toString() === "true" ? 1 : 0);
-        processor.setParameter(null, "OnClick", loadonclick);
-
-        let fragment = processor.transformToFragment(xml, document);
-        
-        $loading.hide();
         let $far = $(fragment);
         let $vline = $('<div id="vline"><span class="vheader"></span></div>');
         $far.append($vline);
         $tvFrame.append($far);
-        $('[data-toggle="tooltip"]').tooltip();
+        $loading.hide();
 
         var popperTab = [];
+        $('[data-toggle="tooltip"]').tooltip();
         $('[data-toggle="popover"]').popover({
             html: true,
         }).on('shown.bs.popover', function (data) {
@@ -311,14 +188,13 @@ $(function () {
             });
         });
 
-        InitTimeline($tvFrame, $vline, hours);
+        InitTimeline($tvFrame, $vline, xsltvProcessor.AppSettings.DisplayLength);
 
         $tvFrame.show();
     }
 
     window.Init = Init;
     $loading.show();
-
 });
 
 
@@ -352,74 +228,7 @@ const percentElapsedTimeNowByDay = (startDay, hours) => {
     return Math.floor(parseInt(percent));
 };
 
-const initFromCookie = () => {
-    var item = localStorage.getItem("xsltvhours");
-    var hours = item ? Number(item) : 4;
-    item = localStorage.getItem("xsltvfixgaps");
-    var fixgaps = item ? item : false;
-    item = localStorage.getItem("xsltvchannelpopups");
-    var channelpopups = item ? item : true;
-    item = localStorage.getItem("xsltvdescriptionpopups");
-    var descriptionpopups = item ? item : true;
-    item = localStorage.getItem("xsltvpopupdelay");
-    var popupdelay = item ? Number(item) : 0;
-    item = localStorage.getItem("xsltvpopuptimes");
-    var popuptimes = item ? item : true;
-    item = localStorage.getItem("xsltvpopuprating");
-    var popuprating = item ? item : true;
-    item = localStorage.getItem("xsltvpopupsubtitle");
-    var popupsubtitle = item ? item : true;
-    item = localStorage.getItem("xsltvpopupdescription");
-    var popupdescription = item ? item : true;
-    item = localStorage.getItem("xsltvpopupdate");
-    var popupdate = item ? item : true;
-    item = localStorage.getItem("xsltvpopupcategories");
-    var popupcategories = item ? item : true;
-    item = localStorage.getItem("xsltvpopupstarrating");
-    var popupstarrating = item ? item : true;
-    item = localStorage.getItem("xsltvoffsetminutes");
-    var offsetminutes = item ? Number(item) : 60;
-    item = localStorage.getItem("xsltvdayfirst");
-    var dayfirst = item ? item : false;
-    item = localStorage.getItem("xsltvcategorycolors");
-    var categorycolors = item ? item : true;
-    item = localStorage.getItem("xsltvloadonclick");
-    var loadonclick = item ? item : 'POPER'; //IMDB URL
-    item = localStorage.getItem("xsltvhighlightclickable");
-    var highlightclickable = item ? item : true;
-    var highlightmovies = 3,
-        item = localStorage.getItem("xsltvhighlightnew");
-    var highlightnew = item ? item : true;
-    item = localStorage.getItem("xsltvprintdates");
-    var printdates = item ? item : true;
-    item = localStorage.getItem("xsltvtimebarfrequency");
-    var timebarfrequency = item ? item : -1;
-    return {
-        offsetminutes,
-        hours,
-        fixgaps,
-        popupdelay,
-        timebarfrequency,
-        channelpopups,
-        descriptionpopups,
-        popuptimes,
-        popuprating,
-        popupsubtitle,
-        popupdescription,
-        popupdate,
-        popupcategories,
-        popupstarrating,
-        highlightclickable,
-        highlightmovies,
-        printdates,
-        dayfirst,
-        categorycolors,
-        highlightnew,
-        loadonclick
-    };
-};
-
-var parseQueryString = () => {
+const parseQueryString = () => {
 
     var str = window.location.search;
     var objURL = {};
@@ -432,3 +241,31 @@ var parseQueryString = () => {
     );
     return objURL;
 };
+
+/**
+ * Datetime to xsltv format
+ * @param {current date time} currenttime 
+ * @param {Décalage horaire} offsetminutes 
+ */
+const getParamsCurrentDate = (currenttime = new Date(), offsetminutes = 60) => {
+    let myDate = new Date(currenttime);
+    myDate.setMinutes(myDate.getMinutes() + (60 - offsetminutes));
+    return [
+        myDate.getHours(),
+        myDate.getDate(),
+        myDate.getMonth() + 1,
+        myDate.getFullYear()
+    ];
+}
+
+// Check to make sure service workers are supported in the current browser,
+// and that the current page is accessed from a secure origin. Using a
+// service worker from an insecure origin will trigger JS console errors.
+const isLocalhost = Boolean(window.location.hostname === 'localhost' ||
+    // [::1] is the IPv6 localhost address.
+    window.location.hostname === '[::1]' ||
+    // 127.0.0.1/8 is considered localhost for IPv4.
+    window.location.hostname.match(
+        /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
+    )
+);
