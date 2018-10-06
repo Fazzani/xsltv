@@ -22221,6 +22221,24 @@ var api_files_url = 'https://api.myjson.com/bins/8tvgs';
       }
     }
   });
+
+  if (window.location == window.parent.location) {
+    (0, _jquery.default)('#fullscreen').html('<span class="glyphicon glyphicon-resize-small"></span>');
+    (0, _jquery.default)('#fullscreen').attr('href', 'http://bootsnipp.com/mouse0270/snippets/PbDb5');
+    (0, _jquery.default)('#fullscreen').attr('title', 'Back To Bootsnipp');
+  }
+
+  (0, _jquery.default)('#fullscreen').on('click', function (event) {
+    event.preventDefault();
+    window.parent.location = (0, _jquery.default)('#fullscreen').attr('href');
+  });
+  (0, _jquery.default)('#fullscreen').tooltip();
+  /* END DEMO OF JS */
+
+  (0, _jquery.default)('.navbar-toggler').on('click', function (event) {
+    event.preventDefault();
+    (0, _jquery.default)(this).closest('.navbar-minimal').toggleClass('open');
+  });
   var $clock = (0, _jquery.default)('#barclock');
   var $xmltv_list = (0, _jquery.default)("#xmlt_list");
   var $tvFrame = (0, _jquery.default)("#tvframe");
@@ -22591,7 +22609,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59044" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50588" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

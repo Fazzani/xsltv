@@ -16,22 +16,39 @@
 </head>
 
 <body>
-    <nav class="navbar fixed-bottom navbar-dark bg-dark justify-content-between">
+    <nav class="navbar fixed-bottom navbar-dark bg-dark  form-inline justify-content-between">
         <span id="barclock">
             <p class="time"></p>
         </span>
         <small>Created with <i class="fa fa-heart"></i> from<a href="http://synker.ovh"> Synker.ovh</a></small>
     </nav>
-    <div class="menu">
-        <div class="title">MENU</div>
-        <div class="container">
-            <form class="form-inline" id="xmltv_source">
-                <select class="mr-sm-2 dropdown-dark" id="xmlt_list">
-                </select>
-            </form>
-        </div>
-    </div>
     <section class="row-section">
+        <nav class="navbar navbar-fixed-left navbar-minimal animate" role="navigation">
+            <div class="navbar-toggler animate">
+                <i class="fa fa-align-justify"></i>
+            </div>
+            <ul class="navbar-menu animate">
+                <li>
+                    <a href="#about-us" class="animate">
+                        <span class="desc animate"> Who We Are </span>
+                        <span class="fa fa-home"></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#settingsMenu" class="animate" data-toggle="modal" data-target="#settingsModal">
+                        <span class="desc animate"> Settings </span>
+                        <i class="fa fa-cogs"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#contact-us" class="animate">
+                        <span class="desc animate"> How To Reach Us </span>
+                        <span class="fa fa-comment"></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
         <div class="container">
             <div class="row">
                 <h2 class="text-center text-capitalize"><span><i class="text-danger">X</i>mltv viewer</span></h2>
@@ -44,6 +61,31 @@
         </div>
         <div id="snackbar">A new version of this app is available. Click <a id="reload" href="_blank">here</a> to update.</div>
     </section>
+    <!--Modal-->
+    <div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Settings</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="xmltv_source">
+                        <div class="form-group">
+                            <label for="xmlt_list" class="col-form-label">Xmltv sources</label>
+                            <select class="form-control" id="xmlt_list">
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script type="text/javascript" src="index.js"></script>
 </body>
 

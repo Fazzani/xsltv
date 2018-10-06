@@ -36,7 +36,7 @@ self.addEventListener('activate', function (event) {
  * Here, we are going to use cache first strategy
  */
 self.addEventListener('fetch', event => {
-    if (event.request.method !== 'GET' || event.request.url.indexOf('https') !== 0) return;
+    if (event.request.method !== 'GET' || event.request.url.indexOf('https') !== 0 || event.request.url.indexOf('.xmltv') !== 0) return;
     //We defind the promise (the async code block) that return either the cached response or the network one
     //It should return a response object
     const getCustomResponsePromise = async function () {

@@ -69,6 +69,23 @@ $(function () {
         }
     });
 
+    if (window.location == window.parent.location) {
+        $('#fullscreen').html('<span class="glyphicon glyphicon-resize-small"></span>');
+        $('#fullscreen').attr('href', 'http://bootsnipp.com/mouse0270/snippets/PbDb5');
+        $('#fullscreen').attr('title', 'Back To Bootsnipp');
+    }    
+    $('#fullscreen').on('click', function(event) {
+        event.preventDefault();
+        window.parent.location =  $('#fullscreen').attr('href');
+    });
+    $('#fullscreen').tooltip();
+    /* END DEMO OF JS */
+    
+    $('.navbar-toggler').on('click', function(event) {
+		event.preventDefault();
+		$(this).closest('.navbar-minimal').toggleClass('open');
+    })
+    
     var $clock = $('#barclock');
     var $xmltv_list = $("#xmlt_list");
     var $tvFrame = $("#tvframe");
@@ -269,6 +286,7 @@ $(function () {
         processor.setParameter(null, "OnClick", loadonclick);
 
         let fragment = processor.transformToFragment(xml, document);
+        
         $loading.hide();
         let $far = $(fragment);
         let $vline = $('<div id="vline"><span class="vheader"></span></div>');
