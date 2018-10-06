@@ -23570,7 +23570,6 @@ var api_files_url = 'https://api.myjson.com/bins/8tvgs';
     event.preventDefault();
     window.parent.location = (0, _jquery.default)('#fullscreen').attr('href');
   }).tooltip();
-  ;
   (0, _jquery.default)('.navbar-toggler').on('click', function (event) {
     event.preventDefault();
     (0, _jquery.default)(this).closest('.navbar-minimal').toggleClass('open');
@@ -23581,7 +23580,7 @@ var api_files_url = 'https://api.myjson.com/bins/8tvgs';
   var $loading = (0, _jquery.default)('#loading');
   var queryStringParams = parseQueryString();
   var xml;
-  var xsltvProcessor;
+  var xsltvProcessor = new _xsltvProcessor.default();
   fetch(api_files_url).then(function (res) {
     return res.json();
   }).then(function (res) {
@@ -23621,7 +23620,6 @@ var api_files_url = 'https://api.myjson.com/bins/8tvgs';
     }).then(function (str) {
       return new window.DOMParser().parseFromString(str, "text/xml");
     }).then(function (xsl) {
-      xsltvProcessor = new _xsltvProcessor.default();
       xsltvProcessor.processor.importStylesheet(xsl);
       loadXML(xmlfileneeded);
     }).catch(function (error) {
@@ -23693,6 +23691,14 @@ var api_files_url = 'https://api.myjson.com/bins/8tvgs';
   window.Init = Init;
   $loading.show();
 });
+
+window.viewXmltvUrl = function () {
+  console.log('in viewXmltvUrl');
+};
+
+window.addXmltvUrl = function () {
+  console.log('in addXmltvUrl');
+};
 
 var InitTimeline = function InitTimeline($tvFrame, $vline, hours) {
   var startTimeInit = $tvFrame.find('th.time[onclick^=Init]').attr('onclick');
@@ -23781,7 +23787,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56539" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56894" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

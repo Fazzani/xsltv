@@ -9,7 +9,6 @@ const api_files_url = 'https://api.myjson.com/bins/8tvgs';
 
 $(function () {
 
-
     window.addEventListener('load', function () {
         if ('serviceWorker' in navigator &&
             (window.location.protocol === 'https:' || window.location.protocol === 'http:' || isLocalhost)) {
@@ -67,7 +66,7 @@ $(function () {
     $('#fullscreen').on('click', function (event) {
         event.preventDefault();
         window.parent.location = $('#fullscreen').attr('href');
-    }).tooltip();;
+    }).tooltip();
 
     $('.navbar-toggler').on('click', function (event) {
         event.preventDefault();
@@ -80,7 +79,7 @@ $(function () {
     var $loading = $('#loading');
     var queryStringParams = parseQueryString();
     var xml;
-    var xsltvProcessor;
+    const xsltvProcessor = new XsltvProcessor();
 
     fetch(api_files_url)
         .then(res => res.json())
@@ -118,7 +117,6 @@ $(function () {
             }).then(response => response.text())
             .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
             .then(xsl => {
-                xsltvProcessor = new XsltvProcessor();
                 xsltvProcessor.processor.importStylesheet(xsl);
                 loadXML(xmlfileneeded);
             }).catch(function (error) {
@@ -196,6 +194,14 @@ $(function () {
     $loading.show();
 });
 
+
+window.viewXmltvUrl = () => {
+    console.log('in viewXmltvUrl');
+};
+
+window.addXmltvUrl = () => {
+    console.log('in addXmltvUrl');
+};
 
 const InitTimeline = ($tvFrame, $vline, hours) => {
     let startTimeInit = $tvFrame.find('th.time[onclick^=Init]').attr('onclick');
