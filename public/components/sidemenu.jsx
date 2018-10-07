@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 
-export default class SideMenu extends Component {
+export default class SideMenu extends PureComponent {
   constructor() {
     super();
     this.state = {
@@ -18,7 +18,7 @@ export default class SideMenu extends Component {
 
   render() {
     const openClassNames = this.state.open ? "navbar navbar-fixed-left navbar-minimal animate open" : "navbar navbar-fixed-left navbar-minimal animate";
-    
+
     return (
       <nav
         onClick={e => this.handleToggleClick(e)}

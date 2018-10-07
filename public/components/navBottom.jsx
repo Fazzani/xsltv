@@ -1,8 +1,8 @@
-import React, { Component } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import moment from 'moment';
 
-export class NavBottom extends Component {
+export class NavBottom extends React.PureComponent {
   static propTypes = {};
 
   render() {

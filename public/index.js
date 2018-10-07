@@ -172,3 +172,8 @@ registerServiceWorker();
 if (module.hot) {
   module.hot.accept();
 }
+
+if (process.env.NODE_ENV !== "production") {
+  const { whyDidYouUpdate } = require("why-did-you-update");
+  whyDidYouUpdate(React);
+}
