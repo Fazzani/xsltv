@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 export class SettingsModal extends Component {
-  static propTypes = {};
+  static propTypes = {
+    files: PropTypes.array.isRequired
+  };
   viewXmltvUrl = e => {
     e.preventDefault();
   };
@@ -43,7 +45,15 @@ export class SettingsModal extends Component {
                           <label htmlFor="xmlt_list" className="col-form-label">
                             Xmltv sources
                           </label>
-                          <select className="form-control" id="xmlt_list" />
+                          <select className="form-control" id="xmlt_list">
+                            {this.props.files.map((e, key) => {
+                              return (
+                                <option key={key} value={e.url}>
+                                  {e.name}
+                                </option>
+                              );
+                            })}
+                          </select>
                         </div>
                       </form>
                       <div className="input-group mb-3">
@@ -111,3 +121,4 @@ export class SettingsModal extends Component {
 }
 
 export default SettingsModal;
+

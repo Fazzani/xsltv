@@ -28,22 +28,6 @@ $(function () {
     var xml;
     const xsltvProcessor = new XsltvProcessor();
 
-    fetch(api_files_url)
-        .then(res => res.json())
-        .then(res => {
-            $xmltv_list.empty().append('<option selected>Select one xmltv file</option>');
-
-            //Loading file from queryString (ex: http://localhost:3000/?file=https://raw.githubusercontent.com/steventrux/epg/master/guide.xml)
-            if (queryStringParams['file']) {
-                $xmltv_list.append(`<option value="${queryStringParams['file']}">${queryStringParams['file']}</option>`);
-            }
-            if (res && res.files.length > 0) {
-                res.files.forEach(file => $xmltv_list.append(`<option value="${file.url}">${file.name}</option>`));
-                let selected = $($xmltv_list.find('option')[1]);
-                selected.prop("selected", "selected");
-                loadXSL(selected.val());
-            }
-        }).catch(e => console.error(e));
 
 
     $('[data-toggle="tooltip"]').tooltip();
@@ -182,19 +166,5 @@ const parseQueryString = () => {
     return objURL;
 };
 
-/**
- * Datetime to xsltv format
- * @param {current date time} currenttime 
- * @param {Décalage horaire} offsetminutes 
- */
-const getParamsCurrentDate = (currenttime = new Date(), offsetminutes = 60) => {
-    let myDate = new Date(currenttime);
-    myDate.setMinutes(myDate.getMinutes() + (60 - offsetminutes));
-    return [
-        myDate.getHours(),
-        myDate.getDate(),
-        myDate.getMonth() + 1,
-        myDate.getFullYear()
-    ];
-}
+
 

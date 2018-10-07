@@ -104,15 +104,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   // Override the current require with this new one
   return newRequire;
-})({"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js":[function(require,module,exports) {
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-
-module.exports = _classCallCheck;
-},{}],"../node_modules/core-js/library/modules/_global.js":[function(require,module,exports) {
+})({"../node_modules/core-js/library/modules/_global.js":[function(require,module,exports) {
 
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
 var global = module.exports = typeof window != 'undefined' && window.Math == Math
@@ -317,42 +309,47 @@ $export.U = 64;  // safe
 $export.R = 128; // real proto method for `library`
 module.exports = $export;
 
-},{"./_global":"../node_modules/core-js/library/modules/_global.js","./_core":"../node_modules/core-js/library/modules/_core.js","./_ctx":"../node_modules/core-js/library/modules/_ctx.js","./_hide":"../node_modules/core-js/library/modules/_hide.js","./_has":"../node_modules/core-js/library/modules/_has.js"}],"../node_modules/core-js/library/modules/es6.object.define-property.js":[function(require,module,exports) {
-var $export = require('./_export');
-// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
-$export($export.S + $export.F * !require('./_descriptors'), 'Object', { defineProperty: require('./_object-dp').f });
+},{"./_global":"../node_modules/core-js/library/modules/_global.js","./_core":"../node_modules/core-js/library/modules/_core.js","./_ctx":"../node_modules/core-js/library/modules/_ctx.js","./_hide":"../node_modules/core-js/library/modules/_hide.js","./_has":"../node_modules/core-js/library/modules/_has.js"}],"../node_modules/core-js/library/modules/_cof.js":[function(require,module,exports) {
+var toString = {}.toString;
 
-},{"./_export":"../node_modules/core-js/library/modules/_export.js","./_descriptors":"../node_modules/core-js/library/modules/_descriptors.js","./_object-dp":"../node_modules/core-js/library/modules/_object-dp.js"}],"../node_modules/core-js/library/fn/object/define-property.js":[function(require,module,exports) {
-require('../../modules/es6.object.define-property');
-var $Object = require('../../modules/_core').Object;
-module.exports = function defineProperty(it, key, desc) {
-  return $Object.defineProperty(it, key, desc);
+module.exports = function (it) {
+  return toString.call(it).slice(8, -1);
 };
 
-},{"../../modules/es6.object.define-property":"../node_modules/core-js/library/modules/es6.object.define-property.js","../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js":[function(require,module,exports) {
-module.exports = require("core-js/library/fn/object/define-property");
-},{"core-js/library/fn/object/define-property":"../node_modules/core-js/library/fn/object/define-property.js"}],"../node_modules/@babel/runtime-corejs2/helpers/createClass.js":[function(require,module,exports) {
-var _Object$defineProperty = require("../core-js/object/define-property");
+},{}],"../node_modules/core-js/library/modules/_is-array.js":[function(require,module,exports) {
+// 7.2.2 IsArray(argument)
+var cof = require('./_cof');
+module.exports = Array.isArray || function isArray(arg) {
+  return cof(arg) == 'Array';
+};
 
-function _defineProperties(target, props) {
-  for (var i = 0; i < props.length; i++) {
-    var descriptor = props[i];
-    descriptor.enumerable = descriptor.enumerable || false;
-    descriptor.configurable = true;
-    if ("value" in descriptor) descriptor.writable = true;
+},{"./_cof":"../node_modules/core-js/library/modules/_cof.js"}],"../node_modules/core-js/library/modules/es6.array.is-array.js":[function(require,module,exports) {
+// 22.1.2.2 / 15.4.3.2 Array.isArray(arg)
+var $export = require('./_export');
 
-    _Object$defineProperty(target, descriptor.key, descriptor);
+$export($export.S, 'Array', { isArray: require('./_is-array') });
+
+},{"./_export":"../node_modules/core-js/library/modules/_export.js","./_is-array":"../node_modules/core-js/library/modules/_is-array.js"}],"../node_modules/core-js/library/fn/array/is-array.js":[function(require,module,exports) {
+require('../../modules/es6.array.is-array');
+module.exports = require('../../modules/_core').Array.isArray;
+
+},{"../../modules/es6.array.is-array":"../node_modules/core-js/library/modules/es6.array.is-array.js","../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/array/is-array.js":[function(require,module,exports) {
+module.exports = require("core-js/library/fn/array/is-array");
+},{"core-js/library/fn/array/is-array":"../node_modules/core-js/library/fn/array/is-array.js"}],"../node_modules/@babel/runtime-corejs2/helpers/arrayWithoutHoles.js":[function(require,module,exports) {
+var _Array$isArray = require("../core-js/array/is-array");
+
+function _arrayWithoutHoles(arr) {
+  if (_Array$isArray(arr)) {
+    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
+
+    return arr2;
   }
 }
 
-function _createClass(Constructor, protoProps, staticProps) {
-  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-  if (staticProps) _defineProperties(Constructor, staticProps);
-  return Constructor;
-}
-
-module.exports = _createClass;
-},{"../core-js/object/define-property":"../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js"}],"../node_modules/core-js/library/modules/_to-integer.js":[function(require,module,exports) {
+module.exports = _arrayWithoutHoles;
+},{"../core-js/array/is-array":"../node_modules/@babel/runtime-corejs2/core-js/array/is-array.js"}],"../node_modules/core-js/library/modules/_to-integer.js":[function(require,module,exports) {
 // 7.1.4 ToInteger
 var ceil = Math.ceil;
 var floor = Math.floor;
@@ -394,13 +391,6 @@ module.exports = require('./_hide');
 
 },{"./_hide":"../node_modules/core-js/library/modules/_hide.js"}],"../node_modules/core-js/library/modules/_iterators.js":[function(require,module,exports) {
 module.exports = {};
-
-},{}],"../node_modules/core-js/library/modules/_cof.js":[function(require,module,exports) {
-var toString = {}.toString;
-
-module.exports = function (it) {
-  return toString.call(it).slice(8, -1);
-};
 
 },{}],"../node_modules/core-js/library/modules/_iobject.js":[function(require,module,exports) {
 // fallback for non-array-like ES3 and non-enumerable old V8 strings
@@ -734,7 +724,146 @@ require('./_iter-define')(String, 'String', function (iterated) {
   return { value: point, done: false };
 });
 
-},{"./_string-at":"../node_modules/core-js/library/modules/_string-at.js","./_iter-define":"../node_modules/core-js/library/modules/_iter-define.js"}],"../node_modules/core-js/library/modules/_add-to-unscopables.js":[function(require,module,exports) {
+},{"./_string-at":"../node_modules/core-js/library/modules/_string-at.js","./_iter-define":"../node_modules/core-js/library/modules/_iter-define.js"}],"../node_modules/core-js/library/modules/_iter-call.js":[function(require,module,exports) {
+// call something on iterator step with safe closing on error
+var anObject = require('./_an-object');
+module.exports = function (iterator, fn, value, entries) {
+  try {
+    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
+  // 7.4.6 IteratorClose(iterator, completion)
+  } catch (e) {
+    var ret = iterator['return'];
+    if (ret !== undefined) anObject(ret.call(iterator));
+    throw e;
+  }
+};
+
+},{"./_an-object":"../node_modules/core-js/library/modules/_an-object.js"}],"../node_modules/core-js/library/modules/_is-array-iter.js":[function(require,module,exports) {
+// check on default Array iterator
+var Iterators = require('./_iterators');
+var ITERATOR = require('./_wks')('iterator');
+var ArrayProto = Array.prototype;
+
+module.exports = function (it) {
+  return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
+};
+
+},{"./_iterators":"../node_modules/core-js/library/modules/_iterators.js","./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/_create-property.js":[function(require,module,exports) {
+'use strict';
+var $defineProperty = require('./_object-dp');
+var createDesc = require('./_property-desc');
+
+module.exports = function (object, index, value) {
+  if (index in object) $defineProperty.f(object, index, createDesc(0, value));
+  else object[index] = value;
+};
+
+},{"./_object-dp":"../node_modules/core-js/library/modules/_object-dp.js","./_property-desc":"../node_modules/core-js/library/modules/_property-desc.js"}],"../node_modules/core-js/library/modules/_classof.js":[function(require,module,exports) {
+// getting tag from 19.1.3.6 Object.prototype.toString()
+var cof = require('./_cof');
+var TAG = require('./_wks')('toStringTag');
+// ES3 wrong here
+var ARG = cof(function () { return arguments; }()) == 'Arguments';
+
+// fallback for IE11 Script Access Denied error
+var tryGet = function (it, key) {
+  try {
+    return it[key];
+  } catch (e) { /* empty */ }
+};
+
+module.exports = function (it) {
+  var O, T, B;
+  return it === undefined ? 'Undefined' : it === null ? 'Null'
+    // @@toStringTag case
+    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
+    // builtinTag case
+    : ARG ? cof(O)
+    // ES3 arguments fallback
+    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
+};
+
+},{"./_cof":"../node_modules/core-js/library/modules/_cof.js","./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/core.get-iterator-method.js":[function(require,module,exports) {
+var classof = require('./_classof');
+var ITERATOR = require('./_wks')('iterator');
+var Iterators = require('./_iterators');
+module.exports = require('./_core').getIteratorMethod = function (it) {
+  if (it != undefined) return it[ITERATOR]
+    || it['@@iterator']
+    || Iterators[classof(it)];
+};
+
+},{"./_classof":"../node_modules/core-js/library/modules/_classof.js","./_wks":"../node_modules/core-js/library/modules/_wks.js","./_iterators":"../node_modules/core-js/library/modules/_iterators.js","./_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/core-js/library/modules/_iter-detect.js":[function(require,module,exports) {
+var ITERATOR = require('./_wks')('iterator');
+var SAFE_CLOSING = false;
+
+try {
+  var riter = [7][ITERATOR]();
+  riter['return'] = function () { SAFE_CLOSING = true; };
+  // eslint-disable-next-line no-throw-literal
+  Array.from(riter, function () { throw 2; });
+} catch (e) { /* empty */ }
+
+module.exports = function (exec, skipClosing) {
+  if (!skipClosing && !SAFE_CLOSING) return false;
+  var safe = false;
+  try {
+    var arr = [7];
+    var iter = arr[ITERATOR]();
+    iter.next = function () { return { done: safe = true }; };
+    arr[ITERATOR] = function () { return iter; };
+    exec(arr);
+  } catch (e) { /* empty */ }
+  return safe;
+};
+
+},{"./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/es6.array.from.js":[function(require,module,exports) {
+'use strict';
+var ctx = require('./_ctx');
+var $export = require('./_export');
+var toObject = require('./_to-object');
+var call = require('./_iter-call');
+var isArrayIter = require('./_is-array-iter');
+var toLength = require('./_to-length');
+var createProperty = require('./_create-property');
+var getIterFn = require('./core.get-iterator-method');
+
+$export($export.S + $export.F * !require('./_iter-detect')(function (iter) { Array.from(iter); }), 'Array', {
+  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
+  from: function from(arrayLike /* , mapfn = undefined, thisArg = undefined */) {
+    var O = toObject(arrayLike);
+    var C = typeof this == 'function' ? this : Array;
+    var aLen = arguments.length;
+    var mapfn = aLen > 1 ? arguments[1] : undefined;
+    var mapping = mapfn !== undefined;
+    var index = 0;
+    var iterFn = getIterFn(O);
+    var length, result, step, iterator;
+    if (mapping) mapfn = ctx(mapfn, aLen > 2 ? arguments[2] : undefined, 2);
+    // if object isn't iterable or it's array with default iterator - use simple case
+    if (iterFn != undefined && !(C == Array && isArrayIter(iterFn))) {
+      for (iterator = iterFn.call(O), result = new C(); !(step = iterator.next()).done; index++) {
+        createProperty(result, index, mapping ? call(iterator, mapfn, [step.value, index], true) : step.value);
+      }
+    } else {
+      length = toLength(O.length);
+      for (result = new C(length); length > index; index++) {
+        createProperty(result, index, mapping ? mapfn(O[index], index) : O[index]);
+      }
+    }
+    result.length = index;
+    return result;
+  }
+});
+
+},{"./_ctx":"../node_modules/core-js/library/modules/_ctx.js","./_export":"../node_modules/core-js/library/modules/_export.js","./_to-object":"../node_modules/core-js/library/modules/_to-object.js","./_iter-call":"../node_modules/core-js/library/modules/_iter-call.js","./_is-array-iter":"../node_modules/core-js/library/modules/_is-array-iter.js","./_to-length":"../node_modules/core-js/library/modules/_to-length.js","./_create-property":"../node_modules/core-js/library/modules/_create-property.js","./core.get-iterator-method":"../node_modules/core-js/library/modules/core.get-iterator-method.js","./_iter-detect":"../node_modules/core-js/library/modules/_iter-detect.js"}],"../node_modules/core-js/library/fn/array/from.js":[function(require,module,exports) {
+require('../../modules/es6.string.iterator');
+require('../../modules/es6.array.from');
+module.exports = require('../../modules/_core').Array.from;
+
+},{"../../modules/es6.string.iterator":"../node_modules/core-js/library/modules/es6.string.iterator.js","../../modules/es6.array.from":"../node_modules/core-js/library/modules/es6.array.from.js","../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/array/from.js":[function(require,module,exports) {
+module.exports = require("core-js/library/fn/array/from");
+},{"core-js/library/fn/array/from":"../node_modules/core-js/library/fn/array/from.js"}],"../node_modules/core-js/library/modules/_add-to-unscopables.js":[function(require,module,exports) {
 module.exports = function () { /* empty */ };
 
 },{}],"../node_modules/core-js/library/modules/_iter-step.js":[function(require,module,exports) {
@@ -800,17 +929,107 @@ for (var i = 0; i < DOMIterables.length; i++) {
   Iterators[NAME] = Iterators.Array;
 }
 
-},{"./es6.array.iterator":"../node_modules/core-js/library/modules/es6.array.iterator.js","./_global":"../node_modules/core-js/library/modules/_global.js","./_hide":"../node_modules/core-js/library/modules/_hide.js","./_iterators":"../node_modules/core-js/library/modules/_iterators.js","./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/_wks-ext.js":[function(require,module,exports) {
-exports.f = require('./_wks');
+},{"./es6.array.iterator":"../node_modules/core-js/library/modules/es6.array.iterator.js","./_global":"../node_modules/core-js/library/modules/_global.js","./_hide":"../node_modules/core-js/library/modules/_hide.js","./_iterators":"../node_modules/core-js/library/modules/_iterators.js","./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/core.is-iterable.js":[function(require,module,exports) {
+var classof = require('./_classof');
+var ITERATOR = require('./_wks')('iterator');
+var Iterators = require('./_iterators');
+module.exports = require('./_core').isIterable = function (it) {
+  var O = Object(it);
+  return O[ITERATOR] !== undefined
+    || '@@iterator' in O
+    // eslint-disable-next-line no-prototype-builtins
+    || Iterators.hasOwnProperty(classof(O));
+};
 
-},{"./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/fn/symbol/iterator.js":[function(require,module,exports) {
-require('../../modules/es6.string.iterator');
-require('../../modules/web.dom.iterable');
-module.exports = require('../../modules/_wks-ext').f('iterator');
+},{"./_classof":"../node_modules/core-js/library/modules/_classof.js","./_wks":"../node_modules/core-js/library/modules/_wks.js","./_iterators":"../node_modules/core-js/library/modules/_iterators.js","./_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/core-js/library/fn/is-iterable.js":[function(require,module,exports) {
+require('../modules/web.dom.iterable');
+require('../modules/es6.string.iterator');
+module.exports = require('../modules/core.is-iterable');
 
-},{"../../modules/es6.string.iterator":"../node_modules/core-js/library/modules/es6.string.iterator.js","../../modules/web.dom.iterable":"../node_modules/core-js/library/modules/web.dom.iterable.js","../../modules/_wks-ext":"../node_modules/core-js/library/modules/_wks-ext.js"}],"../node_modules/@babel/runtime-corejs2/core-js/symbol/iterator.js":[function(require,module,exports) {
-module.exports = require("core-js/library/fn/symbol/iterator");
-},{"core-js/library/fn/symbol/iterator":"../node_modules/core-js/library/fn/symbol/iterator.js"}],"../node_modules/core-js/library/modules/_meta.js":[function(require,module,exports) {
+},{"../modules/web.dom.iterable":"../node_modules/core-js/library/modules/web.dom.iterable.js","../modules/es6.string.iterator":"../node_modules/core-js/library/modules/es6.string.iterator.js","../modules/core.is-iterable":"../node_modules/core-js/library/modules/core.is-iterable.js"}],"../node_modules/@babel/runtime-corejs2/core-js/is-iterable.js":[function(require,module,exports) {
+module.exports = require("core-js/library/fn/is-iterable");
+},{"core-js/library/fn/is-iterable":"../node_modules/core-js/library/fn/is-iterable.js"}],"../node_modules/@babel/runtime-corejs2/helpers/iterableToArray.js":[function(require,module,exports) {
+var _Array$from = require("../core-js/array/from");
+
+var _isIterable = require("../core-js/is-iterable");
+
+function _iterableToArray(iter) {
+  if (_isIterable(Object(iter)) || Object.prototype.toString.call(iter) === "[object Arguments]") return _Array$from(iter);
+}
+
+module.exports = _iterableToArray;
+},{"../core-js/array/from":"../node_modules/@babel/runtime-corejs2/core-js/array/from.js","../core-js/is-iterable":"../node_modules/@babel/runtime-corejs2/core-js/is-iterable.js"}],"../node_modules/@babel/runtime-corejs2/helpers/nonIterableSpread.js":[function(require,module,exports) {
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance");
+}
+
+module.exports = _nonIterableSpread;
+},{}],"../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js":[function(require,module,exports) {
+var arrayWithoutHoles = require("./arrayWithoutHoles");
+
+var iterableToArray = require("./iterableToArray");
+
+var nonIterableSpread = require("./nonIterableSpread");
+
+function _toConsumableArray(arr) {
+  return arrayWithoutHoles(arr) || iterableToArray(arr) || nonIterableSpread();
+}
+
+module.exports = _toConsumableArray;
+},{"./arrayWithoutHoles":"../node_modules/@babel/runtime-corejs2/helpers/arrayWithoutHoles.js","./iterableToArray":"../node_modules/@babel/runtime-corejs2/helpers/iterableToArray.js","./nonIterableSpread":"../node_modules/@babel/runtime-corejs2/helpers/nonIterableSpread.js"}],"../node_modules/core-js/library/modules/_object-pie.js":[function(require,module,exports) {
+exports.f = {}.propertyIsEnumerable;
+
+},{}],"../node_modules/core-js/library/modules/_object-gopd.js":[function(require,module,exports) {
+var pIE = require('./_object-pie');
+var createDesc = require('./_property-desc');
+var toIObject = require('./_to-iobject');
+var toPrimitive = require('./_to-primitive');
+var has = require('./_has');
+var IE8_DOM_DEFINE = require('./_ie8-dom-define');
+var gOPD = Object.getOwnPropertyDescriptor;
+
+exports.f = require('./_descriptors') ? gOPD : function getOwnPropertyDescriptor(O, P) {
+  O = toIObject(O);
+  P = toPrimitive(P, true);
+  if (IE8_DOM_DEFINE) try {
+    return gOPD(O, P);
+  } catch (e) { /* empty */ }
+  if (has(O, P)) return createDesc(!pIE.f.call(O, P), O[P]);
+};
+
+},{"./_object-pie":"../node_modules/core-js/library/modules/_object-pie.js","./_property-desc":"../node_modules/core-js/library/modules/_property-desc.js","./_to-iobject":"../node_modules/core-js/library/modules/_to-iobject.js","./_to-primitive":"../node_modules/core-js/library/modules/_to-primitive.js","./_has":"../node_modules/core-js/library/modules/_has.js","./_ie8-dom-define":"../node_modules/core-js/library/modules/_ie8-dom-define.js","./_descriptors":"../node_modules/core-js/library/modules/_descriptors.js"}],"../node_modules/core-js/library/modules/_object-sap.js":[function(require,module,exports) {
+// most Object methods by ES6 should accept primitives
+var $export = require('./_export');
+var core = require('./_core');
+var fails = require('./_fails');
+module.exports = function (KEY, exec) {
+  var fn = (core.Object || {})[KEY] || Object[KEY];
+  var exp = {};
+  exp[KEY] = exec(fn);
+  $export($export.S + $export.F * fails(function () { fn(1); }), 'Object', exp);
+};
+
+},{"./_export":"../node_modules/core-js/library/modules/_export.js","./_core":"../node_modules/core-js/library/modules/_core.js","./_fails":"../node_modules/core-js/library/modules/_fails.js"}],"../node_modules/core-js/library/modules/es6.object.get-own-property-descriptor.js":[function(require,module,exports) {
+// 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
+var toIObject = require('./_to-iobject');
+var $getOwnPropertyDescriptor = require('./_object-gopd').f;
+
+require('./_object-sap')('getOwnPropertyDescriptor', function () {
+  return function getOwnPropertyDescriptor(it, key) {
+    return $getOwnPropertyDescriptor(toIObject(it), key);
+  };
+});
+
+},{"./_to-iobject":"../node_modules/core-js/library/modules/_to-iobject.js","./_object-gopd":"../node_modules/core-js/library/modules/_object-gopd.js","./_object-sap":"../node_modules/core-js/library/modules/_object-sap.js"}],"../node_modules/core-js/library/fn/object/get-own-property-descriptor.js":[function(require,module,exports) {
+require('../../modules/es6.object.get-own-property-descriptor');
+var $Object = require('../../modules/_core').Object;
+module.exports = function getOwnPropertyDescriptor(it, key) {
+  return $Object.getOwnPropertyDescriptor(it, key);
+};
+
+},{"../../modules/es6.object.get-own-property-descriptor":"../node_modules/core-js/library/modules/es6.object.get-own-property-descriptor.js","../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptor.js":[function(require,module,exports) {
+module.exports = require("core-js/library/fn/object/get-own-property-descriptor");
+},{"core-js/library/fn/object/get-own-property-descriptor":"../node_modules/core-js/library/fn/object/get-own-property-descriptor.js"}],"../node_modules/core-js/library/modules/_meta.js":[function(require,module,exports) {
 var META = require('./_uid')('meta');
 var isObject = require('./_is-object');
 var has = require('./_has');
@@ -865,7 +1084,10 @@ var meta = module.exports = {
   onFreeze: onFreeze
 };
 
-},{"./_uid":"../node_modules/core-js/library/modules/_uid.js","./_is-object":"../node_modules/core-js/library/modules/_is-object.js","./_has":"../node_modules/core-js/library/modules/_has.js","./_object-dp":"../node_modules/core-js/library/modules/_object-dp.js","./_fails":"../node_modules/core-js/library/modules/_fails.js"}],"../node_modules/core-js/library/modules/_wks-define.js":[function(require,module,exports) {
+},{"./_uid":"../node_modules/core-js/library/modules/_uid.js","./_is-object":"../node_modules/core-js/library/modules/_is-object.js","./_has":"../node_modules/core-js/library/modules/_has.js","./_object-dp":"../node_modules/core-js/library/modules/_object-dp.js","./_fails":"../node_modules/core-js/library/modules/_fails.js"}],"../node_modules/core-js/library/modules/_wks-ext.js":[function(require,module,exports) {
+exports.f = require('./_wks');
+
+},{"./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/_wks-define.js":[function(require,module,exports) {
 
 var global = require('./_global');
 var core = require('./_core');
@@ -879,9 +1101,6 @@ module.exports = function (name) {
 
 },{"./_global":"../node_modules/core-js/library/modules/_global.js","./_core":"../node_modules/core-js/library/modules/_core.js","./_library":"../node_modules/core-js/library/modules/_library.js","./_wks-ext":"../node_modules/core-js/library/modules/_wks-ext.js","./_object-dp":"../node_modules/core-js/library/modules/_object-dp.js"}],"../node_modules/core-js/library/modules/_object-gops.js":[function(require,module,exports) {
 exports.f = Object.getOwnPropertySymbols;
-
-},{}],"../node_modules/core-js/library/modules/_object-pie.js":[function(require,module,exports) {
-exports.f = {}.propertyIsEnumerable;
 
 },{}],"../node_modules/core-js/library/modules/_enum-keys.js":[function(require,module,exports) {
 // all enumerable object keys, includes symbols
@@ -900,14 +1119,7 @@ module.exports = function (it) {
   } return result;
 };
 
-},{"./_object-keys":"../node_modules/core-js/library/modules/_object-keys.js","./_object-gops":"../node_modules/core-js/library/modules/_object-gops.js","./_object-pie":"../node_modules/core-js/library/modules/_object-pie.js"}],"../node_modules/core-js/library/modules/_is-array.js":[function(require,module,exports) {
-// 7.2.2 IsArray(argument)
-var cof = require('./_cof');
-module.exports = Array.isArray || function isArray(arg) {
-  return cof(arg) == 'Array';
-};
-
-},{"./_cof":"../node_modules/core-js/library/modules/_cof.js"}],"../node_modules/core-js/library/modules/_object-gopn.js":[function(require,module,exports) {
+},{"./_object-keys":"../node_modules/core-js/library/modules/_object-keys.js","./_object-gops":"../node_modules/core-js/library/modules/_object-gops.js","./_object-pie":"../node_modules/core-js/library/modules/_object-pie.js"}],"../node_modules/core-js/library/modules/_object-gopn.js":[function(require,module,exports) {
 // 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
 var $keys = require('./_object-keys-internal');
 var hiddenKeys = require('./_enum-bug-keys').concat('length', 'prototype');
@@ -937,25 +1149,7 @@ module.exports.f = function getOwnPropertyNames(it) {
   return windowNames && toString.call(it) == '[object Window]' ? getWindowNames(it) : gOPN(toIObject(it));
 };
 
-},{"./_to-iobject":"../node_modules/core-js/library/modules/_to-iobject.js","./_object-gopn":"../node_modules/core-js/library/modules/_object-gopn.js"}],"../node_modules/core-js/library/modules/_object-gopd.js":[function(require,module,exports) {
-var pIE = require('./_object-pie');
-var createDesc = require('./_property-desc');
-var toIObject = require('./_to-iobject');
-var toPrimitive = require('./_to-primitive');
-var has = require('./_has');
-var IE8_DOM_DEFINE = require('./_ie8-dom-define');
-var gOPD = Object.getOwnPropertyDescriptor;
-
-exports.f = require('./_descriptors') ? gOPD : function getOwnPropertyDescriptor(O, P) {
-  O = toIObject(O);
-  P = toPrimitive(P, true);
-  if (IE8_DOM_DEFINE) try {
-    return gOPD(O, P);
-  } catch (e) { /* empty */ }
-  if (has(O, P)) return createDesc(!pIE.f.call(O, P), O[P]);
-};
-
-},{"./_object-pie":"../node_modules/core-js/library/modules/_object-pie.js","./_property-desc":"../node_modules/core-js/library/modules/_property-desc.js","./_to-iobject":"../node_modules/core-js/library/modules/_to-iobject.js","./_to-primitive":"../node_modules/core-js/library/modules/_to-primitive.js","./_has":"../node_modules/core-js/library/modules/_has.js","./_ie8-dom-define":"../node_modules/core-js/library/modules/_ie8-dom-define.js","./_descriptors":"../node_modules/core-js/library/modules/_descriptors.js"}],"../node_modules/core-js/library/modules/es6.symbol.js":[function(require,module,exports) {
+},{"./_to-iobject":"../node_modules/core-js/library/modules/_to-iobject.js","./_object-gopn":"../node_modules/core-js/library/modules/_object-gopn.js"}],"../node_modules/core-js/library/modules/es6.symbol.js":[function(require,module,exports) {
 
 'use strict';
 // ECMAScript 6 symbols shim
@@ -1192,7 +1386,129 @@ setToStringTag(Math, 'Math', true);
 // 24.3.3 JSON[@@toStringTag]
 setToStringTag(global.JSON, 'JSON', true);
 
-},{"./_global":"../node_modules/core-js/library/modules/_global.js","./_has":"../node_modules/core-js/library/modules/_has.js","./_descriptors":"../node_modules/core-js/library/modules/_descriptors.js","./_export":"../node_modules/core-js/library/modules/_export.js","./_redefine":"../node_modules/core-js/library/modules/_redefine.js","./_meta":"../node_modules/core-js/library/modules/_meta.js","./_fails":"../node_modules/core-js/library/modules/_fails.js","./_shared":"../node_modules/core-js/library/modules/_shared.js","./_set-to-string-tag":"../node_modules/core-js/library/modules/_set-to-string-tag.js","./_uid":"../node_modules/core-js/library/modules/_uid.js","./_wks":"../node_modules/core-js/library/modules/_wks.js","./_wks-ext":"../node_modules/core-js/library/modules/_wks-ext.js","./_wks-define":"../node_modules/core-js/library/modules/_wks-define.js","./_enum-keys":"../node_modules/core-js/library/modules/_enum-keys.js","./_is-array":"../node_modules/core-js/library/modules/_is-array.js","./_an-object":"../node_modules/core-js/library/modules/_an-object.js","./_is-object":"../node_modules/core-js/library/modules/_is-object.js","./_to-iobject":"../node_modules/core-js/library/modules/_to-iobject.js","./_to-primitive":"../node_modules/core-js/library/modules/_to-primitive.js","./_property-desc":"../node_modules/core-js/library/modules/_property-desc.js","./_object-create":"../node_modules/core-js/library/modules/_object-create.js","./_object-gopn-ext":"../node_modules/core-js/library/modules/_object-gopn-ext.js","./_object-gopd":"../node_modules/core-js/library/modules/_object-gopd.js","./_object-dp":"../node_modules/core-js/library/modules/_object-dp.js","./_object-keys":"../node_modules/core-js/library/modules/_object-keys.js","./_object-gopn":"../node_modules/core-js/library/modules/_object-gopn.js","./_object-pie":"../node_modules/core-js/library/modules/_object-pie.js","./_object-gops":"../node_modules/core-js/library/modules/_object-gops.js","./_library":"../node_modules/core-js/library/modules/_library.js","./_hide":"../node_modules/core-js/library/modules/_hide.js"}],"../node_modules/core-js/library/modules/es6.object.to-string.js":[function(require,module,exports) {
+},{"./_global":"../node_modules/core-js/library/modules/_global.js","./_has":"../node_modules/core-js/library/modules/_has.js","./_descriptors":"../node_modules/core-js/library/modules/_descriptors.js","./_export":"../node_modules/core-js/library/modules/_export.js","./_redefine":"../node_modules/core-js/library/modules/_redefine.js","./_meta":"../node_modules/core-js/library/modules/_meta.js","./_fails":"../node_modules/core-js/library/modules/_fails.js","./_shared":"../node_modules/core-js/library/modules/_shared.js","./_set-to-string-tag":"../node_modules/core-js/library/modules/_set-to-string-tag.js","./_uid":"../node_modules/core-js/library/modules/_uid.js","./_wks":"../node_modules/core-js/library/modules/_wks.js","./_wks-ext":"../node_modules/core-js/library/modules/_wks-ext.js","./_wks-define":"../node_modules/core-js/library/modules/_wks-define.js","./_enum-keys":"../node_modules/core-js/library/modules/_enum-keys.js","./_is-array":"../node_modules/core-js/library/modules/_is-array.js","./_an-object":"../node_modules/core-js/library/modules/_an-object.js","./_is-object":"../node_modules/core-js/library/modules/_is-object.js","./_to-iobject":"../node_modules/core-js/library/modules/_to-iobject.js","./_to-primitive":"../node_modules/core-js/library/modules/_to-primitive.js","./_property-desc":"../node_modules/core-js/library/modules/_property-desc.js","./_object-create":"../node_modules/core-js/library/modules/_object-create.js","./_object-gopn-ext":"../node_modules/core-js/library/modules/_object-gopn-ext.js","./_object-gopd":"../node_modules/core-js/library/modules/_object-gopd.js","./_object-dp":"../node_modules/core-js/library/modules/_object-dp.js","./_object-keys":"../node_modules/core-js/library/modules/_object-keys.js","./_object-gopn":"../node_modules/core-js/library/modules/_object-gopn.js","./_object-pie":"../node_modules/core-js/library/modules/_object-pie.js","./_object-gops":"../node_modules/core-js/library/modules/_object-gops.js","./_library":"../node_modules/core-js/library/modules/_library.js","./_hide":"../node_modules/core-js/library/modules/_hide.js"}],"../node_modules/core-js/library/fn/object/get-own-property-symbols.js":[function(require,module,exports) {
+require('../../modules/es6.symbol');
+module.exports = require('../../modules/_core').Object.getOwnPropertySymbols;
+
+},{"../../modules/es6.symbol":"../node_modules/core-js/library/modules/es6.symbol.js","../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-symbols.js":[function(require,module,exports) {
+module.exports = require("core-js/library/fn/object/get-own-property-symbols");
+},{"core-js/library/fn/object/get-own-property-symbols":"../node_modules/core-js/library/fn/object/get-own-property-symbols.js"}],"../node_modules/core-js/library/modules/es6.object.keys.js":[function(require,module,exports) {
+// 19.1.2.14 Object.keys(O)
+var toObject = require('./_to-object');
+var $keys = require('./_object-keys');
+
+require('./_object-sap')('keys', function () {
+  return function keys(it) {
+    return $keys(toObject(it));
+  };
+});
+
+},{"./_to-object":"../node_modules/core-js/library/modules/_to-object.js","./_object-keys":"../node_modules/core-js/library/modules/_object-keys.js","./_object-sap":"../node_modules/core-js/library/modules/_object-sap.js"}],"../node_modules/core-js/library/fn/object/keys.js":[function(require,module,exports) {
+require('../../modules/es6.object.keys');
+module.exports = require('../../modules/_core').Object.keys;
+
+},{"../../modules/es6.object.keys":"../node_modules/core-js/library/modules/es6.object.keys.js","../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/object/keys.js":[function(require,module,exports) {
+module.exports = require("core-js/library/fn/object/keys");
+},{"core-js/library/fn/object/keys":"../node_modules/core-js/library/fn/object/keys.js"}],"../node_modules/core-js/library/modules/es6.object.define-property.js":[function(require,module,exports) {
+var $export = require('./_export');
+// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
+$export($export.S + $export.F * !require('./_descriptors'), 'Object', { defineProperty: require('./_object-dp').f });
+
+},{"./_export":"../node_modules/core-js/library/modules/_export.js","./_descriptors":"../node_modules/core-js/library/modules/_descriptors.js","./_object-dp":"../node_modules/core-js/library/modules/_object-dp.js"}],"../node_modules/core-js/library/fn/object/define-property.js":[function(require,module,exports) {
+require('../../modules/es6.object.define-property');
+var $Object = require('../../modules/_core').Object;
+module.exports = function defineProperty(it, key, desc) {
+  return $Object.defineProperty(it, key, desc);
+};
+
+},{"../../modules/es6.object.define-property":"../node_modules/core-js/library/modules/es6.object.define-property.js","../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js":[function(require,module,exports) {
+module.exports = require("core-js/library/fn/object/define-property");
+},{"core-js/library/fn/object/define-property":"../node_modules/core-js/library/fn/object/define-property.js"}],"../node_modules/@babel/runtime-corejs2/helpers/defineProperty.js":[function(require,module,exports) {
+var _Object$defineProperty = require("../core-js/object/define-property");
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    _Object$defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+module.exports = _defineProperty;
+},{"../core-js/object/define-property":"../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js"}],"../node_modules/@babel/runtime-corejs2/helpers/objectSpread.js":[function(require,module,exports) {
+var _Object$getOwnPropertyDescriptor = require("../core-js/object/get-own-property-descriptor");
+
+var _Object$getOwnPropertySymbols = require("../core-js/object/get-own-property-symbols");
+
+var _Object$keys = require("../core-js/object/keys");
+
+var defineProperty = require("./defineProperty");
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    var ownKeys = _Object$keys(source);
+
+    if (typeof _Object$getOwnPropertySymbols === 'function') {
+      ownKeys = ownKeys.concat(_Object$getOwnPropertySymbols(source).filter(function (sym) {
+        return _Object$getOwnPropertyDescriptor(source, sym).enumerable;
+      }));
+    }
+
+    ownKeys.forEach(function (key) {
+      defineProperty(target, key, source[key]);
+    });
+  }
+
+  return target;
+}
+
+module.exports = _objectSpread;
+},{"../core-js/object/get-own-property-descriptor":"../node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptor.js","../core-js/object/get-own-property-symbols":"../node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-symbols.js","../core-js/object/keys":"../node_modules/@babel/runtime-corejs2/core-js/object/keys.js","./defineProperty":"../node_modules/@babel/runtime-corejs2/helpers/defineProperty.js"}],"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js":[function(require,module,exports) {
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+module.exports = _classCallCheck;
+},{}],"../node_modules/@babel/runtime-corejs2/helpers/createClass.js":[function(require,module,exports) {
+var _Object$defineProperty = require("../core-js/object/define-property");
+
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+
+    _Object$defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+module.exports = _createClass;
+},{"../core-js/object/define-property":"../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js"}],"../node_modules/core-js/library/fn/symbol/iterator.js":[function(require,module,exports) {
+require('../../modules/es6.string.iterator');
+require('../../modules/web.dom.iterable');
+module.exports = require('../../modules/_wks-ext').f('iterator');
+
+},{"../../modules/es6.string.iterator":"../node_modules/core-js/library/modules/es6.string.iterator.js","../../modules/web.dom.iterable":"../node_modules/core-js/library/modules/web.dom.iterable.js","../../modules/_wks-ext":"../node_modules/core-js/library/modules/_wks-ext.js"}],"../node_modules/@babel/runtime-corejs2/core-js/symbol/iterator.js":[function(require,module,exports) {
+module.exports = require("core-js/library/fn/symbol/iterator");
+},{"core-js/library/fn/symbol/iterator":"../node_modules/core-js/library/fn/symbol/iterator.js"}],"../node_modules/core-js/library/modules/es6.object.to-string.js":[function(require,module,exports) {
 
 },{}],"../node_modules/core-js/library/modules/es7.symbol.async-iterator.js":[function(require,module,exports) {
 require('./_wks-define')('asyncIterator');
@@ -1255,19 +1571,7 @@ function _possibleConstructorReturn(self, call) {
 }
 
 module.exports = _possibleConstructorReturn;
-},{"../helpers/typeof":"../node_modules/@babel/runtime-corejs2/helpers/typeof.js","./assertThisInitialized":"../node_modules/@babel/runtime-corejs2/helpers/assertThisInitialized.js"}],"../node_modules/core-js/library/modules/_object-sap.js":[function(require,module,exports) {
-// most Object methods by ES6 should accept primitives
-var $export = require('./_export');
-var core = require('./_core');
-var fails = require('./_fails');
-module.exports = function (KEY, exec) {
-  var fn = (core.Object || {})[KEY] || Object[KEY];
-  var exp = {};
-  exp[KEY] = exec(fn);
-  $export($export.S + $export.F * fails(function () { fn(1); }), 'Object', exp);
-};
-
-},{"./_export":"../node_modules/core-js/library/modules/_export.js","./_core":"../node_modules/core-js/library/modules/_core.js","./_fails":"../node_modules/core-js/library/modules/_fails.js"}],"../node_modules/core-js/library/modules/es6.object.get-prototype-of.js":[function(require,module,exports) {
+},{"../helpers/typeof":"../node_modules/@babel/runtime-corejs2/helpers/typeof.js","./assertThisInitialized":"../node_modules/@babel/runtime-corejs2/helpers/assertThisInitialized.js"}],"../node_modules/core-js/library/modules/es6.object.get-prototype-of.js":[function(require,module,exports) {
 // 19.1.2.9 Object.getPrototypeOf(O)
 var toObject = require('./_to-object');
 var $getPrototypeOf = require('./_object-gpo');
@@ -23388,904 +23692,7 @@ if ("development" === 'production') {
 } else {
   module.exports = require('./cjs/react-dom.development.js');
 }
-},{"./cjs/react-dom.development.js":"../node_modules/react-dom/cjs/react-dom.development.js"}],"../node_modules/prop-types/factoryWithTypeCheckers.js":[function(require,module,exports) {
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-'use strict';
-
-var assign = require('object-assign');
-
-var ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');
-
-var checkPropTypes = require('./checkPropTypes');
-
-var printWarning = function () {};
-
-if ("development" !== 'production') {
-  printWarning = function (text) {
-    var message = 'Warning: ' + text;
-
-    if (typeof console !== 'undefined') {
-      console.error(message);
-    }
-
-    try {
-      // --- Welcome to debugging React ---
-      // This error was thrown as a convenience so that you can use this stack
-      // to find the callsite that caused this warning to fire.
-      throw new Error(message);
-    } catch (x) {}
-  };
-}
-
-function emptyFunctionThatReturnsNull() {
-  return null;
-}
-
-module.exports = function (isValidElement, throwOnDirectAccess) {
-  /* global Symbol */
-  var ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
-  var FAUX_ITERATOR_SYMBOL = '@@iterator'; // Before Symbol spec.
-
-  /**
-   * Returns the iterator method function contained on the iterable object.
-   *
-   * Be sure to invoke the function with the iterable as context:
-   *
-   *     var iteratorFn = getIteratorFn(myIterable);
-   *     if (iteratorFn) {
-   *       var iterator = iteratorFn.call(myIterable);
-   *       ...
-   *     }
-   *
-   * @param {?object} maybeIterable
-   * @return {?function}
-   */
-
-  function getIteratorFn(maybeIterable) {
-    var iteratorFn = maybeIterable && (ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL]);
-
-    if (typeof iteratorFn === 'function') {
-      return iteratorFn;
-    }
-  }
-  /**
-   * Collection of methods that allow declaration and validation of props that are
-   * supplied to React components. Example usage:
-   *
-   *   var Props = require('ReactPropTypes');
-   *   var MyArticle = React.createClass({
-   *     propTypes: {
-   *       // An optional string prop named "description".
-   *       description: Props.string,
-   *
-   *       // A required enum prop named "category".
-   *       category: Props.oneOf(['News','Photos']).isRequired,
-   *
-   *       // A prop named "dialog" that requires an instance of Dialog.
-   *       dialog: Props.instanceOf(Dialog).isRequired
-   *     },
-   *     render: function() { ... }
-   *   });
-   *
-   * A more formal specification of how these methods are used:
-   *
-   *   type := array|bool|func|object|number|string|oneOf([...])|instanceOf(...)
-   *   decl := ReactPropTypes.{type}(.isRequired)?
-   *
-   * Each and every declaration produces a function with the same signature. This
-   * allows the creation of custom validation functions. For example:
-   *
-   *  var MyLink = React.createClass({
-   *    propTypes: {
-   *      // An optional string or URI prop named "href".
-   *      href: function(props, propName, componentName) {
-   *        var propValue = props[propName];
-   *        if (propValue != null && typeof propValue !== 'string' &&
-   *            !(propValue instanceof URI)) {
-   *          return new Error(
-   *            'Expected a string or an URI for ' + propName + ' in ' +
-   *            componentName
-   *          );
-   *        }
-   *      }
-   *    },
-   *    render: function() {...}
-   *  });
-   *
-   * @internal
-   */
-
-
-  var ANONYMOUS = '<<anonymous>>'; // Important!
-  // Keep this list in sync with production version in `./factoryWithThrowingShims.js`.
-
-  var ReactPropTypes = {
-    array: createPrimitiveTypeChecker('array'),
-    bool: createPrimitiveTypeChecker('boolean'),
-    func: createPrimitiveTypeChecker('function'),
-    number: createPrimitiveTypeChecker('number'),
-    object: createPrimitiveTypeChecker('object'),
-    string: createPrimitiveTypeChecker('string'),
-    symbol: createPrimitiveTypeChecker('symbol'),
-    any: createAnyTypeChecker(),
-    arrayOf: createArrayOfTypeChecker,
-    element: createElementTypeChecker(),
-    instanceOf: createInstanceTypeChecker,
-    node: createNodeChecker(),
-    objectOf: createObjectOfTypeChecker,
-    oneOf: createEnumTypeChecker,
-    oneOfType: createUnionTypeChecker,
-    shape: createShapeTypeChecker,
-    exact: createStrictShapeTypeChecker
-  };
-  /**
-   * inlined Object.is polyfill to avoid requiring consumers ship their own
-   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
-   */
-
-  /*eslint-disable no-self-compare*/
-
-  function is(x, y) {
-    // SameValue algorithm
-    if (x === y) {
-      // Steps 1-5, 7-10
-      // Steps 6.b-6.e: +0 != -0
-      return x !== 0 || 1 / x === 1 / y;
-    } else {
-      // Step 6.a: NaN == NaN
-      return x !== x && y !== y;
-    }
-  }
-  /*eslint-enable no-self-compare*/
-
-  /**
-   * We use an Error-like object for backward compatibility as people may call
-   * PropTypes directly and inspect their output. However, we don't use real
-   * Errors anymore. We don't inspect their stack anyway, and creating them
-   * is prohibitively expensive if they are created too often, such as what
-   * happens in oneOfType() for any type before the one that matched.
-   */
-
-
-  function PropTypeError(message) {
-    this.message = message;
-    this.stack = '';
-  } // Make `instanceof Error` still work for returned errors.
-
-
-  PropTypeError.prototype = Error.prototype;
-
-  function createChainableTypeChecker(validate) {
-    if ("development" !== 'production') {
-      var manualPropTypeCallCache = {};
-      var manualPropTypeWarningCount = 0;
-    }
-
-    function checkType(isRequired, props, propName, componentName, location, propFullName, secret) {
-      componentName = componentName || ANONYMOUS;
-      propFullName = propFullName || propName;
-
-      if (secret !== ReactPropTypesSecret) {
-        if (throwOnDirectAccess) {
-          // New behavior only for users of `prop-types` package
-          var err = new Error('Calling PropTypes validators directly is not supported by the `prop-types` package. ' + 'Use `PropTypes.checkPropTypes()` to call them. ' + 'Read more at http://fb.me/use-check-prop-types');
-          err.name = 'Invariant Violation';
-          throw err;
-        } else if ("development" !== 'production' && typeof console !== 'undefined') {
-          // Old behavior for people using React.PropTypes
-          var cacheKey = componentName + ':' + propName;
-
-          if (!manualPropTypeCallCache[cacheKey] && // Avoid spamming the console because they are often not actionable except for lib authors
-          manualPropTypeWarningCount < 3) {
-            printWarning('You are manually calling a React.PropTypes validation ' + 'function for the `' + propFullName + '` prop on `' + componentName + '`. This is deprecated ' + 'and will throw in the standalone `prop-types` package. ' + 'You may be seeing this warning due to a third-party PropTypes ' + 'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.');
-            manualPropTypeCallCache[cacheKey] = true;
-            manualPropTypeWarningCount++;
-          }
-        }
-      }
-
-      if (props[propName] == null) {
-        if (isRequired) {
-          if (props[propName] === null) {
-            return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required ' + ('in `' + componentName + '`, but its value is `null`.'));
-          }
-
-          return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required in ' + ('`' + componentName + '`, but its value is `undefined`.'));
-        }
-
-        return null;
-      } else {
-        return validate(props, propName, componentName, location, propFullName);
-      }
-    }
-
-    var chainedCheckType = checkType.bind(null, false);
-    chainedCheckType.isRequired = checkType.bind(null, true);
-    return chainedCheckType;
-  }
-
-  function createPrimitiveTypeChecker(expectedType) {
-    function validate(props, propName, componentName, location, propFullName, secret) {
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-
-      if (propType !== expectedType) {
-        // `propValue` being instance of, say, date/regexp, pass the 'object'
-        // check, but we can offer a more precise error message here rather than
-        // 'of type `object`'.
-        var preciseType = getPreciseType(propValue);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + preciseType + '` supplied to `' + componentName + '`, expected ') + ('`' + expectedType + '`.'));
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createAnyTypeChecker() {
-    return createChainableTypeChecker(emptyFunctionThatReturnsNull);
-  }
-
-  function createArrayOfTypeChecker(typeChecker) {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (typeof typeChecker !== 'function') {
-        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside arrayOf.');
-      }
-
-      var propValue = props[propName];
-
-      if (!Array.isArray(propValue)) {
-        var propType = getPropType(propValue);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an array.'));
-      }
-
-      for (var i = 0; i < propValue.length; i++) {
-        var error = typeChecker(propValue, i, componentName, location, propFullName + '[' + i + ']', ReactPropTypesSecret);
-
-        if (error instanceof Error) {
-          return error;
-        }
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createElementTypeChecker() {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-
-      if (!isValidElement(propValue)) {
-        var propType = getPropType(propValue);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected a single ReactElement.'));
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createInstanceTypeChecker(expectedClass) {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (!(props[propName] instanceof expectedClass)) {
-        var expectedClassName = expectedClass.name || ANONYMOUS;
-        var actualClassName = getClassName(props[propName]);
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + actualClassName + '` supplied to `' + componentName + '`, expected ') + ('instance of `' + expectedClassName + '`.'));
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createEnumTypeChecker(expectedValues) {
-    if (!Array.isArray(expectedValues)) {
-      "development" !== 'production' ? printWarning('Invalid argument supplied to oneOf, expected an instance of array.') : void 0;
-      return emptyFunctionThatReturnsNull;
-    }
-
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-
-      for (var i = 0; i < expectedValues.length; i++) {
-        if (is(propValue, expectedValues[i])) {
-          return null;
-        }
-      }
-
-      var valuesString = JSON.stringify(expectedValues);
-      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of value `' + propValue + '` ' + ('supplied to `' + componentName + '`, expected one of ' + valuesString + '.'));
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createObjectOfTypeChecker(typeChecker) {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (typeof typeChecker !== 'function') {
-        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside objectOf.');
-      }
-
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-
-      if (propType !== 'object') {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an object.'));
-      }
-
-      for (var key in propValue) {
-        if (propValue.hasOwnProperty(key)) {
-          var error = typeChecker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
-
-          if (error instanceof Error) {
-            return error;
-          }
-        }
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createUnionTypeChecker(arrayOfTypeCheckers) {
-    if (!Array.isArray(arrayOfTypeCheckers)) {
-      "development" !== 'production' ? printWarning('Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
-      return emptyFunctionThatReturnsNull;
-    }
-
-    for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
-      var checker = arrayOfTypeCheckers[i];
-
-      if (typeof checker !== 'function') {
-        printWarning('Invalid argument supplied to oneOfType. Expected an array of check functions, but ' + 'received ' + getPostfixForTypeWarning(checker) + ' at index ' + i + '.');
-        return emptyFunctionThatReturnsNull;
-      }
-    }
-
-    function validate(props, propName, componentName, location, propFullName) {
-      for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
-        var checker = arrayOfTypeCheckers[i];
-
-        if (checker(props, propName, componentName, location, propFullName, ReactPropTypesSecret) == null) {
-          return null;
-        }
-      }
-
-      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`.'));
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createNodeChecker() {
-    function validate(props, propName, componentName, location, propFullName) {
-      if (!isNode(props[propName])) {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`, expected a ReactNode.'));
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createShapeTypeChecker(shapeTypes) {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-
-      if (propType !== 'object') {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
-      }
-
-      for (var key in shapeTypes) {
-        var checker = shapeTypes[key];
-
-        if (!checker) {
-          continue;
-        }
-
-        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
-
-        if (error) {
-          return error;
-        }
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function createStrictShapeTypeChecker(shapeTypes) {
-    function validate(props, propName, componentName, location, propFullName) {
-      var propValue = props[propName];
-      var propType = getPropType(propValue);
-
-      if (propType !== 'object') {
-        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
-      } // We need to check all keys in case some are required but missing from
-      // props.
-
-
-      var allKeys = assign({}, props[propName], shapeTypes);
-
-      for (var key in allKeys) {
-        var checker = shapeTypes[key];
-
-        if (!checker) {
-          return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` key `' + key + '` supplied to `' + componentName + '`.' + '\nBad object: ' + JSON.stringify(props[propName], null, '  ') + '\nValid keys: ' + JSON.stringify(Object.keys(shapeTypes), null, '  '));
-        }
-
-        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
-
-        if (error) {
-          return error;
-        }
-      }
-
-      return null;
-    }
-
-    return createChainableTypeChecker(validate);
-  }
-
-  function isNode(propValue) {
-    switch (typeof propValue) {
-      case 'number':
-      case 'string':
-      case 'undefined':
-        return true;
-
-      case 'boolean':
-        return !propValue;
-
-      case 'object':
-        if (Array.isArray(propValue)) {
-          return propValue.every(isNode);
-        }
-
-        if (propValue === null || isValidElement(propValue)) {
-          return true;
-        }
-
-        var iteratorFn = getIteratorFn(propValue);
-
-        if (iteratorFn) {
-          var iterator = iteratorFn.call(propValue);
-          var step;
-
-          if (iteratorFn !== propValue.entries) {
-            while (!(step = iterator.next()).done) {
-              if (!isNode(step.value)) {
-                return false;
-              }
-            }
-          } else {
-            // Iterator will provide entry [k,v] tuples rather than values.
-            while (!(step = iterator.next()).done) {
-              var entry = step.value;
-
-              if (entry) {
-                if (!isNode(entry[1])) {
-                  return false;
-                }
-              }
-            }
-          }
-        } else {
-          return false;
-        }
-
-        return true;
-
-      default:
-        return false;
-    }
-  }
-
-  function isSymbol(propType, propValue) {
-    // Native Symbol.
-    if (propType === 'symbol') {
-      return true;
-    } // 19.4.3.5 Symbol.prototype[@@toStringTag] === 'Symbol'
-
-
-    if (propValue['@@toStringTag'] === 'Symbol') {
-      return true;
-    } // Fallback for non-spec compliant Symbols which are polyfilled.
-
-
-    if (typeof Symbol === 'function' && propValue instanceof Symbol) {
-      return true;
-    }
-
-    return false;
-  } // Equivalent of `typeof` but with special handling for array and regexp.
-
-
-  function getPropType(propValue) {
-    var propType = typeof propValue;
-
-    if (Array.isArray(propValue)) {
-      return 'array';
-    }
-
-    if (propValue instanceof RegExp) {
-      // Old webkits (at least until Android 4.0) return 'function' rather than
-      // 'object' for typeof a RegExp. We'll normalize this here so that /bla/
-      // passes PropTypes.object.
-      return 'object';
-    }
-
-    if (isSymbol(propType, propValue)) {
-      return 'symbol';
-    }
-
-    return propType;
-  } // This handles more types than `getPropType`. Only used for error messages.
-  // See `createPrimitiveTypeChecker`.
-
-
-  function getPreciseType(propValue) {
-    if (typeof propValue === 'undefined' || propValue === null) {
-      return '' + propValue;
-    }
-
-    var propType = getPropType(propValue);
-
-    if (propType === 'object') {
-      if (propValue instanceof Date) {
-        return 'date';
-      } else if (propValue instanceof RegExp) {
-        return 'regexp';
-      }
-    }
-
-    return propType;
-  } // Returns a string that is postfixed to a warning about an invalid type.
-  // For example, "undefined" or "of type array"
-
-
-  function getPostfixForTypeWarning(value) {
-    var type = getPreciseType(value);
-
-    switch (type) {
-      case 'array':
-      case 'object':
-        return 'an ' + type;
-
-      case 'boolean':
-      case 'date':
-      case 'regexp':
-        return 'a ' + type;
-
-      default:
-        return type;
-    }
-  } // Returns class name of the object, if any.
-
-
-  function getClassName(propValue) {
-    if (!propValue.constructor || !propValue.constructor.name) {
-      return ANONYMOUS;
-    }
-
-    return propValue.constructor.name;
-  }
-
-  ReactPropTypes.checkPropTypes = checkPropTypes;
-  ReactPropTypes.PropTypes = ReactPropTypes;
-  return ReactPropTypes;
-};
-},{"object-assign":"../node_modules/object-assign/index.js","./lib/ReactPropTypesSecret":"../node_modules/prop-types/lib/ReactPropTypesSecret.js","./checkPropTypes":"../node_modules/prop-types/checkPropTypes.js"}],"../node_modules/prop-types/index.js":[function(require,module,exports) {
-/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-if ("development" !== 'production') {
-  var REACT_ELEMENT_TYPE = typeof Symbol === 'function' && Symbol.for && Symbol.for('react.element') || 0xeac7;
-
-  var isValidElement = function (object) {
-    return typeof object === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
-  }; // By explicitly using `prop-types` you are opting into new development behavior.
-  // http://fb.me/prop-types-in-prod
-
-
-  var throwOnDirectAccess = true;
-  module.exports = require('./factoryWithTypeCheckers')(isValidElement, throwOnDirectAccess);
-} else {
-  // By explicitly using `prop-types` you are opting into new production behavior.
-  // http://fb.me/prop-types-in-prod
-  module.exports = require('./factoryWithThrowingShims')();
-}
-},{"./factoryWithTypeCheckers":"../node_modules/prop-types/factoryWithTypeCheckers.js"}],"../node_modules/core-js/library/modules/_string-ws.js":[function(require,module,exports) {
-module.exports = '\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003' +
-  '\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF';
-
-},{}],"../node_modules/core-js/library/modules/_string-trim.js":[function(require,module,exports) {
-var $export = require('./_export');
-var defined = require('./_defined');
-var fails = require('./_fails');
-var spaces = require('./_string-ws');
-var space = '[' + spaces + ']';
-var non = '\u200b\u0085';
-var ltrim = RegExp('^' + space + space + '*');
-var rtrim = RegExp(space + space + '*$');
-
-var exporter = function (KEY, exec, ALIAS) {
-  var exp = {};
-  var FORCE = fails(function () {
-    return !!spaces[KEY]() || non[KEY]() != non;
-  });
-  var fn = exp[KEY] = FORCE ? exec(trim) : spaces[KEY];
-  if (ALIAS) exp[ALIAS] = fn;
-  $export($export.P + $export.F * FORCE, 'String', exp);
-};
-
-// 1 -> String#trimLeft
-// 2 -> String#trimRight
-// 3 -> String#trim
-var trim = exporter.trim = function (string, TYPE) {
-  string = String(defined(string));
-  if (TYPE & 1) string = string.replace(ltrim, '');
-  if (TYPE & 2) string = string.replace(rtrim, '');
-  return string;
-};
-
-module.exports = exporter;
-
-},{"./_export":"../node_modules/core-js/library/modules/_export.js","./_defined":"../node_modules/core-js/library/modules/_defined.js","./_fails":"../node_modules/core-js/library/modules/_fails.js","./_string-ws":"../node_modules/core-js/library/modules/_string-ws.js"}],"../node_modules/core-js/library/modules/_parse-int.js":[function(require,module,exports) {
-var $parseInt = require('./_global').parseInt;
-var $trim = require('./_string-trim').trim;
-var ws = require('./_string-ws');
-var hex = /^[-+]?0[xX]/;
-
-module.exports = $parseInt(ws + '08') !== 8 || $parseInt(ws + '0x16') !== 22 ? function parseInt(str, radix) {
-  var string = $trim(String(str), 3);
-  return $parseInt(string, (radix >>> 0) || (hex.test(string) ? 16 : 10));
-} : $parseInt;
-
-},{"./_global":"../node_modules/core-js/library/modules/_global.js","./_string-trim":"../node_modules/core-js/library/modules/_string-trim.js","./_string-ws":"../node_modules/core-js/library/modules/_string-ws.js"}],"../node_modules/core-js/library/modules/es6.parse-int.js":[function(require,module,exports) {
-var $export = require('./_export');
-var $parseInt = require('./_parse-int');
-// 18.2.5 parseInt(string, radix)
-$export($export.G + $export.F * (parseInt != $parseInt), { parseInt: $parseInt });
-
-},{"./_export":"../node_modules/core-js/library/modules/_export.js","./_parse-int":"../node_modules/core-js/library/modules/_parse-int.js"}],"../node_modules/core-js/library/fn/parse-int.js":[function(require,module,exports) {
-require('../modules/es6.parse-int');
-module.exports = require('../modules/_core').parseInt;
-
-},{"../modules/es6.parse-int":"../node_modules/core-js/library/modules/es6.parse-int.js","../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/parse-int.js":[function(require,module,exports) {
-module.exports = require("core-js/library/fn/parse-int");
-},{"core-js/library/fn/parse-int":"../node_modules/core-js/library/fn/parse-int.js"}],"../node_modules/core-js/library/modules/es6.array.is-array.js":[function(require,module,exports) {
-// 22.1.2.2 / 15.4.3.2 Array.isArray(arg)
-var $export = require('./_export');
-
-$export($export.S, 'Array', { isArray: require('./_is-array') });
-
-},{"./_export":"../node_modules/core-js/library/modules/_export.js","./_is-array":"../node_modules/core-js/library/modules/_is-array.js"}],"../node_modules/core-js/library/fn/array/is-array.js":[function(require,module,exports) {
-require('../../modules/es6.array.is-array');
-module.exports = require('../../modules/_core').Array.isArray;
-
-},{"../../modules/es6.array.is-array":"../node_modules/core-js/library/modules/es6.array.is-array.js","../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/array/is-array.js":[function(require,module,exports) {
-module.exports = require("core-js/library/fn/array/is-array");
-},{"core-js/library/fn/array/is-array":"../node_modules/core-js/library/fn/array/is-array.js"}],"../node_modules/@babel/runtime-corejs2/helpers/arrayWithoutHoles.js":[function(require,module,exports) {
-var _Array$isArray = require("../core-js/array/is-array");
-
-function _arrayWithoutHoles(arr) {
-  if (_Array$isArray(arr)) {
-    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {
-      arr2[i] = arr[i];
-    }
-
-    return arr2;
-  }
-}
-
-module.exports = _arrayWithoutHoles;
-},{"../core-js/array/is-array":"../node_modules/@babel/runtime-corejs2/core-js/array/is-array.js"}],"../node_modules/core-js/library/modules/_iter-call.js":[function(require,module,exports) {
-// call something on iterator step with safe closing on error
-var anObject = require('./_an-object');
-module.exports = function (iterator, fn, value, entries) {
-  try {
-    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
-  // 7.4.6 IteratorClose(iterator, completion)
-  } catch (e) {
-    var ret = iterator['return'];
-    if (ret !== undefined) anObject(ret.call(iterator));
-    throw e;
-  }
-};
-
-},{"./_an-object":"../node_modules/core-js/library/modules/_an-object.js"}],"../node_modules/core-js/library/modules/_is-array-iter.js":[function(require,module,exports) {
-// check on default Array iterator
-var Iterators = require('./_iterators');
-var ITERATOR = require('./_wks')('iterator');
-var ArrayProto = Array.prototype;
-
-module.exports = function (it) {
-  return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
-};
-
-},{"./_iterators":"../node_modules/core-js/library/modules/_iterators.js","./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/_create-property.js":[function(require,module,exports) {
-'use strict';
-var $defineProperty = require('./_object-dp');
-var createDesc = require('./_property-desc');
-
-module.exports = function (object, index, value) {
-  if (index in object) $defineProperty.f(object, index, createDesc(0, value));
-  else object[index] = value;
-};
-
-},{"./_object-dp":"../node_modules/core-js/library/modules/_object-dp.js","./_property-desc":"../node_modules/core-js/library/modules/_property-desc.js"}],"../node_modules/core-js/library/modules/_classof.js":[function(require,module,exports) {
-// getting tag from 19.1.3.6 Object.prototype.toString()
-var cof = require('./_cof');
-var TAG = require('./_wks')('toStringTag');
-// ES3 wrong here
-var ARG = cof(function () { return arguments; }()) == 'Arguments';
-
-// fallback for IE11 Script Access Denied error
-var tryGet = function (it, key) {
-  try {
-    return it[key];
-  } catch (e) { /* empty */ }
-};
-
-module.exports = function (it) {
-  var O, T, B;
-  return it === undefined ? 'Undefined' : it === null ? 'Null'
-    // @@toStringTag case
-    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
-    // builtinTag case
-    : ARG ? cof(O)
-    // ES3 arguments fallback
-    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
-};
-
-},{"./_cof":"../node_modules/core-js/library/modules/_cof.js","./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/core.get-iterator-method.js":[function(require,module,exports) {
-var classof = require('./_classof');
-var ITERATOR = require('./_wks')('iterator');
-var Iterators = require('./_iterators');
-module.exports = require('./_core').getIteratorMethod = function (it) {
-  if (it != undefined) return it[ITERATOR]
-    || it['@@iterator']
-    || Iterators[classof(it)];
-};
-
-},{"./_classof":"../node_modules/core-js/library/modules/_classof.js","./_wks":"../node_modules/core-js/library/modules/_wks.js","./_iterators":"../node_modules/core-js/library/modules/_iterators.js","./_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/core-js/library/modules/_iter-detect.js":[function(require,module,exports) {
-var ITERATOR = require('./_wks')('iterator');
-var SAFE_CLOSING = false;
-
-try {
-  var riter = [7][ITERATOR]();
-  riter['return'] = function () { SAFE_CLOSING = true; };
-  // eslint-disable-next-line no-throw-literal
-  Array.from(riter, function () { throw 2; });
-} catch (e) { /* empty */ }
-
-module.exports = function (exec, skipClosing) {
-  if (!skipClosing && !SAFE_CLOSING) return false;
-  var safe = false;
-  try {
-    var arr = [7];
-    var iter = arr[ITERATOR]();
-    iter.next = function () { return { done: safe = true }; };
-    arr[ITERATOR] = function () { return iter; };
-    exec(arr);
-  } catch (e) { /* empty */ }
-  return safe;
-};
-
-},{"./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/es6.array.from.js":[function(require,module,exports) {
-'use strict';
-var ctx = require('./_ctx');
-var $export = require('./_export');
-var toObject = require('./_to-object');
-var call = require('./_iter-call');
-var isArrayIter = require('./_is-array-iter');
-var toLength = require('./_to-length');
-var createProperty = require('./_create-property');
-var getIterFn = require('./core.get-iterator-method');
-
-$export($export.S + $export.F * !require('./_iter-detect')(function (iter) { Array.from(iter); }), 'Array', {
-  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
-  from: function from(arrayLike /* , mapfn = undefined, thisArg = undefined */) {
-    var O = toObject(arrayLike);
-    var C = typeof this == 'function' ? this : Array;
-    var aLen = arguments.length;
-    var mapfn = aLen > 1 ? arguments[1] : undefined;
-    var mapping = mapfn !== undefined;
-    var index = 0;
-    var iterFn = getIterFn(O);
-    var length, result, step, iterator;
-    if (mapping) mapfn = ctx(mapfn, aLen > 2 ? arguments[2] : undefined, 2);
-    // if object isn't iterable or it's array with default iterator - use simple case
-    if (iterFn != undefined && !(C == Array && isArrayIter(iterFn))) {
-      for (iterator = iterFn.call(O), result = new C(); !(step = iterator.next()).done; index++) {
-        createProperty(result, index, mapping ? call(iterator, mapfn, [step.value, index], true) : step.value);
-      }
-    } else {
-      length = toLength(O.length);
-      for (result = new C(length); length > index; index++) {
-        createProperty(result, index, mapping ? mapfn(O[index], index) : O[index]);
-      }
-    }
-    result.length = index;
-    return result;
-  }
-});
-
-},{"./_ctx":"../node_modules/core-js/library/modules/_ctx.js","./_export":"../node_modules/core-js/library/modules/_export.js","./_to-object":"../node_modules/core-js/library/modules/_to-object.js","./_iter-call":"../node_modules/core-js/library/modules/_iter-call.js","./_is-array-iter":"../node_modules/core-js/library/modules/_is-array-iter.js","./_to-length":"../node_modules/core-js/library/modules/_to-length.js","./_create-property":"../node_modules/core-js/library/modules/_create-property.js","./core.get-iterator-method":"../node_modules/core-js/library/modules/core.get-iterator-method.js","./_iter-detect":"../node_modules/core-js/library/modules/_iter-detect.js"}],"../node_modules/core-js/library/fn/array/from.js":[function(require,module,exports) {
-require('../../modules/es6.string.iterator');
-require('../../modules/es6.array.from');
-module.exports = require('../../modules/_core').Array.from;
-
-},{"../../modules/es6.string.iterator":"../node_modules/core-js/library/modules/es6.string.iterator.js","../../modules/es6.array.from":"../node_modules/core-js/library/modules/es6.array.from.js","../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/array/from.js":[function(require,module,exports) {
-module.exports = require("core-js/library/fn/array/from");
-},{"core-js/library/fn/array/from":"../node_modules/core-js/library/fn/array/from.js"}],"../node_modules/core-js/library/modules/core.is-iterable.js":[function(require,module,exports) {
-var classof = require('./_classof');
-var ITERATOR = require('./_wks')('iterator');
-var Iterators = require('./_iterators');
-module.exports = require('./_core').isIterable = function (it) {
-  var O = Object(it);
-  return O[ITERATOR] !== undefined
-    || '@@iterator' in O
-    // eslint-disable-next-line no-prototype-builtins
-    || Iterators.hasOwnProperty(classof(O));
-};
-
-},{"./_classof":"../node_modules/core-js/library/modules/_classof.js","./_wks":"../node_modules/core-js/library/modules/_wks.js","./_iterators":"../node_modules/core-js/library/modules/_iterators.js","./_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/core-js/library/fn/is-iterable.js":[function(require,module,exports) {
-require('../modules/web.dom.iterable');
-require('../modules/es6.string.iterator');
-module.exports = require('../modules/core.is-iterable');
-
-},{"../modules/web.dom.iterable":"../node_modules/core-js/library/modules/web.dom.iterable.js","../modules/es6.string.iterator":"../node_modules/core-js/library/modules/es6.string.iterator.js","../modules/core.is-iterable":"../node_modules/core-js/library/modules/core.is-iterable.js"}],"../node_modules/@babel/runtime-corejs2/core-js/is-iterable.js":[function(require,module,exports) {
-module.exports = require("core-js/library/fn/is-iterable");
-},{"core-js/library/fn/is-iterable":"../node_modules/core-js/library/fn/is-iterable.js"}],"../node_modules/@babel/runtime-corejs2/helpers/iterableToArray.js":[function(require,module,exports) {
-var _Array$from = require("../core-js/array/from");
-
-var _isIterable = require("../core-js/is-iterable");
-
-function _iterableToArray(iter) {
-  if (_isIterable(Object(iter)) || Object.prototype.toString.call(iter) === "[object Arguments]") return _Array$from(iter);
-}
-
-module.exports = _iterableToArray;
-},{"../core-js/array/from":"../node_modules/@babel/runtime-corejs2/core-js/array/from.js","../core-js/is-iterable":"../node_modules/@babel/runtime-corejs2/core-js/is-iterable.js"}],"../node_modules/@babel/runtime-corejs2/helpers/nonIterableSpread.js":[function(require,module,exports) {
-function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance");
-}
-
-module.exports = _nonIterableSpread;
-},{}],"../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js":[function(require,module,exports) {
-var arrayWithoutHoles = require("./arrayWithoutHoles");
-
-var iterableToArray = require("./iterableToArray");
-
-var nonIterableSpread = require("./nonIterableSpread");
-
-function _toConsumableArray(arr) {
-  return arrayWithoutHoles(arr) || iterableToArray(arr) || nonIterableSpread();
-}
-
-module.exports = _toConsumableArray;
-},{"./arrayWithoutHoles":"../node_modules/@babel/runtime-corejs2/helpers/arrayWithoutHoles.js","./iterableToArray":"../node_modules/@babel/runtime-corejs2/helpers/iterableToArray.js","./nonIterableSpread":"../node_modules/@babel/runtime-corejs2/helpers/nonIterableSpread.js"}],"../node_modules/process/browser.js":[function(require,module,exports) {
+},{"./cjs/react-dom.development.js":"../node_modules/react-dom/cjs/react-dom.development.js"}],"../node_modules/process/browser.js":[function(require,module,exports) {
 
 // shim for using process in browser
 var process = module.exports = {}; // cached from whatever global is present so that test runners that stub it
@@ -41341,7 +40748,1070 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     value: true
   });
 });
-},{"jquery":"../node_modules/jquery/dist/jquery.js","popper.js":"../node_modules/popper.js/dist/esm/popper.js"}],"../node_modules/moment/moment.js":[function(require,module,exports) {
+},{"jquery":"../node_modules/jquery/dist/jquery.js","popper.js":"../node_modules/popper.js/dist/esm/popper.js"}],"lang/english.js":[function(require,module,exports) {
+var loadingtext = 'Loading';
+var errortext = 'Error';
+var filetext = 'File';
+var notfoundtext = 'not found';
+var preferenceslink = 'Preferences';
+var datepickerbutton = 'Go!';
+var earliertext = 'Earlier';
+var latertext = 'Later';
+var gridtab = 'Grid';
+var displayhourslabel = 'Display Hours';
+var displayhourshint = 'Select the number of hours to display.';
+var autosizelabel = 'Automatic table size';
+var autosizehint = 'Check to automatically select a table width based on number of columns. Uncheck to enable the next field.';
+var tablewidthlabel = 'Table width (in pixels)';
+var tablewidthhint = 'Specify the width of the table in pixels. Check the above box to set this automatically.';
+var offsetminuteslabel = 'Start with next hour after';
+var offsetminuteshint = 'Set the minutes portion of the time after which the grid will start with the next hour on initial load.';
+var refreshonthelabel = 'Refresh every hour at';
+var refreshonthehint = 'XSLTv can automatically refresh the listings every hour to keep the grid up-to-date, if the browser is kept open. Select the time each hour to perform the refresh.';
+var norefreshoption = 'Do not refresh';
+var timebarfrequencylabel = 'Time Bar Frequency';
+var timebarfrequencyhint = 'How often to repeat the time header row.';
+var toponlyoption = 'Top Line Only';
+var popupstab = 'Popups';
+var channelpopupslabel = 'Channel Popups';
+var channelpopupshint = 'Check to enable the popups when the mouse is over the channel names.';
+var descriptionpopupslabel = 'Description Popups';
+var descriptionpopupshint = 'Check to enable the popups when the mouse is over a program.';
+var popupdelaylabel = 'Popup Delay (in ms)';
+var popupdelayhint = 'Set the delay in milliseconds before popups will appear. Set at 0 to disable delay.';
+var popuptimeslabel = 'Times';
+var popuptimeshint = 'Check to show start and end times in the program popups.';
+var popupratinglabel = 'Rating';
+var popupratinghint = 'Check to show MPAA ratings in the program popups.';
+var popupsubtitlelabel = 'Subtitle';
+var popupsubtitlehint = 'Check to show program subtitles in the program popups.';
+var popupdescriptionlabel = 'Description';
+var popupdescriptionhint = 'Check to show program descriptions in the program popups.';
+var popupdatelabel = 'Date';
+var popupdatehint = 'Check to show dates in the program popups. Dates are either release dates for movies or first-aired dates for shows.';
+var popupcategorieslabel = 'Categories';
+var popupcategorieshint = 'Check to show show categories or genres in the program popups.';
+var popupstarratinglabel = 'Star Rating';
+var popupstarratinghint = 'Check to show a graphical star rating in the program popups.';
+var localoptionstab = 'Local Options';
+var languagelabel = 'Language';
+var fixgapslabel = 'Fix gaps in listings';
+var fixgapshint = 'Check to enable gap-detection in listings which are not contiguous. This option requires listings to be sorted with --by-channel to work. This option will cause listings to load much more slowly, so do not check unnecessarily.';
+var fixgapsconfirm = 'To fill gaps in listings, please ensure the XML file has been sorted with the --by-channel option!';
+var absoluteiconslabel = 'Absolute icon references';
+var absoluteiconshint = 'XSLTv looks for channel icons in an \'icons\' directory. Check this box if your xml file contains absolute url references to icons.';
+var dayfirstlabel = 'Display day first in dates';
+var dayfirsthint = 'Check this box to show dates in dd/mm/yyyy format. Uncheck for mm/dd/yyyy format.';
+var grabberlabel = 'Grabber: tv_grab_';
+var grabberhint = 'Select your grabber to apply localized channel-name settings.';
+var otheroptionstab = 'Other Options';
+var loadonclicklabel = 'On click:';
+var loadonclicknothing = 'Do Nothing';
+var loadonclickIMDB = 'Search IMDB';
+var loadonclickURL = 'URL in XML';
+var categorycolorslabel = 'Category Highlighting';
+var categorycolorshint = 'Select to enable category highlighting (colors must be defined in CSS files). Deselect for a small speed improvement. This is separate from the ratings-based highlighting.';
+var dailyfileslabel = 'Use daily files';
+var dailyfileshint = 'Select to use daily files in the format YYYYMMDD.xml instead of a single tv.xml file.';
+var highlightclickablelabel = 'Highlight linked programs';
+var highlightclickablehint = 'Highlight programs which are linked to a URL (set above). The type of highlighting depends on the stylesheet. It is recommended to disable this if all programs are to be links, or if none are.';
+var highlightmovieslabel = 'Highlight movies rated at or over:';
+var highlightmovieshint = 'Highlight movies rated at or over this number of stars. The type of highlighting depends on the stylesheet, but is generally a brighter color. This is separate from the category highlighting below.';
+var highlightnewlabel = 'Highlight new shows';
+var highlightnewhint = 'Highlight shows which are airing for the first time. The highlighting is generally a darker or thicker border.';
+var printdateslabel = 'Show movie release dates';
+var printdateshint = 'Show movie release dates in the grid. This is separate from the dates in the popup, and only applies to movies.';
+var twelvehourlabel = 'Use twelve-hour clock';
+var twelvehourhint = 'Use twelve-hour (with AM and PM) instead of twenty-four-hour clock.';
+var showclocklabel = 'Show clock in upper right';
+var showclockhint = 'Check to show current time and date in the top right of page.';
+var showbarclocklabel = 'Show clock in top bar';
+var showbarclockhint = 'Check to show current time in the top bar.';
+var reloadbutton = 'Reload';
+var monthnames = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
+var shortmonthnames = new Array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
+var daynames = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
+var dayletters = new Array('S', 'M', 'T', 'W', 'T', 'F', 'S');
+var alllabel = 'All';
+var nonelabel = 'None';
+},{}],"../node_modules/core-js/library/fn/json/stringify.js":[function(require,module,exports) {
+var core = require('../../modules/_core');
+var $JSON = core.JSON || (core.JSON = { stringify: JSON.stringify });
+module.exports = function stringify(it) { // eslint-disable-line no-unused-vars
+  return $JSON.stringify.apply($JSON, arguments);
+};
+
+},{"../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/json/stringify.js":[function(require,module,exports) {
+module.exports = require("core-js/library/fn/json/stringify");
+},{"core-js/library/fn/json/stringify":"../node_modules/core-js/library/fn/json/stringify.js"}],"js/settings.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _objectSpread2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/objectSpread"));
+
+var _stringify = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/json/stringify"));
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Settings =
+/*#__PURE__*/
+function () {
+  function Settings() {
+    var DisplayLength = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 4;
+    var FixGaps = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+    var OnClick = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'POPER';
+    var HighlightClickable = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1;
+    var HighlightMovies = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 1;
+    var HighlightNew = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 1;
+    (0, _classCallCheck2.default)(this, Settings);
+    this.DisplayLength = DisplayLength;
+    this.FixGaps = FixGaps;
+    this.OnClick = OnClick; //POPER, URL, IMDB
+
+    this.HighlightClickable = HighlightClickable;
+    this.HighlightMovies = HighlightMovies;
+    this.HighlightNew = HighlightNew;
+  }
+
+  (0, _createClass2.default)(Settings, [{
+    key: "save",
+    value: function save(key) {
+      localStorage.setItem(key, (0, _stringify.default)(this));
+    }
+  }], [{
+    key: "load",
+    value: function load() {
+      var key = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'settings';
+      var settingsJson = localStorage.getItem(key);
+
+      if (settingsJson == null) {
+        return new Settings();
+      }
+
+      return new Settings((0, _objectSpread2.default)({}, JSON.parse(settingsJson)));
+    }
+  }, {
+    key: "save",
+    value: function save(key, settings) {
+      localStorage.setItem(key, (0, _stringify.default)(settings));
+    }
+  }]);
+  return Settings;
+}();
+
+exports.default = Settings;
+},{"@babel/runtime-corejs2/helpers/objectSpread":"../node_modules/@babel/runtime-corejs2/helpers/objectSpread.js","@babel/runtime-corejs2/core-js/json/stringify":"../node_modules/@babel/runtime-corejs2/core-js/json/stringify.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js"}],"js/xsltvProcessor.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
+
+var _settings = _interopRequireDefault(require("./settings"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var XsltvProcessor =
+/*#__PURE__*/
+function () {
+  function XsltvProcessor() {
+    (0, _classCallCheck2.default)(this, XsltvProcessor);
+    this.AppSettings = _settings.default.load('settings');
+    this.processor = new XSLTProcessor();
+  }
+
+  (0, _createClass2.default)(XsltvProcessor, [{
+    key: "loadSettings",
+    value: function loadSettings() {
+      this.AppSettings = _settings.default.load('settings');
+    }
+  }, {
+    key: "initDate",
+    value: function initDate(hour, day, month, year, offset) {
+      this.ch = hour;
+      this.cd = day;
+      this.cm = month;
+      this.cy = year;
+      this.offset = offset;
+      return this;
+    }
+  }, {
+    key: "Init",
+    value: function Init(xml, document) {
+      /*This stuff needs to be done each time the time changes */
+      var startDate = new Date(this.cy, this.cm - 1, this.cd, this.ch, 0, 0);
+      var endDate = new Date(this.cy, this.cm - 1, this.cd, this.ch, 0, 0);
+      endDate.setHours(endDate.getHours() + this.AppSettings.DisplayLength);
+      var prevDate = new Date(this.cy, this.cm - 1, this.cd, this.ch, 0, 0);
+      prevDate.setHours(prevDate.getHours() - this.AppSettings.DisplayLength);
+      var intMinutes = endDate.getMinutes();
+      var endminutes = intMinutes < 10 ? "0" + intMinutes : endminutes = intMinutes;
+
+      if (this.offset) {
+        startDate.setHours(startDate.getHours() + this.offset);
+        endDate.setHours(endDate.getHours() + this.offset);
+        prevDate.setHours(prevDate.getHours() + this.offset);
+      }
+
+      this.processor.setParameter(null, "DisplayLength", this.AppSettings.DisplayLength);
+      this.processor.setParameter(null, "CurrentHour", startDate.getHours());
+      this.processor.setParameter(null, "CurrentDay", startDate.getDate());
+      this.processor.setParameter(null, "CurrentMonth", startDate.getMonth() + 1);
+      this.processor.setParameter(null, "CurrentYear", startDate.getFullYear());
+      this.processor.setParameter(null, "StopHour", endDate.getHours());
+      this.processor.setParameter(null, "StopDay", endDate.getDate());
+      this.processor.setParameter(null, "StopMonth", endDate.getMonth() + 1);
+      this.processor.setParameter(null, "StopYear", endDate.getFullYear());
+      this.processor.setParameter(null, "PrevHour", prevDate.getHours());
+      this.processor.setParameter(null, "PrevDay", prevDate.getDate());
+      this.processor.setParameter(null, "PrevMonth", prevDate.getMonth() + 1);
+      this.processor.setParameter(null, "PrevYear", prevDate.getFullYear());
+      this.processor.setParameter(null, "FixGaps", this.AppSettings.FixGaps);
+      this.processor.setParameter(null, "HighlightClickable", this.AppSettings.highlightclickable);
+      this.processor.setParameter(null, "HighlightMovies", this.AppSettings.highlightmovies);
+      this.processor.setParameter(null, "HighlightNew", this.AppSettings.highlightnew);
+      this.processor.setParameter(null, "OnClick", this.AppSettings.OnClick);
+      return this.processor.transformToFragment(xml, document);
+    }
+  }]);
+  return XsltvProcessor;
+}();
+
+exports.default = XsltvProcessor;
+},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","./settings":"js/settings.js"}],"../node_modules/prop-types/factoryWithTypeCheckers.js":[function(require,module,exports) {
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+'use strict';
+
+var assign = require('object-assign');
+
+var ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');
+
+var checkPropTypes = require('./checkPropTypes');
+
+var printWarning = function () {};
+
+if ("development" !== 'production') {
+  printWarning = function (text) {
+    var message = 'Warning: ' + text;
+
+    if (typeof console !== 'undefined') {
+      console.error(message);
+    }
+
+    try {
+      // --- Welcome to debugging React ---
+      // This error was thrown as a convenience so that you can use this stack
+      // to find the callsite that caused this warning to fire.
+      throw new Error(message);
+    } catch (x) {}
+  };
+}
+
+function emptyFunctionThatReturnsNull() {
+  return null;
+}
+
+module.exports = function (isValidElement, throwOnDirectAccess) {
+  /* global Symbol */
+  var ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
+  var FAUX_ITERATOR_SYMBOL = '@@iterator'; // Before Symbol spec.
+
+  /**
+   * Returns the iterator method function contained on the iterable object.
+   *
+   * Be sure to invoke the function with the iterable as context:
+   *
+   *     var iteratorFn = getIteratorFn(myIterable);
+   *     if (iteratorFn) {
+   *       var iterator = iteratorFn.call(myIterable);
+   *       ...
+   *     }
+   *
+   * @param {?object} maybeIterable
+   * @return {?function}
+   */
+
+  function getIteratorFn(maybeIterable) {
+    var iteratorFn = maybeIterable && (ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL]);
+
+    if (typeof iteratorFn === 'function') {
+      return iteratorFn;
+    }
+  }
+  /**
+   * Collection of methods that allow declaration and validation of props that are
+   * supplied to React components. Example usage:
+   *
+   *   var Props = require('ReactPropTypes');
+   *   var MyArticle = React.createClass({
+   *     propTypes: {
+   *       // An optional string prop named "description".
+   *       description: Props.string,
+   *
+   *       // A required enum prop named "category".
+   *       category: Props.oneOf(['News','Photos']).isRequired,
+   *
+   *       // A prop named "dialog" that requires an instance of Dialog.
+   *       dialog: Props.instanceOf(Dialog).isRequired
+   *     },
+   *     render: function() { ... }
+   *   });
+   *
+   * A more formal specification of how these methods are used:
+   *
+   *   type := array|bool|func|object|number|string|oneOf([...])|instanceOf(...)
+   *   decl := ReactPropTypes.{type}(.isRequired)?
+   *
+   * Each and every declaration produces a function with the same signature. This
+   * allows the creation of custom validation functions. For example:
+   *
+   *  var MyLink = React.createClass({
+   *    propTypes: {
+   *      // An optional string or URI prop named "href".
+   *      href: function(props, propName, componentName) {
+   *        var propValue = props[propName];
+   *        if (propValue != null && typeof propValue !== 'string' &&
+   *            !(propValue instanceof URI)) {
+   *          return new Error(
+   *            'Expected a string or an URI for ' + propName + ' in ' +
+   *            componentName
+   *          );
+   *        }
+   *      }
+   *    },
+   *    render: function() {...}
+   *  });
+   *
+   * @internal
+   */
+
+
+  var ANONYMOUS = '<<anonymous>>'; // Important!
+  // Keep this list in sync with production version in `./factoryWithThrowingShims.js`.
+
+  var ReactPropTypes = {
+    array: createPrimitiveTypeChecker('array'),
+    bool: createPrimitiveTypeChecker('boolean'),
+    func: createPrimitiveTypeChecker('function'),
+    number: createPrimitiveTypeChecker('number'),
+    object: createPrimitiveTypeChecker('object'),
+    string: createPrimitiveTypeChecker('string'),
+    symbol: createPrimitiveTypeChecker('symbol'),
+    any: createAnyTypeChecker(),
+    arrayOf: createArrayOfTypeChecker,
+    element: createElementTypeChecker(),
+    instanceOf: createInstanceTypeChecker,
+    node: createNodeChecker(),
+    objectOf: createObjectOfTypeChecker,
+    oneOf: createEnumTypeChecker,
+    oneOfType: createUnionTypeChecker,
+    shape: createShapeTypeChecker,
+    exact: createStrictShapeTypeChecker
+  };
+  /**
+   * inlined Object.is polyfill to avoid requiring consumers ship their own
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
+   */
+
+  /*eslint-disable no-self-compare*/
+
+  function is(x, y) {
+    // SameValue algorithm
+    if (x === y) {
+      // Steps 1-5, 7-10
+      // Steps 6.b-6.e: +0 != -0
+      return x !== 0 || 1 / x === 1 / y;
+    } else {
+      // Step 6.a: NaN == NaN
+      return x !== x && y !== y;
+    }
+  }
+  /*eslint-enable no-self-compare*/
+
+  /**
+   * We use an Error-like object for backward compatibility as people may call
+   * PropTypes directly and inspect their output. However, we don't use real
+   * Errors anymore. We don't inspect their stack anyway, and creating them
+   * is prohibitively expensive if they are created too often, such as what
+   * happens in oneOfType() for any type before the one that matched.
+   */
+
+
+  function PropTypeError(message) {
+    this.message = message;
+    this.stack = '';
+  } // Make `instanceof Error` still work for returned errors.
+
+
+  PropTypeError.prototype = Error.prototype;
+
+  function createChainableTypeChecker(validate) {
+    if ("development" !== 'production') {
+      var manualPropTypeCallCache = {};
+      var manualPropTypeWarningCount = 0;
+    }
+
+    function checkType(isRequired, props, propName, componentName, location, propFullName, secret) {
+      componentName = componentName || ANONYMOUS;
+      propFullName = propFullName || propName;
+
+      if (secret !== ReactPropTypesSecret) {
+        if (throwOnDirectAccess) {
+          // New behavior only for users of `prop-types` package
+          var err = new Error('Calling PropTypes validators directly is not supported by the `prop-types` package. ' + 'Use `PropTypes.checkPropTypes()` to call them. ' + 'Read more at http://fb.me/use-check-prop-types');
+          err.name = 'Invariant Violation';
+          throw err;
+        } else if ("development" !== 'production' && typeof console !== 'undefined') {
+          // Old behavior for people using React.PropTypes
+          var cacheKey = componentName + ':' + propName;
+
+          if (!manualPropTypeCallCache[cacheKey] && // Avoid spamming the console because they are often not actionable except for lib authors
+          manualPropTypeWarningCount < 3) {
+            printWarning('You are manually calling a React.PropTypes validation ' + 'function for the `' + propFullName + '` prop on `' + componentName + '`. This is deprecated ' + 'and will throw in the standalone `prop-types` package. ' + 'You may be seeing this warning due to a third-party PropTypes ' + 'library. See https://fb.me/react-warning-dont-call-proptypes ' + 'for details.');
+            manualPropTypeCallCache[cacheKey] = true;
+            manualPropTypeWarningCount++;
+          }
+        }
+      }
+
+      if (props[propName] == null) {
+        if (isRequired) {
+          if (props[propName] === null) {
+            return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required ' + ('in `' + componentName + '`, but its value is `null`.'));
+          }
+
+          return new PropTypeError('The ' + location + ' `' + propFullName + '` is marked as required in ' + ('`' + componentName + '`, but its value is `undefined`.'));
+        }
+
+        return null;
+      } else {
+        return validate(props, propName, componentName, location, propFullName);
+      }
+    }
+
+    var chainedCheckType = checkType.bind(null, false);
+    chainedCheckType.isRequired = checkType.bind(null, true);
+    return chainedCheckType;
+  }
+
+  function createPrimitiveTypeChecker(expectedType) {
+    function validate(props, propName, componentName, location, propFullName, secret) {
+      var propValue = props[propName];
+      var propType = getPropType(propValue);
+
+      if (propType !== expectedType) {
+        // `propValue` being instance of, say, date/regexp, pass the 'object'
+        // check, but we can offer a more precise error message here rather than
+        // 'of type `object`'.
+        var preciseType = getPreciseType(propValue);
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + preciseType + '` supplied to `' + componentName + '`, expected ') + ('`' + expectedType + '`.'));
+      }
+
+      return null;
+    }
+
+    return createChainableTypeChecker(validate);
+  }
+
+  function createAnyTypeChecker() {
+    return createChainableTypeChecker(emptyFunctionThatReturnsNull);
+  }
+
+  function createArrayOfTypeChecker(typeChecker) {
+    function validate(props, propName, componentName, location, propFullName) {
+      if (typeof typeChecker !== 'function') {
+        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside arrayOf.');
+      }
+
+      var propValue = props[propName];
+
+      if (!Array.isArray(propValue)) {
+        var propType = getPropType(propValue);
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an array.'));
+      }
+
+      for (var i = 0; i < propValue.length; i++) {
+        var error = typeChecker(propValue, i, componentName, location, propFullName + '[' + i + ']', ReactPropTypesSecret);
+
+        if (error instanceof Error) {
+          return error;
+        }
+      }
+
+      return null;
+    }
+
+    return createChainableTypeChecker(validate);
+  }
+
+  function createElementTypeChecker() {
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+
+      if (!isValidElement(propValue)) {
+        var propType = getPropType(propValue);
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected a single ReactElement.'));
+      }
+
+      return null;
+    }
+
+    return createChainableTypeChecker(validate);
+  }
+
+  function createInstanceTypeChecker(expectedClass) {
+    function validate(props, propName, componentName, location, propFullName) {
+      if (!(props[propName] instanceof expectedClass)) {
+        var expectedClassName = expectedClass.name || ANONYMOUS;
+        var actualClassName = getClassName(props[propName]);
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + actualClassName + '` supplied to `' + componentName + '`, expected ') + ('instance of `' + expectedClassName + '`.'));
+      }
+
+      return null;
+    }
+
+    return createChainableTypeChecker(validate);
+  }
+
+  function createEnumTypeChecker(expectedValues) {
+    if (!Array.isArray(expectedValues)) {
+      "development" !== 'production' ? printWarning('Invalid argument supplied to oneOf, expected an instance of array.') : void 0;
+      return emptyFunctionThatReturnsNull;
+    }
+
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+
+      for (var i = 0; i < expectedValues.length; i++) {
+        if (is(propValue, expectedValues[i])) {
+          return null;
+        }
+      }
+
+      var valuesString = JSON.stringify(expectedValues);
+      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of value `' + propValue + '` ' + ('supplied to `' + componentName + '`, expected one of ' + valuesString + '.'));
+    }
+
+    return createChainableTypeChecker(validate);
+  }
+
+  function createObjectOfTypeChecker(typeChecker) {
+    function validate(props, propName, componentName, location, propFullName) {
+      if (typeof typeChecker !== 'function') {
+        return new PropTypeError('Property `' + propFullName + '` of component `' + componentName + '` has invalid PropType notation inside objectOf.');
+      }
+
+      var propValue = props[propName];
+      var propType = getPropType(propValue);
+
+      if (propType !== 'object') {
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type ' + ('`' + propType + '` supplied to `' + componentName + '`, expected an object.'));
+      }
+
+      for (var key in propValue) {
+        if (propValue.hasOwnProperty(key)) {
+          var error = typeChecker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
+
+          if (error instanceof Error) {
+            return error;
+          }
+        }
+      }
+
+      return null;
+    }
+
+    return createChainableTypeChecker(validate);
+  }
+
+  function createUnionTypeChecker(arrayOfTypeCheckers) {
+    if (!Array.isArray(arrayOfTypeCheckers)) {
+      "development" !== 'production' ? printWarning('Invalid argument supplied to oneOfType, expected an instance of array.') : void 0;
+      return emptyFunctionThatReturnsNull;
+    }
+
+    for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
+      var checker = arrayOfTypeCheckers[i];
+
+      if (typeof checker !== 'function') {
+        printWarning('Invalid argument supplied to oneOfType. Expected an array of check functions, but ' + 'received ' + getPostfixForTypeWarning(checker) + ' at index ' + i + '.');
+        return emptyFunctionThatReturnsNull;
+      }
+    }
+
+    function validate(props, propName, componentName, location, propFullName) {
+      for (var i = 0; i < arrayOfTypeCheckers.length; i++) {
+        var checker = arrayOfTypeCheckers[i];
+
+        if (checker(props, propName, componentName, location, propFullName, ReactPropTypesSecret) == null) {
+          return null;
+        }
+      }
+
+      return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`.'));
+    }
+
+    return createChainableTypeChecker(validate);
+  }
+
+  function createNodeChecker() {
+    function validate(props, propName, componentName, location, propFullName) {
+      if (!isNode(props[propName])) {
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` supplied to ' + ('`' + componentName + '`, expected a ReactNode.'));
+      }
+
+      return null;
+    }
+
+    return createChainableTypeChecker(validate);
+  }
+
+  function createShapeTypeChecker(shapeTypes) {
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+      var propType = getPropType(propValue);
+
+      if (propType !== 'object') {
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
+      }
+
+      for (var key in shapeTypes) {
+        var checker = shapeTypes[key];
+
+        if (!checker) {
+          continue;
+        }
+
+        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
+
+        if (error) {
+          return error;
+        }
+      }
+
+      return null;
+    }
+
+    return createChainableTypeChecker(validate);
+  }
+
+  function createStrictShapeTypeChecker(shapeTypes) {
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+      var propType = getPropType(propValue);
+
+      if (propType !== 'object') {
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
+      } // We need to check all keys in case some are required but missing from
+      // props.
+
+
+      var allKeys = assign({}, props[propName], shapeTypes);
+
+      for (var key in allKeys) {
+        var checker = shapeTypes[key];
+
+        if (!checker) {
+          return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` key `' + key + '` supplied to `' + componentName + '`.' + '\nBad object: ' + JSON.stringify(props[propName], null, '  ') + '\nValid keys: ' + JSON.stringify(Object.keys(shapeTypes), null, '  '));
+        }
+
+        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
+
+        if (error) {
+          return error;
+        }
+      }
+
+      return null;
+    }
+
+    return createChainableTypeChecker(validate);
+  }
+
+  function isNode(propValue) {
+    switch (typeof propValue) {
+      case 'number':
+      case 'string':
+      case 'undefined':
+        return true;
+
+      case 'boolean':
+        return !propValue;
+
+      case 'object':
+        if (Array.isArray(propValue)) {
+          return propValue.every(isNode);
+        }
+
+        if (propValue === null || isValidElement(propValue)) {
+          return true;
+        }
+
+        var iteratorFn = getIteratorFn(propValue);
+
+        if (iteratorFn) {
+          var iterator = iteratorFn.call(propValue);
+          var step;
+
+          if (iteratorFn !== propValue.entries) {
+            while (!(step = iterator.next()).done) {
+              if (!isNode(step.value)) {
+                return false;
+              }
+            }
+          } else {
+            // Iterator will provide entry [k,v] tuples rather than values.
+            while (!(step = iterator.next()).done) {
+              var entry = step.value;
+
+              if (entry) {
+                if (!isNode(entry[1])) {
+                  return false;
+                }
+              }
+            }
+          }
+        } else {
+          return false;
+        }
+
+        return true;
+
+      default:
+        return false;
+    }
+  }
+
+  function isSymbol(propType, propValue) {
+    // Native Symbol.
+    if (propType === 'symbol') {
+      return true;
+    } // 19.4.3.5 Symbol.prototype[@@toStringTag] === 'Symbol'
+
+
+    if (propValue['@@toStringTag'] === 'Symbol') {
+      return true;
+    } // Fallback for non-spec compliant Symbols which are polyfilled.
+
+
+    if (typeof Symbol === 'function' && propValue instanceof Symbol) {
+      return true;
+    }
+
+    return false;
+  } // Equivalent of `typeof` but with special handling for array and regexp.
+
+
+  function getPropType(propValue) {
+    var propType = typeof propValue;
+
+    if (Array.isArray(propValue)) {
+      return 'array';
+    }
+
+    if (propValue instanceof RegExp) {
+      // Old webkits (at least until Android 4.0) return 'function' rather than
+      // 'object' for typeof a RegExp. We'll normalize this here so that /bla/
+      // passes PropTypes.object.
+      return 'object';
+    }
+
+    if (isSymbol(propType, propValue)) {
+      return 'symbol';
+    }
+
+    return propType;
+  } // This handles more types than `getPropType`. Only used for error messages.
+  // See `createPrimitiveTypeChecker`.
+
+
+  function getPreciseType(propValue) {
+    if (typeof propValue === 'undefined' || propValue === null) {
+      return '' + propValue;
+    }
+
+    var propType = getPropType(propValue);
+
+    if (propType === 'object') {
+      if (propValue instanceof Date) {
+        return 'date';
+      } else if (propValue instanceof RegExp) {
+        return 'regexp';
+      }
+    }
+
+    return propType;
+  } // Returns a string that is postfixed to a warning about an invalid type.
+  // For example, "undefined" or "of type array"
+
+
+  function getPostfixForTypeWarning(value) {
+    var type = getPreciseType(value);
+
+    switch (type) {
+      case 'array':
+      case 'object':
+        return 'an ' + type;
+
+      case 'boolean':
+      case 'date':
+      case 'regexp':
+        return 'a ' + type;
+
+      default:
+        return type;
+    }
+  } // Returns class name of the object, if any.
+
+
+  function getClassName(propValue) {
+    if (!propValue.constructor || !propValue.constructor.name) {
+      return ANONYMOUS;
+    }
+
+    return propValue.constructor.name;
+  }
+
+  ReactPropTypes.checkPropTypes = checkPropTypes;
+  ReactPropTypes.PropTypes = ReactPropTypes;
+  return ReactPropTypes;
+};
+},{"object-assign":"../node_modules/object-assign/index.js","./lib/ReactPropTypesSecret":"../node_modules/prop-types/lib/ReactPropTypesSecret.js","./checkPropTypes":"../node_modules/prop-types/checkPropTypes.js"}],"../node_modules/prop-types/index.js":[function(require,module,exports) {
+/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+if ("development" !== 'production') {
+  var REACT_ELEMENT_TYPE = typeof Symbol === 'function' && Symbol.for && Symbol.for('react.element') || 0xeac7;
+
+  var isValidElement = function (object) {
+    return typeof object === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
+  }; // By explicitly using `prop-types` you are opting into new development behavior.
+  // http://fb.me/prop-types-in-prod
+
+
+  var throwOnDirectAccess = true;
+  module.exports = require('./factoryWithTypeCheckers')(isValidElement, throwOnDirectAccess);
+} else {
+  // By explicitly using `prop-types` you are opting into new production behavior.
+  // http://fb.me/prop-types-in-prod
+  module.exports = require('./factoryWithThrowingShims')();
+}
+},{"./factoryWithTypeCheckers":"../node_modules/prop-types/factoryWithTypeCheckers.js"}],"components/modal.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.SettingsModal = void 0;
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf3 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var SettingsModal =
+/*#__PURE__*/
+function (_Component) {
+  (0, _inherits2.default)(SettingsModal, _Component);
+
+  function SettingsModal() {
+    var _getPrototypeOf2;
+
+    var _this;
+
+    (0, _classCallCheck2.default)(this, SettingsModal);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = (0, _possibleConstructorReturn2.default)(this, (_getPrototypeOf2 = (0, _getPrototypeOf3.default)(SettingsModal)).call.apply(_getPrototypeOf2, [this].concat(args)));
+
+    _this.viewXmltvUrl = function (e) {
+      e.preventDefault();
+    };
+
+    _this.addXmltvUrl = function (e) {
+      e.preventDefault();
+    };
+
+    return _this;
+  }
+
+  (0, _createClass2.default)(SettingsModal, [{
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      return _react.default.createElement("div", {
+        className: "modal fade",
+        id: "settingsModal",
+        tabIndex: "-1",
+        role: "dialog",
+        "aria-labelledby": "exampleModalLabel",
+        "aria-hidden": "true"
+      }, _react.default.createElement("div", {
+        className: "modal-dialog",
+        role: "document"
+      }, _react.default.createElement("div", {
+        className: "modal-content"
+      }, _react.default.createElement("div", {
+        className: "modal-header"
+      }, _react.default.createElement("h5", {
+        className: "modal-title"
+      }, "Settings"), _react.default.createElement("button", {
+        type: "button",
+        className: "close",
+        "data-dismiss": "modal",
+        "aria-label": "Close"
+      }, _react.default.createElement("span", {
+        "aria-hidden": "true"
+      }, "\xD7"))), _react.default.createElement("div", {
+        className: "modal-body"
+      }, _react.default.createElement("div", {
+        id: "accordion"
+      }, _react.default.createElement("div", {
+        className: "card"
+      }, _react.default.createElement("div", {
+        className: "card-header",
+        id: "headingOne"
+      }, _react.default.createElement("h5", {
+        className: "mb-0"
+      }, _react.default.createElement("button", {
+        className: "btn btn-link btn-sm",
+        "data-toggle": "collapse",
+        "data-target": "#collapseOne",
+        "aria-expanded": "true",
+        "aria-controls": "collapseOne"
+      }, "Sources"))), _react.default.createElement("div", {
+        id: "collapseOne",
+        className: "collapse show",
+        "aria-labelledby": "headingOne",
+        "data-parent": "#accordion"
+      }, _react.default.createElement("div", {
+        className: "card-body"
+      }, _react.default.createElement("form", {
+        id: "xmltv_source"
+      }, _react.default.createElement("div", {
+        className: "form-group"
+      }, _react.default.createElement("label", {
+        htmlFor: "xmlt_list",
+        className: "col-form-label"
+      }, "Xmltv sources"), _react.default.createElement("select", {
+        className: "form-control",
+        id: "xmlt_list"
+      }, this.props.files.map(function (e, key) {
+        return _react.default.createElement("option", {
+          key: key,
+          value: e.url
+        }, e.name);
+      })))), _react.default.createElement("div", {
+        className: "input-group mb-3"
+      }, _react.default.createElement("input", {
+        type: "text",
+        id: "xmltv_url",
+        className: "form-control form-control-sm",
+        placeholder: "xmltv url..."
+      }), _react.default.createElement("div", {
+        className: "input-group-append"
+      }, _react.default.createElement("div", {
+        className: "btn-group",
+        role: "group"
+      }, _react.default.createElement("button", {
+        id: "btnGroupDrop1",
+        type: "button",
+        className: "btn btn-outline-info btn-sm dropdown-toggle",
+        "data-toggle": "dropdown",
+        "aria-haspopup": "true",
+        "aria-expanded": "false"
+      }, "Dropdown"), _react.default.createElement("div", {
+        className: "dropdown-menu",
+        "aria-labelledby": "btnGroupDrop1"
+      }, _react.default.createElement("a", {
+        className: "dropdown-item",
+        href: "#",
+        onClick: function onClick(e) {
+          return _this2.viewXmltvUrl(e);
+        }
+      }, "View"), _react.default.createElement("a", {
+        className: "dropdown-item",
+        href: "#",
+        onClick: function onClick(e) {
+          return _this2.addXmltvUrl(e);
+        }
+      }, "Add")))))))), _react.default.createElement("div", {
+        className: "card"
+      }, _react.default.createElement("div", {
+        className: "card-header",
+        id: "headingTwo"
+      }, _react.default.createElement("h5", {
+        className: "mb-0"
+      }, _react.default.createElement("button", {
+        className: "btn btn-link collapsed  btn-sm",
+        "data-toggle": "collapse",
+        "data-target": "#collapseTwo",
+        "aria-expanded": "false",
+        "aria-controls": "collapseTwo"
+      }, "Settings"))), _react.default.createElement("div", {
+        id: "collapseTwo",
+        className: "collapse",
+        "aria-labelledby": "headingTwo",
+        "data-parent": "#accordion"
+      }, _react.default.createElement("div", {
+        className: "card-body"
+      }, "Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS."))))), _react.default.createElement("div", {
+        className: "modal-footer"
+      }, _react.default.createElement("button", {
+        type: "button",
+        className: "btn btn-secondary",
+        "data-dismiss": "modal"
+      }, "Close")))));
+    }
+  }]);
+  return SettingsModal;
+}(_react.Component);
+
+exports.SettingsModal = SettingsModal;
+SettingsModal.propTypes = {
+  files: _propTypes.default.array.isRequired
+};
+var _default = SettingsModal;
+exports.default = _default;
+},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js"}],"../node_modules/moment/moment.js":[function(require,module,exports) {
 var define;
 var global = arguments[3];
 //! moment.js
@@ -45851,732 +46321,7 @@ var global = arguments[3];
 
 })));
 
-},{}],"lang/english.js":[function(require,module,exports) {
-var loadingtext = 'Loading';
-var errortext = 'Error';
-var filetext = 'File';
-var notfoundtext = 'not found';
-var preferenceslink = 'Preferences';
-var datepickerbutton = 'Go!';
-var earliertext = 'Earlier';
-var latertext = 'Later';
-var gridtab = 'Grid';
-var displayhourslabel = 'Display Hours';
-var displayhourshint = 'Select the number of hours to display.';
-var autosizelabel = 'Automatic table size';
-var autosizehint = 'Check to automatically select a table width based on number of columns. Uncheck to enable the next field.';
-var tablewidthlabel = 'Table width (in pixels)';
-var tablewidthhint = 'Specify the width of the table in pixels. Check the above box to set this automatically.';
-var offsetminuteslabel = 'Start with next hour after';
-var offsetminuteshint = 'Set the minutes portion of the time after which the grid will start with the next hour on initial load.';
-var refreshonthelabel = 'Refresh every hour at';
-var refreshonthehint = 'XSLTv can automatically refresh the listings every hour to keep the grid up-to-date, if the browser is kept open. Select the time each hour to perform the refresh.';
-var norefreshoption = 'Do not refresh';
-var timebarfrequencylabel = 'Time Bar Frequency';
-var timebarfrequencyhint = 'How often to repeat the time header row.';
-var toponlyoption = 'Top Line Only';
-var popupstab = 'Popups';
-var channelpopupslabel = 'Channel Popups';
-var channelpopupshint = 'Check to enable the popups when the mouse is over the channel names.';
-var descriptionpopupslabel = 'Description Popups';
-var descriptionpopupshint = 'Check to enable the popups when the mouse is over a program.';
-var popupdelaylabel = 'Popup Delay (in ms)';
-var popupdelayhint = 'Set the delay in milliseconds before popups will appear. Set at 0 to disable delay.';
-var popuptimeslabel = 'Times';
-var popuptimeshint = 'Check to show start and end times in the program popups.';
-var popupratinglabel = 'Rating';
-var popupratinghint = 'Check to show MPAA ratings in the program popups.';
-var popupsubtitlelabel = 'Subtitle';
-var popupsubtitlehint = 'Check to show program subtitles in the program popups.';
-var popupdescriptionlabel = 'Description';
-var popupdescriptionhint = 'Check to show program descriptions in the program popups.';
-var popupdatelabel = 'Date';
-var popupdatehint = 'Check to show dates in the program popups. Dates are either release dates for movies or first-aired dates for shows.';
-var popupcategorieslabel = 'Categories';
-var popupcategorieshint = 'Check to show show categories or genres in the program popups.';
-var popupstarratinglabel = 'Star Rating';
-var popupstarratinghint = 'Check to show a graphical star rating in the program popups.';
-var localoptionstab = 'Local Options';
-var languagelabel = 'Language';
-var fixgapslabel = 'Fix gaps in listings';
-var fixgapshint = 'Check to enable gap-detection in listings which are not contiguous. This option requires listings to be sorted with --by-channel to work. This option will cause listings to load much more slowly, so do not check unnecessarily.';
-var fixgapsconfirm = 'To fill gaps in listings, please ensure the XML file has been sorted with the --by-channel option!';
-var absoluteiconslabel = 'Absolute icon references';
-var absoluteiconshint = 'XSLTv looks for channel icons in an \'icons\' directory. Check this box if your xml file contains absolute url references to icons.';
-var dayfirstlabel = 'Display day first in dates';
-var dayfirsthint = 'Check this box to show dates in dd/mm/yyyy format. Uncheck for mm/dd/yyyy format.';
-var grabberlabel = 'Grabber: tv_grab_';
-var grabberhint = 'Select your grabber to apply localized channel-name settings.';
-var otheroptionstab = 'Other Options';
-var loadonclicklabel = 'On click:';
-var loadonclicknothing = 'Do Nothing';
-var loadonclickIMDB = 'Search IMDB';
-var loadonclickURL = 'URL in XML';
-var categorycolorslabel = 'Category Highlighting';
-var categorycolorshint = 'Select to enable category highlighting (colors must be defined in CSS files). Deselect for a small speed improvement. This is separate from the ratings-based highlighting.';
-var dailyfileslabel = 'Use daily files';
-var dailyfileshint = 'Select to use daily files in the format YYYYMMDD.xml instead of a single tv.xml file.';
-var highlightclickablelabel = 'Highlight linked programs';
-var highlightclickablehint = 'Highlight programs which are linked to a URL (set above). The type of highlighting depends on the stylesheet. It is recommended to disable this if all programs are to be links, or if none are.';
-var highlightmovieslabel = 'Highlight movies rated at or over:';
-var highlightmovieshint = 'Highlight movies rated at or over this number of stars. The type of highlighting depends on the stylesheet, but is generally a brighter color. This is separate from the category highlighting below.';
-var highlightnewlabel = 'Highlight new shows';
-var highlightnewhint = 'Highlight shows which are airing for the first time. The highlighting is generally a darker or thicker border.';
-var printdateslabel = 'Show movie release dates';
-var printdateshint = 'Show movie release dates in the grid. This is separate from the dates in the popup, and only applies to movies.';
-var twelvehourlabel = 'Use twelve-hour clock';
-var twelvehourhint = 'Use twelve-hour (with AM and PM) instead of twenty-four-hour clock.';
-var showclocklabel = 'Show clock in upper right';
-var showclockhint = 'Check to show current time and date in the top right of page.';
-var showbarclocklabel = 'Show clock in top bar';
-var showbarclockhint = 'Check to show current time in the top bar.';
-var reloadbutton = 'Reload';
-var monthnames = new Array('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December');
-var shortmonthnames = new Array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
-var daynames = new Array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
-var dayletters = new Array('S', 'M', 'T', 'W', 'T', 'F', 'S');
-var alllabel = 'All';
-var nonelabel = 'None';
-},{}],"index.xsl":[function(require,module,exports) {
-module.exports = "/public.785ca178.xsl";
-},{}],"../node_modules/core-js/library/modules/es6.object.get-own-property-descriptor.js":[function(require,module,exports) {
-// 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
-var toIObject = require('./_to-iobject');
-var $getOwnPropertyDescriptor = require('./_object-gopd').f;
-
-require('./_object-sap')('getOwnPropertyDescriptor', function () {
-  return function getOwnPropertyDescriptor(it, key) {
-    return $getOwnPropertyDescriptor(toIObject(it), key);
-  };
-});
-
-},{"./_to-iobject":"../node_modules/core-js/library/modules/_to-iobject.js","./_object-gopd":"../node_modules/core-js/library/modules/_object-gopd.js","./_object-sap":"../node_modules/core-js/library/modules/_object-sap.js"}],"../node_modules/core-js/library/fn/object/get-own-property-descriptor.js":[function(require,module,exports) {
-require('../../modules/es6.object.get-own-property-descriptor');
-var $Object = require('../../modules/_core').Object;
-module.exports = function getOwnPropertyDescriptor(it, key) {
-  return $Object.getOwnPropertyDescriptor(it, key);
-};
-
-},{"../../modules/es6.object.get-own-property-descriptor":"../node_modules/core-js/library/modules/es6.object.get-own-property-descriptor.js","../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptor.js":[function(require,module,exports) {
-module.exports = require("core-js/library/fn/object/get-own-property-descriptor");
-},{"core-js/library/fn/object/get-own-property-descriptor":"../node_modules/core-js/library/fn/object/get-own-property-descriptor.js"}],"../node_modules/core-js/library/fn/object/get-own-property-symbols.js":[function(require,module,exports) {
-require('../../modules/es6.symbol');
-module.exports = require('../../modules/_core').Object.getOwnPropertySymbols;
-
-},{"../../modules/es6.symbol":"../node_modules/core-js/library/modules/es6.symbol.js","../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-symbols.js":[function(require,module,exports) {
-module.exports = require("core-js/library/fn/object/get-own-property-symbols");
-},{"core-js/library/fn/object/get-own-property-symbols":"../node_modules/core-js/library/fn/object/get-own-property-symbols.js"}],"../node_modules/core-js/library/modules/es6.object.keys.js":[function(require,module,exports) {
-// 19.1.2.14 Object.keys(O)
-var toObject = require('./_to-object');
-var $keys = require('./_object-keys');
-
-require('./_object-sap')('keys', function () {
-  return function keys(it) {
-    return $keys(toObject(it));
-  };
-});
-
-},{"./_to-object":"../node_modules/core-js/library/modules/_to-object.js","./_object-keys":"../node_modules/core-js/library/modules/_object-keys.js","./_object-sap":"../node_modules/core-js/library/modules/_object-sap.js"}],"../node_modules/core-js/library/fn/object/keys.js":[function(require,module,exports) {
-require('../../modules/es6.object.keys');
-module.exports = require('../../modules/_core').Object.keys;
-
-},{"../../modules/es6.object.keys":"../node_modules/core-js/library/modules/es6.object.keys.js","../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/object/keys.js":[function(require,module,exports) {
-module.exports = require("core-js/library/fn/object/keys");
-},{"core-js/library/fn/object/keys":"../node_modules/core-js/library/fn/object/keys.js"}],"../node_modules/@babel/runtime-corejs2/helpers/defineProperty.js":[function(require,module,exports) {
-var _Object$defineProperty = require("../core-js/object/define-property");
-
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    _Object$defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-module.exports = _defineProperty;
-},{"../core-js/object/define-property":"../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js"}],"../node_modules/@babel/runtime-corejs2/helpers/objectSpread.js":[function(require,module,exports) {
-var _Object$getOwnPropertyDescriptor = require("../core-js/object/get-own-property-descriptor");
-
-var _Object$getOwnPropertySymbols = require("../core-js/object/get-own-property-symbols");
-
-var _Object$keys = require("../core-js/object/keys");
-
-var defineProperty = require("./defineProperty");
-
-function _objectSpread(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-
-    var ownKeys = _Object$keys(source);
-
-    if (typeof _Object$getOwnPropertySymbols === 'function') {
-      ownKeys = ownKeys.concat(_Object$getOwnPropertySymbols(source).filter(function (sym) {
-        return _Object$getOwnPropertyDescriptor(source, sym).enumerable;
-      }));
-    }
-
-    ownKeys.forEach(function (key) {
-      defineProperty(target, key, source[key]);
-    });
-  }
-
-  return target;
-}
-
-module.exports = _objectSpread;
-},{"../core-js/object/get-own-property-descriptor":"../node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptor.js","../core-js/object/get-own-property-symbols":"../node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-symbols.js","../core-js/object/keys":"../node_modules/@babel/runtime-corejs2/core-js/object/keys.js","./defineProperty":"../node_modules/@babel/runtime-corejs2/helpers/defineProperty.js"}],"../node_modules/core-js/library/fn/json/stringify.js":[function(require,module,exports) {
-var core = require('../../modules/_core');
-var $JSON = core.JSON || (core.JSON = { stringify: JSON.stringify });
-module.exports = function stringify(it) { // eslint-disable-line no-unused-vars
-  return $JSON.stringify.apply($JSON, arguments);
-};
-
-},{"../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/json/stringify.js":[function(require,module,exports) {
-module.exports = require("core-js/library/fn/json/stringify");
-},{"core-js/library/fn/json/stringify":"../node_modules/core-js/library/fn/json/stringify.js"}],"js/settings.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _objectSpread2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/objectSpread"));
-
-var _stringify = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/json/stringify"));
-
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Settings =
-/*#__PURE__*/
-function () {
-  function Settings() {
-    var DisplayLength = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 4;
-    var FixGaps = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
-    var OnClick = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'POPER';
-    var HighlightClickable = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1;
-    var HighlightMovies = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 1;
-    var HighlightNew = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 1;
-    (0, _classCallCheck2.default)(this, Settings);
-    this.DisplayLength = DisplayLength;
-    this.FixGaps = FixGaps;
-    this.OnClick = OnClick; //POPER, URL, IMDB
-
-    this.HighlightClickable = HighlightClickable;
-    this.HighlightMovies = HighlightMovies;
-    this.HighlightNew = HighlightNew;
-  }
-
-  (0, _createClass2.default)(Settings, [{
-    key: "save",
-    value: function save(key) {
-      localStorage.setItem(key, (0, _stringify.default)(this));
-    }
-  }], [{
-    key: "load",
-    value: function load() {
-      var key = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'settings';
-      var settingsJson = localStorage.getItem(key);
-
-      if (settingsJson == null) {
-        return new Settings();
-      }
-
-      return new Settings((0, _objectSpread2.default)({}, JSON.parse(settingsJson)));
-    }
-  }, {
-    key: "save",
-    value: function save(key, settings) {
-      localStorage.setItem(key, (0, _stringify.default)(settings));
-    }
-  }]);
-  return Settings;
-}();
-
-exports.default = Settings;
-},{"@babel/runtime-corejs2/helpers/objectSpread":"../node_modules/@babel/runtime-corejs2/helpers/objectSpread.js","@babel/runtime-corejs2/core-js/json/stringify":"../node_modules/@babel/runtime-corejs2/core-js/json/stringify.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js"}],"js/xsltvProcessor.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
-
-var _settings = _interopRequireDefault(require("./settings"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var XsltvProcessor =
-/*#__PURE__*/
-function () {
-  function XsltvProcessor() {
-    (0, _classCallCheck2.default)(this, XsltvProcessor);
-    this.AppSettings = _settings.default.load('settings');
-    this.processor = new XSLTProcessor();
-  }
-
-  (0, _createClass2.default)(XsltvProcessor, [{
-    key: "loadSettings",
-    value: function loadSettings() {
-      this.AppSettings = _settings.default.load('settings');
-    }
-  }, {
-    key: "initDate",
-    value: function initDate(hour, day, month, year, offset) {
-      this.ch = hour;
-      this.cd = day;
-      this.cm = month;
-      this.cy = year;
-      this.offset = offset;
-      return this;
-    }
-  }, {
-    key: "Init",
-    value: function Init(xml, document) {
-      /*This stuff needs to be done each time the time changes */
-      var startDate = new Date(this.cy, this.cm - 1, this.cd, this.ch, 0, 0);
-      var endDate = new Date(this.cy, this.cm - 1, this.cd, this.ch, 0, 0);
-      endDate.setHours(endDate.getHours() + this.AppSettings.DisplayLength);
-      var prevDate = new Date(this.cy, this.cm - 1, this.cd, this.ch, 0, 0);
-      prevDate.setHours(prevDate.getHours() - this.AppSettings.DisplayLength);
-      var intMinutes = endDate.getMinutes();
-      var endminutes = intMinutes < 10 ? "0" + intMinutes : endminutes = intMinutes;
-
-      if (this.offset) {
-        startDate.setHours(startDate.getHours() + this.offset);
-        endDate.setHours(endDate.getHours() + this.offset);
-        prevDate.setHours(prevDate.getHours() + this.offset);
-      }
-
-      this.processor.setParameter(null, "DisplayLength", this.AppSettings.DisplayLength);
-      this.processor.setParameter(null, "CurrentHour", startDate.getHours());
-      this.processor.setParameter(null, "CurrentDay", startDate.getDate());
-      this.processor.setParameter(null, "CurrentMonth", startDate.getMonth() + 1);
-      this.processor.setParameter(null, "CurrentYear", startDate.getFullYear());
-      this.processor.setParameter(null, "StopHour", endDate.getHours());
-      this.processor.setParameter(null, "StopDay", endDate.getDate());
-      this.processor.setParameter(null, "StopMonth", endDate.getMonth() + 1);
-      this.processor.setParameter(null, "StopYear", endDate.getFullYear());
-      this.processor.setParameter(null, "PrevHour", prevDate.getHours());
-      this.processor.setParameter(null, "PrevDay", prevDate.getDate());
-      this.processor.setParameter(null, "PrevMonth", prevDate.getMonth() + 1);
-      this.processor.setParameter(null, "PrevYear", prevDate.getFullYear());
-      this.processor.setParameter(null, "FixGaps", this.AppSettings.FixGaps);
-      this.processor.setParameter(null, "HighlightClickable", this.AppSettings.highlightclickable);
-      this.processor.setParameter(null, "HighlightMovies", this.AppSettings.highlightmovies);
-      this.processor.setParameter(null, "HighlightNew", this.AppSettings.highlightnew);
-      this.processor.setParameter(null, "OnClick", this.AppSettings.OnClick);
-      return this.processor.transformToFragment(xml, document);
-    }
-  }]);
-  return XsltvProcessor;
-}();
-
-exports.default = XsltvProcessor;
-},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","./settings":"js/settings.js"}],"init.js":[function(require,module,exports) {
-"use strict";
-
-var _parseInt2 = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/parse-int"));
-
-var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/toConsumableArray"));
-
-require("bootstrap");
-
-var _jquery = _interopRequireDefault(require("jquery"));
-
-var _moment = _interopRequireDefault(require("moment"));
-
-require("./lang/english");
-
-var _index = _interopRequireDefault(require("./index.xsl"));
-
-var _xsltvProcessor = _interopRequireDefault(require("./js/xsltvProcessor"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var api_files_url = 'https://api.myjson.com/bins/8tvgs';
-(0, _jquery.default)(function () {
-  if (window.location == window.parent.location) {
-    (0, _jquery.default)('#fullscreen').html('<i class="fa fa-expand"></i>');
-  }
-
-  (0, _jquery.default)('#fullscreen').on('click', function (event) {
-    event.preventDefault();
-    window.parent.location = (0, _jquery.default)('#fullscreen').attr('href');
-  }).tooltip();
-  (0, _jquery.default)('.navbar-toggler').on('click', function (event) {
-    event.preventDefault();
-    (0, _jquery.default)(this).closest('.navbar-minimal').toggleClass('open');
-  });
-  var $xmltv_list = (0, _jquery.default)("#xmlt_list");
-  var $tvFrame = (0, _jquery.default)("#tvframe");
-  var $loading = (0, _jquery.default)('#loading');
-  var queryStringParams = parseQueryString();
-  var xml;
-  var xsltvProcessor = new _xsltvProcessor.default();
-  fetch(api_files_url).then(function (res) {
-    return res.json();
-  }).then(function (res) {
-    $xmltv_list.empty().append('<option selected>Select one xmltv file</option>'); //Loading file from queryString (ex: http://localhost:3000/?file=https://raw.githubusercontent.com/steventrux/epg/master/guide.xml)
-
-    if (queryStringParams['file']) {
-      $xmltv_list.append("<option value=\"".concat(queryStringParams['file'], "\">").concat(queryStringParams['file'], "</option>"));
-    }
-
-    if (res && res.files.length > 0) {
-      res.files.forEach(function (file) {
-        return $xmltv_list.append("<option value=\"".concat(file.url, "\">").concat(file.name, "</option>"));
-      });
-      var selected = (0, _jquery.default)($xmltv_list.find('option')[1]);
-      selected.prop("selected", "selected");
-      loadXSL(selected.val());
-    }
-  }).catch(function (e) {
-    return console.error(e);
-  });
-  (0, _jquery.default)('[data-toggle="tooltip"]').tooltip();
-  $xmltv_list.change(function () {
-    loadXSL($xmltv_list.val());
-  });
-
-  function loadXSL(xmlfileneeded) {
-    $loading.show();
-    $loading.html("index.xsl");
-    fetch(_index.default, {
-      method: 'GET'
-    }).then(function (response) {
-      return response.text();
-    }).then(function (str) {
-      return new window.DOMParser().parseFromString(str, "text/xml");
-    }).then(function (xsl) {
-      xsltvProcessor.processor.importStylesheet(xsl);
-      loadXML(xmlfileneeded);
-    }).catch(function (error) {
-      var errorstring = error.message;
-      $loading.text(errorstring);
-    });
-  }
-
-  function loadXML(xmlfileneeded) {
-    if (xmlfileneeded) {
-      $loading.show();
-      $loading.text(xmlfileneeded);
-
-      if (window.XMLHttpRequest && window.XSLTProcessor) {
-        fetch(xmlfileneeded, {
-          method: 'GET'
-        }).then(function (response) {
-          return response.text();
-        }).then(function (str) {
-          return new window.DOMParser().parseFromString(str, "text/xml");
-        }).then(function (x) {
-          xml = x;
-          $loading.show();
-          $loading.text("Preparing grid...");
-          Init.apply(void 0, [xsltvProcessor.AppSettings.DisplayLength].concat((0, _toConsumableArray2.default)(getParamsCurrentDate())));
-        }).catch(function (error) {
-          var errorstring = error.message;
-          $loading.text(errorstring);
-        });
-      } else {
-        alert('Your browser can\'t handle this script');
-        return;
-      }
-    }
-  }
-
-  function Init(dl, ch, cd, cm, cy, offset) {
-    /*This stuff needs to be done each time the time changes */
-    $loading.show();
-    $tvFrame.hide();
-    $tvFrame.text("");
-    xsltvProcessor.initDate(ch, cd, cm, cy, offset);
-    var fragment = xsltvProcessor.Init(xml, document);
-    var $far = (0, _jquery.default)(fragment);
-    var $vline = (0, _jquery.default)('<div id="vline"><span class="vheader"></span></div>');
-    $far.append($vline);
-    $tvFrame.append($far);
-    $loading.hide();
-    var popperTab = [];
-    (0, _jquery.default)('[data-toggle="tooltip"]').tooltip();
-    (0, _jquery.default)('[data-toggle="popover"]').popover({
-      html: true
-    }).on('shown.bs.popover', function (data) {
-      popperTab.push((0, _jquery.default)(data.target));
-    });
-    (0, _jquery.default)(document).on('click touchend', function (e) {
-      var target = (0, _jquery.default)(e.target);
-      popperTab.forEach(function (x) {
-        if (!target.is(x)) {
-          x.popover('hide');
-          popperTab = popperTab.slice(popperTab.indexOf(x), 1);
-        }
-      });
-    });
-    InitTimeline($tvFrame, $vline, xsltvProcessor.AppSettings.DisplayLength);
-    $tvFrame.show();
-  }
-
-  window.Init = Init;
-  $loading.show();
-});
-
-var InitTimeline = function InitTimeline($tvFrame, $vline, hours) {
-  var startTimeInit = $tvFrame.find('th.time[onclick^=Init]').attr('onclick');
-  var startTime = startTimeInit.split('Init(')[1].split(')')[0].split(',');
-  var startTimeMoment = "".concat(startTime[2], "-").concat(startTime[3], "-").concat(startTime[4], " ").concat(startTime[1], ":00:00");
-  var paddingLeft = undefined;
-  setInterval(function () {
-    if (undefined == paddingLeft) {
-      paddingLeft = (0, _jquery.default)('div.leftchannel').width() / $tvFrame.width() * 100;
-    }
-
-    $vline.css('margin-left', percentElapsedTimeNowByDay(startTimeMoment, hours) + paddingLeft + '%');
-  }, 1000);
-};
-
-var percentElapsedTimeNowByDay = function percentElapsedTimeNowByDay(startDay, hours) {
-  var from = (0, _moment.default)(startDay, 'DD-MM-YYYY hh:mm:ss');
-  var diff = (0, _moment.default)().diff(from);
-
-  var elapsedDuration = _moment.default.duration(diff);
-
-  var percent = elapsedDuration.asMinutes() / (60 * hours) * 100; //var s = Math.floor(elapsedDuration.asHours()) + moment(diff).format(":mm:ss");
-  // console.log({
-  //     from,
-  //     diff,
-  //     elapsedDuration: s,
-  //     percent
-  // });
-
-  return Math.floor((0, _parseInt2.default)(percent));
-};
-
-var parseQueryString = function parseQueryString() {
-  var str = window.location.search;
-  var objURL = {};
-  str.replace(new RegExp("([^?=&]+)(=([^&]*))?", "g"), function ($0, $1, $2, $3) {
-    objURL[$1] = $3;
-  });
-  return objURL;
-};
-/**
- * Datetime to xsltv format
- * @param {current date time} currenttime 
- * @param {Décalage horaire} offsetminutes 
- */
-
-
-var getParamsCurrentDate = function getParamsCurrentDate() {
-  var currenttime = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Date();
-  var offsetminutes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 60;
-  var myDate = new Date(currenttime);
-  myDate.setMinutes(myDate.getMinutes() + (60 - offsetminutes));
-  return [myDate.getHours(), myDate.getDate(), myDate.getMonth() + 1, myDate.getFullYear()];
-};
-},{"@babel/runtime-corejs2/core-js/parse-int":"../node_modules/@babel/runtime-corejs2/core-js/parse-int.js","@babel/runtime-corejs2/helpers/toConsumableArray":"../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","jquery":"../node_modules/jquery/dist/jquery.js","moment":"../node_modules/moment/moment.js","./lang/english":"lang/english.js","./index.xsl":"index.xsl","./js/xsltvProcessor":"js/xsltvProcessor.js"}],"components/modal.jsx":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = exports.SettingsModal = void 0;
-
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
-
-var _getPrototypeOf3 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
-
-var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
-
-var _react = _interopRequireWildcard(require("react"));
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var SettingsModal =
-/*#__PURE__*/
-function (_Component) {
-  (0, _inherits2.default)(SettingsModal, _Component);
-
-  function SettingsModal() {
-    var _getPrototypeOf2;
-
-    var _this;
-
-    (0, _classCallCheck2.default)(this, SettingsModal);
-
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    _this = (0, _possibleConstructorReturn2.default)(this, (_getPrototypeOf2 = (0, _getPrototypeOf3.default)(SettingsModal)).call.apply(_getPrototypeOf2, [this].concat(args)));
-
-    _this.viewXmltvUrl = function (e) {
-      e.preventDefault();
-    };
-
-    _this.addXmltvUrl = function (e) {
-      e.preventDefault();
-    };
-
-    return _this;
-  }
-
-  (0, _createClass2.default)(SettingsModal, [{
-    key: "render",
-    value: function render() {
-      var _this2 = this;
-
-      return _react.default.createElement("div", {
-        className: "modal fade",
-        id: "settingsModal",
-        tabIndex: "-1",
-        role: "dialog",
-        "aria-labelledby": "exampleModalLabel",
-        "aria-hidden": "true"
-      }, _react.default.createElement("div", {
-        className: "modal-dialog",
-        role: "document"
-      }, _react.default.createElement("div", {
-        className: "modal-content"
-      }, _react.default.createElement("div", {
-        className: "modal-header"
-      }, _react.default.createElement("h5", {
-        className: "modal-title"
-      }, "Settings"), _react.default.createElement("button", {
-        type: "button",
-        className: "close",
-        "data-dismiss": "modal",
-        "aria-label": "Close"
-      }, _react.default.createElement("span", {
-        "aria-hidden": "true"
-      }, "\xD7"))), _react.default.createElement("div", {
-        className: "modal-body"
-      }, _react.default.createElement("div", {
-        id: "accordion"
-      }, _react.default.createElement("div", {
-        className: "card"
-      }, _react.default.createElement("div", {
-        className: "card-header",
-        id: "headingOne"
-      }, _react.default.createElement("h5", {
-        className: "mb-0"
-      }, _react.default.createElement("button", {
-        className: "btn btn-link btn-sm",
-        "data-toggle": "collapse",
-        "data-target": "#collapseOne",
-        "aria-expanded": "true",
-        "aria-controls": "collapseOne"
-      }, "Sources"))), _react.default.createElement("div", {
-        id: "collapseOne",
-        className: "collapse show",
-        "aria-labelledby": "headingOne",
-        "data-parent": "#accordion"
-      }, _react.default.createElement("div", {
-        className: "card-body"
-      }, _react.default.createElement("form", {
-        id: "xmltv_source"
-      }, _react.default.createElement("div", {
-        className: "form-group"
-      }, _react.default.createElement("label", {
-        htmlFor: "xmlt_list",
-        className: "col-form-label"
-      }, "Xmltv sources"), _react.default.createElement("select", {
-        className: "form-control",
-        id: "xmlt_list"
-      }))), _react.default.createElement("div", {
-        className: "input-group mb-3"
-      }, _react.default.createElement("input", {
-        type: "text",
-        id: "xmltv_url",
-        className: "form-control form-control-sm",
-        placeholder: "xmltv url..."
-      }), _react.default.createElement("div", {
-        className: "input-group-append"
-      }, _react.default.createElement("div", {
-        className: "btn-group",
-        role: "group"
-      }, _react.default.createElement("button", {
-        id: "btnGroupDrop1",
-        type: "button",
-        className: "btn btn-outline-info btn-sm dropdown-toggle",
-        "data-toggle": "dropdown",
-        "aria-haspopup": "true",
-        "aria-expanded": "false"
-      }, "Dropdown"), _react.default.createElement("div", {
-        className: "dropdown-menu",
-        "aria-labelledby": "btnGroupDrop1"
-      }, _react.default.createElement("a", {
-        className: "dropdown-item",
-        href: "#",
-        onClick: function onClick(e) {
-          return _this2.viewXmltvUrl(e);
-        }
-      }, "View"), _react.default.createElement("a", {
-        className: "dropdown-item",
-        href: "#",
-        onClick: function onClick(e) {
-          return _this2.addXmltvUrl(e);
-        }
-      }, "Add")))))))), _react.default.createElement("div", {
-        className: "card"
-      }, _react.default.createElement("div", {
-        className: "card-header",
-        id: "headingTwo"
-      }, _react.default.createElement("h5", {
-        className: "mb-0"
-      }, _react.default.createElement("button", {
-        className: "btn btn-link collapsed  btn-sm",
-        "data-toggle": "collapse",
-        "data-target": "#collapseTwo",
-        "aria-expanded": "false",
-        "aria-controls": "collapseTwo"
-      }, "Settings"))), _react.default.createElement("div", {
-        id: "collapseTwo",
-        className: "collapse",
-        "aria-labelledby": "headingTwo",
-        "data-parent": "#accordion"
-      }, _react.default.createElement("div", {
-        className: "card-body"
-      }, "Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS."))))), _react.default.createElement("div", {
-        className: "modal-footer"
-      }, _react.default.createElement("button", {
-        type: "button",
-        className: "btn btn-secondary",
-        "data-dismiss": "modal"
-      }, "Close")))));
-    }
-  }]);
-  return SettingsModal;
-}(_react.Component);
-
-exports.SettingsModal = SettingsModal;
-SettingsModal.propTypes = {};
-var _default = SettingsModal;
-exports.default = _default;
-},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js"}],"components/NavBottom.jsx":[function(require,module,exports) {
+},{}],"components/NavBottom.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -46684,7 +46429,7 @@ function (_React$Component) {
 
 var _default = NavBottom;
 exports.default = _default;
-},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","moment":"../node_modules/moment/moment.js"}],"components/sidemenu.jsx":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","moment":"../node_modules/moment/moment.js"}],"components/sideMenu.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -46692,49 +46437,97 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _react = _interopRequireDefault(require("react"));
+var _objectSpread2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/objectSpread"));
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
+
+var _react = _interopRequireWildcard(require("react"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var SideMenu = function SideMenu() {
-  return _react.default.createElement("nav", {
-    className: "navbar navbar-fixed-left navbar-minimal animate",
-    role: "navigation"
-  }, _react.default.createElement("div", {
-    className: "navbar-toggler animate"
-  }, _react.default.createElement("i", {
-    className: "fa fa-align-justify"
-  })), _react.default.createElement("ul", {
-    className: "navbar-menu animate"
-  }, _react.default.createElement("li", null, _react.default.createElement("a", {
-    href: "#about-us",
-    className: "animate"
-  }, _react.default.createElement("span", {
-    className: "desc animate"
-  }, " Who We Are "), _react.default.createElement("span", {
-    className: "fa fa-home"
-  }))), _react.default.createElement("li", null, _react.default.createElement("a", {
-    href: "#settingsMenu",
-    className: "animate",
-    "data-toggle": "modal",
-    "data-target": "#settingsModal"
-  }, _react.default.createElement("span", {
-    className: "desc animate"
-  }, " Settings "), _react.default.createElement("i", {
-    className: "fa fa-cogs"
-  }))), _react.default.createElement("li", null, _react.default.createElement("a", {
-    href: "#contact-us",
-    className: "animate"
-  }, _react.default.createElement("span", {
-    className: "desc animate"
-  }, " How To Reach Us "), _react.default.createElement("span", {
-    className: "fa fa-comment"
-  })))));
-};
+var SideMenu =
+/*#__PURE__*/
+function (_Component) {
+  (0, _inherits2.default)(SideMenu, _Component);
 
-var _default = SideMenu;
-exports.default = _default;
-},{"react":"../node_modules/react/index.js"}],"components/snackbar.jsx":[function(require,module,exports) {
+  function SideMenu() {
+    var _this;
+
+    (0, _classCallCheck2.default)(this, SideMenu);
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(SideMenu).call(this));
+    _this.state = {
+      open: true
+    };
+    return _this;
+  }
+
+  (0, _createClass2.default)(SideMenu, [{
+    key: "handleToggleClick",
+    value: function handleToggleClick(e) {
+      e.preventDefault();
+      this.setState((0, _objectSpread2.default)({}, this.state, {
+        open: !this.state.open
+      }));
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      var openClassNames = this.state.open ? "navbar navbar-fixed-left navbar-minimal animate open" : "navbar navbar-fixed-left navbar-minimal animate";
+      return _react.default.createElement("nav", {
+        onClick: function onClick(e) {
+          return _this2.handleToggleClick(e);
+        },
+        className: openClassNames,
+        role: "navigation"
+      }, _react.default.createElement("div", {
+        className: "navbar-toggler animate"
+      }, _react.default.createElement("i", {
+        className: "fa fa-align-justify"
+      })), _react.default.createElement("ul", {
+        className: "navbar-menu animate"
+      }, _react.default.createElement("li", null, _react.default.createElement("a", {
+        href: "#about-us",
+        className: "animate"
+      }, _react.default.createElement("span", {
+        className: "desc animate"
+      }, " Who We Are "), _react.default.createElement("span", {
+        className: "fa fa-home"
+      }))), _react.default.createElement("li", null, _react.default.createElement("a", {
+        href: "#settingsMenu",
+        className: "animate",
+        "data-toggle": "modal",
+        "data-target": "#settingsModal"
+      }, _react.default.createElement("span", {
+        className: "desc animate"
+      }, " Settings "), _react.default.createElement("i", {
+        className: "fa fa-cogs"
+      }))), _react.default.createElement("li", null, _react.default.createElement("a", {
+        href: "#contact-us",
+        className: "animate"
+      }, _react.default.createElement("span", {
+        className: "desc animate"
+      }, " How To Reach Us "), _react.default.createElement("span", {
+        className: "fa fa-comment"
+      })))));
+    }
+  }]);
+  return SideMenu;
+}(_react.Component);
+
+exports.default = SideMenu;
+},{"@babel/runtime-corejs2/helpers/objectSpread":"../node_modules/@babel/runtime-corejs2/helpers/objectSpread.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js"}],"components/snackbar.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -46781,7 +46574,171 @@ var Header = function Header() {
 
 var _default = Header;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js"}],"index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js"}],"index.xsl":[function(require,module,exports) {
+module.exports = "/public.785ca178.xsl";
+},{}],"components/shared.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getParamsCurrentDate = exports.Loader = exports.api_files_url = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var api_files_url = "https://api.myjson.com/bins/8tvgs";
+exports.api_files_url = api_files_url;
+
+var Loader = function Loader(_ref) {
+  var displayText = _ref.displayText;
+  return _react.default.createElement("div", {
+    id: "loading"
+  }, displayText);
+};
+
+exports.Loader = Loader;
+Loader.propTypes = {
+  displayText: _propTypes.default.string
+};
+/**
+ * Datetime to xsltv format
+ * @param {current date time} currenttime 
+ * @param {DÃ©calage horaire} offsetminutes 
+ */
+
+var getParamsCurrentDate = function getParamsCurrentDate() {
+  var currenttime = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Date();
+  var offsetminutes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 60;
+  var myDate = new Date(currenttime);
+  myDate.setMinutes(myDate.getMinutes() + (60 - offsetminutes));
+  return [myDate.getHours(), myDate.getDate(), myDate.getMonth() + 1, myDate.getFullYear()];
+};
+
+exports.getParamsCurrentDate = getParamsCurrentDate;
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js"}],"registerServiceWorker.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = register;
+exports.unregister = unregister;
+
+var _jquery = _interopRequireDefault(require("jquery"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// In production, we register a service worker to serve assets from local cache.
+// This lets the app load faster on subsequent visits in production, and gives
+// it offline capabilities. However, it also means that developers (and users)
+// will only see deployed updates on the "N+1" visit to a page, since previously
+// cached resources are updated in the background.
+// To learn more about the benefits of this model, read https://goo.gl/KwvDNy.
+// This link also includes instructions on opting out of this behavior.
+var isLocalhost = Boolean(window.location.hostname === 'localhost' || // [::1] is the IPv6 localhost address.
+window.location.hostname === '[::1]' || // 127.0.0.1/8 is considered localhost for IPv4.
+window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/));
+
+var showUpdateBar = function showUpdateBar() {
+  var snackbar = document.getElementById("snackbar");
+  snackbar.className = "show";
+};
+
+(0, _jquery.default)(function () {
+  // The click event on the pop up notification
+  document.getElementById("reload").addEventListener("click", function () {
+    newWorker.postMessage({
+      action: "skipWaiting"
+    });
+  });
+});
+
+function register() {
+  if ("development" === 'production' && 'serviceWorker' in navigator) {
+    // The URL constructor is available in all browsers that support SW.
+    var publicUrl = new URL(undefined, window.location);
+
+    if (publicUrl.origin !== window.location.origin) {
+      // Our service worker won't work if PUBLIC_URL is on a different origin
+      // from what our page is served on. This might happen if a CDN is used to
+      // serve assets; see https://github.com/facebookincubator/create-react-app/issues/2374
+      return;
+    }
+
+    window.addEventListener('load', function () {
+      var swUrl = "".concat(undefined, "/service-worker.js");
+
+      if (isLocalhost) {
+        // This is running on localhost. Lets check if a service worker still exists or not.
+        checkValidServiceWorker(swUrl); // Add some additional logging to localhost, pointing developers to the
+        // service worker/PWA documentation.
+
+        navigator.serviceWorker.ready.then(function () {
+          console.log('This web app is being served cache-first by a service ' + 'worker. To learn more, visit https://goo.gl/SC7cgQ');
+        });
+      } else {
+        // Is not local host. Just register service worker
+        registerValidSW(swUrl);
+      }
+    });
+  }
+}
+
+function registerValidSW(swUrl) {
+  navigator.serviceWorker.register(swUrl).then(function (registration) {
+    registration.onupdatefound = function () {
+      var installingWorker = registration.installing;
+
+      installingWorker.onstatechange = function () {
+        if (installingWorker.state === 'installed') {
+          if (navigator.serviceWorker.controller) {
+            showUpdateBar();
+          } else {
+            // At this point, everything has been precached.
+            // It's the perfect time to display a
+            // "Content is cached for offline use." message.
+            console.log('Content is cached for offline use.');
+          }
+        }
+      };
+    };
+  }).catch(function (error) {
+    console.error('Error during service worker registration:', error);
+  });
+}
+
+function checkValidServiceWorker(swUrl) {
+  // Check if the service worker can be found. If it can't reload the page.
+  fetch(swUrl).then(function (response) {
+    // Ensure service worker exists, and that we really are getting a JS file.
+    if (response.status === 404 || response.headers.get('content-type').indexOf('javascript') === -1) {
+      // No service worker found. Probably a different app. Reload the page.
+      navigator.serviceWorker.ready.then(function (registration) {
+        registration.unregister().then(function () {
+          window.location.reload();
+        });
+      });
+    } else {
+      // Service worker found. Proceed as normal.
+      registerValidSW(swUrl);
+    }
+  }).catch(function () {
+    console.log('No internet connection found. App is running in offline mode.');
+  });
+}
+
+function unregister() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.ready.then(function (registration) {
+      registration.unregister();
+    });
+  }
+}
+},{"jquery":"../node_modules/jquery/dist/jquery.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -46789,13 +46746,17 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.App = void 0;
 
+var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/toConsumableArray"));
+
+var _objectSpread2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/objectSpread"));
+
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
 
 var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
 
 var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
 
-var _getPrototypeOf3 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
 
 var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
 
@@ -46803,19 +46764,33 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _reactDom = require("react-dom");
 
-var _propTypes = _interopRequireDefault(require("prop-types"));
+require("bootstrap");
 
-require("./init");
+var _jquery = _interopRequireDefault(require("jquery"));
+
+require("./lang/english");
+
+var _xsltvProcessor = _interopRequireDefault(require("./js/xsltvProcessor"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _modal = _interopRequireDefault(require("./components/modal"));
 
 var _NavBottom = _interopRequireDefault(require("./components/NavBottom"));
 
-var _sidemenu = _interopRequireDefault(require("./components/sidemenu"));
+var _sideMenu = _interopRequireDefault(require("./components/sideMenu"));
 
 var _snackbar = _interopRequireDefault(require("./components/snackbar"));
 
 var _header = _interopRequireDefault(require("./components/header"));
+
+var _settings = _interopRequireDefault(require("./js/settings"));
+
+var _index = _interopRequireDefault(require("./index.xsl"));
+
+var _shared = require("./components/shared");
+
+var _registerServiceWorker = _interopRequireDefault(require("./registerServiceWorker"));
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
@@ -46827,89 +46802,161 @@ function (_Component) {
   (0, _inherits2.default)(App, _Component);
 
   function App() {
-    var _getPrototypeOf2;
-
     var _this;
 
     (0, _classCallCheck2.default)(this, App);
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(App).call(this));
 
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
+    _this.fetchFiles = function () {
+      fetch(_shared.api_files_url).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        if (res && res.files.length > 0) {
+          _this.setState((0, _objectSpread2.default)({}, _this.state, {
+            files: res.files
+          }));
 
-    _this = (0, _possibleConstructorReturn2.default)(this, (_getPrototypeOf2 = (0, _getPrototypeOf3.default)(App)).call.apply(_getPrototypeOf2, [this].concat(args)));
-    _this.isLocalhost = Boolean(window.location.hostname === 'localhost' || // [::1] is the IPv6 localhost address.
-    window.location.hostname === '[::1]' || // 127.0.0.1/8 is considered localhost for IPv4.
-    window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/));
+          if (_this.state.files.length > 0) {
+            _this.loadXSL(_this.state.files[0]);
+          }
+        }
+      }).catch(function (e) {
+        return console.error(e);
+      });
+    };
+
+    _this.state = {
+      loading: true,
+      loaderText: "Init App",
+      files: [],
+      xsltvProcessor: new _xsltvProcessor.default(),
+      AppSettings: _settings.default.load()
+    };
+    window.Init = _this.Init;
     return _this;
   }
 
   (0, _createClass2.default)(App, [{
-    key: "initServiceWorker",
-    value: function initServiceWorker() {
-      if ("serviceWorker" in navigator && (window.location.protocol === "https:" || window.location.protocol === "http:" || isLocalhost)) {
-        if ("serviceWorker" in navigator) {
-          var showUpdateBar = function showUpdateBar() {
-            var snackbar = document.getElementById("snackbar");
-            snackbar.className = "show";
-          }; // The click event on the pop up notification
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.fetchFiles();
+    }
+  }, {
+    key: "loadXSL",
+    value: function loadXSL(xmlfileneeded) {
+      var _this2 = this;
 
+      this.setState((0, _objectSpread2.default)({}, this.state, {
+        loading: true,
+        loaderText: "Loading xslt file..."
+      }));
+      fetch(_index.default, {
+        method: "GET"
+      }).then(function (response) {
+        return response.text();
+      }).then(function (str) {
+        return new window.DOMParser().parseFromString(str, "text/xml");
+      }).then(function (xsl) {
+        _this2.state.xsltvProcessor.processor.importStylesheet(xsl);
 
-          var newWorker;
-          navigator.serviceWorker.register("/service-worker.js").then(function (reg) {
-            console.log("Service Worker Registered");
-            reg.addEventListener("updatefound", function () {
-              // A wild service worker has appeared in reg.installing!
-              if (navigator.serviceWorker.controller) {
-                newWorker = reg.installing;
+        _this2.loadXML(xmlfileneeded);
+      }).catch(function (error) {
+        _this2.setState((0, _objectSpread2.default)({}, _this2.state, {
+          loading: true,
+          loaderText: error.message
+        }));
+      });
+    }
+  }, {
+    key: "loadXML",
+    value: function loadXML(xmlfileneeded) {
+      var _this3 = this;
 
-                if (newWorker != null) {
-                  newWorker.addEventListener("statechange", function () {
-                    // Has network.state changed?
-                    switch (newWorker.state) {
-                      case "installed":
-                        // new update available
-                        showUpdateBar();
-                        break;
-                    }
-                  });
-                }
-              }
-            });
+      if (xmlfileneeded) {
+        this.setState((0, _objectSpread2.default)({}, this.state, {
+          loading: true,
+          loaderText: xmlfileneeded.name
+        }));
+
+        if (window.XMLHttpRequest && window.XSLTProcessor) {
+          fetch(xmlfileneeded.url, {
+            method: "GET"
+          }).then(function (response) {
+            return response.text();
+          }).then(function (str) {
+            return new window.DOMParser().parseFromString(str, "text/xml");
+          }).then(function (x) {
+            _this3.setState((0, _objectSpread2.default)({}, _this3.state, {
+              xml: x,
+              loading: true,
+              loaderText: "Preparing grid..."
+            }));
+
+            _this3.Init.apply(_this3, [_this3.state.xsltvProcessor.AppSettings.DisplayLength].concat((0, _toConsumableArray2.default)((0, _shared.getParamsCurrentDate)())));
+          }).catch(function (error) {
+            _this3.setState((0, _objectSpread2.default)({}, _this3.state, {
+              loading: true,
+              loaderText: error.message
+            }));
           });
-          var refreshing;
-          navigator.serviceWorker.addEventListener("controllerchange", function () {
-            if (refreshing) return;
-            window.location.reload();
-            refreshing = true;
-          });
-          document.getElementById("reload").addEventListener("click", function () {
-            newWorker.postMessage({
-              action: "skipWaiting"
-            });
-          });
+        } else {
+          alert("Your browser can't handle this script");
+          return;
         }
       }
     }
   }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this.initServiceWorker();
+    key: "Init",
+    value: function Init(dl, ch, cd, cm, cy, offset) {
+      var $tvFrame = (0, _jquery.default)("#tvframe");
+      this.setState((0, _objectSpread2.default)({}, this.state, {
+        loading: true,
+        loaderText: "Init xsltv file"
+      }));
+      this.state.xsltvProcessor.initDate(ch, cd, cm, cy, offset);
+      var fragment = this.state.xsltvProcessor.Init(this.state.xml, document);
+      var $far = (0, _jquery.default)(fragment); // let $vline = $('<div id="vline"><span class="vheader"></span></div>');
+      // $far.append($vline);
+
+      $tvFrame.append($far);
+      this.setState((0, _objectSpread2.default)({}, this.state, {
+        loading: false
+      }));
+      var popperTab = [];
+      (0, _jquery.default)('[data-toggle="tooltip"]').tooltip();
+      (0, _jquery.default)('[data-toggle="popover"]').popover({
+        html: true
+      }).on("shown.bs.popover", function (data) {
+        popperTab.push((0, _jquery.default)(data.target));
+      });
+      (0, _jquery.default)(document).on("click touchend", function (e) {
+        var target = (0, _jquery.default)(e.target);
+        popperTab.forEach(function (x) {
+          if (!target.is(x)) {
+            x.popover("hide");
+            popperTab = popperTab.slice(popperTab.indexOf(x), 1);
+          }
+        });
+      }); //InitTimeline($tvFrame, $vline, this.state.xsltvProcessor.AppSettings.DisplayLength);
+
+      $tvFrame.show();
     }
   }, {
     key: "render",
     value: function render() {
       return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement(_NavBottom.default, null), _react.default.createElement("section", {
         className: "row-section"
-      }, _react.default.createElement(_sidemenu.default, null), _react.default.createElement(_modal.default, null), _react.default.createElement("div", {
+      }, _react.default.createElement(_sideMenu.default, null), this.state.files ? _react.default.createElement(_modal.default, {
+        files: this.state.files
+      }) : null, _react.default.createElement("div", {
         className: "container"
       }, _react.default.createElement(_header.default, null), _react.default.createElement("div", {
         className: "row"
       }, _react.default.createElement("div", {
         id: "tvframe"
-      }), _react.default.createElement("div", {
-        id: "loading"
-      }))), _react.default.createElement(_snackbar.default, null)));
+      }), this.state.loading ? _react.default.createElement(_shared.Loader, {
+        displayText: this.state.loaderText
+      }) : null)), _react.default.createElement(_snackbar.default, null)));
     }
   }]);
   return App;
@@ -46917,12 +46964,13 @@ function (_Component) {
 
 exports.App = App;
 App.propTypes = {};
-(0, _reactDom.render)(_react.default.createElement(App, null), document.getElementById("app")); // Hot Module Replacement
+(0, _reactDom.render)(_react.default.createElement(App, null), document.getElementById("app"));
+(0, _registerServiceWorker.default)(); // Hot Module Replacement
 
 if (module.hot) {
   module.hot.accept();
 }
-},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","prop-types":"../node_modules/prop-types/index.js","./init":"init.js","./components/modal":"components/modal.jsx","./components/NavBottom":"components/NavBottom.jsx","./components/sidemenu":"components/sidemenu.jsx","./components/snackbar":"components/snackbar.jsx","./components/header":"components/header.jsx","./service-worker.js":[["service-worker.js","service-worker.js"],"service-worker.map","service-worker.js"]}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/helpers/toConsumableArray":"../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js","@babel/runtime-corejs2/helpers/objectSpread":"../node_modules/@babel/runtime-corejs2/helpers/objectSpread.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","jquery":"../node_modules/jquery/dist/jquery.js","./lang/english":"lang/english.js","./js/xsltvProcessor":"js/xsltvProcessor.js","prop-types":"../node_modules/prop-types/index.js","./components/modal":"components/modal.jsx","./components/NavBottom":"components/NavBottom.jsx","./components/sideMenu":"components/sideMenu.jsx","./components/snackbar":"components/snackbar.jsx","./components/header":"components/header.jsx","./js/settings":"js/settings.js","./index.xsl":"index.xsl","./components/shared":"components/shared.jsx","./registerServiceWorker":"registerServiceWorker.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -46949,7 +46997,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65290" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54434" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
