@@ -3,17 +3,36 @@ import PropTypes from "prop-types";
 
 export class SettingsModal extends Component {
   static propTypes = {
-    files: PropTypes.array.isRequired
+    files: PropTypes.array.isRequired,
+    onViewXmltvUrl: PropTypes.func.isRequired,
+    onAddXmltvUrl: PropTypes.func.isRequired
   };
+  static defaultProps = {
+    files: []
+  };
+
   viewXmltvUrl = e => {
     e.preventDefault();
+    this.props.onViewXmltvUrl(this.createFileObject(this.refs.xmltv_url.value));
   };
   addXmltvUrl = e => {
     e.preventDefault();
+    this.props.onAddXmltvUrl(this.createFileObject(this.refs.xmltv_url.value));
   };
+
+  createFileObject = xmltv_file_url => {
+    return { name: xmltv_file_url.split("/").pop(), url: xmltv_file_url };
+  };
+
   render() {
     return (
-      <div className="modal fade" id="settingsModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div
+        className="modal fade"
+        id="settingsModal"
+        tabIndex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden={this.props.open ? "false" : "true"}>
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
@@ -57,28 +76,42 @@ export class SettingsModal extends Component {
                         </div>
                       </form>
                       <div className="input-group mb-3">
-                        <input type="text" id="xmltv_url" className="form-control form-control-sm" placeholder="xmltv url..." />
-                        <div className="input-group-append">
-                          <div className="btn-group" role="group">
-                            <button
-                              id="btnGroupDrop1"
-                              type="button"
-                              className="btn btn-outline-info btn-sm dropdown-toggle"
-                              data-toggle="dropdown"
-                              aria-haspopup="true"
-                              aria-expanded="false">
-                              Dropdown
-                            </button>
-                            <div className="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                              <a className="dropdown-item" href="#" onClick={e => this.viewXmltvUrl(e)}>
-                                View
-                              </a>
-                              <a className="dropdown-item" href="#" onClick={e => this.addXmltvUrl(e)}>
-                                Add
-                              </a>
+                        <form className="form-inline" ref="xmltv_file_form">
+                          <div className="form-group">
+                            <input
+                              type="url"
+                              ref="xmltv_url"
+                              required="required"
+                              data-error="Please enter your full name."
+                              className="form-control form-control-sm"
+                              placeholder="xmltv url..."
+                              pattern="(ftp|https?)://.+"
+                            />
+                            <div className="help-block with-errors" />
+                          </div>
+
+                          <div className="input-group-append">
+                            <div className="btn-group" role="group">
+                              <button
+                                id="btnGroupDrop1"
+                                type="button"
+                                className="btn btn-outline-info btn-sm dropdown-toggle"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false">
+                                Dropdown
+                              </button>
+                              <div className="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                <a className="dropdown-item" href="#" onClick={this.viewXmltvUrl}>
+                                  View
+                                </a>
+                                <a className="dropdown-item" href="#" onClick={this.addXmltvUrl}>
+                                  Add
+                                </a>
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        </form>
                       </div>
                     </div>
                   </div>
@@ -121,4 +154,3 @@ export class SettingsModal extends Component {
 }
 
 export default SettingsModal;
-

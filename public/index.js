@@ -4,7 +4,6 @@ import "bootstrap";
 import $ from "jquery";
 import "./lang/english";
 import XsltvProcessor from "./js/xsltvProcessor";
-import PropTypes from "prop-types";
 import SettingsModal from "./components/modal";
 import NavBottom from "./components/NavBottom";
 import SideMenu from "./components/sideMenu";
@@ -24,7 +23,8 @@ export class App extends Component {
       loaderText: "Init App",
       files: [],
       xsltvProcessor: new XsltvProcessor(),
-      AppSettings: Settings.load()
+      AppSettings: Settings.load(),
+      openSettingsModal: false
     };
 
     window.Init = this.Init;
@@ -116,7 +116,7 @@ export class App extends Component {
     let $far = $(fragment);
     // let $vline = $('<div id="vline"><span class="vheader"></span></div>');
     // $far.append($vline);
-    $tvFrame.append($far);
+    $tvFrame.empty().append($far);
     this.setState({ ...this.state, loading: false });
 
     var popperTab = [];
@@ -144,13 +144,38 @@ export class App extends Component {
     $tvFrame.show();
   }
 
+  onAddXmltvUrl = xmltv_file => {
+    console.log(`onAddXmltvUrl ${xmltv_file}`);
+    this.setState({
+      ...this.state,
+      files: [xmltv_file, ...this.state.files]
+    });
+  };
+
+  onViewXmltvUrl = xmltv_file => {
+    console.log(`onViewXmltvUrl ${xmltv_file}`);
+    this.setState({ ...this.state, openSettingsModal: false });
+    this.toggleSettingsModal();
+    this.loadXML(xmltv_file);
+  };
+
+  onSettingsModalClick = e => {
+    this.setState({ openSettingsModal: !this.state.openSettingsModal, ...this.state });
+    this.toggleSettingsModal();
+  };
+
+  toggleSettingsModal = () => {
+    const settingsModal = $("#settingsModal");
+    if (settingsModal) settingsModal.modal(this.state.openSettingsModal ? "show" : "hide");
+  };
+
   render() {
     return (
       <React.Fragment>
         <NavBottom />
         <section className="row-section">
-          <SideMenu />
-          {this.state.files ? <SettingsModal files={this.state.files} /> : null}
+          <SideMenu handleToggleModalClick={this.onSettingsModalClick} />
+          <SettingsModal files={this.state.files} onViewXmltvUrl={this.onViewXmltvUrl} onAddXmltvUrl={this.onAddXmltvUrl} />
           <div className="container">
             <Header />
             <div className="row">

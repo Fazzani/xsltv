@@ -20,10 +20,7 @@ export default class SideMenu extends PureComponent {
     const openClassNames = this.state.open ? "navbar navbar-fixed-left navbar-minimal animate open" : "navbar navbar-fixed-left navbar-minimal animate";
 
     return (
-      <nav
-        onClick={e => this.handleToggleClick(e)}
-        className={openClassNames}
-        role="navigation">
+      <nav onClick={e => this.handleToggleClick(e)} className={openClassNames} role="navigation">
         <div className="navbar-toggler animate">
           <i className="fa fa-align-justify" />
         </div>
@@ -35,7 +32,7 @@ export default class SideMenu extends PureComponent {
             </a>
           </li>
           <li>
-            <a href="#settingsMenu" className="animate" data-toggle="modal" data-target="#settingsModal">
+            <a href="#settingsMenu" className="animate" data-toggle="modal" data-target="#settingsModal" onClick={this.props.handleToggleModalClick}>
               <span className="desc animate"> Settings </span>
               <i className="fa fa-cogs" />
             </a>

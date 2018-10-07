@@ -41663,10 +41663,21 @@ function (_Component) {
 
     _this.viewXmltvUrl = function (e) {
       e.preventDefault();
+
+      _this.props.onViewXmltvUrl(_this.createFileObject(_this.refs.xmltv_url.value));
     };
 
     _this.addXmltvUrl = function (e) {
       e.preventDefault();
+
+      _this.props.onAddXmltvUrl(_this.createFileObject(_this.refs.xmltv_url.value));
+    };
+
+    _this.createFileObject = function (xmltv_file_url) {
+      return {
+        name: xmltv_file_url.split("/").pop(),
+        url: xmltv_file_url
+      };
     };
 
     return _this;
@@ -41675,15 +41686,13 @@ function (_Component) {
   (0, _createClass2.default)(SettingsModal, [{
     key: "render",
     value: function render() {
-      var _this2 = this;
-
       return _react.default.createElement("div", {
         className: "modal fade",
         id: "settingsModal",
         tabIndex: "-1",
         role: "dialog",
         "aria-labelledby": "exampleModalLabel",
-        "aria-hidden": "true"
+        "aria-hidden": this.props.open ? "false" : "true"
       }, _react.default.createElement("div", {
         className: "modal-dialog",
         role: "document"
@@ -41741,12 +41750,22 @@ function (_Component) {
         }, e.name);
       })))), _react.default.createElement("div", {
         className: "input-group mb-3"
+      }, _react.default.createElement("form", {
+        className: "form-inline",
+        ref: "xmltv_file_form"
+      }, _react.default.createElement("div", {
+        className: "form-group"
       }, _react.default.createElement("input", {
-        type: "text",
-        id: "xmltv_url",
+        type: "url",
+        ref: "xmltv_url",
+        required: "required",
+        "data-error": "Please enter your full name.",
         className: "form-control form-control-sm",
-        placeholder: "xmltv url..."
+        placeholder: "xmltv url...",
+        pattern: "(ftp|https?)://.+"
       }), _react.default.createElement("div", {
+        className: "help-block with-errors"
+      })), _react.default.createElement("div", {
         className: "input-group-append"
       }, _react.default.createElement("div", {
         className: "btn-group",
@@ -41764,16 +41783,12 @@ function (_Component) {
       }, _react.default.createElement("a", {
         className: "dropdown-item",
         href: "#",
-        onClick: function onClick(e) {
-          return _this2.viewXmltvUrl(e);
-        }
+        onClick: this.viewXmltvUrl
       }, "View"), _react.default.createElement("a", {
         className: "dropdown-item",
         href: "#",
-        onClick: function onClick(e) {
-          return _this2.addXmltvUrl(e);
-        }
-      }, "Add")))))))), _react.default.createElement("div", {
+        onClick: this.addXmltvUrl
+      }, "Add"))))))))), _react.default.createElement("div", {
         className: "card"
       }, _react.default.createElement("div", {
         className: "card-header",
@@ -41807,7 +41822,12 @@ function (_Component) {
 
 exports.SettingsModal = SettingsModal;
 SettingsModal.propTypes = {
-  files: _propTypes.default.array.isRequired
+  files: _propTypes.default.array.isRequired,
+  onViewXmltvUrl: _propTypes.default.func.isRequired,
+  onAddXmltvUrl: _propTypes.default.func.isRequired
+};
+SettingsModal.defaultProps = {
+  files: []
 };
 var _default = SettingsModal;
 exports.default = _default;
@@ -46506,7 +46526,8 @@ function (_PureComponent) {
         href: "#settingsMenu",
         className: "animate",
         "data-toggle": "modal",
-        "data-target": "#settingsModal"
+        "data-target": "#settingsModal",
+        onClick: this.props.handleToggleModalClick
       }, _react.default.createElement("span", {
         className: "desc animate"
       }, " Settings "), _react.default.createElement("i", {
@@ -58436,8 +58457,6 @@ require("./lang/english");
 
 var _xsltvProcessor = _interopRequireDefault(require("./js/xsltvProcessor"));
 
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
 var _modal = _interopRequireDefault(require("./components/modal"));
 
 var _NavBottom = _interopRequireDefault(require("./components/NavBottom"));
@@ -58489,12 +58508,46 @@ function (_Component) {
       });
     };
 
+    _this.onAddXmltvUrl = function (xmltv_file) {
+      console.log("onAddXmltvUrl ".concat(xmltv_file));
+
+      _this.setState((0, _objectSpread2.default)({}, _this.state, {
+        files: [xmltv_file].concat((0, _toConsumableArray2.default)(_this.state.files))
+      }));
+    };
+
+    _this.onViewXmltvUrl = function (xmltv_file) {
+      console.log("onViewXmltvUrl ".concat(xmltv_file));
+
+      _this.setState((0, _objectSpread2.default)({}, _this.state, {
+        openSettingsModal: false
+      }));
+
+      _this.toggleSettingsModal();
+
+      _this.loadXML(xmltv_file);
+    };
+
+    _this.onSettingsModalClick = function (e) {
+      _this.setState((0, _objectSpread2.default)({
+        openSettingsModal: !_this.state.openSettingsModal
+      }, _this.state));
+
+      _this.toggleSettingsModal();
+    };
+
+    _this.toggleSettingsModal = function () {
+      var settingsModal = (0, _jquery.default)("#settingsModal");
+      if (settingsModal) settingsModal.modal(_this.state.openSettingsModal ? "show" : "hide");
+    };
+
     _this.state = {
       loading: true,
       loaderText: "Init App",
       files: [],
       xsltvProcessor: new _xsltvProcessor.default(),
-      AppSettings: _settings.default.load()
+      AppSettings: _settings.default.load(),
+      openSettingsModal: false
     };
     window.Init = _this.Init;
     return _this;
@@ -58582,7 +58635,7 @@ function (_Component) {
       var $far = (0, _jquery.default)(fragment); // let $vline = $('<div id="vline"><span class="vheader"></span></div>');
       // $far.append($vline);
 
-      $tvFrame.append($far);
+      $tvFrame.empty().append($far);
       this.setState((0, _objectSpread2.default)({}, this.state, {
         loading: false
       }));
@@ -58610,9 +58663,13 @@ function (_Component) {
     value: function render() {
       return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement(_NavBottom.default, null), _react.default.createElement("section", {
         className: "row-section"
-      }, _react.default.createElement(_sideMenu.default, null), this.state.files ? _react.default.createElement(_modal.default, {
-        files: this.state.files
-      }) : null, _react.default.createElement("div", {
+      }, _react.default.createElement(_sideMenu.default, {
+        handleToggleModalClick: this.onSettingsModalClick
+      }), _react.default.createElement(_modal.default, {
+        files: this.state.files,
+        onViewXmltvUrl: this.onViewXmltvUrl,
+        onAddXmltvUrl: this.onAddXmltvUrl
+      }), _react.default.createElement("div", {
         className: "container"
       }, _react.default.createElement(_header.default, null), _react.default.createElement("div", {
         className: "row"
@@ -58641,7 +58698,7 @@ if ("development" !== "production") {
 
   whyDidYouUpdate(_react.default);
 }
-},{"@babel/runtime-corejs2/helpers/toConsumableArray":"../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js","@babel/runtime-corejs2/helpers/objectSpread":"../node_modules/@babel/runtime-corejs2/helpers/objectSpread.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","jquery":"../node_modules/jquery/dist/jquery.js","./lang/english":"lang/english.js","./js/xsltvProcessor":"js/xsltvProcessor.js","prop-types":"../node_modules/prop-types/index.js","./components/modal":"components/modal.jsx","./components/NavBottom":"components/NavBottom.jsx","./components/sideMenu":"components/sideMenu.jsx","./components/snackbar":"components/snackbar.jsx","./components/header":"components/header.jsx","./js/settings":"js/settings.js","./index.xsl":"index.xsl","./components/shared":"components/shared.jsx","./registerServiceWorker":"registerServiceWorker.js","why-did-you-update":"../node_modules/why-did-you-update/lib/index.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/helpers/toConsumableArray":"../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js","@babel/runtime-corejs2/helpers/objectSpread":"../node_modules/@babel/runtime-corejs2/helpers/objectSpread.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","jquery":"../node_modules/jquery/dist/jquery.js","./lang/english":"lang/english.js","./js/xsltvProcessor":"js/xsltvProcessor.js","./components/modal":"components/modal.jsx","./components/NavBottom":"components/NavBottom.jsx","./components/sideMenu":"components/sideMenu.jsx","./components/snackbar":"components/snackbar.jsx","./components/header":"components/header.jsx","./js/settings":"js/settings.js","./index.xsl":"index.xsl","./components/shared":"components/shared.jsx","./registerServiceWorker":"registerServiceWorker.js","why-did-you-update":"../node_modules/why-did-you-update/lib/index.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -58668,7 +58725,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53788" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55011" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
