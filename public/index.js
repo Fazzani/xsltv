@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { render } from "react-dom";
 import PropTypes from "prop-types";
 import "./init";
-import Modal from "./components/modal";
+import SettingsModal from "./components/modal";
 import NavBottom from "./components/NavBottom";
 import SideMenu from "./components/sidemenu";
 import SnackBar from "./components/snackbar";

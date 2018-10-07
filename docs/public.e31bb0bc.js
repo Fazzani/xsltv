@@ -46795,7 +46795,7 @@ var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpe
 
 var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
 
-var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
+var _getPrototypeOf3 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
 
 var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
 
@@ -46827,34 +46827,47 @@ function (_Component) {
   (0, _inherits2.default)(App, _Component);
 
   function App() {
+    var _getPrototypeOf2;
+
+    var _this;
+
     (0, _classCallCheck2.default)(this, App);
-    return (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(App).apply(this, arguments));
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = (0, _possibleConstructorReturn2.default)(this, (_getPrototypeOf2 = (0, _getPrototypeOf3.default)(App)).call.apply(_getPrototypeOf2, [this].concat(args)));
+    _this.isLocalhost = Boolean(window.location.hostname === 'localhost' || // [::1] is the IPv6 localhost address.
+    window.location.hostname === '[::1]' || // 127.0.0.1/8 is considered localhost for IPv4.
+    window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/));
+    return _this;
   }
 
   (0, _createClass2.default)(App, [{
     key: "initServiceWorker",
     value: function initServiceWorker() {
-      if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.protocol === 'http:' || isLocalhost)) {
-        if ('serviceWorker' in navigator) {
+      if ("serviceWorker" in navigator && (window.location.protocol === "https:" || window.location.protocol === "http:" || isLocalhost)) {
+        if ("serviceWorker" in navigator) {
           var showUpdateBar = function showUpdateBar() {
-            var snackbar = document.getElementById('snackbar');
-            snackbar.className = 'show';
+            var snackbar = document.getElementById("snackbar");
+            snackbar.className = "show";
           }; // The click event on the pop up notification
 
 
           var newWorker;
           navigator.serviceWorker.register("/service-worker.js").then(function (reg) {
-            console.log('Service Worker Registered');
-            reg.addEventListener('updatefound', function () {
+            console.log("Service Worker Registered");
+            reg.addEventListener("updatefound", function () {
               // A wild service worker has appeared in reg.installing!
               if (navigator.serviceWorker.controller) {
                 newWorker = reg.installing;
 
                 if (newWorker != null) {
-                  newWorker.addEventListener('statechange', function () {
+                  newWorker.addEventListener("statechange", function () {
                     // Has network.state changed?
                     switch (newWorker.state) {
-                      case 'installed':
+                      case "installed":
                         // new update available
                         showUpdateBar();
                         break;
@@ -46865,14 +46878,14 @@ function (_Component) {
             });
           });
           var refreshing;
-          navigator.serviceWorker.addEventListener('controllerchange', function () {
+          navigator.serviceWorker.addEventListener("controllerchange", function () {
             if (refreshing) return;
             window.location.reload();
             refreshing = true;
           });
-          document.getElementById('reload').addEventListener('click', function () {
+          document.getElementById("reload").addEventListener("click", function () {
             newWorker.postMessage({
-              action: 'skipWaiting'
+              action: "skipWaiting"
             });
           });
         }
@@ -46936,7 +46949,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54678" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65290" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
