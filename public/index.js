@@ -14,6 +14,7 @@ import index_xsl from "./index.xsl";
 import { Loader, api_files_url, getParamsCurrentDate } from "./components/shared";
 import registerServiceWorker from "./registerServiceWorker";
 import Timeline from "./components/timeline";
+import Xslt from './components/xslt';
 
 export class App extends Component {
   static propTypes = {};
@@ -39,7 +40,6 @@ export class App extends Component {
       .then(res => {
         if (res && res.files.length > 0) {
           this.setState({
-            ...this.state,
             files: res.files
           });
           if (this.state.files.length > 0) {
@@ -52,7 +52,6 @@ export class App extends Component {
 
   loadXSL(xmlfileneeded) {
     this.setState({
-      ...this.state,
       loading: true,
       loaderText: "Loading xslt file..."
     });
@@ -67,7 +66,6 @@ export class App extends Component {
       })
       .catch(error => {
         this.setState({
-          ...this.state,
           loading: true,
           loaderText: error.message
         });
@@ -76,7 +74,7 @@ export class App extends Component {
 
   loadXML(xmlfileneeded) {
     if (xmlfileneeded) {
-      this.setState({ ...this.state, loading: true, loaderText: xmlfileneeded.name });
+      this.setState({  loading: true, loaderText: xmlfileneeded.name });
       if (window.XMLHttpRequest && window.XSLTProcessor) {
         fetch(xmlfileneeded.url, {
           method: "GET"
@@ -84,12 +82,11 @@ export class App extends Component {
           .then(response => response.text())
           .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
           .then(x => {
-            this.setState({ ...this.state, xml: x, loading: true, loaderText: "Preparing grid..." });
+            this.setState({  xml: x, loading: true, loaderText: "Preparing grid..." });
             this.Init(this.state.xsltvProcessor.AppSettings.DisplayLength, ...getParamsCurrentDate());
           })
           .catch(error => {
             this.setState({
-              ...this.state,
               loading: true,
               loaderText: error.message
             });
@@ -113,7 +110,6 @@ export class App extends Component {
 
   Init = (dl, ch, cd, cm, cy, offset) => {
     this.setState({
-      ...this.state,
       loading: true,
       loaderText: "Init xsltv file",
       fragment: undefined
@@ -124,20 +120,19 @@ export class App extends Component {
     var helperDiv = document.createElement("div");
     helperDiv.appendChild(fragment);
 
-    this.setState({ ...this.state, fragment: helperDiv.innerHTML, loading: false });
+    this.setState({  fragment: helperDiv.innerHTML, loading: false });
   };
 
   onAddXmltvUrl = xmltv_file => {
     console.log(`onAddXmltvUrl ${xmltv_file}`);
     this.setState({
-      ...this.state,
       files: [xmltv_file, ...this.state.files]
     });
   };
 
   onViewXmltvUrl = xmltv_file => {
     console.log(`onViewXmltvUrl ${xmltv_file}`);
-    this.setState({ ...this.state, openSettingsModal: false });
+    this.setState({  openSettingsModal: false });
     this.toggleSettingsModal();
     this.loadXML(xmltv_file);
   };
@@ -189,50 +184,4 @@ if (module.hot) {
 if (process.env.NODE_ENV !== "production") {
   const { whyDidYouUpdate } = require("why-did-you-update");
   whyDidYouUpdate(React);
-}
-
-export default class Xslt extends Component {
-  popperTab = [];
-
-  componentDidMount() {
-    this.InitPopperAndTooltip();
-  }
-
-  componentDidUpdate() {
-    this.InitPopperAndTooltip();
-  }
-
-  componentWillUnmount = () => {
-    this.popperTab = [];
-  };
-
-  InitPopperAndTooltip = () => {
-    $('[data-toggle="tooltip"]').tooltip();
-    $('[data-toggle="popover"]')
-      .popover({
-        html: true
-      })
-      .on("shown.bs.popover", data => {
-        this.popperTab.push($(data.target));
-      });
-
-    $(document).on("click touchend", e => {
-      e.preventDefault();
-      let target = $(e.target);
-      this.popperTab.forEach(x => {
-        if (!target.is(x)) {
-          x.popover("hide");
-          this.popperTab = this.popperTab.slice(this.popperTab.indexOf(x), 1);
-        }
-      });
-    });
-  };
-
-  createMarkup = html => {
-    return { __html: html };
-  };
-
-  render() {
-    return <div dangerouslySetInnerHTML={this.createMarkup(this.props.fragment)} onClick={this.props.onClick} />;
-  }
 }
