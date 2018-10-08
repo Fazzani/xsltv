@@ -58688,7 +58688,6 @@ function (_Component) {
     };
 
     _this.Init = function (dl, ch, cd, cm, cy, offset) {
-      // let $tvFrame = $("#tvframe");
       _this.setState((0, _objectSpread2.default)({}, _this.state, {
         loading: true,
         loaderText: "Init xsltv file",
@@ -58700,18 +58699,12 @@ function (_Component) {
       var fragment = _this.state.xsltvProcessor.Init(_this.state.xml, document);
 
       var helperDiv = document.createElement("div");
-      helperDiv.appendChild(fragment); //  let $far = $(fragment);
-      // let $vline = $('<div id="vline"><span class="vheader"></span></div>');
-      // $far.append($vline);
-      //    $tvFrame.empty().append($far);
+      helperDiv.appendChild(fragment);
 
       _this.setState((0, _objectSpread2.default)({}, _this.state, {
         fragment: helperDiv.innerHTML,
-        loading: false,
-        initHandler: _this.Init
-      })); // //InitTimeline($tvFrame, $vline, this.state.xsltvProcessor.AppSettings.DisplayLength);
-      // $tvFrame.show();
-
+        loading: false
+      }));
     };
 
     _this.onAddXmltvUrl = function (xmltv_file) {

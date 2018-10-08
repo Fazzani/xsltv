@@ -112,7 +112,6 @@ export class App extends Component {
   };
 
   Init = (dl, ch, cd, cm, cy, offset) => {
-    // let $tvFrame = $("#tvframe");
     this.setState({
       ...this.state,
       loading: true,
@@ -125,15 +124,7 @@ export class App extends Component {
     var helperDiv = document.createElement("div");
     helperDiv.appendChild(fragment);
 
-    //  let $far = $(fragment);
-    // let $vline = $('<div id="vline"><span class="vheader"></span></div>');
-    // $far.append($vline);
-    //    $tvFrame.empty().append($far);
-    this.setState({ ...this.state, fragment: helperDiv.innerHTML, loading: false, initHandler: this.Init });
-
-    // //InitTimeline($tvFrame, $vline, this.state.xsltvProcessor.AppSettings.DisplayLength);
-
-    // $tvFrame.show();
+    this.setState({ ...this.state, fragment: helperDiv.innerHTML, loading: false });
   };
 
   onAddXmltvUrl = xmltv_file => {
