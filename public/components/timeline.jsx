@@ -27,7 +27,7 @@ export default class Timeline extends Component {
     //   let startTimeMoment = `${startTime[2]}-${startTime[3]}-${startTime[4]} ${startTime[1]}:00:00`;
     let paddingLeft = undefined;
 
-    setInterval(() => {
+    this.interval = setInterval(() => {
       if (undefined == paddingLeft) {
         paddingLeft = (this.props.leftchannelWidth / this.props.parent.clientWidth) * 100;
       }
@@ -35,6 +35,10 @@ export default class Timeline extends Component {
         style: { marginLeft: this.percentElapsedTimeNowByDay(this.props.startTimeMoment, this.props.hours) + paddingLeft + "%" }
       });
     }, 1000);
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.interval);
   }
 
   percentElapsedTimeNowByDay = (startDay, hours) => {

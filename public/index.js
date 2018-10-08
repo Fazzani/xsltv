@@ -13,7 +13,7 @@ import Settings from "./js/settings";
 import index_xsl from "./index.xsl";
 import { Loader, api_files_url, getParamsCurrentDate } from "./components/shared";
 import registerServiceWorker from "./registerServiceWorker";
-import Timeline from "./components/timeline"
+import Timeline from "./components/timeline";
 
 export class App extends Component {
   static propTypes = {};
@@ -27,8 +27,6 @@ export class App extends Component {
       AppSettings: Settings.load(),
       openSettingsModal: false
     };
-
-    window.Init = this.Init;
   }
 
   componentDidMount() {
@@ -103,6 +101,16 @@ export class App extends Component {
     }
   }
 
+  onXsltClick = e => {
+    let target = e.target.id === "topcorner" ? e.target : e.target.parentNode;
+
+    if (target.attributes["data-onclick"]) {
+      e.preventDefault();
+      console.log(target.attributes["data-onclick"].value);
+      eval("_this." + target.attributes["data-onclick"].value);
+    }
+  };
+
   Init = (dl, ch, cd, cm, cy, offset) => {
     // let $tvFrame = $("#tvframe");
     this.setState({
@@ -122,26 +130,6 @@ export class App extends Component {
     // $far.append($vline);
     //    $tvFrame.empty().append($far);
     this.setState({ ...this.state, fragment: helperDiv.innerHTML, loading: false, initHandler: this.Init });
-
-    // var popperTab = [];
-    // $('[data-toggle="tooltip"]').tooltip();
-    // $('[data-toggle="popover"]')
-    //   .popover({
-    //     html: true
-    //   })
-    //   .on("shown.bs.popover", function(data) {
-    //     popperTab.push($(data.target));
-    //   });
-
-    // $(document).on("click touchend", function(e) {
-    //   var target = $(e.target);
-    //   popperTab.forEach(x => {
-    //     if (!target.is(x)) {
-    //       x.popover("hide");
-    //       popperTab = popperTab.slice(popperTab.indexOf(x), 1);
-    //     }
-    //   });
-    // });
 
     // //InitTimeline($tvFrame, $vline, this.state.xsltvProcessor.AppSettings.DisplayLength);
 
@@ -182,11 +170,11 @@ export class App extends Component {
           <SettingsModal files={this.state.files} onViewXmltvUrl={this.onViewXmltvUrl} onAddXmltvUrl={this.onAddXmltvUrl} />
           <div className="container">
             <Header />
-            <div className="row" ref={c => this.xsltRef = c }>
+            <div className="row" ref={c => (this.xsltRef = c)}>
               {this.state.fragment ? (
                 <React.Fragment>
-                  <Xslt fragment={this.state.fragment} Init={this.state.initHandler} />
-                  <Timeline parent={ this.xsltRef } />
+                  <Xslt fragment={this.state.fragment} onClick={this.onXsltClick} />
+                  <Timeline parent={this.xsltRef} />
                 </React.Fragment>
               ) : null}
               {this.state.loading ? <Loader displayText={this.state.loaderText} /> : null}
@@ -216,6 +204,44 @@ function createMarkup(html) {
   return { __html: html };
 }
 
-function Xslt(props) {
-  return <div dangerouslySetInnerHTML={createMarkup(props.fragment)} {...props} />;
+export default class Xslt extends Component {
+  popperTab = [];
+
+  componentDidMount() {
+    this.InitPopperAndTooltip();
+  }
+
+  componentDidUpdate() {
+    this.InitPopperAndTooltip();
+  }
+
+  componentWillUnmount = () => {
+    this.popperTab = [];
+  };
+
+  InitPopperAndTooltip = () => {
+    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="popover"]')
+      .popover({
+        html: true
+      })
+      .on("shown.bs.popover", data => {
+        this.popperTab.push($(data.target));
+      });
+
+    $(document).on("click touchend", e => {
+      e.preventDefault();
+      let target = $(e.target);
+      this.popperTab.forEach(x => {
+        if (!target.is(x)) {
+          x.popover("hide");
+          this.popperTab = this.popperTab.slice(this.popperTab.indexOf(x), 1);
+        }
+      });
+    });
+  };
+
+  render() {
+    return <div dangerouslySetInnerHTML={createMarkup(this.props.fragment)} onClick={this.props.onClick} />;
+  }
 }
