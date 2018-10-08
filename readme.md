@@ -17,5 +17,12 @@ Epg viewer for XMLTV format based on xsltv project.
   - [ ] UI tests (JEST)
   - [ ] Errors handling
 
+## Bugs
+
+- [ ] React
+  - [ ] timeline
+  - [ ] popper
+
+
 [live]: https://fazzani.github.io/xviewer/docs/
 [example_css]: https://codepen.io/blackstockc/pen/eJbbyb

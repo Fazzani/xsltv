@@ -13,6 +13,7 @@ import Settings from "./js/settings";
 import index_xsl from "./index.xsl";
 import { Loader, api_files_url, getParamsCurrentDate } from "./components/shared";
 import registerServiceWorker from "./registerServiceWorker";
+import Timeline from "./components/timeline"
 
 export class App extends Component {
   static propTypes = {};
@@ -181,8 +182,13 @@ export class App extends Component {
           <SettingsModal files={this.state.files} onViewXmltvUrl={this.onViewXmltvUrl} onAddXmltvUrl={this.onAddXmltvUrl} />
           <div className="container">
             <Header />
-            <div className="row">
-              {this.state.fragment ? <Xslt fragment={this.state.fragment} Init={this.state.initHandler} /> : null}
+            <div className="row" ref={c => this.xsltRef = c }>
+              {this.state.fragment ? (
+                <React.Fragment>
+                  <Xslt fragment={this.state.fragment} Init={this.state.initHandler} />
+                  <Timeline parent={ this.xsltRef } />
+                </React.Fragment>
+              ) : null}
               {this.state.loading ? <Loader displayText={this.state.loaderText} /> : null}
             </div>
           </div>
