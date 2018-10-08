@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel public/index.html --out-dir docs",
     "build": "parcel build public/index.html --out-dir docs --detailed-report --public-url ./",
-    "deploy": "npm run build && git add --all && git commit -m \"latest build\" && git push"
+    "deploy": "cross-env NODE_ENV=production npm run build && git add --all && git commit -m \"latest build\" && git push"
   },
   "repository": {
     "type": "git",
@@ -51,6 +51,7 @@
     "@babel/runtime": "^7.1.2",
     "@babel/runtime-corejs2": "^7.1.2",
     "babel-plugin-react-transform": "^3.0.0",
+    "cross-env": "^5.2.0",
     "parcel-bundler": "^1.10.2"
   }
 }
