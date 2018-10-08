@@ -200,10 +200,6 @@ if (process.env.NODE_ENV !== "production") {
   whyDidYouUpdate(React);
 }
 
-function createMarkup(html) {
-  return { __html: html };
-}
-
 export default class Xslt extends Component {
   popperTab = [];
 
@@ -241,7 +237,11 @@ export default class Xslt extends Component {
     });
   };
 
+  createMarkup = html => {
+    return { __html: html };
+  };
+
   render() {
-    return <div dangerouslySetInnerHTML={createMarkup(this.props.fragment)} onClick={this.props.onClick} />;
+    return <div dangerouslySetInnerHTML={this.createMarkup(this.props.fragment)} onClick={this.props.onClick} />;
   }
 }

@@ -58876,12 +58876,6 @@ if ("development" !== "production") {
   whyDidYouUpdate(_react.default);
 }
 
-function createMarkup(html) {
-  return {
-    __html: html
-  };
-}
-
 var Xslt =
 /*#__PURE__*/
 function (_Component2) {
@@ -58925,6 +58919,12 @@ function (_Component2) {
       });
     };
 
+    _this5.createMarkup = function (html) {
+      return {
+        __html: html
+      };
+    };
+
     return _this5;
   }
 
@@ -58942,7 +58942,7 @@ function (_Component2) {
     key: "render",
     value: function render() {
       return _react.default.createElement("div", {
-        dangerouslySetInnerHTML: createMarkup(this.props.fragment),
+        dangerouslySetInnerHTML: this.createMarkup(this.props.fragment),
         onClick: this.props.onClick
       });
     }
