@@ -11,6 +11,18 @@ Epg viewer for XMLTV format based on xsltv project.
 - [ ] Fix loader
 - [ ] Fix mobile version
 - [ ] Highlight movies and sports by filter (multiselect)
+- [ ] Integrate Typescript
+- [ ] React enhancement
+  - [ ] BIT for sharing component
+  - [ ] UI tests (JEST)
+  - [ ] Errors handling
+
+## Bugs
+
+- [ ] React
+  - [ ] timeline
+  - [ ] popper
+
 
 [live]: https://fazzani.github.io/xviewer/docs/
 [example_css]: https://codepen.io/blackstockc/pen/eJbbyb

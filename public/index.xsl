@@ -53,9 +53,9 @@
           <xsl:choose>
             <xsl:when test="(position() = 1)">
               <tr class="timebar">
-                <th class="topleftcorner">
-                  <xsl:attribute name="onclick">
-                    <xsl:value-of select="concat('Init','(',$DisplayLength,',',$PrevHour,',',$PrevDay,',',$PrevMonth,',',$PrevYear,')')" />
+                <th class="topleftcorner" id="topcorner">
+                  <xsl:attribute name="data-onclick">
+                    <xsl:value-of select="concat('Init','(',$DisplayLength,',',$PrevHour,',',$PrevDay,',',$PrevMonth,',',$PrevYear,',0)')" />
                   </xsl:attribute>
                   <i class="fa fa-chevron-circle-left" style="font-size:24px"></i>
                 </th>
@@ -70,8 +70,8 @@
                     <xsl:value-of select="$CurrentHour"/>
                   </xsl:with-param>
                 </xsl:call-template>
-                <th class="toprightcorner">
-                  <xsl:attribute name="onclick">
+                <th class="toprightcorner" id="topcorner">
+                  <xsl:attribute name="data-onclick">
                     <xsl:value-of select="concat('Init','(',$DisplayLength,',',$StopHour,',',$StopDay,',',$StopMonth,',',$StopYear,')')" />
                   </xsl:attribute>
                   <i class="fa fa-chevron-circle-right" style="font-size:24px"></i>

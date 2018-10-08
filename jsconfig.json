@@ -5,7 +5,7 @@
         ]
     },
     "compilerOptions": {
-        "target": "ES6"
+        "target": "es6"
     },
     "exclude": [
         "node_modules",
