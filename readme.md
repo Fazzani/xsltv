@@ -11,7 +11,7 @@ Epg viewer for XMLTV format based on xsltv project.
 - [ ] Fix loader
 - [ ] Fix mobile version
 - [ ] Highlight movies and sports by filter (multiselect)
-- [ ] Typescript installation
+- [ ] Integrate Typescript
 - [ ] React enhancement
   - [ ] BIT for sharing component
   - [ ] UI tests (JEST)

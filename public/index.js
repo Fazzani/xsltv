@@ -102,47 +102,50 @@ export class App extends Component {
     }
   }
 
-  Init(dl, ch, cd, cm, cy, offset) {
-    let $tvFrame = $("#tvframe");
+  Init = (dl, ch, cd, cm, cy, offset) => {
+    // let $tvFrame = $("#tvframe");
     this.setState({
       ...this.state,
       loading: true,
-      loaderText: "Init xsltv file"
+      loaderText: "Init xsltv file",
+      fragment: undefined
     });
 
     this.state.xsltvProcessor.initDate(ch, cd, cm, cy, offset);
     let fragment = this.state.xsltvProcessor.Init(this.state.xml, document);
+    var helperDiv = document.createElement("div");
+    helperDiv.appendChild(fragment);
 
-    let $far = $(fragment);
+    //  let $far = $(fragment);
     // let $vline = $('<div id="vline"><span class="vheader"></span></div>');
     // $far.append($vline);
-    $tvFrame.empty().append($far);
-    this.setState({ ...this.state, loading: false });
+    //    $tvFrame.empty().append($far);
+    this.setState({ ...this.state, fragment: helperDiv.innerHTML, loading: false, initHandler: this.Init });
 
-    var popperTab = [];
-    $('[data-toggle="tooltip"]').tooltip();
-    $('[data-toggle="popover"]')
-      .popover({
-        html: true
-      })
-      .on("shown.bs.popover", function(data) {
-        popperTab.push($(data.target));
-      });
+    // var popperTab = [];
+    // $('[data-toggle="tooltip"]').tooltip();
+    // $('[data-toggle="popover"]')
+    //   .popover({
+    //     html: true
+    //   })
+    //   .on("shown.bs.popover", function(data) {
+    //     popperTab.push($(data.target));
+    //   });
 
-    $(document).on("click touchend", function(e) {
-      var target = $(e.target);
-      popperTab.forEach(x => {
-        if (!target.is(x)) {
-          x.popover("hide");
-          popperTab = popperTab.slice(popperTab.indexOf(x), 1);
-        }
-      });
-    });
+    // $(document).on("click touchend", function(e) {
+    //   var target = $(e.target);
+    //   popperTab.forEach(x => {
+    //     if (!target.is(x)) {
+    //       x.popover("hide");
+    //       popperTab = popperTab.slice(popperTab.indexOf(x), 1);
+    //     }
+    //   });
+    // });
 
-    //InitTimeline($tvFrame, $vline, this.state.xsltvProcessor.AppSettings.DisplayLength);
+    // //InitTimeline($tvFrame, $vline, this.state.xsltvProcessor.AppSettings.DisplayLength);
 
-    $tvFrame.show();
-  }
+    // $tvFrame.show();
+  };
 
   onAddXmltvUrl = xmltv_file => {
     console.log(`onAddXmltvUrl ${xmltv_file}`);
@@ -179,7 +182,7 @@ export class App extends Component {
           <div className="container">
             <Header />
             <div className="row">
-              <div id="tvframe" />
+              {this.state.fragment ? <Xslt fragment={this.state.fragment} Init={this.state.initHandler} /> : null}
               {this.state.loading ? <Loader displayText={this.state.loaderText} /> : null}
             </div>
           </div>
@@ -201,4 +204,12 @@ if (module.hot) {
 if (process.env.NODE_ENV !== "production") {
   const { whyDidYouUpdate } = require("why-did-you-update");
   whyDidYouUpdate(React);
+}
+
+function createMarkup(html) {
+  return { __html: html };
+}
+
+function Xslt(props) {
+  return <div dangerouslySetInnerHTML={createMarkup(props.fragment)} {...props} />;
 }
