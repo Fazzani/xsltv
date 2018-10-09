@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 export default class Common {
 
     static parseQueryString = () => {
@@ -15,4 +13,16 @@ export default class Common {
         );
         return objURL;
     };
+}
+
+export class Constants {
+    static Events = {
+        SELECTED_XMLTV_CHANGED: 'SELECTED_XMLTV_CHANGED',
+        LOAD_XMLTV_URL: 'onViewXmltvUrl',
+        ADD_XMLTV_URL: 'onAddXmltvUrl'
+    }
+
+    static Urls = {
+        API_FILES: "https://api.myjson.com/bins/8tvgs"
+    }
 }

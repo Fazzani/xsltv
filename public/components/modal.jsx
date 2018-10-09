@@ -1,38 +1,88 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { Constants } from "../js/common";
+import $ from 'jquery';
 
 export class SettingsModal extends Component {
   static propTypes = {
     files: PropTypes.array.isRequired,
-    onViewXmltvUrl: PropTypes.func.isRequired,
-    onAddXmltvUrl: PropTypes.func.isRequired
+    callbackEvent: PropTypes.func
   };
   static defaultProps = {
     files: []
   };
+  constructor(props) {
+    super(props);
+    // create a ref to store the textInput DOM element
+    this.meRef = React.createRef();
+  }
+
+  componentDidUpdate() {
+    if (this.props.files.length > 0) {
+      this.selectedXmltvFile = this.props.files.filter(x => x.selected)[0];
+    }
+  }
 
   viewXmltvUrl = e => {
     e.preventDefault();
-    this.props.onViewXmltvUrl(this.createFileObject(this.refs.xmltv_url.value));
+    if (this.props.callbackEvent) {
+      this.props.callbackEvent({ type: Constants.Events.LOAD_XMLTV_URL, file:this.createFileObject(this.refs.xmltv_url.value) });
+      $(this.meRef.current).modal('hide');
+    }
   };
+
   addXmltvUrl = e => {
     e.preventDefault();
-    this.props.onAddXmltvUrl(this.createFileObject(this.refs.xmltv_url.value));
+    if (this.props.callbackEvent) {
+      this.props.callbackEvent({ type: Constants.Events.ADD_XMLTV_URL, file:this.createFileObject(this.refs.xmltv_url.value) });
+      $(this.meRef.current).modal('hide');
+    }
   };
 
   createFileObject = xmltv_file_url => {
     return { name: xmltv_file_url.split("/").pop(), url: xmltv_file_url };
   };
 
+  onXmltvSelectChange = e => {
+    e.preventDefault();
+    let file = this.props.files.find(x => x.url === e.target.value);
+    file.selected = true;
+    if (this.props.callbackEvent) {
+      this.props.callbackEvent({ type: Constants.Events.SELECTED_XMLTV_CHANGED, file });
+      $(this.meRef.current).modal('hide');
+    }
+  };
+
   render() {
+    const selectXmltv = this.selectedXmltvFile ? (
+      <form id="xmltv_source">
+        <div className="form-group">
+          <label htmlFor="xmlt_list" className="col-form-label">
+            Xmltv sources
+          </label>
+          <select className="form-control" id="xmlt_list" onChange={this.onXmltvSelectChange} value={this.selectedXmltvFile}>
+            {this.props.files.map((e, key) => {
+              return (
+                <option key={key} value={e.url}>
+                  {e.name}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+      </form>
+    ) : null;
+
     return (
       <div
         className="modal fade"
         id="settingsModal"
         tabIndex="-1"
         role="dialog"
+        ref={this.meRef}
         aria-labelledby="exampleModalLabel"
-        aria-hidden={this.props.open ? "false" : "true"}>
+        aria-hidden={this.props.open ? "false" : "true"}
+      >
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
@@ -51,7 +101,8 @@ export class SettingsModal extends Component {
                         data-toggle="collapse"
                         data-target="#collapseOne"
                         aria-expanded="true"
-                        aria-controls="collapseOne">
+                        aria-controls="collapseOne"
+                      >
                         Sources
                       </button>
                     </h5>
@@ -59,22 +110,7 @@ export class SettingsModal extends Component {
 
                   <div id="collapseOne" className="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                     <div className="card-body">
-                      <form id="xmltv_source">
-                        <div className="form-group">
-                          <label htmlFor="xmlt_list" className="col-form-label">
-                            Xmltv sources
-                          </label>
-                          <select className="form-control" id="xmlt_list">
-                            {this.props.files.map((e, key) => {
-                              return (
-                                <option key={key} value={e.url}>
-                                  {e.name}
-                                </option>
-                              );
-                            })}
-                          </select>
-                        </div>
-                      </form>
+                      {selectXmltv}
                       <div className="input-group mb-3">
                         <form className="form-inline" ref="xmltv_file_form">
                           <div className="form-group">
@@ -98,7 +134,8 @@ export class SettingsModal extends Component {
                                 className="btn btn-outline-info btn-sm dropdown-toggle"
                                 data-toggle="dropdown"
                                 aria-haspopup="true"
-                                aria-expanded="false">
+                                aria-expanded="false"
+                              >
                                 Dropdown
                               </button>
                               <div className="dropdown-menu" aria-labelledby="btnGroupDrop1">
@@ -124,7 +161,8 @@ export class SettingsModal extends Component {
                         data-toggle="collapse"
                         data-target="#collapseTwo"
                         aria-expanded="false"
-                        aria-controls="collapseTwo">
+                        aria-controls="collapseTwo"
+                      >
                         Settings
                       </button>
                     </h5>

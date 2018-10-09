@@ -41616,7 +41616,47 @@ if ("development" !== 'production') {
   // http://fb.me/prop-types-in-prod
   module.exports = require('./factoryWithThrowingShims')();
 }
-},{"./factoryWithTypeCheckers":"../node_modules/prop-types/factoryWithTypeCheckers.js"}],"components/modal.jsx":[function(require,module,exports) {
+},{"./factoryWithTypeCheckers":"../node_modules/prop-types/factoryWithTypeCheckers.js"}],"js/common.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Constants = exports.default = void 0;
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Common = function Common() {
+  (0, _classCallCheck2.default)(this, Common);
+};
+
+exports.default = Common;
+
+Common.parseQueryString = function () {
+  var str = window.location.search;
+  var objURL = {};
+  str.replace(new RegExp("([^?=&]+)(=([^&]*))?", "g"), function ($0, $1, $2, $3) {
+    objURL[$1] = $3;
+  });
+  return objURL;
+};
+
+var Constants = function Constants() {
+  (0, _classCallCheck2.default)(this, Constants);
+};
+
+exports.Constants = Constants;
+Constants.Events = {
+  SELECTED_XMLTV_CHANGED: 'SELECTED_XMLTV_CHANGED',
+  LOAD_XMLTV_URL: 'onViewXmltvUrl',
+  ADD_XMLTV_URL: 'onAddXmltvUrl'
+};
+Constants.Urls = {
+  API_FILES: "https://api.myjson.com/bins/8tvgs"
+};
+},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js"}],"components/modal.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -41630,13 +41670,17 @@ var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpe
 
 var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
 
-var _getPrototypeOf3 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
 
 var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
 
 var _react = _interopRequireWildcard(require("react"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _common = require("../js/common");
+
+var _jquery = _interopRequireDefault(require("jquery"));
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
@@ -41647,29 +41691,36 @@ var SettingsModal =
 function (_Component) {
   (0, _inherits2.default)(SettingsModal, _Component);
 
-  function SettingsModal() {
-    var _getPrototypeOf2;
-
+  function SettingsModal(props) {
     var _this;
 
     (0, _classCallCheck2.default)(this, SettingsModal);
-
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    _this = (0, _possibleConstructorReturn2.default)(this, (_getPrototypeOf2 = (0, _getPrototypeOf3.default)(SettingsModal)).call.apply(_getPrototypeOf2, [this].concat(args)));
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(SettingsModal).call(this, props)); // create a ref to store the textInput DOM element
 
     _this.viewXmltvUrl = function (e) {
       e.preventDefault();
 
-      _this.props.onViewXmltvUrl(_this.createFileObject(_this.refs.xmltv_url.value));
+      if (_this.props.callbackEvent) {
+        _this.props.callbackEvent({
+          type: _common.Constants.Events.LOAD_XMLTV_URL,
+          file: _this.createFileObject(_this.refs.xmltv_url.value)
+        });
+
+        (0, _jquery.default)(_this.meRef.current).modal('hide');
+      }
     };
 
     _this.addXmltvUrl = function (e) {
       e.preventDefault();
 
-      _this.props.onAddXmltvUrl(_this.createFileObject(_this.refs.xmltv_url.value));
+      if (_this.props.callbackEvent) {
+        _this.props.callbackEvent({
+          type: _common.Constants.Events.ADD_XMLTV_URL,
+          file: _this.createFileObject(_this.refs.xmltv_url.value)
+        });
+
+        (0, _jquery.default)(_this.meRef.current).modal('hide');
+      }
     };
 
     _this.createFileObject = function (xmltv_file_url) {
@@ -41679,17 +41730,65 @@ function (_Component) {
       };
     };
 
+    _this.onXmltvSelectChange = function (e) {
+      e.preventDefault();
+
+      var file = _this.props.files.find(function (x) {
+        return x.url === e.target.value;
+      });
+
+      file.selected = true;
+
+      if (_this.props.callbackEvent) {
+        _this.props.callbackEvent({
+          type: _common.Constants.Events.SELECTED_XMLTV_CHANGED,
+          file: file
+        });
+
+        (0, _jquery.default)(_this.meRef.current).modal('hide');
+      }
+    };
+
+    _this.meRef = _react.default.createRef();
     return _this;
   }
 
   (0, _createClass2.default)(SettingsModal, [{
+    key: "componentDidUpdate",
+    value: function componentDidUpdate() {
+      if (this.props.files.length > 0) {
+        this.selectedXmltvFile = this.props.files.filter(function (x) {
+          return x.selected;
+        })[0];
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
+      var selectXmltv = this.selectedXmltvFile ? _react.default.createElement("form", {
+        id: "xmltv_source"
+      }, _react.default.createElement("div", {
+        className: "form-group"
+      }, _react.default.createElement("label", {
+        htmlFor: "xmlt_list",
+        className: "col-form-label"
+      }, "Xmltv sources"), _react.default.createElement("select", {
+        className: "form-control",
+        id: "xmlt_list",
+        onChange: this.onXmltvSelectChange,
+        value: this.selectedXmltvFile
+      }, this.props.files.map(function (e, key) {
+        return _react.default.createElement("option", {
+          key: key,
+          value: e.url
+        }, e.name);
+      })))) : null;
       return _react.default.createElement("div", {
         className: "modal fade",
         id: "settingsModal",
         tabIndex: "-1",
         role: "dialog",
+        ref: this.meRef,
         "aria-labelledby": "exampleModalLabel",
         "aria-hidden": this.props.open ? "false" : "true"
       }, _react.default.createElement("div", {
@@ -41732,22 +41831,7 @@ function (_Component) {
         "data-parent": "#accordion"
       }, _react.default.createElement("div", {
         className: "card-body"
-      }, _react.default.createElement("form", {
-        id: "xmltv_source"
-      }, _react.default.createElement("div", {
-        className: "form-group"
-      }, _react.default.createElement("label", {
-        htmlFor: "xmlt_list",
-        className: "col-form-label"
-      }, "Xmltv sources"), _react.default.createElement("select", {
-        className: "form-control",
-        id: "xmlt_list"
-      }, this.props.files.map(function (e, key) {
-        return _react.default.createElement("option", {
-          key: key,
-          value: e.url
-        }, e.name);
-      })))), _react.default.createElement("div", {
+      }, selectXmltv, _react.default.createElement("div", {
         className: "input-group mb-3"
       }, _react.default.createElement("form", {
         className: "form-inline",
@@ -41822,15 +41906,14 @@ function (_Component) {
 exports.SettingsModal = SettingsModal;
 SettingsModal.propTypes = {
   files: _propTypes.default.array.isRequired,
-  onViewXmltvUrl: _propTypes.default.func.isRequired,
-  onAddXmltvUrl: _propTypes.default.func.isRequired
+  callbackEvent: _propTypes.default.func
 };
 SettingsModal.defaultProps = {
   files: []
 };
 var _default = SettingsModal;
 exports.default = _default;
-},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js"}],"../node_modules/moment/moment.js":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","../js/common":"js/common.js","jquery":"../node_modules/jquery/dist/jquery.js"}],"../node_modules/moment/moment.js":[function(require,module,exports) {
 var define;
 var global = arguments[3];
 //! moment.js
@@ -46600,34 +46683,13 @@ module.exports = "/public.785ca178.xsl";
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getParamsCurrentDate = exports.Loader = exports.api_files_url = void 0;
+exports.getParamsCurrentDate = void 0;
 
-var _react = _interopRequireDefault(require("react"));
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var api_files_url = "https://api.myjson.com/bins/8tvgs";
-exports.api_files_url = api_files_url;
-
-var Loader = function Loader(_ref) {
-  var displayText = _ref.displayText;
-  return _react.default.createElement("div", {
-    id: "loading"
-  }, displayText);
-};
-
-exports.Loader = Loader;
-Loader.propTypes = {
-  displayText: _propTypes.default.string
-};
 /**
  * Datetime to xsltv format
- * @param {current date time} currenttime 
- * @param {DÃ©calage horaire} offsetminutes 
+ * @param {current date time} currenttime
+ * @param {DÃ©calage horaire} offsetminutes
  */
-
 var getParamsCurrentDate = function getParamsCurrentDate() {
   var currenttime = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Date();
   var offsetminutes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 60;
@@ -46637,7 +46699,7 @@ var getParamsCurrentDate = function getParamsCurrentDate() {
 };
 
 exports.getParamsCurrentDate = getParamsCurrentDate;
-},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js"}],"registerServiceWorker.js":[function(require,module,exports) {
+},{}],"registerServiceWorker.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -46960,8 +47022,7 @@ function (_Component) {
       var leftchannel = (0, _jquery.default)(this.props.parentNode).find(".leftchannel:first");
       var paddingLeft = (leftchannel ? leftchannel.width() : 0) / this.props.parentNode.clientWidth * 100;
       this.interval = setInterval(function () {
-        var marginLeft = _this2.percentElapsedTimeNowByDay(_this2.props.startDate, _this2.props.hours) + paddingLeft + "%";
-        console.log("MarginLeft => ", marginLeft);
+        var marginLeft = _this2.percentElapsedTimeNowByDay(_this2.props.startDate, _this2.props.hours) + paddingLeft + "%"; //console.log("MarginLeft => ", marginLeft);
 
         _this2.setState({
           style: {
@@ -47110,7 +47171,76 @@ function (_Component) {
 }(_react.Component);
 
 exports.default = Xslt;
-},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","jquery":"../node_modules/jquery/dist/jquery.js"}],"../node_modules/lodash.isequal/index.js":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","jquery":"../node_modules/jquery/dist/jquery.js"}],"styles/loader.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/loader.jsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+require("../styles/loader.css");
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Loader =
+/*#__PURE__*/
+function (_Component) {
+  (0, _inherits2.default)(Loader, _Component);
+
+  function Loader() {
+    (0, _classCallCheck2.default)(this, Loader);
+    return (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Loader).apply(this, arguments));
+  }
+
+  (0, _createClass2.default)(Loader, [{
+    key: "render",
+    value: function render() {
+      return _react.default.createElement("div", {
+        className: "overlay"
+      }, _react.default.createElement("div", {
+        className: "loading"
+      }, _react.default.createElement("div", {
+        className: "spinner-wrapper"
+      }, _react.default.createElement("span", {
+        className: "spinner-text"
+      }, this.props.displayText), _react.default.createElement("span", {
+        className: "spinner"
+      }))));
+    }
+  }]);
+  return Loader;
+}(_react.Component);
+
+exports.default = Loader;
+Loader.propTypes = {
+  displayText: _propTypes.default.string
+};
+Loader.defaultProps = {
+  displayText: "loading..."
+};
+},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","../styles/loader.css":"styles/loader.css"}],"../node_modules/lodash.isequal/index.js":[function(require,module,exports) {
 var global = arguments[3];
 
 /**
@@ -58830,6 +58960,10 @@ var _timeline = _interopRequireDefault(require("./components/timeline"));
 
 var _xslt = _interopRequireDefault(require("./components/xslt"));
 
+var _common = require("./js/common");
+
+var _loader = _interopRequireDefault(require("./components/loader"));
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -58846,7 +58980,7 @@ function (_Component) {
     _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(App).call(this));
 
     _this.fetchFiles = function () {
-      fetch(_shared.api_files_url).then(function (res) {
+      fetch(_common.Constants.Urls.API_FILES).then(function (res) {
         return res.json();
       }).then(function (res) {
         if (res && res.files.length > 0) {
@@ -58854,9 +58988,9 @@ function (_Component) {
             files: res.files
           });
 
-          if (_this.state.files.length > 0) {
-            _this.loadXSL(_this.state.files[0]);
-          }
+          _this.state.files[0].selected = true;
+
+          _this.loadXSL(_this.state.files[0]);
         }
       }).catch(function (e) {
         return console.error(e);
@@ -58893,32 +59027,41 @@ function (_Component) {
       });
     };
 
-    _this.onAddXmltvUrl = function (xmltv_file) {
-      console.log("onAddXmltvUrl ".concat(xmltv_file));
-
-      _this.setState({
-        files: [xmltv_file].concat((0, _toConsumableArray2.default)(_this.state.files))
-      });
-    };
-
-    _this.onViewXmltvUrl = function (xmltv_file) {
-      console.log("onViewXmltvUrl ".concat(xmltv_file));
-
-      _this.setState({
-        openSettingsModal: false
-      });
-
-      _this.toggleSettingsModal();
-
-      _this.loadXML(xmltv_file);
-    };
-
     _this.onSettingsModalClick = function (e) {
       _this.setState({
         openSettingsModal: !_this.state.openSettingsModal
       });
 
       _this.toggleSettingsModal();
+    };
+
+    _this.onSettingsModalCallback = function (e) {
+      switch (e.type) {
+        case _common.Constants.Events.SELECTED_XMLTV_CHANGED:
+          _this.loadXML(e.file);
+
+          break;
+
+        case _common.Constants.Events.LOAD_XMLTV_URL:
+          _this.loadXML(e.file);
+
+          break;
+
+        case _common.Constants.Events.ADD_XMLTV_URL:
+          e.file.selected = true;
+
+          _this.state.files.forEach(function (element) {
+            element.selected = false;
+          });
+
+          _this.setState({
+            files: [e.file].concat((0, _toConsumableArray2.default)(_this.state.files))
+          });
+
+          _this.loadXML(e.file);
+
+          break;
+      }
     };
 
     _this.toggleSettingsModal = function () {
@@ -58975,8 +59118,9 @@ function (_Component) {
 
       if (xmlfileneeded) {
         this.setState({
+          fragment: undefined,
           loading: true,
-          loaderText: xmlfileneeded.name
+          loaderText: "Loading ".concat(xmlfileneeded.name, "...")
         });
 
         if (window.XMLHttpRequest && window.XSLTProcessor) {
@@ -59017,8 +59161,7 @@ function (_Component) {
         handleToggleModalClick: this.onSettingsModalClick
       }), _react.default.createElement(_modal.default, {
         files: this.state.files,
-        onViewXmltvUrl: this.onViewXmltvUrl,
-        onAddXmltvUrl: this.onAddXmltvUrl
+        callbackEvent: this.onSettingsModalCallback
       }), _react.default.createElement("div", {
         className: "container"
       }, _react.default.createElement(_header.default, null), _react.default.createElement("div", {
@@ -59034,7 +59177,7 @@ function (_Component) {
         startDate: this.state.xsltvProcessor.startDate,
         hours: this.state.xsltvProcessor.AppSettings.DisplayLength,
         leftchannelWidth: 150
-      })) : null, this.state.loading ? _react.default.createElement(_shared.Loader, {
+      })) : null, this.state.loading ? _react.default.createElement(_loader.default, {
         displayText: this.state.loaderText
       }) : null)), _react.default.createElement(_snackbar.default, null)));
     }
@@ -59057,7 +59200,7 @@ if ("development" !== "production") {
 
   whyDidYouUpdate(_react.default);
 }
-},{"@babel/runtime-corejs2/helpers/toConsumableArray":"../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","jquery":"../node_modules/jquery/dist/jquery.js","./lang/english":"lang/english.js","./js/xsltvProcessor":"js/xsltvProcessor.js","./components/modal":"components/modal.jsx","./components/NavBottom":"components/NavBottom.jsx","./components/sideMenu":"components/sideMenu.jsx","./components/snackbar":"components/snackbar.jsx","./components/header":"components/header.jsx","./js/settings":"js/settings.js","./index.xsl":"index.xsl","./components/shared":"components/shared.jsx","./registerServiceWorker":"registerServiceWorker.js","./components/timeline":"components/timeline.jsx","./components/xslt":"components/xslt.jsx","why-did-you-update":"../node_modules/why-did-you-update/lib/index.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/helpers/toConsumableArray":"../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","jquery":"../node_modules/jquery/dist/jquery.js","./lang/english":"lang/english.js","./js/xsltvProcessor":"js/xsltvProcessor.js","./components/modal":"components/modal.jsx","./components/NavBottom":"components/NavBottom.jsx","./components/sideMenu":"components/sideMenu.jsx","./components/snackbar":"components/snackbar.jsx","./components/header":"components/header.jsx","./js/settings":"js/settings.js","./index.xsl":"index.xsl","./components/shared":"components/shared.jsx","./registerServiceWorker":"registerServiceWorker.js","./components/timeline":"components/timeline.jsx","./components/xslt":"components/xslt.jsx","./js/common":"js/common.js","./components/loader":"components/loader.jsx","why-did-you-update":"../node_modules/why-did-you-update/lib/index.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -59084,7 +59227,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53062" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51284" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

@@ -31,7 +31,7 @@ export default class Timeline extends Component {
     let paddingLeft = ((leftchannel ? leftchannel.width() : 0) / this.props.parentNode.clientWidth) * 100;
     this.interval = setInterval(() => {
       let marginLeft = this.percentElapsedTimeNowByDay(this.props.startDate, this.props.hours) + paddingLeft + "%";
-      console.log("MarginLeft => ", marginLeft);
+      //console.log("MarginLeft => ", marginLeft);
       this.setState({
         style: { marginLeft: marginLeft }
       });

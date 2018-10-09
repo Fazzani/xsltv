@@ -65,10 +65,10 @@ body {
     position: relative;
 }
 
-
 .xstl-container{
     position: relative;
 }
+
 #listings {
 
     table-layout: fixed;
@@ -93,7 +93,6 @@ div.internal {
     height: 100%;
 }
 
-
 i.extendleft {
     margin: 0px;
     padding: 3px;
@@ -113,7 +112,6 @@ i.extendright {
     white-space: normal;
     font-size: small;
 }
-
 
 div.program {
     text-align: left;
@@ -180,7 +178,6 @@ th {
     font-size: 10pt;
     overflow: hidden;
 }
-
 
 th.channel {
     text-align: center;
@@ -341,24 +338,6 @@ td[class*='cup'].Longshow {
     right: 9px; */
     letter-spacing: 0.05em;
     font-size: 12px;
-}
-
-/********************************************  Loading ************************************************/
-
-#loading {
-    position: absolute;
-    top: 50%;
-    left: 30%;
-    border: 1px solid #000000;
-    font-family: arial, sans-serif;
-    font-size: 10pt;
-    font-weight: bold;
-    color: white;
-    background-color: #033647;
-    text-align: center;
-    padding: 10px;
-    width: 50%;
-    z-index: 10;
 }
 
 /****** Popper js ********/

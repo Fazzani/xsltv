@@ -11,10 +11,12 @@ import SnackBar from "./components/snackbar";
 import Header from "./components/header";
 import Settings from "./js/settings";
 import index_xsl from "./index.xsl";
-import { Loader, api_files_url, getParamsCurrentDate } from "./components/shared";
+import { getParamsCurrentDate } from "./components/shared";
 import registerServiceWorker from "./registerServiceWorker";
 import Timeline from "./components/timeline";
 import Xslt from "./components/xslt";
+import { Constants } from "./js/common";
+import Loader from "./components/loader";
 
 export class App extends Component {
   static propTypes = {};
@@ -35,16 +37,15 @@ export class App extends Component {
   }
 
   fetchFiles = () => {
-    fetch(api_files_url)
+    fetch(Constants.Urls.API_FILES)
       .then(res => res.json())
       .then(res => {
         if (res && res.files.length > 0) {
           this.setState({
             files: res.files
           });
-          if (this.state.files.length > 0) {
-            this.loadXSL(this.state.files[0]);
-          }
+          this.state.files[0].selected = true;
+          this.loadXSL(this.state.files[0]);
         }
       })
       .catch(e => console.error(e));
@@ -74,7 +75,7 @@ export class App extends Component {
 
   loadXML(xmlfileneeded) {
     if (xmlfileneeded) {
-      this.setState({ loading: true, loaderText: xmlfileneeded.name });
+      this.setState({ fragment: undefined, loading: true, loaderText: `Loading ${xmlfileneeded.name}...` });
       if (window.XMLHttpRequest && window.XSLTProcessor) {
         fetch(xmlfileneeded.url, {
           method: "GET"
@@ -123,23 +124,30 @@ export class App extends Component {
     this.setState({ fragment: helperDiv.innerHTML, loading: false });
   };
 
-  onAddXmltvUrl = xmltv_file => {
-    console.log(`onAddXmltvUrl ${xmltv_file}`);
-    this.setState({
-      files: [xmltv_file, ...this.state.files]
-    });
-  };
-
-  onViewXmltvUrl = xmltv_file => {
-    console.log(`onViewXmltvUrl ${xmltv_file}`);
-    this.setState({ openSettingsModal: false });
-    this.toggleSettingsModal();
-    this.loadXML(xmltv_file);
-  };
-
   onSettingsModalClick = e => {
     this.setState({ openSettingsModal: !this.state.openSettingsModal });
     this.toggleSettingsModal();
+  };
+
+  onSettingsModalCallback = e => {
+    switch (e.type) {
+      case Constants.Events.SELECTED_XMLTV_CHANGED:
+        this.loadXML(e.file);
+        break;
+      case Constants.Events.LOAD_XMLTV_URL:
+        this.loadXML(e.file);
+        break;
+      case Constants.Events.ADD_XMLTV_URL:
+        e.file.selected = true;
+        this.state.files.forEach(element => {
+          element.selected = false;
+        });
+        this.setState({
+          files: [e.file, ...this.state.files]
+        });
+        this.loadXML(e.file);
+        break;
+    }
   };
 
   toggleSettingsModal = () => {
@@ -153,14 +161,19 @@ export class App extends Component {
         <NavBottom />
         <section className="row-section">
           <SideMenu handleToggleModalClick={this.onSettingsModalClick} />
-          <SettingsModal files={this.state.files} onViewXmltvUrl={this.onViewXmltvUrl} onAddXmltvUrl={this.onAddXmltvUrl} />
+          <SettingsModal files={this.state.files} callbackEvent={this.onSettingsModalCallback} />
           <div className="container">
             <Header />
             <div className="row xstl-container" ref={c => (this.xsltRef = c)}>
               {this.state.fragment ? (
                 <React.Fragment>
                   <Xslt fragment={this.state.fragment} onClick={this.onXsltClick} />
-                  <Timeline parentNode={this.xsltRef} startDate={this.state.xsltvProcessor.startDate} hours={this.state.xsltvProcessor.AppSettings.DisplayLength} leftchannelWidth={150} />
+                  <Timeline
+                    parentNode={this.xsltRef}
+                    startDate={this.state.xsltvProcessor.startDate}
+                    hours={this.state.xsltvProcessor.AppSettings.DisplayLength}
+                    leftchannelWidth={150}
+                  />
                 </React.Fragment>
               ) : null}
               {this.state.loading ? <Loader displayText={this.state.loaderText} /> : null}
