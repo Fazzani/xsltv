@@ -8,11 +8,13 @@ export default class Timeline extends Component {
   static propTypes = {
     startDate: PropTypes.instanceOf(Date).isRequired,
     hours: PropTypes.number.isRequired,
-    parent: PropTypes.node.isRequired
+    parentNode: PropTypes.any.isRequired,
+    timeout: PropTypes.number
   };
   static defaultProps = {
     hours: 4,
-    startDate: new Date()
+    startDate: new Date(),
+    timeout: 1000
   };
 
   constructor(props) {
@@ -24,16 +26,16 @@ export default class Timeline extends Component {
   }
 
   componentDidMount() {
-    //if (this.props.parent != undefined) console.log(`parent.clientWidth: ${this.props.parent.clientWidth}`);
-    let leftchannel = $(this.props.parent).find(".leftchannel:first");
-    let paddingLeft = ((leftchannel ? leftchannel.width() : 0) / this.props.parent.clientWidth) * 100;
+    //if (this.props.parentNode != undefined) console.log(`parentNode.clientWidth: ${this.props.parentNode.clientWidth}`);
+    let leftchannel = $(this.props.parentNode).find(".leftchannel:first");
+    let paddingLeft = ((leftchannel ? leftchannel.width() : 0) / this.props.parentNode.clientWidth) * 100;
     this.interval = setInterval(() => {
       let marginLeft = this.percentElapsedTimeNowByDay(this.props.startDate, this.props.hours) + paddingLeft + "%";
       console.log("MarginLeft => ", marginLeft);
       this.setState({
         style: { marginLeft: marginLeft }
       });
-    }, 1000);
+    }, this.props.timeout);
   }
 
   componentWillUnmount() {

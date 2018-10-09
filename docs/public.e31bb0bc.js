@@ -46956,9 +46956,9 @@ function (_Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      //if (this.props.parent != undefined) console.log(`parent.clientWidth: ${this.props.parent.clientWidth}`);
-      var leftchannel = (0, _jquery.default)(this.props.parent).find(".leftchannel:first");
-      var paddingLeft = (leftchannel ? leftchannel.width() : 0) / this.props.parent.clientWidth * 100;
+      //if (this.props.parentNode != undefined) console.log(`parentNode.clientWidth: ${this.props.parentNode.clientWidth}`);
+      var leftchannel = (0, _jquery.default)(this.props.parentNode).find(".leftchannel:first");
+      var paddingLeft = (leftchannel ? leftchannel.width() : 0) / this.props.parentNode.clientWidth * 100;
       this.interval = setInterval(function () {
         var marginLeft = _this2.percentElapsedTimeNowByDay(_this2.props.startDate, _this2.props.hours) + paddingLeft + "%";
         console.log("MarginLeft => ", marginLeft);
@@ -46968,7 +46968,7 @@ function (_Component) {
             marginLeft: marginLeft
           }
         });
-      }, 1000);
+      }, this.props.timeout);
     }
   }, {
     key: "componentWillUnmount",
@@ -46993,11 +46993,13 @@ exports.default = Timeline;
 Timeline.propTypes = {
   startDate: _propTypes.default.instanceOf(Date).isRequired,
   hours: _propTypes.default.number.isRequired,
-  parent: _propTypes.default.node.isRequired
+  parentNode: _propTypes.default.any.isRequired,
+  timeout: _propTypes.default.number
 };
 Timeline.defaultProps = {
   hours: 4,
-  startDate: new Date()
+  startDate: new Date(),
+  timeout: 1000
 };
 },{"@babel/runtime-corejs2/core-js/parse-int":"../node_modules/@babel/runtime-corejs2/core-js/parse-int.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","moment":"../node_modules/moment/moment.js","../styles/timeline.css":"styles/timeline.css","jquery":"../node_modules/jquery/dist/jquery.js"}],"components/xslt.jsx":[function(require,module,exports) {
 "use strict";
@@ -59028,7 +59030,7 @@ function (_Component) {
         fragment: this.state.fragment,
         onClick: this.onXsltClick
       }), _react.default.createElement(_timeline.default, {
-        parent: this.xsltRef,
+        parentNode: this.xsltRef,
         startDate: this.state.xsltvProcessor.startDate,
         hours: this.state.xsltvProcessor.AppSettings.DisplayLength,
         leftchannelWidth: 150
@@ -59082,7 +59084,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50714" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53062" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

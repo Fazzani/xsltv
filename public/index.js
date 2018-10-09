@@ -160,7 +160,7 @@ export class App extends Component {
               {this.state.fragment ? (
                 <React.Fragment>
                   <Xslt fragment={this.state.fragment} onClick={this.onXsltClick} />
-                  <Timeline parent={this.xsltRef} startDate={this.state.xsltvProcessor.startDate} hours={this.state.xsltvProcessor.AppSettings.DisplayLength} leftchannelWidth={150} />
+                  <Timeline parentNode={this.xsltRef} startDate={this.state.xsltvProcessor.startDate} hours={this.state.xsltvProcessor.AppSettings.DisplayLength} leftchannelWidth={150} />
                 </React.Fragment>
               ) : null}
               {this.state.loading ? <Loader displayText={this.state.loaderText} /> : null}
