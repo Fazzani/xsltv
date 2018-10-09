@@ -1,15 +1,18 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
+import "../styles/timeline.css";
+import $ from "jquery";
 
 export default class Timeline extends Component {
   static propTypes = {
-    // startTimeMoment:PropTypes.string.isRequired,
-    // hours:PropTypes.number.isRequired,
-    // leftchannelWidth:PropTypes.number.isRequired
+    startDate: PropTypes.instanceOf(Date).isRequired,
+    hours: PropTypes.number.isRequired,
+    parent: PropTypes.node.isRequired
   };
   static defaultProps = {
-    hours: 4
+    hours: 4,
+    startDate: new Date()
   };
 
   constructor(props) {
@@ -21,18 +24,14 @@ export default class Timeline extends Component {
   }
 
   componentDidMount() {
-    if (this.props.parent != undefined) console.log(`parent.clientWidth: ${this.props.parent.clientWidth}`);
-    //   let startTimeInit = $tvFrame.find('th.time[onclick^=Init]').attr('onclick');
-    //   let startTime = (startTimeInit.split('Init(')[1].split(')')[0]).split(',');
-    //   let startTimeMoment = `${startTime[2]}-${startTime[3]}-${startTime[4]} ${startTime[1]}:00:00`;
-    let paddingLeft = undefined;
-
+    //if (this.props.parent != undefined) console.log(`parent.clientWidth: ${this.props.parent.clientWidth}`);
+    let leftchannel = $(this.props.parent).find(".leftchannel:first");
+    let paddingLeft = ((leftchannel ? leftchannel.width() : 0) / this.props.parent.clientWidth) * 100;
     this.interval = setInterval(() => {
-      if (undefined == paddingLeft) {
-        paddingLeft = (this.props.leftchannelWidth / this.props.parent.clientWidth) * 100;
-      }
+      let marginLeft = this.percentElapsedTimeNowByDay(this.props.startDate, this.props.hours) + paddingLeft + "%";
+      console.log("MarginLeft => ", marginLeft);
       this.setState({
-        style: { marginLeft: this.percentElapsedTimeNowByDay(this.props.startTimeMoment, this.props.hours) + paddingLeft + "%" }
+        style: { marginLeft: marginLeft }
       });
     }, 1000);
   }
@@ -51,7 +50,7 @@ export default class Timeline extends Component {
 
   render() {
     return (
-      <div style={this.state.style}>
+      <div className="vline" style={this.state.style}>
         <span className="vheader" />
       </div>
     );

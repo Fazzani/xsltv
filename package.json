@@ -2,6 +2,7 @@
   "name": "xsltv",
   "version": "1.0.0",
   "description": "EPG viewer for xmltv files",
+  "private": true,
   "main": "docs/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

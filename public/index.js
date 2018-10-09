@@ -14,7 +14,7 @@ import index_xsl from "./index.xsl";
 import { Loader, api_files_url, getParamsCurrentDate } from "./components/shared";
 import registerServiceWorker from "./registerServiceWorker";
 import Timeline from "./components/timeline";
-import Xslt from './components/xslt';
+import Xslt from "./components/xslt";
 
 export class App extends Component {
   static propTypes = {};
@@ -74,7 +74,7 @@ export class App extends Component {
 
   loadXML(xmlfileneeded) {
     if (xmlfileneeded) {
-      this.setState({  loading: true, loaderText: xmlfileneeded.name });
+      this.setState({ loading: true, loaderText: xmlfileneeded.name });
       if (window.XMLHttpRequest && window.XSLTProcessor) {
         fetch(xmlfileneeded.url, {
           method: "GET"
@@ -82,7 +82,7 @@ export class App extends Component {
           .then(response => response.text())
           .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
           .then(x => {
-            this.setState({  xml: x, loading: true, loaderText: "Preparing grid..." });
+            this.setState({ xml: x, loading: true, loaderText: "Preparing grid..." });
             this.Init(this.state.xsltvProcessor.AppSettings.DisplayLength, ...getParamsCurrentDate());
           })
           .catch(error => {
@@ -120,7 +120,7 @@ export class App extends Component {
     var helperDiv = document.createElement("div");
     helperDiv.appendChild(fragment);
 
-    this.setState({  fragment: helperDiv.innerHTML, loading: false });
+    this.setState({ fragment: helperDiv.innerHTML, loading: false });
   };
 
   onAddXmltvUrl = xmltv_file => {
@@ -132,13 +132,13 @@ export class App extends Component {
 
   onViewXmltvUrl = xmltv_file => {
     console.log(`onViewXmltvUrl ${xmltv_file}`);
-    this.setState({  openSettingsModal: false });
+    this.setState({ openSettingsModal: false });
     this.toggleSettingsModal();
     this.loadXML(xmltv_file);
   };
 
   onSettingsModalClick = e => {
-    this.setState({ openSettingsModal: !this.state.openSettingsModal, ...this.state });
+    this.setState({ openSettingsModal: !this.state.openSettingsModal });
     this.toggleSettingsModal();
   };
 
@@ -156,11 +156,11 @@ export class App extends Component {
           <SettingsModal files={this.state.files} onViewXmltvUrl={this.onViewXmltvUrl} onAddXmltvUrl={this.onAddXmltvUrl} />
           <div className="container">
             <Header />
-            <div className="row" ref={c => (this.xsltRef = c)}>
+            <div className="row xstl-container" ref={c => (this.xsltRef = c)}>
               {this.state.fragment ? (
                 <React.Fragment>
                   <Xslt fragment={this.state.fragment} onClick={this.onXsltClick} />
-                  <Timeline parent={this.xsltRef} />
+                  <Timeline parent={this.xsltRef} startDate={this.state.xsltvProcessor.startDate} hours={this.state.xsltvProcessor.AppSettings.DisplayLength} leftchannelWidth={150} />
                 </React.Fragment>
               ) : null}
               {this.state.loading ? <Loader displayText={this.state.loaderText} /> : null}
