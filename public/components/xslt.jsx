@@ -39,14 +39,17 @@ export default class Xslt extends Component {
       })
 
     $(document).on('click touchend', (e) => {
-      e.preventdefault()
+      e.preventDefault()
       let target = $(e.target)
-      this.poppertab.foreach((x) => {
+      for (const popper of this.poppertab) {
         if (!target.is(x)) {
-          x.popover('hide')
-          this.poppertab = this.poppertab.slice(this.poppertab.indexof(x), 1)
+          popper.popover('hide')
+          this.poppertab = this.poppertab.slice(
+            this.poppertab.indexof(popper),
+            1
+          )
         }
-      })
+      }
     })
   }
 
