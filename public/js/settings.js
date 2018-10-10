@@ -1,29 +1,36 @@
 export default class Settings {
-    constructor(DisplayLength = 4, FixGaps = 1, OnClick = 'POPER', HighlightClickable = 1, HighlightMovies = 1, HighlightNew = 1) {
-        this.DisplayLength = DisplayLength;
-        this.FixGaps = FixGaps;
-        this.OnClick = OnClick; //POPER, URL, IMDB
-        this.HighlightClickable = HighlightClickable;
-        this.HighlightMovies = HighlightMovies;
-        this.HighlightNew = HighlightNew;
+  constructor(
+    DisplayLength = 4,
+    FixGaps = 1,
+    OnClick = 'POPER',
+    HighlightClickable = 1,
+    HighlightMovies = 1,
+    HighlightNew = 1
+  ) {
+    this.DisplayLength = DisplayLength
+    this.FixGaps = FixGaps
+    this.OnClick = OnClick //POPER, URL, IMDB
+    this.HighlightClickable = HighlightClickable
+    this.HighlightMovies = HighlightMovies
+    this.HighlightNew = HighlightNew
+  }
+
+  static load(key = 'settings') {
+    var settingsJson = localStorage.getItem(key)
+    if (settingsJson == null) {
+      return new Settings()
     }
 
-    static load(key='settings') {
+    return new Settings({
+      ...JSON.parse(settingsJson),
+    })
+  }
 
-        var settingsJson = localStorage.getItem(key);
-        if (settingsJson == null) {
-            return new Settings();
-        }
+  save(key) {
+    localStorage.setItem(key, JSON.stringify(this))
+  }
 
-        return new Settings({ ...JSON.parse(settingsJson)
-        });
-    }
-
-    save(key) {
-        localStorage.setItem(key, JSON.stringify(this));
-    }
-
-    static save(key, settings) {
-        localStorage.setItem(key, JSON.stringify(settings));
-    }
+  static save(key, settings) {
+    localStorage.setItem(key, JSON.stringify(settings))
+  }
 }

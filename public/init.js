@@ -194,7 +194,6 @@
 //     $loading.show();
 // });
 
-
 // window.viewXmltvUrl = () => {
 //     console.log('in viewXmltvUrl');
 // };
@@ -249,8 +248,8 @@
 
 // /**
 //  * Datetime to xsltv format
-//  * @param {current date time} currenttime 
-//  * @param {Décalage horaire} offsetminutes 
+//  * @param {current date time} currenttime
+//  * @param {Décalage horaire} offsetminutes
 //  */
 // const getParamsCurrentDate = (currenttime = new Date(), offsetminutes = 60) => {
 //     let myDate = new Date(currenttime);

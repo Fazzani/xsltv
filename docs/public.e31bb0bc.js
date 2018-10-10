@@ -58973,6 +58973,9 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/*eslint no-undef: "error"*/
+
+/*eslint-env browser*/
 var App =
 /*#__PURE__*/
 function (_Component) {
@@ -58989,11 +58992,11 @@ function (_Component) {
         return res.json();
       }).then(function (res) {
         if (res && res.files.length > 0) {
+          res.files.selected = true;
+
           _this.setState({
             files: res.files
           });
-
-          _this.state.files[0].selected = true;
 
           _this.loadXSL(_this.state.files[0]);
         }
@@ -59003,19 +59006,19 @@ function (_Component) {
     };
 
     _this.onXsltClick = function (e) {
-      var target = e.target.id === "topcorner" ? e.target : e.target.parentNode;
+      var target = e.target.id === 'topcorner' ? e.target : e.target.parentNode;
 
-      if (target.attributes["data-onclick"]) {
-        e.preventDefault();
-        console.log(target.attributes["data-onclick"].value);
-        eval("_this." + target.attributes["data-onclick"].value);
+      if (target.attributes['data-onclick']) {
+        e.preventDefault(); // console.log(target.attributes['data-onclick'].value)
+
+        eval('_this.' + target.attributes['data-onclick'].value);
       }
     };
 
     _this.Init = function (dl, ch, cd, cm, cy, offset) {
       _this.setState({
         loading: true,
-        loaderText: "Init xsltv file",
+        loaderText: 'Init xsltv file',
         fragment: undefined
       });
 
@@ -59023,7 +59026,7 @@ function (_Component) {
 
       var fragment = _this.state.xsltvProcessor.Init(_this.state.xml, document);
 
-      var helperDiv = document.createElement("div");
+      var helperDiv = document.createElement('div');
       helperDiv.appendChild(fragment);
 
       _this.setState({
@@ -59032,7 +59035,7 @@ function (_Component) {
       });
     };
 
-    _this.onSettingsModalClick = function (e) {
+    _this.onSettingsModalClick = function () {
       _this.setState({
         openSettingsModal: !_this.state.openSettingsModal
       });
@@ -59070,13 +59073,13 @@ function (_Component) {
     };
 
     _this.toggleSettingsModal = function () {
-      var settingsModal = (0, _jquery.default)("#settingsModal");
-      if (settingsModal) settingsModal.modal(_this.state.openSettingsModal ? "show" : "hide");
+      var settingsModal = (0, _jquery.default)('#settingsModal');
+      if (settingsModal) settingsModal.modal(_this.state.openSettingsModal ? 'show' : 'hide');
     };
 
     _this.state = {
       loading: true,
-      loaderText: "Init App",
+      loaderText: 'Init App',
       files: [],
       xsltvProcessor: new _xsltvProcessor.default(),
       AppSettings: _settings.default.load(),
@@ -59097,14 +59100,14 @@ function (_Component) {
 
       this.setState({
         loading: true,
-        loaderText: "Loading xslt file..."
+        loaderText: 'Loading xslt file...'
       });
       fetch(_index.default, {
-        method: "GET"
+        method: 'GET'
       }).then(function (response) {
         return response.text();
       }).then(function (str) {
-        return new window.DOMParser().parseFromString(str, "text/xml");
+        return new window.DOMParser().parseFromString(str, 'text/xml');
       }).then(function (xsl) {
         _this2.state.xsltvProcessor.processor.importStylesheet(xsl);
 
@@ -59130,16 +59133,16 @@ function (_Component) {
 
         if (window.XMLHttpRequest && window.XSLTProcessor) {
           fetch(xmlfileneeded.url, {
-            method: "GET"
+            method: 'GET'
           }).then(function (response) {
             return response.text();
           }).then(function (str) {
-            return new window.DOMParser().parseFromString(str, "text/xml");
+            return new window.DOMParser().parseFromString(str, 'text/xml');
           }).then(function (x) {
             _this3.setState({
               xml: x,
               loading: true,
-              loaderText: "Preparing grid..."
+              loaderText: 'Preparing grid...'
             });
 
             _this3.Init.apply(_this3, [_this3.state.xsltvProcessor.AppSettings.DisplayLength].concat((0, _toConsumableArray2.default)((0, _shared.getParamsCurrentDate)())));
@@ -59192,15 +59195,15 @@ function (_Component) {
 
 exports.App = App;
 App.propTypes = {};
-(0, _reactDom.render)(_react.default.createElement(App, null), document.getElementById("app"));
+(0, _reactDom.render)(_react.default.createElement(App, null), document.getElementById('app'));
 (0, _registerServiceWorker.default)(); // Hot Module Replacement
 
 if (module.hot) {
   module.hot.accept();
 }
 
-if ("development" !== "production") {
-  var _require = require("why-did-you-update"),
+if ("development" !== 'production') {
+  var _require = require('why-did-you-update'),
       whyDidYouUpdate = _require.whyDidYouUpdate;
 
   whyDidYouUpdate(_react.default);

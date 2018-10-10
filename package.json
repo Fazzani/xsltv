@@ -6,6 +6,7 @@
   "main": "docs/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "pretest": "eslint --ignore-pattern docs --ignore-path .gitignore -f compact .",
     "start": "parcel public/index.html --out-dir docs",
     "build": "parcel build public/index.html --out-dir docs --detailed-report --public-url ./",
     "deploy": "cross-env NODE_ENV=production npm run build && git add --all && git commit -m \"latest build\" && git push"
@@ -26,6 +27,19 @@
   },
   "homepage": "https://github.com/Fazzani/xviewer/public/index.html",
   "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es6": true,
+      "jest": true
+    },
+    "globals": {
+      "process": true,
+      "window": true,
+      "localStorage": true,
+      "fetch": true,
+      "module": true,
+      "console": true
+    },
     "parser": "babel-eslint",
     "parserOptions": {
       "ecmaFeatures": {
@@ -56,6 +70,7 @@
       }
     },
     "rules": {
+      "no-console": 0,
       "max-len": [
         1,
         120,
@@ -75,6 +90,8 @@
       "react/no-did-update-set-state": "error",
       "react/no-unknown-property": "error",
       "react/no-unused-prop-types": "error",
+      "react/jsx-uses-react": 2,
+      "react/jsx-uses-vars": 2,
       "react/prop-types": "error",
       "react/react-in-jsx-scope": "error",
       "prettier/prettier": [
@@ -85,14 +102,8 @@
           "singleQuote": true,
           "trailingComma": "es5"
         }
-      ],
-      "no-irregular-whitespace": 0
+      ]
     }
-  },
-  "env": {
-    "es6": true,
-    "jest": true,
-    "browser": true
   },
   "jest": {
     "collectCoverageFrom": [
@@ -147,7 +158,6 @@
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/plugin-proposal-decorators": "^7.1.2",
     "@babel/plugin-transform-runtime": "^7.1.0",
-    "@babel/preset-es2015": "^7.0.0-beta.53",
     "@babel/preset-react": "^7.0.0",
     "@babel/runtime": "^7.1.2",
     "@babel/runtime-corejs2": "^7.1.2",
@@ -155,12 +165,12 @@
     "eslint": "^5.5.0",
     "eslint-config-prettier": "^3.0.1",
     "eslint-config-react": "^1.1.7",
+    "eslint-plugin-babel": "^5.2.1",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-prettier": "^3.0.0",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-react": "^7.11.1",
     "eslint-plugin-standard": "^4.0.0",
-    "eslint-plugin-babel": "^5.2.1",
     "jest": "^23.6.0",
     "jest-watch-toggle-config": "^1.0.2",
     "jest-watch-typeahead": "^0.2.0",
