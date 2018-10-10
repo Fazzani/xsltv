@@ -47152,7 +47152,7 @@ function (_Component) {
 
             if (!target.is(popper)) {
               popper.popover('hide');
-              _this.popperTab = _this.popperTab.slice(_this.popperTab.indexof(popper), 1);
+              _this.popperTab = _this.popperTab.slice(_this.popperTab.indexOf(popper), 1);
             }
           }
         } catch (err) {

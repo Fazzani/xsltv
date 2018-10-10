@@ -44,7 +44,7 @@ export default class Xslt extends Component {
         if (!target.is(popper)) {
           popper.popover('hide')
           this.popperTab = this.popperTab.slice(
-            this.popperTab.indexof(popper),
+            this.popperTab.indexOf(popper),
             1
           )
         }
