@@ -46751,7 +46751,7 @@ function register() {
     }
 
     window.addEventListener('load', function () {
-      var swUrl = "".concat(undefined, "/service-worker.js");
+      var swUrl = "service-worker.js";
 
       if (isLocalhost) {
         // This is running on localhost. Lets check if a service worker still exists or not.
@@ -59268,7 +59268,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50547" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51639" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
