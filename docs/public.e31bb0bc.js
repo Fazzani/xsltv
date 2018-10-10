@@ -40707,7 +40707,7 @@ var fixgapslabel = 'Fix gaps in listings';
 var fixgapshint = 'Check to enable gap-detection in listings which are not contiguous. This option requires listings to be sorted with --by-channel to work. This option will cause listings to load much more slowly, so do not check unnecessarily.';
 var fixgapsconfirm = 'To fill gaps in listings, please ensure the XML file has been sorted with the --by-channel option!';
 var absoluteiconslabel = 'Absolute icon references';
-var absoluteiconshint = 'XSLTv looks for channel icons in an \'icons\' directory. Check this box if your xml file contains absolute url references to icons.';
+var absoluteiconshint = "XSLTv looks for channel icons in an 'icons' directory. Check this box if your xml file contains absolute url references to icons.";
 var dayfirstlabel = 'Display day first in dates';
 var dayfirsthint = 'Check this box to show dates in dd/mm/yyyy format. Uncheck for mm/dd/yyyy format.';
 var grabberlabel = 'Grabber: tv_grab_';
@@ -40965,24 +40965,24 @@ function () {
         prevDate.setHours(prevDate.getHours() + this.offset);
       }
 
-      this.processor.setParameter(null, "DisplayLength", this.AppSettings.DisplayLength);
-      this.processor.setParameter(null, "CurrentHour", this.startDate.getHours());
-      this.processor.setParameter(null, "CurrentDay", this.startDate.getDate());
-      this.processor.setParameter(null, "CurrentMonth", this.startDate.getMonth() + 1);
-      this.processor.setParameter(null, "CurrentYear", this.startDate.getFullYear());
-      this.processor.setParameter(null, "StopHour", endDate.getHours());
-      this.processor.setParameter(null, "StopDay", endDate.getDate());
-      this.processor.setParameter(null, "StopMonth", endDate.getMonth() + 1);
-      this.processor.setParameter(null, "StopYear", endDate.getFullYear());
-      this.processor.setParameter(null, "PrevHour", prevDate.getHours());
-      this.processor.setParameter(null, "PrevDay", prevDate.getDate());
-      this.processor.setParameter(null, "PrevMonth", prevDate.getMonth() + 1);
-      this.processor.setParameter(null, "PrevYear", prevDate.getFullYear());
-      this.processor.setParameter(null, "FixGaps", this.AppSettings.FixGaps);
-      this.processor.setParameter(null, "HighlightClickable", this.AppSettings.highlightclickable);
-      this.processor.setParameter(null, "HighlightMovies", this.AppSettings.highlightmovies);
-      this.processor.setParameter(null, "HighlightNew", this.AppSettings.highlightnew);
-      this.processor.setParameter(null, "OnClick", this.AppSettings.OnClick);
+      this.processor.setParameter(null, 'DisplayLength', this.AppSettings.DisplayLength);
+      this.processor.setParameter(null, 'CurrentHour', this.startDate.getHours());
+      this.processor.setParameter(null, 'CurrentDay', this.startDate.getDate());
+      this.processor.setParameter(null, 'CurrentMonth', this.startDate.getMonth() + 1);
+      this.processor.setParameter(null, 'CurrentYear', this.startDate.getFullYear());
+      this.processor.setParameter(null, 'StopHour', endDate.getHours());
+      this.processor.setParameter(null, 'StopDay', endDate.getDate());
+      this.processor.setParameter(null, 'StopMonth', endDate.getMonth() + 1);
+      this.processor.setParameter(null, 'StopYear', endDate.getFullYear());
+      this.processor.setParameter(null, 'PrevHour', prevDate.getHours());
+      this.processor.setParameter(null, 'PrevDay', prevDate.getDate());
+      this.processor.setParameter(null, 'PrevMonth', prevDate.getMonth() + 1);
+      this.processor.setParameter(null, 'PrevYear', prevDate.getFullYear());
+      this.processor.setParameter(null, 'FixGaps', this.AppSettings.FixGaps);
+      this.processor.setParameter(null, 'HighlightClickable', this.AppSettings.highlightclickable);
+      this.processor.setParameter(null, 'HighlightMovies', this.AppSettings.highlightmovies);
+      this.processor.setParameter(null, 'HighlightNew', this.AppSettings.highlightnew);
+      this.processor.setParameter(null, 'OnClick', this.AppSettings.OnClick);
       return this.processor.transformToFragment(xml, document);
     }
   }]);
@@ -41637,7 +41637,7 @@ exports.default = Common;
 Common.parseQueryString = function () {
   var str = window.location.search;
   var objURL = {};
-  str.replace(new RegExp("([^?=&]+)(=([^&]*))?", "g"), function ($0, $1, $2, $3) {
+  str.replace(new RegExp('([^?=&]+)(=([^&]*))?', 'g'), function ($0, $1, $2, $3) {
     objURL[$1] = $3;
   });
   return objURL;
@@ -41654,7 +41654,7 @@ Constants.Events = {
   ADD_XMLTV_URL: 'onAddXmltvUrl'
 };
 Constants.Urls = {
-  API_FILES: "https://api.myjson.com/bins/8tvgs"
+  API_FILES: 'https://api.myjson.com/bins/8tvgs'
 };
 },{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js"}],"components/modal.jsx":[function(require,module,exports) {
 "use strict";
@@ -46714,11 +46714,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = register;
 exports.unregister = unregister;
-
-var _jquery = _interopRequireDefault(require("jquery"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 // In production, we register a service worker to serve assets from local cache.
 // This lets the app load faster on subsequent visits in production, and gives
 // it offline capabilities. However, it also means that developers (and users)
@@ -46731,18 +46726,17 @@ window.location.hostname === '[::1]' || // 127.0.0.1/8 is considered localhost f
 window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/));
 
 var showUpdateBar = function showUpdateBar() {
-  var snackbar = document.getElementById("snackbar");
-  snackbar.className = "show";
-};
+  var snackbar = document.getElementById('snackbar');
+  snackbar.className = 'show';
+}; // $(function() {
+//   // The click event on the pop up notification
+//   document.getElementById('reload').addEventListener('click', function() {
+//     newWorker.postMessage({
+//       action: 'skipWaiting',
+//     })
+//   })
+// })
 
-(0, _jquery.default)(function () {
-  // The click event on the pop up notification
-  document.getElementById("reload").addEventListener("click", function () {
-    newWorker.postMessage({
-      action: "skipWaiting"
-    });
-  });
-});
 
 function register() {
   if ("development" === 'production' && 'serviceWorker' in navigator) {
@@ -46825,7 +46819,7 @@ function unregister() {
     });
   }
 }
-},{"jquery":"../node_modules/jquery/dist/jquery.js"}],"../node_modules/core-js/library/modules/_string-ws.js":[function(require,module,exports) {
+},{}],"../node_modules/core-js/library/modules/_string-ws.js":[function(require,module,exports) {
 module.exports = '\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003' +
   '\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF';
 
@@ -47072,13 +47066,31 @@ Timeline.defaultProps = {
   startDate: new Date(),
   timeout: 1000
 };
-},{"@babel/runtime-corejs2/core-js/parse-int":"../node_modules/@babel/runtime-corejs2/core-js/parse-int.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","moment":"../node_modules/moment/moment.js","../styles/timeline.css":"styles/timeline.css","jquery":"../node_modules/jquery/dist/jquery.js"}],"components/xslt.jsx":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/core-js/parse-int":"../node_modules/@babel/runtime-corejs2/core-js/parse-int.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","moment":"../node_modules/moment/moment.js","../styles/timeline.css":"styles/timeline.css","jquery":"../node_modules/jquery/dist/jquery.js"}],"../node_modules/core-js/library/modules/core.get-iterator.js":[function(require,module,exports) {
+var anObject = require('./_an-object');
+var get = require('./core.get-iterator-method');
+module.exports = require('./_core').getIterator = function (it) {
+  var iterFn = get(it);
+  if (typeof iterFn != 'function') throw TypeError(it + ' is not iterable!');
+  return anObject(iterFn.call(it));
+};
+
+},{"./_an-object":"../node_modules/core-js/library/modules/_an-object.js","./core.get-iterator-method":"../node_modules/core-js/library/modules/core.get-iterator-method.js","./_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/core-js/library/fn/get-iterator.js":[function(require,module,exports) {
+require('../modules/web.dom.iterable');
+require('../modules/es6.string.iterator');
+module.exports = require('../modules/core.get-iterator');
+
+},{"../modules/web.dom.iterable":"../node_modules/core-js/library/modules/web.dom.iterable.js","../modules/es6.string.iterator":"../node_modules/core-js/library/modules/es6.string.iterator.js","../modules/core.get-iterator":"../node_modules/core-js/library/modules/core.get-iterator.js"}],"../node_modules/@babel/runtime-corejs2/core-js/get-iterator.js":[function(require,module,exports) {
+module.exports = require("core-js/library/fn/get-iterator");
+},{"core-js/library/fn/get-iterator":"../node_modules/core-js/library/fn/get-iterator.js"}],"components/xslt.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
+
+var _getIterator2 = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/get-iterator"));
 
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
 
@@ -47127,16 +47139,37 @@ function (_Component) {
         html: true
       }).on('shown.bs.popover', function (data) {
         _this.popperTab.push((0, _jquery.default)(data.target));
-      }); // $(DOCUMENT).ON("CLICK TOUCHEND", E => {
-      //   E.PREVENTDEFAULT();
-      //   LET TARGET = $(E.TARGET);
-      //   THIS.POPPERTAB.FOREACH(X => {
-      //     IF (!TARGET.IS(X)) {
-      //       X.POPOVER("HIDE");
-      //       THIS.POPPERTAB = THIS.POPPERTAB.SLICE(THIS.POPPERTAB.INDEXOF(X), 1);
-      //     }
-      //   });
-      // });
+      });
+      (0, _jquery.default)(document).on('click touchend', function (e) {
+        var target = (0, _jquery.default)(e.target);
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = (0, _getIterator2.default)(_this.popperTab), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var popper = _step.value;
+
+            if (!target.is(x)) {
+              popper.popover('hide');
+              _this.popperTab = _this.popperTab.slice(_this.popperTab.indexof(popper), 1);
+            }
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator.return != null) {
+              _iterator.return();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+      });
     };
 
     _this.createMarkup = function (html) {
@@ -47176,7 +47209,7 @@ Xslt.propTypes = {
   onClick: _propTypes.default.func.isRequired,
   fragment: _propTypes.default.string.isRequired
 };
-},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","jquery":"../node_modules/jquery/dist/jquery.js","prop-types":"../node_modules/prop-types/index.js"}],"styles/loader.css":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/core-js/get-iterator":"../node_modules/@babel/runtime-corejs2/core-js/get-iterator.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","jquery":"../node_modules/jquery/dist/jquery.js","prop-types":"../node_modules/prop-types/index.js"}],"styles/loader.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -59235,7 +59268,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54222" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50547" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
