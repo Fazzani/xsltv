@@ -38,16 +38,16 @@ export default class Xslt extends Component {
         this.popperTab.push($(data.target))
       })
 
-    // $(DOCUMENT).ON("CLICK TOUCHEND", E => {
-    //   E.PREVENTDEFAULT();
-    //   LET TARGET = $(E.TARGET);
-    //   THIS.POPPERTAB.FOREACH(X => {
-    //     IF (!TARGET.IS(X)) {
-    //       X.POPOVER("HIDE");
-    //       THIS.POPPERTAB = THIS.POPPERTAB.SLICE(THIS.POPPERTAB.INDEXOF(X), 1);
-    //     }
-    //   });
-    // });
+    $(document).on('click touchend', (e) => {
+      e.preventdefault()
+      let target = $(e.target)
+      this.poppertab.foreach((x) => {
+        if (!target.is(x)) {
+          x.popover('hide')
+          this.poppertab = this.poppertab.slice(this.poppertab.indexof(x), 1)
+        }
+      })
+    })
   }
 
   createMarkup = (html) => {
