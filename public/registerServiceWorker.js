@@ -7,7 +7,6 @@
 
 // To learn more about the benefits of this model, read https://goo.gl/KwvDNy.
 // This link also includes instructions on opting out of this behavior.
-import $ from 'jquery'
 
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
@@ -23,14 +22,14 @@ const showUpdateBar = () => {
   let snackbar = document.getElementById('snackbar')
   snackbar.className = 'show'
 }
-$(function() {
-  // The click event on the pop up notification
-  document.getElementById('reload').addEventListener('click', function() {
-    newWorker.postMessage({
-      action: 'skipWaiting',
-    })
-  })
-})
+// $(function() {
+//   // The click event on the pop up notification
+//   document.getElementById('reload').addEventListener('click', function() {
+//     newWorker.postMessage({
+//       action: 'skipWaiting',
+//     })
+//   })
+// })
 
 export default function register() {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {

@@ -6,7 +6,7 @@
   "main": "docs/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "pretest": "eslint --ignore-pattern docs --ignore-path .gitignore -f compact .",
+    "pretest": "eslint --ignore-pattern docs/** --ignore-pattern public/lang/** --ignore-path .gitignore -f compact .",
     "start": "parcel public/index.html --out-dir docs",
     "build": "parcel build public/index.html --out-dir docs --detailed-report --public-url ./",
     "deploy": "cross-env NODE_ENV=production npm run build && git add --all && git commit -m \"latest build\" && git push"
