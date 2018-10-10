@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { render } from "react-dom";
 import "bootstrap";
 import $ from "jquery";
 
@@ -9,10 +8,11 @@ export default class Xslt extends Component {
   componentDidMount() {
     this.InitPopperAndTooltip();
   }
-
+ 
   componentDidUpdate() {
     this.InitPopperAndTooltip();
-  }
+    
+  } 
 
   componentWillUnmount = () => {
     this.popperTab = [];
@@ -31,16 +31,16 @@ export default class Xslt extends Component {
         this.popperTab.push($(data.target));
       });
 
-    $(document).on("click touchend", e => {
-      e.preventDefault();
-      let target = $(e.target);
-      this.popperTab.forEach(x => {
-        if (!target.is(x)) {
-          x.popover("hide");
-          this.popperTab = this.popperTab.slice(this.popperTab.indexOf(x), 1);
-        }
-      });
-    });
+    // $(DOCUMENT).ON("CLICK TOUCHEND", E => {
+    //   E.PREVENTDEFAULT();
+    //   LET TARGET = $(E.TARGET);
+    //   THIS.POPPERTAB.FOREACH(X => {
+    //     IF (!TARGET.IS(X)) {
+    //       X.POPOVER("HIDE");
+    //       THIS.POPPERTAB = THIS.POPPERTAB.SLICE(THIS.POPPERTAB.INDEXOF(X), 1);
+    //     }
+    //   });
+    // });
   };
 
   createMarkup = html => {

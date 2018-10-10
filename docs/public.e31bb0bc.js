@@ -47082,8 +47082,6 @@ var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _reactDom = require("react-dom");
-
 require("bootstrap");
 
 var _jquery = _interopRequireDefault(require("jquery"));
@@ -47125,18 +47123,16 @@ function (_Component) {
         html: true
       }).on("shown.bs.popover", function (data) {
         _this.popperTab.push((0, _jquery.default)(data.target));
-      });
-      (0, _jquery.default)(document).on("click touchend", function (e) {
-        e.preventDefault();
-        var target = (0, _jquery.default)(e.target);
-
-        _this.popperTab.forEach(function (x) {
-          if (!target.is(x)) {
-            x.popover("hide");
-            _this.popperTab = _this.popperTab.slice(_this.popperTab.indexOf(x), 1);
-          }
-        });
-      });
+      }); // $(DOCUMENT).ON("CLICK TOUCHEND", E => {
+      //   E.PREVENTDEFAULT();
+      //   LET TARGET = $(E.TARGET);
+      //   THIS.POPPERTAB.FOREACH(X => {
+      //     IF (!TARGET.IS(X)) {
+      //       X.POPOVER("HIDE");
+      //       THIS.POPPERTAB = THIS.POPPERTAB.SLICE(THIS.POPPERTAB.INDEXOF(X), 1);
+      //     }
+      //   });
+      // });
     };
 
     _this.createMarkup = function (html) {
@@ -47171,7 +47167,7 @@ function (_Component) {
 }(_react.Component);
 
 exports.default = Xslt;
-},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","jquery":"../node_modules/jquery/dist/jquery.js"}],"styles/loader.css":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","jquery":"../node_modules/jquery/dist/jquery.js"}],"styles/loader.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -59227,7 +59223,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51284" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50693" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

@@ -2,6 +2,14 @@
 
     "search.exclude": {
         "**/docs": true
-    }
+    },
+    "files.exclude": {
+        "**/docs": true,
+    },
+      "editor.quickSuggestions": {
+          "other": false,
+          "comments": false,
+          "strings": false
+      },
 
 }
