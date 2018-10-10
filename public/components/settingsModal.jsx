@@ -12,15 +12,16 @@ export class SettingsModal extends Component {
   static defaultProps = {
     files: [],
   }
-  constructor(props) {
-    super(props)
+  constructor() {
+    super()
     // create a ref to store the textInput DOM element
     this.meRef = React.createRef()
   }
 
   componentDidUpdate() {
     if (this.props.files.length > 0) {
-      this.selectedXmltvFile = this.props.files.filter((x) => x.selected)[0]
+      this.selectedXmltvFile =
+        this.props.files.filter((x) => x.selected)[0] || this.props.files[0]
     }
   }
 

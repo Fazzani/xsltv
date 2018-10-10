@@ -41656,7 +41656,7 @@ Constants.Events = {
 Constants.Urls = {
   API_FILES: 'https://api.myjson.com/bins/8tvgs'
 };
-},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js"}],"components/modal.jsx":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js"}],"components/settingsModal.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -41691,11 +41691,11 @@ var SettingsModal =
 function (_Component) {
   (0, _inherits2.default)(SettingsModal, _Component);
 
-  function SettingsModal(props) {
+  function SettingsModal() {
     var _this;
 
     (0, _classCallCheck2.default)(this, SettingsModal);
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(SettingsModal).call(this, props)); // create a ref to store the textInput DOM element
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(SettingsModal).call(this)); // create a ref to store the textInput DOM element
 
     _this.viewXmltvUrl = function (e) {
       e.preventDefault();
@@ -41759,7 +41759,7 @@ function (_Component) {
       if (this.props.files.length > 0) {
         this.selectedXmltvFile = this.props.files.filter(function (x) {
           return x.selected;
-        })[0];
+        })[0] || this.props.files[0];
       }
     }
   }, {
@@ -58976,7 +58976,7 @@ require("./lang/english");
 
 var _xsltvProcessor = _interopRequireDefault(require("./js/xsltvProcessor"));
 
-var _modal = _interopRequireDefault(require("./components/modal"));
+var _settingsModal = _interopRequireDefault(require("./components/settingsModal"));
 
 var _NavBottom = _interopRequireDefault(require("./components/NavBottom"));
 
@@ -59200,7 +59200,7 @@ function (_Component) {
         className: "row-section"
       }, _react.default.createElement(_sideMenu.default, {
         handleToggleModalClick: this.onSettingsModalClick
-      }), _react.default.createElement(_modal.default, {
+      }), _react.default.createElement(_settingsModal.default, {
         files: this.state.files,
         callbackEvent: this.onSettingsModalCallback
       }), _react.default.createElement("div", {
@@ -59241,7 +59241,7 @@ if ("development" !== 'production') {
 
   whyDidYouUpdate(_react.default);
 }
-},{"@babel/runtime-corejs2/helpers/toConsumableArray":"../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","jquery":"../node_modules/jquery/dist/jquery.js","./lang/english":"lang/english.js","./js/xsltvProcessor":"js/xsltvProcessor.js","./components/modal":"components/modal.jsx","./components/NavBottom":"components/NavBottom.jsx","./components/sideMenu":"components/sideMenu.jsx","./components/snackbar":"components/snackbar.jsx","./components/header":"components/header.jsx","./js/settings":"js/settings.js","./index.xsl":"index.xsl","./components/shared":"components/shared.jsx","./registerServiceWorker":"registerServiceWorker.js","./components/timeline":"components/timeline.jsx","./components/xslt":"components/xslt.jsx","./js/common":"js/common.js","./components/loader":"components/loader.jsx","why-did-you-update":"../node_modules/why-did-you-update/lib/index.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/helpers/toConsumableArray":"../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","jquery":"../node_modules/jquery/dist/jquery.js","./lang/english":"lang/english.js","./js/xsltvProcessor":"js/xsltvProcessor.js","./components/settingsModal":"components/settingsModal.jsx","./components/NavBottom":"components/NavBottom.jsx","./components/sideMenu":"components/sideMenu.jsx","./components/snackbar":"components/snackbar.jsx","./components/header":"components/header.jsx","./js/settings":"js/settings.js","./index.xsl":"index.xsl","./components/shared":"components/shared.jsx","./registerServiceWorker":"registerServiceWorker.js","./components/timeline":"components/timeline.jsx","./components/xslt":"components/xslt.jsx","./js/common":"js/common.js","./components/loader":"components/loader.jsx","why-did-you-update":"../node_modules/why-did-you-update/lib/index.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -59268,7 +59268,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51639" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54437" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
