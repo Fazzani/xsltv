@@ -47150,7 +47150,7 @@ function (_Component) {
           for (var _iterator = (0, _getIterator2.default)(_this.popperTab), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
             var popper = _step.value;
 
-            if (!target.is(x)) {
+            if (!target.is(popper)) {
               popper.popover('hide');
               _this.popperTab = _this.popperTab.slice(_this.popperTab.indexof(popper), 1);
             }
