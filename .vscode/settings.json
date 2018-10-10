@@ -13,4 +13,5 @@
     },
     "prettier.jsxBracketSameLine": true,
     "prettier.printWidth": 180,
+    "eslint.enable": true,
 }

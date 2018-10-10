@@ -1,15 +1,15 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import '../styles/loader.css';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import '../styles/loader.css'
 
 export default class Loader extends Component {
   static propTypes = {
-    displayText: PropTypes.string
-  };
+    displayText: PropTypes.string,
+  }
 
   static defaultProps = {
-    displayText: "loading..."
-  };
+    displayText: 'loading...',
+  }
   render() {
     return (
       <div className="overlay">
@@ -20,6 +20,6 @@ export default class Loader extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }

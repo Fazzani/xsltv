@@ -16,9 +16,10 @@ Epg viewer for XMLTV format based on xsltv project.
 - [ ] Integrate Typescript
 - [ ] React enhancement
   - [ ] BIT for sharing component
-  - [ ] UI tests (JEST)
+  - [ ] UI tests (JEST & e2e)
   - [ ] Errors handling
 - [ ] Fix timeline position
+- [ ] Auto refresh toutes les 4 heures de l'appli
 
 [live]: https://fazzani.github.io/xviewer/docs/
 [example_css]: https://codepen.io/blackstockc/pen/eJbbyb

@@ -1,35 +1,42 @@
-import React, { Component } from "react";
-import "bootstrap";
-import $ from "jquery";
+import React, { Component } from 'react'
+import 'bootstrap'
+import $ from 'jquery'
+import PropTypes from 'prop-types'
 
 export default class Xslt extends Component {
-  popperTab = [];
+  static propTypes = {
+    onClick: PropTypes.func.isRequired,
+    fragment: PropTypes.string.isRequired,
+  }
+  constructor() {
+    super()
+    this.popperTab = []
+  }
 
   componentDidMount() {
-    this.InitPopperAndTooltip();
+    this.InitPopperAndTooltip()
   }
- 
+
   componentDidUpdate() {
-    this.InitPopperAndTooltip();
-    
-  } 
+    this.InitPopperAndTooltip()
+  }
 
   componentWillUnmount = () => {
-    this.popperTab = [];
+    this.popperTab = []
     if (this.popper) {
-      this.popper.off();
+      this.popper.off()
     }
-  };
+  }
 
   InitPopperAndTooltip = () => {
-    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="tooltip"]').tooltip()
     this.popper = $('[data-toggle="popover"]')
       .popover({
-        html: true
+        html: true,
       })
-      .on("shown.bs.popover", data => {
-        this.popperTab.push($(data.target));
-      });
+      .on('shown.bs.popover', (data) => {
+        this.popperTab.push($(data.target))
+      })
 
     // $(DOCUMENT).ON("CLICK TOUCHEND", E => {
     //   E.PREVENTDEFAULT();
@@ -41,13 +48,18 @@ export default class Xslt extends Component {
     //     }
     //   });
     // });
-  };
+  }
 
-  createMarkup = html => {
-    return { __html: html };
-  };
+  createMarkup = (html) => {
+    return { __html: html }
+  }
 
   render() {
-    return <div dangerouslySetInnerHTML={this.createMarkup(this.props.fragment)} onClick={this.props.onClick} />;
+    return (
+      <div
+        dangerouslySetInnerHTML={this.createMarkup(this.props.fragment)}
+        onClick={this.props.onClick}
+      />
+    )
   }
 }

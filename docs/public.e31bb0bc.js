@@ -41703,7 +41703,7 @@ function (_Component) {
       if (_this.props.callbackEvent) {
         _this.props.callbackEvent({
           type: _common.Constants.Events.LOAD_XMLTV_URL,
-          file: _this.createFileObject(_this.refs.xmltv_url.value)
+          file: _this.createFileObject(_this.xmltv_url.value)
         });
 
         (0, _jquery.default)(_this.meRef.current).modal('hide');
@@ -41716,7 +41716,7 @@ function (_Component) {
       if (_this.props.callbackEvent) {
         _this.props.callbackEvent({
           type: _common.Constants.Events.ADD_XMLTV_URL,
-          file: _this.createFileObject(_this.refs.xmltv_url.value)
+          file: _this.createFileObject(_this.xmltv_url.value)
         });
 
         (0, _jquery.default)(_this.meRef.current).modal('hide');
@@ -41725,7 +41725,7 @@ function (_Component) {
 
     _this.createFileObject = function (xmltv_file_url) {
       return {
-        name: xmltv_file_url.split("/").pop(),
+        name: xmltv_file_url.split('/').pop(),
         url: xmltv_file_url
       };
     };
@@ -41765,6 +41765,8 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
+      var _this2 = this;
+
       var selectXmltv = this.selectedXmltvFile ? _react.default.createElement("form", {
         id: "xmltv_source"
       }, _react.default.createElement("div", {
@@ -41790,7 +41792,7 @@ function (_Component) {
         role: "dialog",
         ref: this.meRef,
         "aria-labelledby": "exampleModalLabel",
-        "aria-hidden": this.props.open ? "false" : "true"
+        "aria-hidden": this.props.open ? 'false' : 'true'
       }, _react.default.createElement("div", {
         className: "modal-dialog",
         role: "document"
@@ -41835,12 +41837,16 @@ function (_Component) {
         className: "input-group mb-3"
       }, _react.default.createElement("form", {
         className: "form-inline",
-        ref: "xmltv_file_form"
+        ref: function ref(x) {
+          _this2.xmltv_file_form = x;
+        }
       }, _react.default.createElement("div", {
         className: "form-group"
       }, _react.default.createElement("input", {
         type: "url",
-        ref: "xmltv_url",
+        ref: function ref(x) {
+          _this2.xmltv_url = x;
+        },
         required: "required",
         "data-error": "Please enter your full name.",
         className: "form-control form-control-sm",
@@ -41891,7 +41897,7 @@ function (_Component) {
         "data-parent": "#accordion"
       }, _react.default.createElement("div", {
         className: "card-body"
-      }, "Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS."))))), _react.default.createElement("div", {
+      }, "Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably havent heard of them accusamus labore sustainable VHS."))))), _react.default.createElement("div", {
         className: "modal-footer"
       }, _react.default.createElement("button", {
         type: "button",
@@ -41906,7 +41912,8 @@ function (_Component) {
 exports.SettingsModal = SettingsModal;
 SettingsModal.propTypes = {
   files: _propTypes.default.array.isRequired,
-  callbackEvent: _propTypes.default.func
+  callbackEvent: _propTypes.default.func,
+  open: _propTypes.default.func
 };
 SettingsModal.defaultProps = {
   files: []
@@ -46443,12 +46450,13 @@ var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/
 
 var _react = _interopRequireDefault(require("react"));
 
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
 var _moment = _interopRequireDefault(require("moment"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/*eslint no-undef: "error"*/
+
+/*eslint-env browser*/
 var NavBottom =
 /*#__PURE__*/
 function (_React$PureComponent) {
@@ -46475,7 +46483,6 @@ function (_React$PureComponent) {
 }(_react.default.PureComponent);
 
 exports.NavBottom = NavBottom;
-NavBottom.propTypes = {};
 
 var Clock =
 /*#__PURE__*/
@@ -46488,7 +46495,7 @@ function (_React$Component) {
     (0, _classCallCheck2.default)(this, Clock);
     _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Clock).call(this, props));
     _this.state = {
-      date: (0, _moment.default)(new Date()).format("LLLL")
+      date: (0, _moment.default)(new Date()).format('LLLL')
     };
     return _this;
   }
@@ -46511,7 +46518,7 @@ function (_React$Component) {
     key: "tick",
     value: function tick() {
       this.setState({
-        date: (0, _moment.default)(new Date()).format("LLLL")
+        date: (0, _moment.default)(new Date()).format('LLLL')
       });
     }
   }, {
@@ -46529,7 +46536,7 @@ function (_React$Component) {
 
 var _default = NavBottom;
 exports.default = _default;
-},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","moment":"../node_modules/moment/moment.js"}],"components/sideMenu.jsx":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","moment":"../node_modules/moment/moment.js"}],"components/sideMenu.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -46983,6 +46990,9 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/*eslint no-undef: "error"*/
+
+/*eslint-env browser*/
 var Timeline =
 /*#__PURE__*/
 function (_Component) {
@@ -46995,7 +47005,7 @@ function (_Component) {
     _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Timeline).call(this, props));
 
     _this.percentElapsedTimeNowByDay = function (startDay, hours) {
-      var from = (0, _moment.default)(startDay, "DD-MM-YYYY hh:mm:ss");
+      var from = (0, _moment.default)(startDay, 'DD-MM-YYYY hh:mm:ss');
       var diff = (0, _moment.default)().diff(from);
 
       var elapsedDuration = _moment.default.duration(diff);
@@ -47019,10 +47029,10 @@ function (_Component) {
       var _this2 = this;
 
       //if (this.props.parentNode != undefined) console.log(`parentNode.clientWidth: ${this.props.parentNode.clientWidth}`);
-      var leftchannel = (0, _jquery.default)(this.props.parentNode).find(".leftchannel:first");
+      var leftchannel = (0, _jquery.default)(this.props.parentNode).find('.leftchannel:first');
       var paddingLeft = (leftchannel ? leftchannel.width() : 0) / this.props.parentNode.clientWidth * 100;
       this.interval = setInterval(function () {
-        var marginLeft = _this2.percentElapsedTimeNowByDay(_this2.props.startDate, _this2.props.hours) + paddingLeft + "%"; //console.log("MarginLeft => ", marginLeft);
+        var marginLeft = _this2.percentElapsedTimeNowByDay(_this2.props.startDate, _this2.props.hours) + paddingLeft + '%'; //console.log("MarginLeft => ", marginLeft);
 
         _this2.setState({
           style: {
@@ -47076,7 +47086,7 @@ var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpe
 
 var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
 
-var _getPrototypeOf3 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
 
 var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
 
@@ -47085,6 +47095,8 @@ var _react = _interopRequireWildcard(require("react"));
 require("bootstrap");
 
 var _jquery = _interopRequireDefault(require("jquery"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
@@ -47096,18 +47108,10 @@ function (_Component) {
   (0, _inherits2.default)(Xslt, _Component);
 
   function Xslt() {
-    var _getPrototypeOf2;
-
     var _this;
 
     (0, _classCallCheck2.default)(this, Xslt);
-
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    _this = (0, _possibleConstructorReturn2.default)(this, (_getPrototypeOf2 = (0, _getPrototypeOf3.default)(Xslt)).call.apply(_getPrototypeOf2, [this].concat(args)));
-    _this.popperTab = [];
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Xslt).call(this));
 
     _this.componentWillUnmount = function () {
       _this.popperTab = [];
@@ -47121,7 +47125,7 @@ function (_Component) {
       (0, _jquery.default)('[data-toggle="tooltip"]').tooltip();
       _this.popper = (0, _jquery.default)('[data-toggle="popover"]').popover({
         html: true
-      }).on("shown.bs.popover", function (data) {
+      }).on('shown.bs.popover', function (data) {
         _this.popperTab.push((0, _jquery.default)(data.target));
       }); // $(DOCUMENT).ON("CLICK TOUCHEND", E => {
       //   E.PREVENTDEFAULT();
@@ -47141,6 +47145,7 @@ function (_Component) {
       };
     };
 
+    _this.popperTab = [];
     return _this;
   }
 
@@ -47167,7 +47172,11 @@ function (_Component) {
 }(_react.Component);
 
 exports.default = Xslt;
-},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","jquery":"../node_modules/jquery/dist/jquery.js"}],"styles/loader.css":[function(require,module,exports) {
+Xslt.propTypes = {
+  onClick: _propTypes.default.func.isRequired,
+  fragment: _propTypes.default.string.isRequired
+};
+},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","jquery":"../node_modules/jquery/dist/jquery.js","prop-types":"../node_modules/prop-types/index.js"}],"styles/loader.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -47234,7 +47243,7 @@ Loader.propTypes = {
   displayText: _propTypes.default.string
 };
 Loader.defaultProps = {
-  displayText: "loading..."
+  displayText: 'loading...'
 };
 },{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","../styles/loader.css":"styles/loader.css"}],"../node_modules/lodash.isequal/index.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -59223,7 +59232,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50693" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54222" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
