@@ -6,10 +6,11 @@
     "files.exclude": {
         "**/docs": true,
     },
-      "editor.quickSuggestions": {
-          "other": false,
-          "comments": false,
-          "strings": false
-      },
-
+    "editor.quickSuggestions": {
+        "other": false,
+        "comments": false,
+        "strings": false
+    },
+    "prettier.jsxBracketSameLine": true,
+    "prettier.printWidth": 180,
 }
