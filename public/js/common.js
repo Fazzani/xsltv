@@ -22,7 +22,10 @@ export class Constants {
     ADD_XMLTV_URL: 'onAddXmltvUrl',
   }
 
-  static Urls = {
-    API_FILES: 'https://api.myjson.com/bins/8tvgs',
+  static get Urls() {
+    return {
+      API_FILES: 'https://api.myjson.com/bins/8tvgs',
+      MYJSON_API_URL: 'https://api.myjson.com/bins/',
+    }
   }
 }

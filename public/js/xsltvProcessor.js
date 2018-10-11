@@ -1,14 +1,14 @@
-import Settings from './settings'
+import Settings, { SettingsService } from './settings'
 
 export default class XsltvProcessor {
   constructor() {
-    this.AppSettings = Settings.load('settings')
+    this.AppSettings = SettingsService.load()
     this.processor = new XSLTProcessor()
     this.startDate = new Date()
   }
 
   loadSettings() {
-    this.AppSettings = Settings.load('settings')
+    this.AppSettings = SettingsService.load()
   }
 
   initDate(hour, day, month, year, offset) {

@@ -11,7 +11,7 @@ import NavBottom from './components/NavBottom'
 import SideMenu from './components/sideMenu'
 import SnackBar from './components/snackbar'
 import Header from './components/header'
-import Settings from './js/settings'
+import Settings, { SettingsService } from './js/settings'
 import index_xsl from './index.xsl'
 import { getParamsCurrentDate } from './components/shared'
 import registerServiceWorker from './registerServiceWorker'
@@ -19,6 +19,9 @@ import Timeline from './components/timeline'
 import Xslt from './components/xslt'
 import { Constants } from './js/common'
 import Loader from './components/loader'
+import filesServices from './js/filesService'
+
+export const AppContext = React.createContext()
 
 export class App extends Component {
   static propTypes = {}
@@ -29,26 +32,48 @@ export class App extends Component {
       loaderText: 'Init App',
       files: [],
       xsltvProcessor: new XsltvProcessor(),
-      AppSettings: Settings.load(),
+      AppSettings: SettingsService.load(),
       openSettingsModal: false,
     }
   }
 
-  componentDidMount() {
-    this.fetchFiles()
-    
+  async componentDidMount() {
+    if (!this.state.AppSettings.MyJsonId) {
+      const result = await filesServices.add({ files: [] })
+      const id = result.uri.split('bins//')[1]
+      this.setState(
+        (prevState, prop) => {
+          return {
+            AppSettings: { ...prevState.AppSettings, MyJsonId: id },
+          }
+        },
+        () => {
+          SettingsService.save(this.state.AppSettings)
+          this.fetchFiles()
+        }
+      )
+    } else {
+      SettingsService.save(this.state.AppSettings)
+      this.fetchFiles()
+    }
   }
 
   fetchFiles = () => {
-    fetch(Constants.Urls.API_FILES)
-      .then((res) => res.json())
+    filesServices
+      .get(this.state.AppSettings.MyJsonId)
       .then((res) => {
-        if (res && res.files.length > 0) {
-          res.files.selected = true
+        if (res && res.length > 0) {
+          res[0].selected = true
           this.setState({
-            files: res.files,
+            files: res,
           })
-          this.loadXSL(this.state.files[0])
+          this.loadXSL(res[0])
+        } else {
+          this.setState({
+            loading: false,
+            snackMessage: 'No files founded',
+          })
+          this.loadXSL()
         }
       })
       .catch((e) => console.error(e))
@@ -66,7 +91,7 @@ export class App extends Component {
       .then((str) => new window.DOMParser().parseFromString(str, 'text/xml'))
       .then((xsl) => {
         this.state.xsltvProcessor.processor.importStylesheet(xsl)
-        this.loadXML(xmlfileneeded)
+        if (xmlfileneeded) this.loadXML(xmlfileneeded)
       })
       .catch((error) => {
         this.setState({
@@ -145,7 +170,7 @@ export class App extends Component {
     this.toggleSettingsModal()
   }
 
-  onSettingsModalCallback = (e) => {
+  onSettingsModalCallback = async (e) => {
     switch (e.type) {
       case Constants.Events.SELECTED_XMLTV_CHANGED:
         this.loadXML(e.file)
@@ -158,10 +183,20 @@ export class App extends Component {
         this.state.files.forEach((element) => {
           element.selected = false
         })
-        this.setState({
-          files: [e.file, ...this.state.files],
-        })
-        this.loadXML(e.file)
+        this.setState(
+          (prevState, prop) => {
+            return {
+              files: [e.file, ...prevState.files],
+            }
+          },
+          async () => {
+            const updateResult = await filesServices.update(
+              this.state.AppSettings.MyJsonId,
+              this.state.files
+            )
+            this.loadXML(e.file)
+          }
+        )
         break
     }
   }
@@ -172,9 +207,19 @@ export class App extends Component {
       settingsModal.modal(this.state.openSettingsModal ? 'show' : 'hide')
   }
 
+  saveSettings = () => {
+    Settings.save(this.state.AppSettings)
+  }
+
   render() {
     return (
-      <React.Fragment>
+      <AppContext.Provider
+        value={{
+          ...this.state,
+          loadXML: this.loadXML,
+          saveSettings: this.saveSettings,
+        }}
+      >
         <NavBottom />
         <section className="row-section">
           <SideMenu handleToggleModalClick={this.onSettingsModalClick} />
@@ -204,9 +249,9 @@ export class App extends Component {
               ) : null}
             </div>
           </div>
-          <SnackBar />
+          <SnackBar {...this.state} />
         </section>
-      </React.Fragment>
+      </AppContext.Provider>
     )
   }
 }

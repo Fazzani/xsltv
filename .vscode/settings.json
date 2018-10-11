@@ -1,23 +1,23 @@
 {
-"mongoRunner": {
-        "connection": {
-            "url": "mongodb://ip172-18-0-21-bevjs6s9cs9g00c06fgg.direct.labs.play-with-docker.com:27017",
-            "activeOnStartUp": true,
-            "user": "root"
-        }
-    },
-    "search.exclude": {
-        "**/docs": true
-    },
-    "files.exclude": {
-        "**/docs": true,
-    },
-    "editor.quickSuggestions": {
-        "other": false,
-        "comments": false,
-        "strings": false
-    },
-    "prettier.jsxBracketSameLine": true,
-    "prettier.printWidth": 180,
-    "eslint.enable": true,
+  "mongoRunner": {
+    "connection": {
+      "url": "mongodb://ip172-18-0-21-bevjs6s9cs9g00c06fgg.direct.labs.play-with-docker.com:27017",
+      "activeOnStartUp": true,
+      "user": "root"
+    }
+  },
+  "search.exclude": {
+    "**/docs": true
+  },
+  "files.exclude": {
+    "**/docs": true
+  },
+  "editor.quickSuggestions": {
+    "other": false,
+    "comments": false,
+    "strings": false
+  },
+  "prettier.jsxBracketSameLine": true,
+  "prettier.printWidth": 180,
+  "eslint.enable": true
 }

@@ -1,3 +1,18 @@
+export class SettingsService {
+  static load(key = 'settings') {
+    var settingsJson = localStorage.getItem(key)
+    if (settingsJson == null) {
+      return new Settings()
+    }
+
+    return JSON.parse(settingsJson)
+  }
+
+  static save(settings, key = 'settings') {
+    localStorage.setItem(key, JSON.stringify(settings))
+  }
+}
+
 export default class Settings {
   constructor(
     DisplayLength = 4,
@@ -13,24 +28,6 @@ export default class Settings {
     this.HighlightClickable = HighlightClickable
     this.HighlightMovies = HighlightMovies
     this.HighlightNew = HighlightNew
-  }
-
-  static load(key = 'settings') {
-    var settingsJson = localStorage.getItem(key)
-    if (settingsJson == null) {
-      return new Settings()
-    }
-
-    return new Settings({
-      ...JSON.parse(settingsJson),
-    })
-  }
-
-  save(key) {
-    localStorage.setItem(key, JSON.stringify(this))
-  }
-
-  static save(key, settings) {
-    localStorage.setItem(key, JSON.stringify(settings))
+    this.MyJsonId = ''
   }
 }

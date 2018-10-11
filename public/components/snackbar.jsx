@@ -1,12 +1,15 @@
-import React from "react";
+import React from 'react'
 
-const SnackBar = () => (
+const SnackBar = ({ snackMessage }) => 
+!snackMessage ? (
   <div id="snackbar">
-    A new version of this app is available. Click{" "}
+    A new version of this app is available. Click{' '}
     <a id="reload" href="_self">
       here
-    </a>{" "}
+    </a>{' '}
     to update.
   </div>
-);
-export default SnackBar;
+) : (
+  <div id="snackbar" className="show">{snackMessage}</div>
+)
+export default SnackBar
