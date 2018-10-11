@@ -9,8 +9,9 @@
     "test": "cross-env NODE_ENV=test jest",
     "test:watch": "npm test -- --watch",
     "build": "parcel build public/index.html --out-dir docs --detailed-report --public-url ./",
-    "start": "parcel public/index.html --out-dir docs",
-    "deploy": "cross-env NODE_ENV=production npm run build && git add --all && git commit -m \"latest build\" && git push"
+    "start": "parcel public/index.html --out-dir docs ",
+    "deploy": "cross-env NODE_ENV=production npm run build && npm run push",
+    "push": "git add --all && git commit -m \"vscode push\" && git push"
   },
   "repository": {
     "type": "git",

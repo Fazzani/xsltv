@@ -36,6 +36,7 @@ export class App extends Component {
 
   componentDidMount() {
     this.fetchFiles()
+    
   }
 
   fetchFiles = () => {

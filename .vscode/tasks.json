@@ -1,0 +1,26 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "npm",
+            "script": "deploy",
+            "isBackground": true,
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "start",
+            "isBackground": true,
+            "label": "start_app",
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "push",
+            "isBackground": true,
+            "problemMatcher": []
+        }
+    ]
+}

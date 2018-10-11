@@ -1,15 +1,42 @@
 {
-    // Utilisez IntelliSense pour en savoir plus sur les attributs possibles.
-    // Pointez pour afficher la description des attributs existants.
-    // Pour plus d'informations, visitez : https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "chrome",
-            "request": "launch",
-            "name": "Launch Chrome against localhost",
-            "url": "http://localhost:1234",
-            "webRoot": "${workspaceFolder}/docs"
-        }
-    ]
+  // Utilisez IntelliSense pour en savoir plus sur les attributs possibles.
+  // Pointez pour afficher la description des attributs existants.
+  // Pour plus d'informations, visitez : https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Client",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--nolazy","start"],
+      "port": 1234,
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "protocol": "legacy",
+      "sourceMaps": true,
+      "restart": true,
+      "stopOnEntry": false,
+      "env": {
+        "NODE_ENV": "development"
+      }
+    
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Chrome",
+      "url": "http://localhost:1234",
+      "webRoot": "${workspaceFolder}/docs",
+      "internalConsoleOptions": "neverOpen",
+      "preLaunchTask": "start_app"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Chrome/Client",
+      "configurations": ["Client", "Chrome"]
+    }
+  ]
 }
