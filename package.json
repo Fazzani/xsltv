@@ -5,10 +5,11 @@
   "private": true,
   "main": "docs/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "pretest": "eslint --ignore-pattern docs/** --ignore-pattern public/lang/** --ignore-path .gitignore -f compact .",
-    "start": "parcel public/index.html --out-dir docs",
+    "test": "cross-env NODE_ENV=test jest",
+    "test:watch": "npm test -- --watch",
     "build": "parcel build public/index.html --out-dir docs --detailed-report --public-url ./",
+    "start": "parcel public/index.html --out-dir docs",
     "deploy": "cross-env NODE_ENV=production npm run build && git add --all && git commit -m \"latest build\" && git push"
   },
   "repository": {
@@ -115,7 +116,6 @@
       "text"
     ],
     "notify": true,
-    "testEnvironment": "./jest/mongo-memory-environment",
     "transform": {},
     "watchPlugins": [
       "jest-watch-typeahead/filename",
