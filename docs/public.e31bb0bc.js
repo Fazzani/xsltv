@@ -42365,9 +42365,7 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/he
 
 var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
 
-var _settings = _interopRequireWildcard(require("./settings"));
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+var _settings = require("./settings");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -60646,6 +60644,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var AppContext = _react.default.createContext();
 
 exports.AppContext = AppContext;
+var test = '';
 
 var App =
 /*#__PURE__*/
@@ -60750,7 +60749,7 @@ function (_Component) {
                   element.selected = false;
                 });
 
-                _this.setState(function (prevState, prop) {
+                _this.setState(function (prevState) {
                   return {
                     files: [e.file].concat((0, _toConsumableArray2.default)(prevState.files))
                   };
@@ -60759,7 +60758,6 @@ function (_Component) {
                 (0, _asyncToGenerator2.default)(
                 /*#__PURE__*/
                 _regenerator.default.mark(function _callee() {
-                  var updateResult;
                   return _regenerator.default.wrap(function _callee$(_context) {
                     while (1) {
                       switch (_context.prev = _context.next) {
@@ -60768,11 +60766,9 @@ function (_Component) {
                           return _filesService.default.update(_this.state.AppSettings.MyJsonId, _this.state.files);
 
                         case 2:
-                          updateResult = _context.sent;
-
                           _this.loadXML(e.file);
 
-                        case 4:
+                        case 3:
                         case "end":
                           return _context.stop();
                       }
@@ -60841,7 +60837,7 @@ function (_Component) {
               case 3:
                 result = _context3.sent;
                 id = result.uri.split('bins//')[1];
-                this.setState(function (prevState, prop) {
+                this.setState(function (prevState) {
                   return {
                     AppSettings: (0, _objectSpread2.default)({}, prevState.AppSettings, {
                       MyJsonId: id
@@ -60983,7 +60979,10 @@ App.propTypes = {};
 (0, _registerServiceWorker.default)(); // Hot Module Replacement
 
 if (module.hot) {
-  module.hot.accept();
+  module.hot.dispose(function () {// module is about to be replaced
+  });
+  module.hot.accept(function () {// module or one of its dependencies was just updated
+  });
 }
 
 if ("development" !== 'production') {
@@ -61019,7 +61018,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60672" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55276" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
