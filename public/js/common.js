@@ -24,7 +24,6 @@ export class Constants {
 
   static get Urls() {
     return {
-      API_FILES: 'https://api.myjson.com/bins/8tvgs',
       MYJSON_API_URL: 'https://api.myjson.com/bins/',
     }
   }

@@ -46,60 +46,66 @@ export class App extends Component {
             AppSettings: { ...prevState.AppSettings, MyJsonId: id },
           }
         },
-        () => {
+        async () => {
           SettingsService.save(this.state.AppSettings)
-          this.fetchFiles()
+          await this.fetchFiles()
         }
       )
     } else {
       SettingsService.save(this.state.AppSettings)
-      this.fetchFiles()
+      await this.fetchFiles()
     }
   }
 
-  fetchFiles = () => {
-    filesServices
-      .get(this.state.AppSettings.MyJsonId)
-      .then((res) => {
-        if (res && res.length > 0) {
-          res[0].selected = true
-          this.setState({
-            files: res,
-          })
-          this.loadXSL(res[0])
-        } else {
-          this.setState({
-            loading: false,
-            snackMessage: 'No files founded',
-          })
-          this.loadXSL()
-        }
+  fetchFiles = async () => {
+    const response = await filesServices.get(this.state.AppSettings.MyJsonId)
+
+    if (response && response.length > 0) {
+      response[0].selected = true
+      this.setState({
+        files: response,
       })
-      .catch((e) => console.error(e))
+      await this.loadXSL(response[0])
+    } else {
+      this.setState({
+        loading: false,
+        snackMessage: 'No files founded',
+      })
+      await this.loadXSL()
+    }
   }
 
-  loadXSL(xmlfileneeded) {
+  /**
+   *  Importing xsl as stylesheet
+   * @param {object} xmlfileneeded - xmltv file object
+   */
+  async loadXSL(xmlfileneeded) {
     this.setState({
       loading: true,
       loaderText: 'Loading xslt file...',
     })
-    fetch(index_xsl, {
-      method: 'GET',
-    })
-      .then((response) => response.text())
-      .then((str) => new window.DOMParser().parseFromString(str, 'text/xml'))
-      .then((xsl) => {
-        this.state.xsltvProcessor.processor.importStylesheet(xsl)
-        if (xmlfileneeded) this.loadXML(xmlfileneeded)
+
+    try {
+      const response = await fetch(index_xsl)
+      this.handleErrors('Loading Xsl file', response)
+      const xsl = new window.DOMParser().parseFromString(
+        await response.text(),
+        'text/xml'
+      )
+      this.state.xsltvProcessor.processor.importStylesheet(xsl)
+      if (xmlfileneeded) await this.loadXML(xmlfileneeded)
+    } catch (error) {
+      this.setState({
+        loading: true,
+        loaderText: error.message,
       })
-      .catch((error) => {
-        this.setState({
-          loading: true,
-          loaderText: error.message,
-        })
-      })
+    }
   }
 
+  /**
+   *  Loading Xmltv file
+   * @param {object} xmlfileneeded - xmltv file object
+   */
   loadXML(xmlfileneeded) {
     if (xmlfileneeded) {
       this.setState({
@@ -139,16 +145,11 @@ export class App extends Component {
     }
   }
 
-  onXsltClick = (e) => {
-    let target = e.target.id === 'topcorner' ? e.target : e.target.parentNode
-
-    if (target.attributes['data-onclick']) {
-      e.preventDefault()
-      // console.log(target.attributes['data-onclick'].value)
-      eval('_this.' + target.attributes['data-onclick'].value)
-    }
-  }
-
+  /**
+   * Initi différents params to xsl processor
+   *
+   * @memberof App
+   */
   Init = (dl, ch, cd, cm, cy, offset) => {
     this.setState({
       loading: true,
@@ -157,11 +158,30 @@ export class App extends Component {
     })
 
     this.state.xsltvProcessor.initDate(ch, cd, cm, cy, offset)
-    let fragment = this.state.xsltvProcessor.Init(this.state.xml, document)
-    var helperDiv = document.createElement('div')
+    const fragment = this.state.xsltvProcessor.Init(this.state.xml, document)
+    if (fragment === null)
+      throw new Error('An error was occured while processing the xml file...')
+    const helperDiv = document.createElement('div')
     helperDiv.appendChild(fragment)
 
     this.setState({ fragment: helperDiv.innerHTML, loading: false })
+  }
+
+  handleErrors = (origin = 'XViewer App', response) => {
+    if (!response.ok) {
+      throw Error(`${origin} : ${response.statusText}`)
+    }
+    return response
+  }
+
+  onXsltClick = (e) => {
+    let target = e.target.id === 'topcorner' ? e.target : e.target.parentNode
+
+    if (target.attributes['data-onclick']) {
+      e.preventDefault()
+      // console.log(target.attributes['data-onclick'].value)
+      eval('_this.' + target.attributes['data-onclick'].value)
+    }
   }
 
   onSettingsModalClick = () => {
