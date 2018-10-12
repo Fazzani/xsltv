@@ -5,7 +5,7 @@
   "private": true,
   "main": "docs/index.js",
   "scripts": {
-    "pretest": "eslint --ignore-pattern docs/** --ignore-pattern public/lang/** --ignore-path .gitignore -f compact .",
+    "lint": "./node_modules/.bin/eslint --fix --ignore-pattern docs --ignore-pattern public/lang --ignore-path .gitignore .",
     "test": "cross-env NODE_ENV=test jest",
     "test:watch": "npm test -- --watch",
     "build": "parcel build public/index.html --out-dir docs --detailed-report --public-url ./",
@@ -32,7 +32,8 @@
     "env": {
       "browser": true,
       "es6": true,
-      "jest": true
+      "jest": true,
+      "jquery": true
     },
     "globals": {
       "process": true,
@@ -163,7 +164,7 @@
     "@babel/runtime": "^7.1.2",
     "@babel/runtime-corejs2": "^7.1.2",
     "cross-env": "^5.2.0",
-    "eslint": "^5.5.0",
+    "eslint": "^5.6.1",
     "eslint-config-prettier": "^3.0.1",
     "eslint-config-react": "^1.1.7",
     "eslint-plugin-babel": "^5.2.1",

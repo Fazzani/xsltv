@@ -22,7 +22,7 @@ import Loader from './components/loader'
 import filesServices from './js/filesService'
 
 export const AppContext = React.createContext()
-
+var test = ''
 export class App extends Component {
   static propTypes = {}
   constructor() {
