@@ -8,8 +8,8 @@ export default class Xslt extends Component {
     onClick: PropTypes.func.isRequired,
     fragment: PropTypes.string.isRequired,
   }
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.popperTab = []
   }
 

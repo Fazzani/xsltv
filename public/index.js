@@ -12,6 +12,7 @@ import SideMenu from './components/sideMenu'
 import SnackBar from './components/snackbar'
 import Header from './components/header'
 import Settings, { SettingsService } from './js/settings'
+// @ts-ignore
 import index_xsl from './index.xsl'
 import { getParamsCurrentDate } from './components/shared'
 import registerServiceWorker from './registerServiceWorker'
@@ -21,11 +22,11 @@ import { Constants } from './js/common'
 import Loader from './components/loader'
 import filesServices from './js/filesService'
 
-export const AppContext = React.createContext()
+export const AppContext = React.createContext({})
 export class App extends Component {
   static propTypes = {}
   constructor() {
-    super()
+    super(null)
     this.state = {
       loading: true,
       loaderText: 'Init App',
@@ -79,7 +80,7 @@ export class App extends Component {
    *  Importing xsl as stylesheet
    * @param {object} xmlfileneeded - xmltv file object
    */
-  async loadXSL(xmlfileneeded) {
+  async loadXSL(xmlfileneeded = null) {
     this.setState({
       loading: true,
       loaderText: 'Loading xslt file...',
@@ -88,6 +89,7 @@ export class App extends Component {
     try {
       const response = await fetch(index_xsl)
       this.handleErrors('Loading Xsl file', response)
+      // @ts-ignore
       const xsl = new window.DOMParser().parseFromString(
         await response.text(),
         'text/xml'
@@ -113,12 +115,14 @@ export class App extends Component {
         loading: true,
         loaderText: `Loading ${xmlfileneeded.name}...`,
       })
+      // @ts-ignore
       if (window.XMLHttpRequest && window.XSLTProcessor) {
         fetch(xmlfileneeded.url, {
           method: 'GET',
         })
           .then((response) => response.text())
           .then((str) =>
+            // @ts-ignore
             new window.DOMParser().parseFromString(str, 'text/xml')
           )
           .then((x) => {
@@ -146,10 +150,11 @@ export class App extends Component {
   }
 
   /**
-   * Initi différents params to xsl processor
+   * Init different params to xsl processor
    *
    * @memberof App
    */
+  // @ts-ignore
   Init = (dl, ch, cd, cm, cy, offset) => {
     this.setState({
       loading: true,
@@ -160,7 +165,7 @@ export class App extends Component {
     this.state.xsltvProcessor.initDate(ch, cd, cm, cy, offset)
     const fragment = this.state.xsltvProcessor.Init(this.state.xml, document)
     if (fragment === null)
-      throw new Error('An error was occured while processing the xml file...')
+      throw new Error('An error was occurred while processing the xml file...')
     const helperDiv = document.createElement('div')
     helperDiv.appendChild(fragment)
 
@@ -227,6 +232,7 @@ export class App extends Component {
   }
 
   saveSettings = () => {
+    // @ts-ignore
     Settings.save(this.state.AppSettings)
   }
 
@@ -248,7 +254,7 @@ export class App extends Component {
           />
           <div className="container">
             <Header />
-            <div className="row xstl-container" ref={(c) => (this.xsltRef = c)}>
+            <div className="row xslt-container" ref={(c) => (this.xsltRef = c)}>
               {this.state.fragment ? (
                 <React.Fragment>
                   <Xslt
@@ -268,7 +274,7 @@ export class App extends Component {
               ) : null}
             </div>
           </div>
-          <SnackBar {...this.state} />
+          <SnackBar {...this.state.snackMessage} />
         </section>
       </AppContext.Provider>
     )
@@ -279,11 +285,14 @@ render(<App />, document.getElementById('app'))
 registerServiceWorker()
 
 // Hot Module Replacement
+// @ts-ignore
 if (module.hot) {
+  // @ts-ignore
   module.hot.dispose(function() {
     // module is about to be replaced
   })
 
+  // @ts-ignore
   module.hot.accept(function() {
     // module or one of its dependencies was just updated
   })

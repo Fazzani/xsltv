@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 const Header = () => (
   <div className="row">
@@ -9,6 +9,6 @@ const Header = () => (
       </span>
     </h2>
   </div>
-);
+)
 
-export default Header;
+export default Header

@@ -12,8 +12,8 @@ export class SettingsModal extends Component {
   static defaultProps = {
     files: [],
   }
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     // create a ref to store the textInput DOM element
     this.meRef = React.createRef()
   }
@@ -68,12 +68,12 @@ export class SettingsModal extends Component {
     const selectXmltv = this.selectedXmltvFile ? (
       <form id="xmltv_source">
         <div className="form-group">
-          <label htmlFor="xmlt_list" className="col-form-label">
+          <label htmlFor="xmltv_list" className="col-form-label">
             Xmltv sources
           </label>
           <select
             className="form-control"
-            id="xmlt_list"
+            id="xmltv_list"
             onChange={this.onXmltvSelectChange}
             value={this.selectedXmltvFile}
           >
@@ -93,7 +93,7 @@ export class SettingsModal extends Component {
       <div
         className="modal fade"
         id="settingsModal"
-        tabIndex="-1"
+        tabIndex={-1}
         role="dialog"
         ref={this.meRef}
         aria-labelledby="exampleModalLabel"
@@ -150,7 +150,7 @@ export class SettingsModal extends Component {
                               ref={(x) => {
                                 this.xmltv_url = x
                               }}
-                              required="required"
+                              required
                               data-error="Please enter your full name."
                               className="form-control form-control-sm"
                               placeholder="xmltv url..."

@@ -53,11 +53,11 @@ export default class Timeline extends Component {
   }
 
   percentElapsedTimeNowByDay = (startDay, hours) => {
-    let from = moment(startDay, 'DD-MM-YYYY hh:mm:ss')
-    let diff = moment().diff(from)
-    let elapsedDuration = moment.duration(diff)
-    let percent = (elapsedDuration.asMinutes() / (60 * hours)) * 100
-    return Math.floor(parseInt(percent))
+    const from = moment(startDay, 'DD-MM-YYYY hh:mm:ss')
+    const diff = moment().diff(from)
+    const elapsedDuration = moment.duration(diff)
+    const percent = (elapsedDuration.asMinutes() / (60 * hours)) * 100
+    return Math.floor(percent)
   }
 
   render() {
