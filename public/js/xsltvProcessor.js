@@ -1,4 +1,4 @@
-import Settings, { SettingsService } from './settings'
+import { SettingsService } from './settings'
 
 export default class XsltvProcessor {
   constructor() {

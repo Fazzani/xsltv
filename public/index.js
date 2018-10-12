@@ -42,7 +42,7 @@ export class App extends Component {
       const result = await filesServices.add({ files: [] })
       const id = result.uri.split('bins//')[1]
       this.setState(
-        (prevState, prop) => {
+        (prevState) => {
           return {
             AppSettings: { ...prevState.AppSettings, MyJsonId: id },
           }
@@ -184,13 +184,13 @@ export class App extends Component {
           element.selected = false
         })
         this.setState(
-          (prevState, prop) => {
+          (prevState) => {
             return {
               files: [e.file, ...prevState.files],
             }
           },
           async () => {
-            const updateResult = await filesServices.update(
+            await filesServices.update(
               this.state.AppSettings.MyJsonId,
               this.state.files
             )
