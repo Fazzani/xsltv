@@ -1,26 +1,27 @@
 # EPG Viewer
 
 Epg viewer for XMLTV format based on xsltv project.
-[Live][live]
 
-[Example css][example_css]
+> [GO TO Live Demo][live]
 
 ## TODO
 
 - [ ] Loading xmltv file from queryString param
+- [ ] Auto refresh toutes les 4 heures de l'appli
+- [ ] Auto close the snack bar
 - [ ] Fix mobile version (Landscape)
 - [ ] Highlight movies and sports by filter (multiselect)
-- [ ] Searching a program
-- [ ] Save settings to localStorage
-- [ ] About page
+- [ ] Searching a program feature
+- [ ] Finalize settings modal page
+- [ ] Fix timeline position
+- [ ] About modal
 - [ ] React enhancement
   - [ ] BIT for sharing component
   - [ ] UI tests (JEST & e2e)
   - [ ] Errors handling
   - [ ] [Rxjs integration][rxjs_react]
-- [ ] Fix timeline position
-- [ ] Auto refresh toutes les 4 heures de l'appli
-- [x] Chromse debugger/vscode/react installation
+
+[Css theme example][example_css]
 
 [live]: https://fazzani.github.io/xviewer
 [example_css]: https://codepen.io/blackstockc/pen/eJbbyb
