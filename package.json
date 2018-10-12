@@ -10,8 +10,9 @@
     "test:watch": "npm test -- --watch",
     "build": "parcel build public/index.html --out-dir docs --detailed-report --public-url ./",
     "start": "parcel public/index.html --out-dir docs ",
-    "deploy": "cross-env NODE_ENV=production npm run build && npm run push",
-    "push": "git add --all && git commit -m \"vscode push\" && git push"
+    "push": "git add --all && git commit -m \"vscode push\" && git push",
+    "prepublish": "rm -rf ./docs/**",
+    "publish": "cross-env NODE_ENV=production npm run build && npm run push"
   },
   "repository": {
     "type": "git",
