@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import { Constants } from '../js/common'
 import $ from 'jquery'
 
-export class SettingsModal extends Component {
+class SettingsModal extends Component {
   static propTypes = {
     files: PropTypes.array.isRequired,
     callbackEvent: PropTypes.func,
-    open: PropTypes.func,
+    open: PropTypes.bool,
   }
   static defaultProps = {
     files: [],

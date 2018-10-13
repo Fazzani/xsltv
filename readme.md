@@ -7,8 +7,7 @@ Epg viewer for XMLTV format based on xsltv project.
 ## TODO
 
 - [ ] Loading xmltv file from queryString param
-- [ ] Auto refresh toutes les 4 heures de l'appli
-- [ ] Auto close the snack bar
+- [ ] Auto refresh each 4 hours
 - [ ] Fix mobile version (Landscape)
 - [ ] Highlight movies and sports by filter (multiselect)
 - [ ] Searching a program feature

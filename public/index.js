@@ -1,6 +1,7 @@
 /*eslint no-undef: "error"*/
 /*eslint-env browser*/
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { render } from 'react-dom'
 import 'bootstrap'
 import $ from 'jquery'
@@ -9,7 +10,6 @@ import XsltvProcessor from './js/xsltvProcessor'
 import SettingsModal from './components/settingsModal'
 import NavBottom from './components/NavBottom'
 import SideMenu from './components/sideMenu'
-import SnackBar from './components/snackbar'
 import Header from './components/header'
 import Settings, { SettingsService } from './js/settings'
 // @ts-ignore
@@ -21,41 +21,59 @@ import Xslt from './components/xslt'
 import { Constants } from './js/common'
 import Loader from './components/loader'
 import filesServices from './js/filesService'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { ErrorBoundary } from './components/ErrorBoundary'
+const AppContext = React.createContext({})
 
-export const AppContext = React.createContext({})
 export class App extends Component {
-  static propTypes = {}
-  constructor() {
-    super(null)
+  static propTypes = { notify: PropTypes.func }
+  constructor(props) {
+    super(props)
     this.state = {
       loading: true,
+      notify: props.notify,
       loaderText: 'Init App',
       files: [],
       xsltvProcessor: new XsltvProcessor(),
       AppSettings: SettingsService.load(),
       openSettingsModal: false,
+      noXmltvFiles: false,
+      modalSettingsOpen: false,
     }
   }
 
   async componentDidMount() {
-    if (!this.state.AppSettings.MyJsonId) {
-      const result = await filesServices.add({ files: [] })
-      const id = result.uri.split('bins//')[1]
-      this.setState(
-        (prevState) => {
-          return {
-            AppSettings: { ...prevState.AppSettings, MyJsonId: id },
+    try {
+      if (!this.state.AppSettings.MyJsonId) {
+        const result = await filesServices.add({ files: [] })
+        const id = result.uri.split('bins//')[1]
+        this.setState(
+          (prevState) => {
+            return {
+              AppSettings: { ...prevState.AppSettings, MyJsonId: id },
+            }
+          },
+          async () => {
+            SettingsService.save(this.state.AppSettings)
+            await this.fetchFiles()
           }
-        },
-        async () => {
-          SettingsService.save(this.state.AppSettings)
-          await this.fetchFiles()
-        }
-      )
-    } else {
-      SettingsService.save(this.state.AppSettings)
-      await this.fetchFiles()
+        )
+      } else {
+        SettingsService.save(this.state.AppSettings)
+        await this.fetchFiles()
+      }
+    } catch (error) {
+      this.componentDidCatch(error)
     }
+  }
+
+  // @ts-ignore
+  componentDidCatch(error, errorInfo) {
+    this.state.notify({
+      message: error.toString(),
+      type: toast.TYPE.ERROR,
+    })
   }
 
   fetchFiles = async () => {
@@ -68,9 +86,12 @@ export class App extends Component {
       })
       await this.loadXSL(response[0])
     } else {
+      this.state.notify({
+        message: 'no settings file founded!',
+        type: toast.TYPE.WARNING,
+      })
       this.setState({
-        loading: false,
-        snackMessage: 'No files founded',
+        noXmltvFiles: true,
       })
       await this.loadXSL()
     }
@@ -86,29 +107,28 @@ export class App extends Component {
       loaderText: 'Loading xslt file...',
     })
 
-    try {
-      const response = await fetch(index_xsl)
+    const response = await fetch(index_xsl)
+    if (this.state.noXmltvFiles) {
       this.handleErrors('Loading Xsl file', response)
-      // @ts-ignore
-      const xsl = new window.DOMParser().parseFromString(
-        await response.text(),
-        'text/xml'
-      )
-      this.state.xsltvProcessor.processor.importStylesheet(xsl)
-      if (xmlfileneeded) await this.loadXML(xmlfileneeded)
-    } catch (error) {
       this.setState({
-        loading: true,
-        loaderText: error.message,
+        loading: false,
       })
+      this.toggleSettingsModal()
     }
+    // @ts-ignore
+    const xsl = new window.DOMParser().parseFromString(
+      await response.text(),
+      'text/xml'
+    )
+    this.state.xsltvProcessor.processor.importStylesheet(xsl)
+    await this.loadXML(xmlfileneeded)
   }
 
   /**
    *  Loading Xmltv file
    * @param {object} xmlfileneeded - xmltv file object
    */
-  loadXML(xmlfileneeded) {
+  async loadXML(xmlfileneeded) {
     if (xmlfileneeded) {
       this.setState({
         fragment: undefined,
@@ -117,41 +137,38 @@ export class App extends Component {
       })
       // @ts-ignore
       if (window.XMLHttpRequest && window.XSLTProcessor) {
-        fetch(xmlfileneeded.url, {
-          method: 'GET',
+        const response = await fetch(xmlfileneeded.url)
+        this.handleErrors('Loading xml file', response)
+        // @ts-ignore
+        const xml = new window.DOMParser().parseFromString(
+          await response.text(),
+          'text/xml'
+        )
+        this.setState({
+          xml,
+          loading: true,
+          loaderText: 'Preparing grid...',
         })
-          .then((response) => response.text())
-          .then((str) =>
-            // @ts-ignore
-            new window.DOMParser().parseFromString(str, 'text/xml')
-          )
-          .then((x) => {
-            this.setState({
-              xml: x,
-              loading: true,
-              loaderText: 'Preparing grid...',
-            })
-            this.Init(
-              this.state.xsltvProcessor.AppSettings.DisplayLength,
-              ...getParamsCurrentDate()
-            )
-          })
-          .catch((error) => {
-            this.setState({
-              loading: true,
-              loaderText: error.message,
-            })
-          })
-      } else {
-        alert("Your browser can't handle this script")
-        return
+        // @ts-ignore
+        this.Init(
+          this.state.xsltvProcessor.AppSettings.DisplayLength,
+          ...getParamsCurrentDate()
+        )
       }
+    } else {
+      throw new Error("Your browser can't handle this script")
     }
   }
 
   /**
    * Init different params to xsl processor
    *
+   * @param {number} dl - display length (displayed hours)
+   * @param {number} ch - hour date
+   * @param {number} cd - day date
+   * @param {number} cm - month date
+   * @param {number} cy- year date
+   * @param {number} offset- decalage horaire
    * @memberof App
    */
   // @ts-ignore
@@ -179,6 +196,13 @@ export class App extends Component {
     return response
   }
 
+  /**
+   * handle click on epg table corners. that's allow as to navigate
+   * to next/previous hours
+   *
+   * @param {object} e- click event
+   * @memberof App
+   */
   onXsltClick = (e) => {
     let target = e.target.id === 'topcorner' ? e.target : e.target.parentNode
 
@@ -226,9 +250,18 @@ export class App extends Component {
   }
 
   toggleSettingsModal = () => {
-    const settingsModal = $('#settingsModal')
-    if (settingsModal)
-      settingsModal.modal(this.state.openSettingsModal ? 'show' : 'hide')
+    this.setState(
+      (prev) => {
+        return {
+          openSettingsModal: !prev.openSettingsModal,
+        }
+      },
+      () => {
+        const settingsModal = $('#settingsModal')
+        if (settingsModal)
+          settingsModal.modal(this.state.openSettingsModal ? 'show' : 'hide')
+      }
+    )
   }
 
   saveSettings = () => {
@@ -249,6 +282,7 @@ export class App extends Component {
         <section className="row-section">
           <SideMenu handleToggleModalClick={this.onSettingsModalClick} />
           <SettingsModal
+            open={this.state.openSettingsModal}
             files={this.state.files}
             callbackEvent={this.onSettingsModalCallback}
           />
@@ -274,14 +308,18 @@ export class App extends Component {
               ) : null}
             </div>
           </div>
-          <SnackBar {...this.state.snackMessage} />
         </section>
       </AppContext.Provider>
     )
   }
 }
 
-render(<App />, document.getElementById('app'))
+render(
+  <ErrorBoundary>
+    <App />
+  </ErrorBoundary>,
+  document.getElementById('app')
+)
 registerServiceWorker()
 
 // Hot Module Replacement
@@ -298,7 +336,7 @@ if (module.hot) {
   })
 }
 
-if (process.env.NODE_ENV !== 'production') {
-  const { whyDidYouUpdate } = require('why-did-you-update')
-  whyDidYouUpdate(React)
-}
+// if (process.env.NODE_ENV !== 'production') {
+//   const { whyDidYouUpdate } = require('why-did-you-update')
+//   whyDidYouUpdate(React)
+// }

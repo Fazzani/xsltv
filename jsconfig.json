@@ -1,12 +1,20 @@
 {
-  "typeAcquisition": {
-    "include": ["jquery"]
-  },
   "compilerOptions": {
+    "outDir": "./docs/",
+    "sourceMap": true,
     "target": "es6",
     "checkJs": true,
     "jsx": "react",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "baseUrl": "src",
+    "lib": [
+      "es6",
+      "dom"
+    ],
   },
-  "exclude": ["node_modules", "**/node_modules/*"]
+  "include": [
+    "./public/**/*",
+    "node_modules/@types"
+  ]
 }

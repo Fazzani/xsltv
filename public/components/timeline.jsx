@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import '../styles/timeline.css'
 import $ from 'jquery'
+
 export default class Timeline extends Component {
   static propTypes = {
     startDate: PropTypes.instanceOf(Date).isRequired,

@@ -1,26 +1,37 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
 
 export default class SideMenu extends PureComponent {
-  constructor() {
-    super();
+  static propTypes = {
+    handleToggleModalClick: PropTypes.func,
+  }
+
+  constructor(props) {
+    super(props)
     this.state = {
-      open: true
-    };
+      open: true,
+    }
   }
 
   handleToggleClick(e) {
-    e.preventDefault();
+    e.preventDefault()
     this.setState({
       ...this.state,
-      open: !this.state.open
-    });
+      open: !this.state.open,
+    })
   }
 
   render() {
-    const openClassNames = this.state.open ? "navbar navbar-fixed-left navbar-minimal animate open" : "navbar navbar-fixed-left navbar-minimal animate";
+    const openClassNames = this.state.open
+      ? 'navbar navbar-fixed-left navbar-minimal animate open'
+      : 'navbar navbar-fixed-left navbar-minimal animate'
 
     return (
-      <nav onClick={e => this.handleToggleClick(e)} className={openClassNames} role="navigation">
+      <nav
+        onClick={(e) => this.handleToggleClick(e)}
+        className={openClassNames}
+        role="navigation"
+      >
         <div className="navbar-toggler animate">
           <i className="fa fa-align-justify" />
         </div>
@@ -32,7 +43,13 @@ export default class SideMenu extends PureComponent {
             </a>
           </li>
           <li>
-            <a href="#settingsMenu" className="animate" data-toggle="modal" data-target="#settingsModal" onClick={this.props.handleToggleModalClick}>
+            <a
+              href="#settingsMenu"
+              className="animate"
+              data-toggle="modal"
+              data-target="#settingsModal"
+              onClick={this.props.handleToggleModalClick}
+            >
               <span className="desc animate"> Settings </span>
               <i className="fa fa-cogs" />
             </a>
@@ -45,6 +62,6 @@ export default class SideMenu extends PureComponent {
           </li>
         </ul>
       </nav>
-    );
+    )
   }
 }
