@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import '../styles/loader.css'
+import '../styles/loader.scss'
 
 export default class Loader extends Component {
   static propTypes = {

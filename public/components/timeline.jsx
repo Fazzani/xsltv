@@ -3,7 +3,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import '../styles/timeline.css'
+import '../styles/timeline.scss'
 import $ from 'jquery'
 
 export default class Timeline extends Component {

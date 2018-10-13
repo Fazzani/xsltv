@@ -24,7 +24,8 @@ import filesServices from './js/filesService'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { ErrorBoundary } from './components/ErrorBoundary'
-const AppContext = React.createContext({})
+
+export const AppContext = React.createContext({})
 
 export class App extends Component {
   static propTypes = { notify: PropTypes.func }
@@ -226,6 +227,24 @@ export class App extends Component {
       case Constants.Events.LOAD_XMLTV_URL:
         this.loadXML(e.file)
         break
+      case Constants.Events.REMOVE_XMLTV_URL:
+        this.setState(
+          (prevState) => {
+            return {
+              files: prevState.files.filter((f) => f.url != e.file.url),
+            }
+          },
+          async () => {
+            await filesServices.update(
+              this.state.AppSettings.MyJsonId,
+              this.state.files
+            )
+            await this.loadXML(
+              this.state.files.length > 0 ? this.state.files[0] : null
+            )
+          }
+        )
+        break
       case Constants.Events.ADD_XMLTV_URL:
         e.file.selected = true
         this.state.files.forEach((element) => {
@@ -242,7 +261,7 @@ export class App extends Component {
               this.state.AppSettings.MyJsonId,
               this.state.files
             )
-            this.loadXML(e.file)
+            await this.loadXML(e.file)
           }
         )
         break
@@ -276,6 +295,7 @@ export class App extends Component {
           ...this.state,
           loadXML: this.loadXML,
           saveSettings: this.saveSettings,
+          onSettingsModalCallback: this.onSettingsModalCallback,
         }}
       >
         <NavBottom />

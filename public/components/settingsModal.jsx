@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Constants } from '../js/common'
 import $ from 'jquery'
+import XmltvFilesComponent from './xmltvFiles'
+import { AppContext } from '../index'
 
 class SettingsModal extends Component {
   static propTypes = {
@@ -46,7 +48,11 @@ class SettingsModal extends Component {
       $(this.meRef.current).modal('hide')
     }
   }
-
+  /**
+   * Generate xmltv object from url
+   * @param {string} xmltv_file_url - xmltv file url
+   * @memberof SettingsModal
+   */
   createFileObject = (xmltv_file_url) => {
     return { name: xmltv_file_url.split('/').pop(), url: xmltv_file_url }
   }
@@ -218,17 +224,14 @@ class SettingsModal extends Component {
                     data-parent="#accordion"
                   >
                     <div className="card-body">
-                      Anim pariatur cliche reprehenderit, enim eiusmod high life
-                      accusamus terry richardson ad squid. 3 wolf moon officia
-                      aute, non cupidatat skateboard dolor brunch. Food truck
-                      quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon
-                      tempor, sunt aliqua put a bird on it squid single-origin
-                      coffee nulla assumenda shoreditch et. Nihil anim keffiyeh
-                      helvetica, craft beer labore wes anderson cred nesciunt
-                      sapiente ea proident. Ad vegan excepteur butcher vice
-                      lomo. Leggings occaecat craft beer farm-to-table, raw
-                      denim aesthetic synth nesciunt you probably havent heard
-                      of them accusamus labore sustainable VHS.
+                      <AppContext.Consumer>
+                        {({ onSettingsModalCallback }) => (
+                          <XmltvFilesComponent
+                            files={this.props.files}
+                            onSettingsModalCallback={onSettingsModalCallback}
+                          />
+                        )}
+                      </AppContext.Consumer>
                     </div>
                   </div>
                 </div>

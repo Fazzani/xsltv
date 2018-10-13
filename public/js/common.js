@@ -20,6 +20,7 @@ export class Constants {
     SELECTED_XMLTV_CHANGED: 'SELECTED_XMLTV_CHANGED',
     LOAD_XMLTV_URL: 'onViewXmltvUrl',
     ADD_XMLTV_URL: 'onAddXmltvUrl',
+    REMOVE_XMLTV_URL: 'onRemoveXmltvUrl',
   }
 
   static get Urls() {
