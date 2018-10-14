@@ -186,7 +186,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"../../node_modules/font-awesome/css/font-awesome.css":"../node_modules/font-awesome/css/font-awesome.css","../../node_modules/bootstrap/dist/css/bootstrap.css":"../node_modules/bootstrap/dist/css/bootstrap.css","./..\\images\\empty.gif":[["empty.d0b8fc41.gif","images/empty.gif"],"images/empty.gif"],"./..\\images\\starempty.png":[["starempty.cf8af87e.png","images/starempty.png"],"images/starempty.png"],"./..\\images\\starhalf.png":[["starhalf.bc55ac13.png","images/starhalf.png"],"images/starhalf.png"],"./..\\images\\starfilled.png":[["starfilled.ff5b9747.png","images/starfilled.png"],"images/starfilled.png"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"../../node_modules/font-awesome/css/font-awesome.css":"../node_modules/font-awesome/css/font-awesome.css","../../node_modules/bootstrap/dist/css/bootstrap.css":"../node_modules/bootstrap/dist/css/bootstrap.css","./..\\images\\bg.jpg":[["bg.43bfd8b0.jpg","images/bg.jpg"],"images/bg.jpg"],"./..\\images\\empty.gif":[["empty.d0b8fc41.gif","images/empty.gif"],"images/empty.gif"],"./..\\images\\starempty.png":[["starempty.cf8af87e.png","images/starempty.png"],"images/starempty.png"],"./..\\images\\starhalf.png":[["starhalf.bc55ac13.png","images/starhalf.png"],"images/starhalf.png"],"./..\\images\\starfilled.png":[["starfilled.ff5b9747.png","images/starfilled.png"],"images/starfilled.png"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -213,7 +213,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53270" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53665" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

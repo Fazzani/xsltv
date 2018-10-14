@@ -3,6 +3,7 @@ export default class Common {
     var str = window.location.search
     var objURL = {}
 
+    // @ts-ignore
     str.replace(new RegExp('([^?=&]+)(=([^&]*))?', 'g'), function(
       $0,
       $1,

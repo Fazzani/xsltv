@@ -2,16 +2,16 @@
 /**
 import { getParamsCurrentDate } from './shared';
  * Datetime to xsltv format
- * @param {Date} currenttime -current date time
- * @param {number} offsetminutes - jet lag (minutes)
+ * @param {Date} currentTime -current date time
+ * @param {number} offsetMinutes - jet lag (minutes)
  * @return {array} anonymous - fragment date as an array  
  */
 export let getParamsCurrentDate = (
-  currenttime = new Date(),
-  offsetminutes = 60
+  currentTime = new Date(),
+  offsetMinutes = 60
 ) => {
-  let myDate = new Date(currenttime)
-  myDate.setMinutes(myDate.getMinutes() + (60 - offsetminutes))
+  let myDate = new Date(currentTime)
+  myDate.setMinutes(myDate.getMinutes() + (60 - offsetMinutes))
   return [
     myDate.getHours(),
     myDate.getDate(),

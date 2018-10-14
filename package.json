@@ -151,6 +151,7 @@
     "popper": "^1.0.1",
     "popper.js": "^1.14.4",
     "react": "^16.5.2",
+    "react-bootstrap-tabs": "^1.0.2",
     "react-dom": "^16.5.2",
     "react-toastify": "^4.4.0",
     "styles": "^0.2.1",

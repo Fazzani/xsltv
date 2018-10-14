@@ -43083,7 +43083,8 @@ exports.default = Common;
 
 Common.parseQueryString = function () {
   var str = window.location.search;
-  var objURL = {};
+  var objURL = {}; // @ts-ignore
+
   str.replace(new RegExp('([^?=&]+)(=([^&]*))?', 'g'), function ($0, $1, $2, $3) {
     objURL[$1] = $3;
   });
@@ -48188,7 +48189,7 @@ function (_React$PureComponent) {
         className: "navbar fixed-bottom navbar-dark bg-dark  form-inline justify-content-between"
       }, _react.default.createElement(Clock, null), _react.default.createElement("small", null, "Created with ", _react.default.createElement("i", {
         className: "fa fa-heart"
-      }), " from", _react.default.createElement("a", {
+      }), " by", _react.default.createElement("a", {
         href: "http://synker.ovh"
       }, " Synker.ovh")));
     }
@@ -48391,15 +48392,15 @@ exports.getParamsCurrentDate = void 0;
 /**
 import { getParamsCurrentDate } from './shared';
  * Datetime to xsltv format
- * @param {Date} currenttime -current date time
- * @param {number} offsetminutes - jet lag (minutes)
+ * @param {Date} currentTime -current date time
+ * @param {number} offsetMinutes - jet lag (minutes)
  * @return {array} anonymous - fragment date as an array  
  */
 var getParamsCurrentDate = function getParamsCurrentDate() {
-  var currenttime = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Date();
-  var offsetminutes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 60;
-  var myDate = new Date(currenttime);
-  myDate.setMinutes(myDate.getMinutes() + (60 - offsetminutes));
+  var currentTime = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Date();
+  var offsetMinutes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 60;
+  var myDate = new Date(currentTime);
+  myDate.setMinutes(myDate.getMinutes() + (60 - offsetMinutes));
   return [myDate.getHours(), myDate.getDate(), myDate.getMonth() + 1, myDate.getFullYear()];
 };
 
@@ -52246,7 +52247,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53270" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53665" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
