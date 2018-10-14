@@ -41,7 +41,9 @@
         {
             "type": "npm",
             "script": "lint",
-            "problemMatcher": ["$eslint-stylish"],
+            "problemMatcher": [
+                "$eslint-stylish"
+            ],
             "label": "Lint",
             "presentation": {
                 "echo": true,
@@ -50,6 +52,11 @@
                 "panel": "shared",
                 "showReuseMessage": true
             }
+        },
+        {
+            "type": "npm",
+            "script": "publish",
+            "problemMatcher": []
         }
     ]
 }
