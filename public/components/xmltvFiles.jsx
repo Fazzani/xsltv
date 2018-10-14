@@ -9,9 +9,9 @@ export default class XmltvFilesComponent extends Component {
       PropTypes.shape({
         name: PropTypes.string.isRequired,
         url: PropTypes.string.isRequired,
-        onSettingsModalCallback: PropTypes.func,
       })
     ),
+    onSettingsModalCallback: PropTypes.func,
   }
 
   render() {
@@ -36,8 +36,8 @@ class XmltvFileItem extends Component {
     file: PropTypes.shape({
       name: PropTypes.string.isRequired,
       url: PropTypes.string.isRequired,
-      itemCallback: PropTypes.func,
     }).isRequired,
+    itemCallback: PropTypes.func,
   }
   view = (e) => {
     e.preventDefault()

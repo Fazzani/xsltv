@@ -173,6 +173,7 @@ export class App extends Component {
    * @memberof App
    */
   // @ts-ignore
+  // @ts-ignore
   Init = (dl, ch, cd, cm, cy, offset) => {
     this.setState({
       loading: true,
