@@ -107,21 +107,32 @@ class XmltvFileItem extends Component {
   }
 
   render() {
+    const removeBtn = !this.state.isNew && (
+      <button
+        className="pull-right btn btn-sm border-0 rounded-circle btn-outline-danger"
+        onClick={(e) => this.remove(e)}
+      >
+        <i className="fa fa-trash-o" />
+      </button>
+    )
+
+    const inputUrl = this.state.isNew ? (
+      <div className="col-8">
+        <input
+          type="url"
+          value={this.state.value || ''}
+          onChange={(e) => this.handleChange(e)}
+          placeholder="Add new xmltv url..."
+          className="form-control"
+        />
+      </div>
+    ) : (
+      <div className="col">{this.props.file.name}</div>
+    )
+
     return (
       <div className="row xviewer-list-item">
-        {this.state.isNew ? (
-          <div className="col-8">
-            <input
-              type="url"
-              value={this.state.value || ''}
-              onChange={(e) => this.handleChange(e)}
-              placeholder="Add new xmltv url..."
-              className="form-control"
-            />
-          </div>
-        ) : (
-          <div className="col">{this.props.file.name}</div>
-        )}
+        {inputUrl}
         <div className="col">
           <button
             className="pull-right btn btn-sm border-0 rounded-circle btn-outline-success"
@@ -137,14 +148,7 @@ class XmltvFileItem extends Component {
               <i className="fa fa-plus" />
             </button>
           )}
-          {!this.state.isNew && (
-            <button
-              className="pull-right btn btn-sm border-0 rounded-circle btn-outline-danger"
-              onClick={(e) => this.remove(e)}
-            >
-              <i className="fa fa-trash-o" />
-            </button>
-          )}
+          {removeBtn}
         </div>
       </div>
     )
