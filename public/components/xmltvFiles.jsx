@@ -27,7 +27,7 @@ export default class XmltvFilesComponent extends Component {
           )
         })}
         <XmltvFileItem
-          isNew={true}
+          isNew
           itemCallback={this.props.onSettingsModalCallback}
         />
       </div>
