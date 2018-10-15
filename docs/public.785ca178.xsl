@@ -46,7 +46,9 @@
       <xsl:variable name="programmes" select="/tv/programme[((substring(@stop,1,12) &gt; $StartTimeString and substring(@stop,1,12) &lt;= $StopTimeString) or (substring(@start,1,12) &gt;= $StartTimeString and substring(@start,1,12) &lt; $StopTimeString) or (substring(@start,1,12) &lt;= $StartTimeString and substring(@stop,1,12) &gt;= $StopTimeString))]"/>
 
       <table id="listings" class="container table-dark">
- 
+        <xsl:attribute name="data-channel-count">
+          <xsl:value-of select="count(//channel)" />
+        </xsl:attribute>
         <xsl:for-each select="/tv/channel">
           <xsl:sort select="display-name[3]" data-type="number"></xsl:sort>
 
@@ -95,6 +97,9 @@
           <tr>
             <th class="channel">
               <div class="leftchannel">
+                <xsl:attribute name="data-prog-count">
+                  <xsl:value-of select="count(//programme[@channel=current()/@id])"/>
+                </xsl:attribute>
                 <xsl:choose>
                    <xsl:when test="string-length($iconname) &gt; 0">
                     <span class="leftlogocell">
