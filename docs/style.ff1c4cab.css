@@ -11368,6 +11368,7 @@ a.text-dark:hover, a.text-dark:focus {
 @import url("https://fonts.googleapis.com/css?family=Libre+Baskerville:400,700");
 @import url("https://fonts.googleapis.com/css?family=Charmonman");
 html body {
+  scroll-behavior: smooth;
   margin: 0;
   font-family: "Libre Baskerville", BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   height: 100vh;
@@ -11479,7 +11480,6 @@ html body i.extendright {
 }
 html body div.program {
   text-align: left;
-  font-family: arial, sans-serif;
   font-size: 9pt;
   padding: 1px;
   margin: 0px;
@@ -11647,17 +11647,15 @@ html body #barclock .time {
 }
 html body .popover {
   color: white !important;
-  background-color: transparent !important;
 }
 html body .popover-header {
-  font-family: "Charmonman", cursive;
   background-color: #000000 !important;
   color: yellow;
   text-align: center;
 }
 html body .popover .popover-body {
   color: white !important;
-  background-color: #000000c4;
+  background-color: #000000;
 }
 html body .popover .popover-body img.popupimage {
   margin: 10px;

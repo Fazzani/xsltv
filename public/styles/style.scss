@@ -12,6 +12,7 @@
 
 html {
     body {
+        scroll-behavior: smooth;
         margin: 0;
         font-family: 'Libre Baskerville', BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         height: 100vh;
@@ -104,7 +105,6 @@ html {
         }
         div.program {
             text-align: left;
-            font-family: arial, sans-serif;
             font-size: 9pt;
             padding: 1px;
             margin: 0px;
@@ -288,17 +288,15 @@ html {
         /* ***** Popper js ******* */
         .popover {
             color: white !important;
-            background-color: transparent !important;
         }
         .popover-header {
-            font-family: 'Charmonman', cursive;
             background-color: #000000 !important;
             color: yellow;
             text-align: center;
         }
         .popover .popover-body {
             color: white !important;
-            background-color: #000000c4;
+            background-color: #000000;
             img.popupimage {
                 margin: 10px;
                 border: 1px solid #1b1b17;
