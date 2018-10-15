@@ -2,7 +2,7 @@
 @import '../../node_modules/font-awesome/css/font-awesome.css';
 @import '../../node_modules/bootstrap/dist/css/bootstrap.css';
 @import url('https://fonts.googleapis.com/css?family=Charmonman');
-@import '_vars.scss';
+@import 'vars.scss';
 @mixin bg-size($bg) {
     -webkit-background-size: $bg;
     -moz-background-size: $bg;
@@ -13,7 +13,7 @@
 html {
     body {
         margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        font-family: 'Libre Baskerville', BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         height: 100vh;
         overflow: auto;
         background: url(../images/bg.jpg) no-repeat center center fixed;
@@ -43,7 +43,6 @@ html {
                 color: white;
                 font-size: 14px;
                 span {
-                    font-family: 'Libre Baskerville', serif;
                     display: block;
                     font-size: 45px;
                     text-transform: none;
@@ -441,7 +440,7 @@ html {
                     padding: 0px;
                     list-style: none;
                     z-index: 50;
-                    background-color: #191925 !important;
+                    background-color: transparent !important;
                     >li {
                         margin: 0px;
                         padding: 0px;
