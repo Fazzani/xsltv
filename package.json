@@ -94,8 +94,8 @@
       "react/no-did-update-set-state": "error",
       "react/no-unknown-property": "error",
       "react/no-unused-prop-types": "error",
-      "react/jsx-uses-react": 2,
-      "react/jsx-uses-vars": 2,
+      "react/jsx-uses-react": "error",
+      "react/jsx-uses-vars": "error",
       "react/prop-types": "error",
       "react/react-in-jsx-scope": "error",
       "prettier/prettier": [

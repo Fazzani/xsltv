@@ -11,9 +11,23 @@
     "strings": false
   },
   "prettier.jsxBracketSameLine": true,
-  "prettier.printWidth": 180,
+  // "prettier.printWidth": 200,
+  "prettier.trailingComma": "es5",
   "eslint.enable": true,
-  "cSpell.words": ["MYJSON", "POPER", "XMLTV", "Xsltv", "haspopup", "highlightclickable", "highlightmovies", "highlightnew", "leftchannel", "topcorner", "xmlfileneeded"],
+  "cSpell.words": [
+    "MYJSON",
+    "POPER",
+    "XMLTV",
+    "Xsltv",
+    "haspopup",
+    "highlightclickable",
+    "highlightmovies",
+    "highlightnew",
+    "leftchannel",
+    "searchbox",
+    "topcorner",
+    "xmlfileneeded"
+  ],
   "cSpell.ignorePaths": [
     "**/docs/**",
     "*.json",
