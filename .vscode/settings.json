@@ -13,33 +13,20 @@
   "prettier.jsxBracketSameLine": true,
   "prettier.printWidth": 180,
   "eslint.enable": true,
-  "cSpell.words": [
-    "MYJSON",
-    "POPER",
-    "XMLTV",
-    "Xsltv",
-    "haspopup",
-    "highlightclickable",
-    "highlightmovies",
-    "highlightnew",
-    "leftchannel",
-    "topcorner",
-    "xmlfileneeded"
-  ],
+  "cSpell.words": ["MYJSON", "POPER", "XMLTV", "Xsltv", "haspopup", "highlightclickable", "highlightmovies", "highlightnew", "leftchannel", "topcorner", "xmlfileneeded"],
   "cSpell.ignorePaths": [
-  "**/docs/**",
-  "*.json",
- "*.scss",
- "*.xslt",
- "*.xml",
- 
-        "node_modules",        // this will ignore anything the node_modules directory
-        "**/node_modules",     // the same for this one
-        "**/node_modules/**",  // the same for this one
-        "node_modules/**",     // Doesn't currently work due to how the current working directory is determined.
-        "vscode-extension",    //
-        ".git",                // Ignore the .git directory
-        "*.dll",               // Ignore all .dll files.
-        "**/*.dll"             // Ignore all .dll files
-    ],
+    "**/docs/**",
+    "*.json",
+    "*.scss",
+    "*.xslt",
+    "*.xml",
+    "node_modules", // this will ignore anything the node_modules directory
+    "**/node_modules", // the same for this one
+    "**/node_modules/**", // the same for this one
+    "node_modules/**", // Doesn't currently work due to how the current working directory is determined.
+    "vscode-extension", //
+    ".git", // Ignore the .git directory
+    "*.dll", // Ignore all .dll files.
+    "**/*.dll" // Ignore all .dll files
+  ]
 }

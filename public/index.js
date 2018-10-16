@@ -24,7 +24,7 @@ import filesServices from './js/filesService'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { ErrorBoundary } from './components/ErrorBoundary'
-import { SearchBox } from './components/searchbox';
+import { SearchBox } from './components/searchbox'
 
 export const AppContext = React.createContext({})
 
@@ -290,6 +290,8 @@ export class App extends Component {
     Settings.save(this.state.AppSettings)
   }
 
+  handleSearch = (value) => {}
+
   render() {
     return (
       <AppContext.Provider
@@ -310,7 +312,7 @@ export class App extends Component {
           />
           <div className="container">
             <Header />
-            <SearchBox/>
+            <SearchBox submitCallback={(v) => this.handleSearch(v)} />
             <div className="row xslt-container" ref={(c) => (this.xsltRef = c)}>
               {this.state.fragment ? (
                 <React.Fragment>
