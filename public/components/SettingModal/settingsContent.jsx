@@ -76,4 +76,4 @@ export class SettingContent extends Component {
   }
 }
 
-export default SettingsContent
+export default SettingContent

@@ -1,74 +1,74 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Constants } from '../js/common'
-import $ from 'jquery'
-import XmltvFilesComponent from './xmltvFiles'
-import { AppContext } from '../index'
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { Constants } from "../js/common";
+import $ from "jquery";
+import XmltvFilesComponent from "./xmltvFiles";
+import { AppContext } from "../index";
 
 class SettingsModal extends Component {
   static propTypes = {
     files: PropTypes.array.isRequired,
     callbackEvent: PropTypes.func,
-    open: PropTypes.bool,
-  }
+    open: PropTypes.bool
+  };
   static defaultProps = {
-    files: [],
-  }
+    files: []
+  };
   constructor(props) {
-    super(props)
+    super(props);
     // create a ref to store the textInput DOM element
-    this.meRef = React.createRef()
+    this.meRef = React.createRef();
   }
 
   componentDidUpdate() {
     if (this.props.files.length > 0) {
       this.selectedXmltvFile =
-        this.props.files.filter((x) => x.selected)[0] || this.props.files[0]
+        this.props.files.filter(x => x.selected)[0] || this.props.files[0];
     }
   }
 
-  viewXmltvUrl = (e) => {
-    e.preventDefault()
+  viewXmltvUrl = e => {
+    e.preventDefault();
     if (this.props.callbackEvent) {
       this.props.callbackEvent({
         type: Constants.Events.LOAD_XMLTV_URL,
-        file: this.createFileObject(this.xmltv_url.value),
-      })
-      $(this.meRef.current).modal('hide')
+        file: this.createFileObject(this.xmltv_url.value)
+      });
+      $(this.meRef.current).modal("hide");
     }
-  }
+  };
 
-  addXmltvUrl = (e) => {
-    e.preventDefault()
+  addXmltvUrl = e => {
+    e.preventDefault();
     if (this.props.callbackEvent) {
       this.props.callbackEvent({
         type: Constants.Events.ADD_XMLTV_URL,
-        file: this.createFileObject(this.xmltv_url.value),
-      })
-      $(this.meRef.current).modal('hide')
+        file: this.createFileObject(this.xmltv_url.value)
+      });
+      $(this.meRef.current).modal("hide");
     }
-  }
+  };
   /**
    * Generate xmltv object from url
    * @param {string} xmltv_file_url - xmltv file url
    * @memberof SettingsModal
    */
-  createFileObject = (xmltv_file_url) => {
-    return { name: xmltv_file_url.split('/').pop(), url: xmltv_file_url }
-  }
+  createFileObject = xmltv_file_url => {
+    return { name: xmltv_file_url.split("/").pop(), url: xmltv_file_url };
+  };
 
-  onXmltvSelectChange = (e) => {
-    e.preventDefault()
-    let file = this.props.files.find((x) => x.url === e.target.value)
-    file.selected = true
+  onXmltvSelectChange = e => {
+    e.preventDefault();
+    let file = this.props.files.find(x => x.url === e.target.value);
+    file.selected = true;
     if (this.props.callbackEvent) {
       this.props.callbackEvent({
         type: Constants.Events.SELECTED_XMLTV_CHANGED,
-        file,
-      })
-      $(this.meRef.current).modal('hide')
+        file
+      });
+      $(this.meRef.current).modal("hide");
     }
-  }
+  };
 
   render() {
     const selectXmltv = this.selectedXmltvFile ? (
@@ -88,12 +88,12 @@ class SettingsModal extends Component {
                 <option key={key} value={e.url}>
                   {e.name}
                 </option>
-              )
+              );
             })}
           </select>
         </div>
       </form>
-    ) : null
+    ) : null;
 
     return (
       <div
@@ -103,7 +103,7 @@ class SettingsModal extends Component {
         role="dialog"
         ref={this.meRef}
         aria-labelledby="exampleModalLabel"
-        aria-hidden={this.props.open ? 'false' : 'true'}
+        aria-hidden={this.props.open ? "false" : "true"}
       >
         <div className="modal-dialog" role="document">
           <div className="modal-content">
@@ -146,15 +146,15 @@ class SettingsModal extends Component {
                       <div className="input-group mb-3">
                         <form
                           className="form-inline"
-                          ref={(x) => {
-                            this.xmltv_file_form = x
+                          ref={x => {
+                            this.xmltv_file_form = x;
                           }}
                         >
                           <div className="form-group">
                             <input
                               type="url"
-                              ref={(x) => {
-                                this.xmltv_url = x
+                              ref={x => {
+                                this.xmltv_url = x;
                               }}
                               required
                               data-error="Please enter your full name."
@@ -249,8 +249,8 @@ class SettingsModal extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default SettingsModal
+export default SettingsModal;

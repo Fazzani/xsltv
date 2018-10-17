@@ -74,6 +74,7 @@ export class App extends Component {
   componentDidCatch(error, errorInfo) {
     this.state.notify({
       message: error.toString(),
+      errorInfo,
       type: toast.TYPE.ERROR,
     })
   }
@@ -331,7 +332,7 @@ export class App extends Component {
             callbackEvent={this.onSettingsModalCallback}
           />
           <div className="container">
-            <Header headerTitle="Xmltv viewer" />
+            <Header title="Xmltv viewer" />
             <SearchBox submitCallback={(v) => this.handleSearch(v)} />
             <div className="row xslt-container" ref={(c) => (this.xsltRef = c)}>
               {this.state.fragment ? (
