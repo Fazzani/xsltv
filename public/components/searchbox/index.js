@@ -1,33 +1,33 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import './style.scss';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import './style.scss'
 
 export class SearchBox extends Component {
   static propTypes = {
     value: PropTypes.string,
     submitCallback: PropTypes.func,
-  };
+  }
   constructor(props) {
-    super(props);
-    this.state = { value: this.props.value || '' };
+    super(props)
+    this.state = { value: this.props.value || '' }
   }
 
   handleChange(e) {
-    e.preventDefault();
-    this.setState({ value: e.target.value });
+    e.preventDefault()
+    this.setState({ value: e.target.value })
   }
 
   handleSubmit(e) {
-    e.preventDefault();
+    e.preventDefault()
     return (
       this.props.submitCallback &&
       this.props.submitCallback({ target: e.target, value: this.state.value })
-    );
+    )
   }
 
   render() {
     return (
-      <form onSubmit={e => this.handleSubmit(e)}>
+      <form onSubmit={(e) => this.handleSubmit(e)} className="search">
         <div className="container-2 row-fluid">
           <span className="icon">
             <i className="fa fa-search" />
@@ -37,14 +37,14 @@ export class SearchBox extends Component {
             id="search"
             value={this.state.value}
             placeholder="Search..."
-            onChange={e => {
-              this.handleChange(e);
+            onChange={(e) => {
+              this.handleChange(e)
             }}
           />
         </div>
       </form>
-    );
+    )
   }
 }
 
-export default SearchBox;
+export default SearchBox

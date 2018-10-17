@@ -1,73 +1,69 @@
-.container-2 {
-    width: 100%;
-    vertical-align: middle;
-    white-space: nowrap;
-    position: relative;
-    .icon {
-        position: absolute;
-        top: 50%;
-        margin-left: 17px;
-        margin-top: 17px;
-        z-index: 1;
-        color: #4f5b66;
-        line-height: 12px;
-    }
-    input#search {
-        width: 50px;
-        height: 50px;
-        background: rgba(43, 48, 59, 0.6);
-        border: none;
-        font-size: 10pt;
-        float: left;
-        padding-left: 45px;
-        -webkit-border-radius: 5px;
-        -moz-border-radius: 5px;
-        border-radius: 5px;
-        color: #fff;
-        -webkit-transition: width 0.55s ease;
-        -moz-transition: width 0.55s ease;
-        -ms-transition: width 0.55s ease;
-        -o-transition: width 0.55s ease;
-        transition: width 0.55s ease;
-        &::-webkit-input-placeholder {
-            color: #65737e;
+form.search {
+    position: absolute;
+    top: 2rem;
+    right: 10px;
+    .container-2 {
+        width: 350px;
+        vertical-align: middle;
+        white-space: nowrap;
+        position: relative;
+        .icon {
+            position: absolute;
+            top: 50%;
+            margin-left: 17px;
+            margin-top: 17px;
+            z-index: 1;
+            color: #4f5b66;
+            line-height: 12px;
         }
-        &:-moz-placeholder {
-            /* Firefox 18- */
-            color: #65737e;
+        input#search {
+            width: 50px;
+            height: 50px;
+            background: rgba(43, 48, 59, 0.6);
+            border: none;
+            font-size: 10pt;
+            float: left;
+            padding-left: 55px;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            color: #fff;
+            -webkit-transition: all 0.55s ease;
+            -moz-transition: all 0.55s ease;
+            -ms-transition: all 0.55s ease;
+            -o-transition: all 0.55s ease;
+            transition: all 0.55s ease;
+            &::-webkit-input-placeholder {
+                color: #65737e;
+            }
+            &:-moz-placeholder {
+                /* Firefox 18- */
+                color: #65737e;
+            }
+            &::-moz-placeholder {
+                /* Firefox 19+ */
+                color: #65737e;
+            }
+            &:-ms-input-placeholder {
+                color: #65737e;
+            }
+            &:focus,
+            &:active {
+                outline: none;
+                width: 300px;
+                outline: none;
+                width: 100%;
+                background-color: rgba(43, 48, 59, 1);
+            }
         }
-        &::-moz-placeholder {
-            /* Firefox 19+ */
-            color: #65737e;
-        }
-        &:-ms-input-placeholder {
-            color: #65737e;
-        }
-        &:focus,
-        &:active {
-            outline: none;
+        &:hover input#search {
             width: 300px;
         }
+        &:hover .icon {
+            color: white;
+        }
     }
-    &:hover input#search {
-        width: 300px;
+    .container-2 .container-2:hover input#search {
+        width: 100%;
     }
-    &:hover .icon {
-        color: white;
-    }
-}
-
-.container-2 input#search:focus,
-.container-2 input#search:active {
-    outline: none;
-    width: 100%;
-    background: rgba(43, 48, 59,1);
-}
-
-.container-2:hover input#search {
-    width: 100%;
-}
-
-.container-2:hover .icon {
-    color: white;
 }

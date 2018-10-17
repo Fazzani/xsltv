@@ -38,24 +38,6 @@ html {
             margin-bottom: 50px;
             background-color: $bg;
             width: 100%;
-            h2 {
-                float: left;
-                width: 100%;
-                color: white;
-                font-size: 14px;
-                span {
-                    display: block;
-                    font-size: 45px;
-                    text-transform: none;
-                    margin-bottom: 20px;
-                    margin-top: 30px;
-                    font-weight: 700;
-                    text-shadow: 0 0 20px #0aafe6, 0 0 20px rgba(10, 175, 230, 0);
-                }
-                a {
-                    color: #d2abce;
-                }
-            }
         }
         .selector-for-some-widget {
             box-sizing: content-box;
@@ -75,63 +57,6 @@ html {
                 border-bottom: 1px solid #231c1c;
             }
         }
-        div.internal {
-            table-layout: auto;
-            border-collapse: collapse;
-            width: 100%;
-            margin: 0px;
-            text-align: left;
-            border: 0px;
-            height: 100%;
-        }
-        i {
-            &.extendleft {
-                margin: 0px;
-                padding: 3px;
-                border-right: 1px solid #c2c2c2;
-                overflow: hidden;
-                white-space: normal;
-                font-size: small;
-            }
-            &.extendright {
-                margin: 0px;
-                padding: 3px;
-                border-left: 1px solid #c2c2c2;
-                border-right: 1px solid #c2c2c2;
-                overflow: hidden;
-                white-space: normal;
-                font-size: small;
-            }
-        }
-        div.program {
-            text-align: left;
-            font-size: 9pt;
-            padding: 1px;
-            margin: 0px;
-            overflow: hidden;
-            white-space: nowrap;
-            width: 100%;
-            height: 100%;
-            line-height: 4em;
-            background: #141e30;
-            background: linear-gradient(to right, rgb(16, 17, 19) 3px, #00000070 5%, rgb(20, 30, 48));
-            &::before,
-            &::after {
-                font: normal normal normal 14px/1 FontAwesome !important;
-                display: inline-block;
-                vertical-align: middle;
-                color: #ffff88;
-                font-weight: bold;
-            }
-            &.extendleft::before {
-                padding-right: 3px;
-                content: '\f100 ';
-            }
-            &.extendright::after {
-                padding-left: 3px;
-                content: '\f101';
-            }
-        }
         td {
             margin-left: 1px;
             padding-left: 0px;
@@ -145,6 +70,92 @@ html {
             overflow: hidden;
             height: 30px;
             white-space: nowrap;
+            &.Goodmovie {
+                background-color: #ff9 !important;
+                table td {
+                    background-color: #ff9;
+                }
+            }
+            &.program {
+                cursor: pointer;
+            }
+            &.highlight-search {
+                font-weight: bolder;
+                background: $highlight-text;
+            }
+            &.movie,
+            &.film,
+            &.Newshow {
+                border: 2px solid #666;
+                background-color: rgb(64, 17, 50) !important;
+            }
+            &[class*='foot'].Longshow,
+            &[class*='fudbal'].Longshow,
+            &[class*='match'].Longshow,
+            &[class*='tennis'].Longshow,
+            &[class*='league'].Longshow,
+            &[class*='copa'].Longshow,
+            &[class*='cup'].Longshow {
+                border: 2px solid #666;
+                background-color: rgb(20, 54, 5) !important;
+            }
+            div.internal {
+                table-layout: auto;
+                border-collapse: collapse;
+                width: 100%;
+                margin: 0px;
+                text-align: left;
+                border: 0px;
+                height: 100%;
+                div.program {
+                    text-align: left;
+                    font-size: 9pt;
+                    padding: 1px;
+                    margin: 0px;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    width: 100%;
+                    height: 100%;
+                    line-height: 4em;
+                    background: #141e30;
+                    background: linear-gradient(to right, rgb(16, 17, 19) 3px, #00000070 5%, rgb(20, 30, 48));
+                    &::before,
+                    &::after {
+                        font: normal normal normal 14px/1 FontAwesome !important;
+                        display: inline-block;
+                        vertical-align: middle;
+                        color: $highlight-text;
+                        font-weight: bold;
+                    }
+                    &.extendleft::before {
+                        padding-right: 3px;
+                        content: '\f100 ';
+                    }
+                    &.extendright::after {
+                        padding-left: 3px;
+                        content: '\f101';
+                    }
+                }
+            }
+            i {
+                &.extendleft {
+                    margin: 0px;
+                    padding: 3px;
+                    border-right: 1px solid #c2c2c2;
+                    overflow: hidden;
+                    white-space: normal;
+                    font-size: small;
+                }
+                &.extendright {
+                    margin: 0px;
+                    padding: 3px;
+                    border-left: 1px solid #c2c2c2;
+                    border-right: 1px solid #c2c2c2;
+                    overflow: hidden;
+                    white-space: normal;
+                    font-size: small;
+                }
+            }
             &.extendright td.program {
                 padding: 0px;
                 border: 0px;
@@ -162,11 +173,9 @@ html {
                 text-align: center;
                 padding: 0px;
                 overflow: hidden;
-                color: #d3ef01;
+                color: $highlight-text;
                 font-size: 8pt;
             }
-        }
-        th {
             &.time {
                 text-align: left;
                 cursor: pointer;
@@ -176,7 +185,7 @@ html {
                     padding-right: 3px;
                     vertical-align: middle;
                     content: '\f142';
-                    color: #ffff88;
+                    color: $highlight-text;
                 }
             }
             &.topleftcorner {
@@ -239,33 +248,6 @@ html {
                     max-width: 70%;
                     max-height: 100%;
                 }
-            }
-        }
-        td {
-            &.Goodmovie {
-                background-color: #ff9 !important;
-                table td {
-                    background-color: #ff9;
-                }
-            }
-            &.program {
-                cursor: pointer;
-            }
-            &.movie,
-            &.film,
-            &.Newshow {
-                border: 2px solid #666;
-                background-color: rgb(64, 17, 50) !important;
-            }
-            &[class*='foot'].Longshow,
-            &[class*='fudbal'].Longshow,
-            &[class*='match'].Longshow,
-            &[class*='tennis'].Longshow,
-            &[class*='league'].Longshow,
-            &[class*='copa'].Longshow,
-            &[class*='cup'].Longshow {
-                border: 2px solid #666;
-                background-color: rgb(20, 54, 5) !important;
             }
         }
         .table-dark {
@@ -459,7 +441,7 @@ html {
                                 border-bottom-width: 0px;
                             }
                             &:hover {
-                                background-color: #dc3545;
+                                background-color: $highlight-text;
                             }
                         }
                     }

@@ -6,11 +6,12 @@ Epg viewer for XMLTV format based on xsltv project.
 
 ## TODO
 
+- [ ] Add new component for program detail and remove popper
 - [ ] Loading xmltv file from queryString param
 - [ ] Auto refresh every 4 hours
 - [ ] Fix mobile version (Landscape)
 - [ ] Highlight movies and sports by filter (multiselect)
-- [ ] Searching a program feature
+- [x] Searching a program feature
 - [ ] Finalize settings modal page
 - [ ] Fix timeline position
 - [ ] About modal
