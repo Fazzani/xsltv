@@ -1,5 +1,5 @@
-import * as React from 'react';
-import './style.scss';
+import * as React from "react";
+import "./style.scss";
 
 export interface SearchBoxProps {
   value?: string;
@@ -7,13 +7,13 @@ export interface SearchBoxProps {
 }
 
 export class SearchBoxState {
-  value: string | number = '';
+  value: string | number = "";
 }
 
 export class SearchBox extends React.Component<SearchBoxProps, SearchBoxState> {
   constructor(props: SearchBoxProps) {
     super(props);
-    this.state = { value: props.value || '' };
+    this.state = { value: props.value || "" };
   }
 
   handleChange(e: React.FormEvent<HTMLInputElement>): void {
@@ -23,7 +23,9 @@ export class SearchBox extends React.Component<SearchBoxProps, SearchBoxState> {
 
   handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
     e.preventDefault();
-    return this.props.submitCallback && this.props.submitCallback(this.state.value);
+    return (
+      this.props.submitCallback && this.props.submitCallback(this.state.value)
+    );
   }
 
   render() {

@@ -1,15 +1,15 @@
-import * as React from 'react'
-import './style.scss'
+import * as React from "react";
+import "./style.scss";
 
 export interface HeaderProps {
-  title?: string
+  title?: string;
 }
-const Header = ({ title = 'XViewer' }: HeaderProps) => {
+const Header = ({ title = "XViewer" }: HeaderProps) => {
   return (
     <div className="row header">
       <h2 className="text-center text-capitalize">{title}</h2>
     </div>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

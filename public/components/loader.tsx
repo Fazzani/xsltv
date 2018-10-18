@@ -1,16 +1,15 @@
-import * as React from 'react';
-import '../styles/loader.scss';
+import * as React from "react";
+import "../styles/loader.scss";
 
 export interface LoaderProps {
   displayText: string;
 }
 
-export default class Loader extends React.Component<LoaderProps,{}> {
-
+export default class Loader extends React.Component<LoaderProps, {}> {
   static defaultProps = {
-    displayText: 'loading...',
+    displayText: "loading..."
   };
-  
+
   render() {
     return (
       <div className="overlay">
