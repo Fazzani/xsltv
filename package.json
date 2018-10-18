@@ -7,7 +7,7 @@
   "scripts": {
     "lint": "./node_modules/.bin/eslint --fix --ignore-pattern docs --ignore-pattern public/lang --ignore-path .gitignore .",
     "test": "cross-env NODE_ENV=test jest",
-    "test:watch": "npm test -- --watch",
+    "test:watch": "npm test -- --watchAll",
     "build": "parcel build public/index.html --out-dir docs --detailed-report --public-url ./",
     "start": "parcel public/index.html --out-dir docs ",
     "push": "git add --all && git commit -m \"vscode push\" && git push",
@@ -111,31 +111,48 @@
     }
   },
   "jest": {
+    "verbose": true,
+    "globals": {
+      "NODE_ENV": "test"
+    },
+    "collectCoverage": true,
     "collectCoverageFrom": [
-      "src/**/*.js"
+      "**/*.{js,jsx,tsx,ts}",
+      "!**/node_modules/**",
+      "!**/vendor/**",
+      "!**/coverage/**",
+      "!**/lang/**",
+      "!**/docs/**",
+      "!**/tests/**"
     ],
     "coverageReporters": [
       "html",
-      "lcov",
       "text"
     ],
     "notify": true,
-    "transform": {},
-    "watchPlugins": [
-      "jest-watch-typeahead/filename",
-      "jest-watch-typeahead/testname",
-      [
-        "jest-watch-toggle-config",
-        {
-          "setting": "verbose"
-        }
-      ],
-      [
-        "jest-watch-toggle-config",
-        {
-          "setting": "collectCoverage"
-        }
-      ]
+    "transform": {
+      "\\.(js|jsx)$": "babel-jest",
+      "\\.(ts|tsx)$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "setupFiles": [
+      "<rootDir>/public/tests/setupTests.js"
+    ],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/public/tests/fileMock.ts",
+      "\\.(css|scss)$": "identity-obj-proxy"
+    },
+    "moduleDirectories": [
+      "node_modules",
+      "public"
     ]
   },
   "dependencies": {
@@ -164,10 +181,19 @@
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/plugin-proposal-decorators": "^7.1.2",
     "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/runtime": "^7.1.2",
     "@babel/runtime-corejs2": "^7.1.2",
+    "@types/jest": "^23.3.5",
+    "@types/react": "16.4.18",
+    "@types/react-dom": "16.0.9",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
     "cross-env": "^5.2.0",
+    "enzyme": "^3.7.0",
+    "enzyme-adapter-react-16": "^1.6.0",
+    "enzyme-to-json": "^3.3.4",
     "eslint": "^5.6.1",
     "eslint-config-prettier": "^3.0.1",
     "eslint-config-react": "^1.1.7",
@@ -177,25 +203,24 @@
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-react": "^7.11.1",
     "eslint-plugin-standard": "^4.0.0",
+    "husky": "1.1.2",
+    "identity-obj-proxy": "^3.0.0",
     "jest": "^23.6.0",
     "jest-watch-toggle-config": "^1.0.2",
     "jest-watch-typeahead": "^0.2.0",
     "parcel-bundler": "^1.10.2",
     "prettier": "^1.14.3",
-    "sass": "^1.14.2",
-    "supertest": "^3.3.0",
-    "typescript": "^3.1.3",
-    "@types/jest": "23.3.5",
-    "@types/react": "16.4.18",
-    "@types/react-dom": "16.0.9",
-    "husky": "1.1.2",
     "react-test-renderer": "16.5.2",
     "react-testing-library": "5.2.0",
-    "ts-jest": "23.10.4",
+    "regenerator-runtime": "^0.12.1",
+    "sass": "^1.14.2",
+    "supertest": "^3.3.0",
+    "ts-jest": "^23.10.4",
     "tslint": "5.11.0",
     "tslint-config-airbnb": "5.11.0",
     "tslint-config-prettier": "^1.15.0",
-    "tslint-react": "^3.6.0"
+    "tslint-react": "^3.6.0",
+    "typescript": "^3.1.3"
   },
   "peerDependencies": {
     "eslint": ">=5.0.0",

@@ -1,13 +1,17 @@
 {
-    "compilerOptions": {
-        "target": "es6",
-        "module": "commonjs",
-        "strict": true,
-        "jsx": "react",
-        "experimentalDecorators": true,
-        "lib": [
-            "dom",
-            "es2015"
-        ]
-    }
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "strict": true,
+    "jsx": "react",
+    "sourceMap": true,
+    "allowJs": true,
+    "experimentalDecorators": true,
+    "baseUrl": "./public",
+    "rootDir": "./public",
+    "lib": ["dom", "es2015"]
+  },
+  "exclude": ["node_modules",
+    "setupTests.js", 
+    "docs"]
 }

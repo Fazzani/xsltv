@@ -21,7 +21,7 @@ export class SearchBox extends React.Component<SearchBoxProps, SearchBoxState> {
     this.setState({ value: (e.target as HTMLInputElement).value });
   }
 
-  handleSubmit(e: React.FormEvent<HTMLInputElement>): void {
+  handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
     e.preventDefault();
     return this.props.submitCallback && this.props.submitCallback(this.state.value);
   }

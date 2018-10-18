@@ -1,24 +1,24 @@
-import React, { PureComponent } from "react";
-import PropTypes from "prop-types";
+import React, { PureComponent } from 'react'
+import PropTypes from 'prop-types'
 
 export default class SideMenu extends PureComponent {
   static propTypes = {
-    handleToggleModalClick: PropTypes.func
-  };
+    handleToggleModalClick: PropTypes.func,
+  }
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       open: true,
-    };
+    }
   }
 
   handleToggleClick(e) {
-    e.preventDefault();
+    e.preventDefault()
     this.setState({
       ...this.state,
-      open: !this.state.open
-    });
+      open: !this.state.open,
+    })
   }
 
   render() {
@@ -28,7 +28,7 @@ export default class SideMenu extends PureComponent {
 
     return (
       <nav
-        onClick={e => this.handleToggleClick(e)}
+        onClick={(e) => this.handleToggleClick(e)}
         className={openClassNames}
         role="navigation"
       >
@@ -62,6 +62,6 @@ export default class SideMenu extends PureComponent {
           </li>
         </ul>
       </nav>
-    );
+    )
   }
 }
