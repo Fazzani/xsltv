@@ -9,7 +9,7 @@ export default class SideMenu extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      open: true
+      open: true,
     };
   }
 
@@ -23,8 +23,8 @@ export default class SideMenu extends PureComponent {
 
   render() {
     const openClassNames = this.state.open
-      ? "navbar navbar-fixed-left navbar-minimal animate open"
-      : "navbar navbar-fixed-left navbar-minimal animate";
+      ? 'navbar navbar-fixed-left navbar-minimal animate open'
+      : 'navbar navbar-fixed-left navbar-minimal animate'
 
     return (
       <nav
