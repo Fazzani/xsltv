@@ -7,39 +7,8 @@
       "type": "npm",
       "script": "start",
       "isBackground": true,
-      "label": "start_app",
-      "problemMatcher": []
-    },
-    {
-      "type": "npm",
-      "script": "push",
-      "isBackground": true,
-      "problemMatcher": []
-    },
-    {
-      "type": "npm",
-      "script": "build",
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
-    },
-    {
-      "type": "npm",
-      "script": "test",
-      "group": {
-        "kind": "test",
-        "isDefault": true
-      },
-      "options": {
-        "cwd": "${workspaceRoot}"
-      }
-    },
-    {
-      "type": "npm",
-      "script": "lint",
       "problemMatcher": ["$eslint-stylish"],
-      "label": "Lint",
+      "label": "Start",
       "presentation": {
         "echo": true,
         "reveal": "silent",
@@ -49,11 +18,78 @@
       }
     },
     {
+      "label": "Push",
+      "type": "npm",
+      "script": "push",
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Build",
+      "type": "npm",
+      "script": "build",
+      "options": {
+        "cwd": "${workspaceRoot}"
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Test",
+      "type": "npm",
+      "script": "test",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "options": {
+        "cwd": "${workspaceRoot}"
+      },
+      "presentation": {
+        "panel": "dedicated",
+        "focus": true,
+        "reveal": "silent"
+      }
+    },
+    {
+      "label": "Lint",
+      "type": "npm",
+      "script": "lint",
+      "problemMatcher": ["$eslint-stylish"],
+      "options": {
+        "cwd": "${workspaceRoot}"
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true
+      }
+    },
+    {
+      "label": "Publish",
       "type": "npm",
       "script": "publish",
       "problemMatcher": ["$eslint-stylish"],
       "options": {
         "cwd": "${workspaceRoot}"
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true
       }
     }
   ]

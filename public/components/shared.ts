@@ -6,9 +6,9 @@ import { getParamsCurrentDate } from './shared';
  * @return {array} anonymous - fragment date as an array  
  */
 export let getParamsCurrentDate = (
-  currentTime = new Date(),
-  offsetMinutes = 60
-) => {
+  currentTime: Date = new Date(),
+  offsetMinutes: number = 60
+): Array<any> => {
   let myDate = new Date(currentTime);
   myDate.setMinutes(myDate.getMinutes() + (60 - offsetMinutes));
   return [

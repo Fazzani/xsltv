@@ -24136,27 +24136,25 @@ parcelRequire = (function(e, r, n, t) {
       },
       {}
     ],
-    "42ja": [
+    AGx4: [
       function(require, module, exports) {
         "use strict";
         Object.defineProperty(exports, "__esModule", { value: !0 }),
-          (exports.getParamsCurrentDate = void 0);
-        var e = function() {
-          var e =
-              arguments.length > 0 && void 0 !== arguments[0]
-                ? arguments[0]
-                : new Date(),
-            t =
-              arguments.length > 1 && void 0 !== arguments[1]
-                ? arguments[1]
-                : 60,
-            r = new Date(e);
-          return (
-            r.setMinutes(r.getMinutes() + (60 - t)),
-            [r.getHours(), r.getDate(), r.getMonth() + 1, r.getFullYear()]
-          );
-        };
-        exports.getParamsCurrentDate = e;
+          (exports.getParamsCurrentDate = function() {
+            var e =
+                arguments.length > 0 && void 0 !== arguments[0]
+                  ? arguments[0]
+                  : new Date(),
+              t =
+                arguments.length > 1 && void 0 !== arguments[1]
+                  ? arguments[1]
+                  : 60,
+              r = new Date(e);
+            return (
+              r.setMinutes(r.getMinutes() + (60 - t)),
+              [r.getHours(), r.getDate(), r.getMonth() + 1, r.getFullYear()]
+            );
+          });
       },
       {}
     ],
@@ -27510,7 +27508,7 @@ parcelRequire = (function(e, r, n, t) {
         "./components/header/header": "xR4m",
         "./js/settings": "HxdU",
         "./index.xsl": "gkEa",
-        "./components/shared": "42ja",
+        "./components/shared": "AGx4",
         "./registerServiceWorker": "xv3Y",
         "./components/timeline": "c+LU",
         "./components/xslt": "9Uu/",
@@ -27528,4 +27526,4 @@ parcelRequire = (function(e, r, n, t) {
   ["Focm"],
   null
 );
-//# sourceMappingURL=public.72c7fb65.map
+//# sourceMappingURL=public.b6a30446.map

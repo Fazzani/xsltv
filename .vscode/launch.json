@@ -10,7 +10,7 @@
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["--nolazy","start"],
+      "runtimeArgs": ["--nolazy", "start"],
       "port": 1234,
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
@@ -21,7 +21,6 @@
       "env": {
         "NODE_ENV": "development"
       }
-    
     },
     {
       "type": "chrome",
@@ -30,7 +29,7 @@
       "url": "http://localhost:1234",
       "webRoot": "${workspaceFolder}/docs",
       "internalConsoleOptions": "neverOpen",
-      "preLaunchTask": "start_app"
+      "preLaunchTask": "Start"
     }
   ],
   "compounds": [
