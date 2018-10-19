@@ -1,6 +1,8 @@
 {
   "search.exclude": {
-    "**/docs": true
+    "**/docs": true,
+    "**/__snapshots__": true,
+    "**/coverage": true
   },
   "files.exclude": {
     "**/docs": true

@@ -5,11 +5,11 @@ import { getParamsCurrentDate } from './shared';
  * @param {number} offsetMinutes - jet lag (minutes)
  * @return {array} anonymous - fragment date as an array  
  */
-export let getParamsCurrentDate = (
-  currentTime: Date = new Date(),
+const getParamsCurrentDate = (
+  currentTime: number = Date.now(),
   offsetMinutes: number = 60
 ): Array<any> => {
-  let myDate = new Date(currentTime);
+  const myDate = new Date(currentTime);
   myDate.setMinutes(myDate.getMinutes() + (60 - offsetMinutes));
   return [
     myDate.getHours(),
@@ -18,3 +18,5 @@ export let getParamsCurrentDate = (
     myDate.getFullYear()
   ];
 };
+
+export { getParamsCurrentDate };

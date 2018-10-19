@@ -15,7 +15,7 @@ export default class Timeline extends Component {
   };
   static defaultProps = {
     hours: 4,
-    startDate: new Date(),
+    startDate: Date.now(),
     timeout: 1000
   };
 

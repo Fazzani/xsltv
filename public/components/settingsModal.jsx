@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Constants } from "../js/common";
 import $ from "jquery";
 import XmltvFilesComponent from "./xmltvFiles";
-import { AppContext } from "../index";
+import { AppContext } from "../app";
 
 class SettingsModal extends Component {
   static propTypes = {

@@ -20,7 +20,7 @@ export class NavBottom extends React.PureComponent {
 class Clock extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { date: moment(new Date()).format("LLLL") };
+    this.state = { date: moment(Date.now()).format("LLLL") };
   }
 
   componentDidMount() {
@@ -33,7 +33,7 @@ class Clock extends React.Component {
 
   tick() {
     this.setState({
-      date: moment(new Date()).format("LLLL")
+      date: moment(Date.now()).format("LLLL")
     });
   }
 
