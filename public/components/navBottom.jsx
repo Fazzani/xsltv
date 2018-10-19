@@ -1,7 +1,7 @@
 /*eslint no-undef: "error"*/
 /*eslint-env browser*/
-import React from "react";
-import moment from "moment";
+import React from 'react'
+import moment from 'moment'
 
 export class NavBottom extends React.PureComponent {
   render() {
@@ -13,28 +13,28 @@ export class NavBottom extends React.PureComponent {
           <a href="http://synker.ovh"> Synker.ovh</a>
         </small>
       </nav>
-    );
+    )
   }
 }
 
 class Clock extends React.Component {
   constructor(props) {
-    super(props);
-    this.state = { date: moment(Date.now()).format("LLLL") };
+    super(props)
+    this.state = { date: moment(Date.now()).format('LLLL') }
   }
 
   componentDidMount() {
-    this.timerID = setInterval(() => this.tick(), 60000);
+    this.timerID = setInterval(() => this.tick(), 60000)
   }
 
   componentWillUnmount() {
-    clearInterval(this.timerID);
+    clearInterval(this.timerID)
   }
 
   tick() {
     this.setState({
-      date: moment(Date.now()).format("LLLL")
-    });
+      date: moment(Date.now()).format('LLLL'),
+    })
   }
 
   render() {
@@ -42,8 +42,8 @@ class Clock extends React.Component {
       <span id="barclock">
         <p className="time">{this.state.date}</p>
       </span>
-    );
+    )
   }
 }
 
-export default NavBottom;
+export default NavBottom
