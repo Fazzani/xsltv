@@ -1,9 +1,7 @@
-/*eslint no-undef: "error"*/
-/*eslint-env browser*/
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import '../styles/timeline.scss'
+import '../../styles/timeline.scss'
 import $ from 'jquery'
 
 export default class Timeline extends Component {
@@ -15,7 +13,7 @@ export default class Timeline extends Component {
   }
   static defaultProps = {
     hours: 4,
-    startDate: Date.now(),
+    startDate: new Date(),
     timeout: 1000,
   }
 
@@ -32,7 +30,7 @@ export default class Timeline extends Component {
     let leftchannel = $(this.props.parentNode).find('.leftchannel:first')
     let paddingLeft =
       ((leftchannel ? leftchannel.width() : 0) /
-        this.props.parentNode.clientWidth) *
+        (this.props.parentNode ? this.props.parentNode.clientWidth : 1)) *
       100
     this.interval = setInterval(() => {
       let marginLeft =

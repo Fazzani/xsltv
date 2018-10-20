@@ -1,41 +1,8 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import '../styles/file-items.scss'
-import { Constants } from '../js/common'
+import { PropTypes } from 'prop-types'
+import { Constants } from '../../js/common'
 
-export default class XmltvFilesComponent extends Component {
-  static propTypes = {
-    files: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        url: PropTypes.string.isRequired,
-      })
-    ),
-    onSettingsModalCallback: PropTypes.func,
-  }
-
-  render() {
-    return (
-      <div className="xviewer-list">
-        {this.props.files.map((file, key) => {
-          return (
-            <XmltvFileItem
-              file={file}
-              key={key}
-              itemCallback={this.props.onSettingsModalCallback}
-            />
-          )
-        })}
-        <XmltvFileItem
-          isNew
-          itemCallback={this.props.onSettingsModalCallback}
-        />
-      </div>
-    )
-  }
-}
-
-class XmltvFileItem extends Component {
+export default class XmltvFileItem extends Component {
   static propTypes = {
     file: PropTypes.shape({
       name: PropTypes.string,
@@ -127,7 +94,7 @@ class XmltvFileItem extends Component {
         />
       </div>
     ) : (
-      <div className="col">{this.props.file.name}</div>
+      this.props.file && <div className="col">{this.props.file.name}</div>
     )
 
     return (

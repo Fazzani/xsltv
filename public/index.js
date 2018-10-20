@@ -4,7 +4,7 @@ import React from 'react'
 import { render } from 'react-dom'
 import registerServiceWorker from './registerServiceWorker'
 import { ErrorBoundary } from './components/ErrorBoundary'
-import App from './app'
+import App from './components/app'
 
 render(
   <ErrorBoundary>

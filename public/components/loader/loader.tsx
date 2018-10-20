@@ -1,5 +1,5 @@
 import * as React from "react";
-import "../styles/loader.scss";
+import "../../styles/loader.scss";
 
 export interface LoaderProps {
   displayText: string;

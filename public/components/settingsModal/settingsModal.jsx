@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Constants } from '../js/common'
+import { Constants } from '../../js/common'
 import $ from 'jquery'
-import XmltvFilesComponent from './xmltvFiles'
+import XmltvFilesComponent from '../xmltvFiles/xmltvFiles'
 import { AppContext } from '../app'
 
 class SettingsModal extends Component {

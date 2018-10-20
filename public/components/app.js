@@ -4,24 +4,24 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import 'bootstrap'
 import $ from 'jquery'
-import './lang/english'
-import XsltvProcessor from './js/xsltvProcessor'
-import SettingsModal from './components/settingsModal'
-import NavBottom from './components/NavBottom'
-import SideMenu from './components/sideMenu'
-import Header from './components/header/header'
-import Settings, { SettingsService } from './js/settings'
+import '../lang/english'
+import XsltvProcessor from '../js/xsltvProcessor'
+import SettingsModal from './settingsModal/settingsModal'
+import NavBottom from './navBottom'
+import SideMenu from './sidemenu/sidemenu'
+import Header from './header/header'
+import Settings, { SettingsService } from '../js/settings'
 // @ts-ignore
-import index_xsl from './index.xsl'
-import { getParamsCurrentDate } from './components/shared'
-import Timeline from './components/timeline'
-import Xslt from './components/xslt'
-import { Constants } from './js/common'
-import Loader from './components/loader'
-import filesServices from './js/filesService'
+import index_xsl from '../js/index.xsl'
+import { getParamsCurrentDate } from '../js/shared'
+import Timeline from './timeline/timeline'
+import Xslt from './xslt/xslt'
+import { Constants } from '../js/common'
+import Loader from './loader/loader'
+import filesServices from '../js/filesService'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { SearchBox } from './components/searchbox'
+import { SearchBox } from './searchbox'
 
 export const AppContext = React.createContext({})
 
@@ -152,7 +152,7 @@ export default class App extends Component {
         // @ts-ignore
         this.Init(
           this.state.xsltvProcessor.AppSettings.DisplayLength,
-          ...getParamsCurrentDate(Date.now())
+          ...getParamsCurrentDate(new Date())
         )
       }
     } else {
