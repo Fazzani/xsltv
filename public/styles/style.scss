@@ -1,8 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Libre+Baskerville:400,700');
 @import '../../node_modules/font-awesome/css/font-awesome.css';
 @import '../../node_modules/bootstrap/dist/css/bootstrap.css';
+@import '../../node_modules/react-toastify/dist/ReactToastify.css';
 @import url('https://fonts.googleapis.com/css?family=Charmonman');
 @import 'vars.scss';
+
 @mixin bg-size($bg) {
     -webkit-background-size: $bg;
     -moz-background-size: $bg;

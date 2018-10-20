@@ -12,7 +12,8 @@ self.addEventListener('install', function(event) {
         // cache, the whole operation fails.
       })
       .catch(function(error) {
-        console.error(error)
+        // console.error(error)
+        throw error
       })
   )
 })
@@ -48,19 +49,19 @@ self.addEventListener('fetch', (event) => {
   //We defind the promise (the async code block) that return either the cached response or the network one
   //It should return a response object
   const getCustomResponsePromise = async function() {
-    console.log(`URL ${event.request.url}`, `location origin ${location}`)
+    // console.log(`URL ${event.request.url}`, `location origin ${location}`)
     try {
       //Try to get the cached response
       const cachedResponse = await caches.match(event.request)
       if (cachedResponse) {
         //Return the cached response if present
-        console.log(`Cached response ${cachedResponse}`)
+        //console.log(`Cached response ${cachedResponse}`)
         return cachedResponse
       }
 
       //Get the network response if no cached response is present
       const netResponse = await fetch(event.request)
-      console.log(`adding net response to cache`)
+      //console.log(`adding net response to cache`)
 
       //Here, we add the network response to the cache
       let cache = await caches.open(CACHE_NAME)
@@ -71,7 +72,7 @@ self.addEventListener('fetch', (event) => {
       //return the network response
       return netResponse
     } catch (err) {
-      console.error(`Error ${err}`)
+      // console.error(`Error ${err}`)
       throw err
     }
   }

@@ -5,15 +5,16 @@
   "private": true,
   "main": "docs/index.js",
   "scripts": {
-    "lint": "./node_modules/.bin/eslint --fix --ignore-pattern docs --ignore-pattern public/lang --ignore-path .gitignore .",
-    "test:test": "cross-env NODE_ENV=test jest",
-    "test": "jest",
+    "lint": "npm run tslint && npm run eslint",
+    "eslint": "node_modules\\.bin\\eslint --ignore-pattern public/lang/** --ignore-path .gitignore ./public",
+    "tslint": "tslint --project ./tsconfig.json '**/*.ts' --exclude '**/node_modules/**'",
+    "test": "cross-env NODE_ENV=test jest",
     "test:watch": "npm test -- --watchAll",
     "build": "parcel build public/index.html --out-dir docs --detailed-report --public-url ./",
-    "start": "parcel public/index.html --out-dir docs ",
+    "start": "parcel public/index.html --out-dir docs",
     "push": "git add --all && git commit -m \"vscode deploy\" && git push",
     "prettify": "prettier --write './public/**/*.{ts,tsx,js,jsx}'",
-    "prepublish": "rm -rf ./docs/**",
+    "prepare": "rm -rf ./docs/**",
     "publish": "cross-env NODE_ENV=production npm run build && npm run push"
   },
   "repository": {
@@ -78,7 +79,7 @@
       }
     },
     "rules": {
-      "no-console": 0,
+      "no-console": "error",
       "max-len": [
         1,
         120,
@@ -119,10 +120,23 @@
     }
   },
   "jest": {
+    "testURL": "http://localhost:1234/",
     "verbose": true,
+    "browser": false,
+    "errorOnDeprecated": true,
+    "notify": true,
+    "setupFiles": [
+      "<rootDir>/tests/setupTests.js"
+    ],
+    "moduleDirectories": [
+      "node_modules"
+    ],
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
     ],
+    "globals": {
+      "XSLTProcessor": true
+    },
     "collectCoverage": true,
     "collectCoverageFrom": [
       "**/*.{js,jsx,tsx,ts}",
@@ -137,30 +151,51 @@
       "html",
       "text"
     ],
-    "notify": true,
     "transform": {
-      "\\.(js|jsx)$": "babel-jest",
-      "\\.(ts|tsx)$": "ts-jest"
+      "^.+\\.(js|jsx)$": "babel-jest",
+      "^.+\\.(ts|tsx)$": "ts-jest",
+      "^.+\\.(xsl|xslt)$": "<rootDir>/tests/styleMock.ts",
+      "^.+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|css|less|scss)$": "jest-transform-stub"
     },
+    "testPathIgnorePatterns": [
+      "<rootDir>[/\\\\](build|docs|node_modules|bin)[/\\\\]"
+    ],
+    "transformIgnorePatterns": [
+      "/node_modules/"
+    ],
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
       "js",
       "jsx",
-      "json",
-      "node"
+      "json"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/react"
     ],
-    "setupFiles": [
-      "<rootDir>/public/tests/setupTests.js"
-    ],
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|xsl|xslt)$": "<rootDir>/public/tests/fileMock.ts",
-      "\\.(css|scss)$": "identity-obj-proxy"
-    },
-    "moduleDirectories": [
-      "node_modules",
-      "public"
+    "plugins": [
+      [
+        "@babel/plugin-proposal-decorators",
+        {
+          "legacy": true
+        }
+      ],
+      [
+        "@babel/plugin-proposal-class-properties",
+        {
+          "loose": true
+        }
+      ],
+      [
+        "@babel/plugin-transform-runtime",
+        {
+          "corejs": 2
+        }
+      ]
     ]
   },
   "dependencies": {
@@ -214,8 +249,8 @@
     "eslint-plugin-react": "^7.11.1",
     "eslint-plugin-standard": "^4.0.0",
     "husky": "1.1.2",
-    "identity-obj-proxy": "^3.0.0",
     "jest": "^23.6.0",
+    "jest-transform-stub": "^1.0.0",
     "jest-watch-toggle-config": "^1.0.2",
     "jest-watch-typeahead": "^0.2.0",
     "parcel-bundler": "^1.10.2",

@@ -8,7 +8,7 @@ import { getParamsCurrentDate } from './shared';
 const getParamsCurrentDate = (
   currentTime: number = Date.now(),
   offsetMinutes: number = 60
-): Array<any> => {
+): number[] => {
   const myDate = new Date(currentTime);
   myDate.setMinutes(myDate.getMinutes() + (60 - offsetMinutes));
   return [

@@ -20,7 +20,6 @@ import { Constants } from '../js/common'
 import Loader from './loader/loader'
 import filesServices from '../js/filesService'
 import { toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
 import { SearchBox } from './searchbox'
 
 export const AppContext = React.createContext({})
