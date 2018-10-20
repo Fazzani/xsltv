@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "EPG viewer for xmltv files",
   "private": true,
+  "author": "Fazzani Heni",
+  "license": "MIT",
+  "homepage": "https://github.com/Fazzani/xviewer/public/index.html",
   "main": "docs/index.js",
   "scripts": {
     "lint": "npm run tslint && npm run eslint",
@@ -26,12 +29,9 @@
     "xmltv",
     "viewer"
   ],
-  "author": "Fazzani Heni",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Fazzani/xviewer/issues"
   },
-  "homepage": "https://github.com/Fazzani/xviewer/public/index.html",
   "eslintConfig": {
     "env": {
       "browser": true,
@@ -58,14 +58,14 @@
         "experimentalObjectRestSpread": true,
         "jsx": true
       },
-      "ecmaVersion": 2017,
-      "sourceType": "module"
+      "ecmaVersion": 2017
     },
     "extends": [
       "prettier",
       "standard-jsx",
       "eslint:recommended",
-      "plugin:react/recommended"
+      "plugin:react/recommended",
+      "plugin:jest/recommended"
     ],
     "plugins": [
       "prettier",
@@ -103,6 +103,12 @@
       "react/jsx-uses-vars": "error",
       "react/prop-types": "error",
       "react/react-in-jsx-scope": "error",
+      "jest/consistent-test-it": [
+        "error",
+        {
+          "fn": "it"
+        }
+      ],
       "prettier/prettier": [
         "error",
         {
@@ -191,12 +197,23 @@
         }
       ],
       [
+        "@babel/plugin-transform-object-assign",
+        {}
+      ],
+      [
         "@babel/plugin-transform-runtime",
         {
           "corejs": 2
         }
       ]
-    ]
+    ],
+    "env": {
+      "test": {
+        "plugins": [
+          "@babel/transform-modules-commonjs"
+        ]
+      }
+    }
   },
   "dependencies": {
     "babel-eslint": "^10.0.1",
@@ -251,8 +268,10 @@
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-react": "^7.11.1",
     "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-jest": "^21.25.1",
     "husky": "^1.1.2",
     "jest": "^23.6.0",
+    "jest-cli": "^23.6.0",
     "jest-transform-stub": "^1.0.0",
     "jest-watch-toggle-config": "^1.0.2",
     "jest-watch-typeahead": "^0.2.0",
