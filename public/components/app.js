@@ -21,6 +21,8 @@ import Loader from './loader/loader'
 import filesServices from '../js/filesService'
 import { toast } from 'react-toastify'
 import { SearchBox } from './searchbox'
+import parser from 'fast-xml-parser'
+import TvgChannel from './tvgChannel/tvgChannel'
 
 export const AppContext = React.createContext({})
 
@@ -138,11 +140,29 @@ export default class App extends Component {
       if (window.XMLHttpRequest && window.XSLTProcessor) {
         const response = await fetch(xmlfileneeded.url)
         this.handleErrors('Loading xml file', response)
+
+        const xmlString = await response.text()
         // @ts-ignore
         const xml = new window.DOMParser().parseFromString(
-          await response.text(),
+          xmlString,
           'text/xml'
         )
+
+        const docJson = parser.parse(xmlString, {
+          attributeNamePrefix: '',
+          ignoreAttributes: false,
+        })
+
+        if (docJson.tv) {
+          const tvgChannels = docJson.tv.channel.map((c) => {
+            c.programs = docJson.tv.programme.filter((p) => p.channel === c.id)
+            return c
+          })
+
+          console.log(tvgChannels)
+          this.setState({ tvgChannels })
+        }
+
         this.setState({
           xml,
           loading: true,
@@ -330,6 +350,9 @@ export default class App extends Component {
           <div className="container">
             <Header title="Xmltv viewer" />
             <SearchBox submitCallback={(v) => this.handleSearch(v)} />
+            {this.state.tvgChannels && (
+              <TvgChannel channel={this.state.tvgChannels[0]} />
+            )}
             <div className="row xslt-container" ref={(c) => (this.xsltRef = c)}>
               {this.state.fragment ? (
                 <React.Fragment>
