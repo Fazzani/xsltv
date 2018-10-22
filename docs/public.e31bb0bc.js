@@ -52910,13 +52910,87 @@ exports.parseToNimn = function (xmlData,schema,options){
     return exports.convertTonimn(exports.getTraversalObj(xmlData,options), schema, options);
 };
 
-},{"./node2json":"../node_modules/fast-xml-parser/src/node2json.js","./xmlstr2xmlnode":"../node_modules/fast-xml-parser/src/xmlstr2xmlnode.js","./util":"../node_modules/fast-xml-parser/src/util.js","../src/nimndata":"../node_modules/fast-xml-parser/src/nimndata.js","./node2json_str":"../node_modules/fast-xml-parser/src/node2json_str.js","./validator":"../node_modules/fast-xml-parser/src/validator.js","./json2xml":"../node_modules/fast-xml-parser/src/json2xml.js"}],"components/tvgChannel/style.scss":[function(require,module,exports) {
+},{"./node2json":"../node_modules/fast-xml-parser/src/node2json.js","./xmlstr2xmlnode":"../node_modules/fast-xml-parser/src/xmlstr2xmlnode.js","./util":"../node_modules/fast-xml-parser/src/util.js","../src/nimndata":"../node_modules/fast-xml-parser/src/nimndata.js","./node2json_str":"../node_modules/fast-xml-parser/src/node2json_str.js","./validator":"../node_modules/fast-xml-parser/src/validator.js","./json2xml":"../node_modules/fast-xml-parser/src/json2xml.js"}],"../node_modules/core-js/library/modules/_object-assign.js":[function(require,module,exports) {
+'use strict';
+// 19.1.2.1 Object.assign(target, source, ...)
+var getKeys = require('./_object-keys');
+var gOPS = require('./_object-gops');
+var pIE = require('./_object-pie');
+var toObject = require('./_to-object');
+var IObject = require('./_iobject');
+var $assign = Object.assign;
+
+// should work with symbols and should have deterministic property order (V8 bug)
+module.exports = !$assign || require('./_fails')(function () {
+  var A = {};
+  var B = {};
+  // eslint-disable-next-line no-undef
+  var S = Symbol();
+  var K = 'abcdefghijklmnopqrst';
+  A[S] = 7;
+  K.split('').forEach(function (k) { B[k] = k; });
+  return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
+}) ? function assign(target, source) { // eslint-disable-line no-unused-vars
+  var T = toObject(target);
+  var aLen = arguments.length;
+  var index = 1;
+  var getSymbols = gOPS.f;
+  var isEnum = pIE.f;
+  while (aLen > index) {
+    var S = IObject(arguments[index++]);
+    var keys = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S);
+    var length = keys.length;
+    var j = 0;
+    var key;
+    while (length > j) if (isEnum.call(S, key = keys[j++])) T[key] = S[key];
+  } return T;
+} : $assign;
+
+},{"./_object-keys":"../node_modules/core-js/library/modules/_object-keys.js","./_object-gops":"../node_modules/core-js/library/modules/_object-gops.js","./_object-pie":"../node_modules/core-js/library/modules/_object-pie.js","./_to-object":"../node_modules/core-js/library/modules/_to-object.js","./_iobject":"../node_modules/core-js/library/modules/_iobject.js","./_fails":"../node_modules/core-js/library/modules/_fails.js"}],"../node_modules/core-js/library/modules/es6.object.assign.js":[function(require,module,exports) {
+// 19.1.3.1 Object.assign(target, source)
+var $export = require('./_export');
+
+$export($export.S + $export.F, 'Object', { assign: require('./_object-assign') });
+
+},{"./_export":"../node_modules/core-js/library/modules/_export.js","./_object-assign":"../node_modules/core-js/library/modules/_object-assign.js"}],"../node_modules/core-js/library/fn/object/assign.js":[function(require,module,exports) {
+require('../../modules/es6.object.assign');
+module.exports = require('../../modules/_core').Object.assign;
+
+},{"../../modules/es6.object.assign":"../node_modules/core-js/library/modules/es6.object.assign.js","../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/object/assign.js":[function(require,module,exports) {
+module.exports = require("core-js/library/fn/object/assign");
+},{"core-js/library/fn/object/assign":"../node_modules/core-js/library/fn/object/assign.js"}],"../node_modules/@babel/runtime-corejs2/helpers/extends.js":[function(require,module,exports) {
+var _Object$assign = require("../core-js/object/assign");
+
+function _extends() {
+  module.exports = _extends = _Object$assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+module.exports = _extends;
+},{"../core-js/object/assign":"../node_modules/@babel/runtime-corejs2/core-js/object/assign.js"}],"components/tvgChannel/style.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
 },{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/tvgChannel/tvgChannel.tsx":[function(require,module,exports) {
 "use strict";
+
+var _typeof2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/typeof"));
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/extends"));
 
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
 
@@ -53003,6 +53077,38 @@ function (_React$Component) {
         }, c['#text']);
       };
 
+      var subtitle = function subtitle(p) {
+        return p['sub-title'] && React.createElement("small", {
+          className: "subtitle"
+        }, p['sub-title']['#text']);
+      };
+
+      var date = function date(p) {
+        return p.date && React.createElement("small", {
+          className: "date"
+        }, p.date);
+      };
+
+      var persons = function persons(actors) {
+        return actors && actors.map(function (f, i) {
+          return React.createElement("li", {
+            key: i
+          }, f);
+        });
+      };
+
+      var credits = function credits(p) {
+        return p.credits && React.createElement("ul", {
+          className: "credits"
+        }, persons((0, _extends2.default)([], p.credits.director && (0, _typeof2.default)('1') === (0, _typeof2.default)(p.credits.director) ? [p.credits.director] : p.credits.director, p.credits.presenter && (0, _typeof2.default)('1') === (0, _typeof2.default)(p.credits.presenter) ? [p.credits.presenter] : p.credits.presenter, p.credits.actor && (0, _typeof2.default)('1') === (0, _typeof2.default)(p.credits.actor) ? [p.credits.actor] : p.credits.actor, p.credits.writer && (0, _typeof2.default)('1') === (0, _typeof2.default)(p.credits.writer) ? [p.credits.writer] : p.credits.writer)));
+      };
+
+      var country = function country(p) {
+        return p.country && React.createElement("small", {
+          className: "country"
+        }, p.country['#text']);
+      };
+
       var listItems = this.props.channel && this.props.channel.programs && this.props.channel.programs.map(function (p, i) {
         return React.createElement("li", {
           className: "program-item row",
@@ -53018,11 +53124,9 @@ function (_React$Component) {
           onClick: function onClick(e) {
             return _this2.handleClickCollapse(e);
           }
-        }, p.title['#text']), React.createElement("div", {
-          style: {
-            float: 'right'
-          }
-        }, p.category && category(p.category)), React.createElement("div", {
+        }, p.title['#text']), React.createElement("span", null, p.category && category(p.category)), React.createElement("div", {
+          className: "row details"
+        }, subtitle(p), date(p), country(p), credits(p)), React.createElement("div", {
           className: "collapse",
           id: i.toString()
         }, React.createElement("p", {
@@ -53046,7 +53150,7 @@ function (_React$Component) {
 }(React.Component);
 
 exports.default = TvgChannel;
-},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","../../styles/loader.scss":"styles/loader.scss","./style.scss":"components/tvgChannel/style.scss","moment":"../node_modules/moment/moment.js","jquery":"../node_modules/jquery/dist/jquery.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js"}],"components/app.js":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/helpers/typeof":"../node_modules/@babel/runtime-corejs2/helpers/typeof.js","@babel/runtime-corejs2/helpers/extends":"../node_modules/@babel/runtime-corejs2/helpers/extends.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","../../styles/loader.scss":"styles/loader.scss","./style.scss":"components/tvgChannel/style.scss","moment":"../node_modules/moment/moment.js","jquery":"../node_modules/jquery/dist/jquery.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js"}],"components/app.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -53798,7 +53902,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56176" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62835" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

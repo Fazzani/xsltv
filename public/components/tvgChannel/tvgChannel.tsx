@@ -5,36 +5,10 @@ import './style.scss'
 import moment from 'moment'
 import $ from 'jquery'
 import 'bootstrap'
+import { Channel, Program } from './entities'
 
 export interface TvgChannelProps {
   channel: undefined | Channel
-}
-
-export interface Program {
-  start: string
-  stop: string
-  title: TextProp
-  category: any
-  desc: TextProp
-  icon: Icon
-}
-
-export interface Channel {
-  id: string
-  url: string
-  icon: Icon
-  'display-name': TextProp
-  //@display-name: any;
-  programs: Program[]
-}
-
-export interface Icon {
-  src: string
-}
-
-export interface TextProp {
-  '#text': string
-  lang: string
 }
 
 export default class TvgChannel extends React.Component<TvgChannelProps, {}> {
@@ -43,7 +17,7 @@ export default class TvgChannel extends React.Component<TvgChannelProps, {}> {
   }
 
   handleClickCollapse = (e: any) => {
-      $(e.target.attributes['data-target'].value).collapse('toggle')
+    $(e.target.attributes['data-target'].value).collapse('toggle')
   }
 
   getFormatedDateTime = (date: string) =>
@@ -53,6 +27,41 @@ export default class TvgChannel extends React.Component<TvgChannelProps, {}> {
     const categories = (cs: any[]) =>
       cs.map && cs.map((c, index) => <li key={index}>{c['#text']}</li>)
     const category = (c: any) => <span className="category">{c['#text']}</span>
+    const subtitle = (p: Program) =>
+      p['sub-title'] && (
+        <small className="subtitle">{p['sub-title']['#text']}</small>
+      )
+    const date = (p: Program) =>
+      p.date && <small className="date">{p.date}</small>
+
+    const persons = (actors: string[]) =>
+      actors && actors.map((f: string, i: number) => <li key={i}>{f}</li>)
+
+    const credits = (p: Program) =>
+      p.credits && (
+        <ul className="credits">
+          {persons(
+            Object.assign(
+              [],
+              p.credits.director && typeof '1' === typeof p.credits.director
+                ? [p.credits.director]
+                : p.credits.director,
+              p.credits.presenter && typeof '1' === typeof p.credits.presenter
+                ? [p.credits.presenter]
+                : p.credits.presenter,
+              p.credits.actor && typeof '1' === typeof p.credits.actor
+                ? [p.credits.actor]
+                : p.credits.actor,
+              p.credits.writer && typeof '1' === typeof p.credits.writer
+                ? [p.credits.writer]
+                : p.credits.writer
+            )
+          )}
+        </ul>
+      )
+    const country = (p: Program) =>
+      p.country && <small className="country">{p.country['#text']}</small>
+
     const listItems =
       this.props.channel &&
       this.props.channel.programs &&
@@ -70,14 +79,18 @@ export default class TvgChannel extends React.Component<TvgChannelProps, {}> {
             >
               {p.title['#text']}
             </a>
-            <div style={{float:'right'}}>{p.category && category(p.category)}</div>
+            <span>{p.category && category(p.category)}</span>
+            <div className="row details">
+              {subtitle(p)}
+              {date(p)}
+              {country(p)}
+              {credits(p)}
+            </div>
             <div className="collapse" id={i.toString()}>
               <p className="desc">{p.desc && p.desc['#text']}</p>
             </div>
           </span>
-          <span className="icon">
-            {p.icon && <img src={p.icon.src} />}
-          </span>
+          <span className="icon">{p.icon && <img src={p.icon.src} />}</span>
         </li>
       ))
     return (
