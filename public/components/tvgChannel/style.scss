@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css?family=Charmonman');
+$heighlight-color: #edff00;
+.channel {
+    color: white;
+    margin: 0;
+    padding: 1em;
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+    font-weight: 300;
+    font-size: 2em;
+}
+
+.tvgChannel {
+    font-family: 'Libre Baskerville', BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    .programs {
+        width: 100%;
+        list-style: none;
+        color: white;
+        .program-item {
+            padding: 5px;
+            border-bottom: 1px solid rgba(33, 24, 24, 0.15);
+            .start {
+                width: 15%;
+                color: #7b7c7d !important;
+                font-weight: 600;
+                font-size: 13px;
+            }
+            .content {
+                .title {
+                    color: white;
+                }
+                .collapse {
+                    .row {
+                        flex-direction: row-reverse;
+                        justify-content: center;
+                        align-items: center;
+                        .icon {
+                            width: 25%;
+                            vertical-align: middle;
+                            display: inline-flex;
+                            img {
+                                width: 100%;
+                                box-shadow: 3px 3px 3px 2px black;
+                                translate: -1rem;
+                            }
+                        }
+                        .desc {
+                            width: 66%;
+                            text-transform: none;
+                            letter-spacing: 0.125rem;
+                            color: #cfcfcf;
+                            font-size: 0.7rem;
+                            text-overflow: ellipsis;
+                            padding: 6px 28px 6px 8px;
+                            display: inline-block;
+                            line-height: 1.15rem;
+                            border-left: 0.25rem $heighlight-color solid;
+                        }
+                    }
+                }
+                .details {
+                    padding: 0.7rem;
+                    display: inline-block;
+                    line-height: 1.6rem;
+                    .subtitle {
+                        display: inline;
+                        color: aquamarine;
+                        font-weight: bolder
+                    }
+                    .date {
+                        color: rgb(106, 244, 255);
+                        display: inline-block;
+                        opacity: 1 !important;
+                        margin: 0.5rem;
+                        &:before {
+                            font: normal normal normal 14px/1 FontAwesome;
+                            content: "\f073";
+                            margin-right: 0.25rem;
+                        }
+                    }
+                    .country {
+                        color: rgb(106, 244, 255);
+                        &:before {
+                            font: normal normal normal 14px/1 FontAwesome;
+                            content: "\f11e";
+                            margin-right: 0.25rem;
+                        }
+                    }
+                    .credits {
+                        margin: 0;
+                        padding: 0;
+                        font-size: smaller;
+                        line-height: 1rem;
+                        list-style-type: none;
+                        li {
+                            display: inline;
+                            margin-right: 0.25rem;
+                            &:before {
+                                font: normal normal normal 14px/1 FontAwesome;
+                                margin-right: 0.25rem;
+                                color: rgb(106, 244, 255);
+                                content: "\f007";
+                            }
+                        }
+                    }
+                }
+                .category {
+                    display: inline-block;
+                    background-color: #343f4c;
+                    height: 30px;
+                    border-radius: 20px;
+                    text-decoration: none;
+                    -webkit-transition: 0.2s;
+                    transition: 0.2s;
+                    font-size: 10px;
+                    line-height: 23px;
+                    padding: 4px 11px;
+                    color: $heighlight-color;
+                    margin-left: 1rem;
+                    font-weight: bold;
+                }
+                a {
+                    text-decoration: none;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}

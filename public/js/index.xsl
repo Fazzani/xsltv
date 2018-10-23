@@ -97,6 +97,9 @@
           <tr>
             <th class="channel">
               <div class="leftchannel">
+                <xsl:attribute name="data-channel-id" >
+                  <xsl:value-of select="@id"/>
+                </xsl:attribute>
                 <xsl:attribute name="data-prog-count">
                   <xsl:value-of select="count(//programme[@channel=current()/@id])"/>
                 </xsl:attribute>

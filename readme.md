@@ -26,3 +26,4 @@ Epg viewer for XMLTV format based on xsltv project.
 [live]: https://fazzani.github.io/xviewer
 [example_css]: https://codepen.io/blackstockc/pen/eJbbyb
 [rxjs_react]: https://reactrocket.com/post/react-and-rxjs/
+[sidePanel]: https://github.com/DimitryDushkin/sliding-pane

@@ -13,9 +13,9 @@
     "strings": false
   },
   "prettier.jsxBracketSameLine": true,
+  "prettier.semi": false,
   // "prettier.printWidth": 200,
   "prettier.trailingComma": "es5",
-  "eslint.enable": true,
   "cSpell.words": [
     "MYJSON",
     "POPER",

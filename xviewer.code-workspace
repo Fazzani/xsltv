@@ -5,8 +5,17 @@
 		}
 	],
 	"settings": {
+		"eslint.autoFixOnSave": false,
+		"eslint.enable": true,
 		"cSpell.words": [
 			"barclock"
-		]
+		],
+		// "prettier.singleQuote": true,
+		"prettier.jsxBracketSameLine": true,
+		"prettier.eslintIntegration": true,
+		"prettier.stylelintIntegration": true,
+		// "prettier.printWidth": 200,
+		"prettier.trailingComma": "none",
+		"javascript.format.enable": false
 	}
 }
