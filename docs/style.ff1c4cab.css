@@ -12019,6 +12019,7 @@ html body .leftchannel {
   height: 50px;
 }
 html body .leftchannel .leftlogocell {
+  cursor: pointer;
   border: 0px;
   max-width: 50px;
 }
