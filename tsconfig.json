@@ -9,7 +9,8 @@
     "experimentalDecorators": true,
     "baseUrl": "./public",
     "rootDir": "./public",
-    "lib": ["dom", "es2015"]
+    "lib": ["dom", "es2015"],
+    "esModuleInterop": true
   },
   "exclude": ["node_modules",
     "setupTests.js", 
