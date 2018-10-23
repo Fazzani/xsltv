@@ -1,4 +1,5 @@
 import { Constants } from './common'
+
 export default class filesServices {
   static get = async (id) => {
     const res = await fetch(`${Constants.Urls.MYJSON_API_URL}${id}`)
