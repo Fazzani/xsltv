@@ -23,6 +23,8 @@ import { toast } from 'react-toastify'
 import { SearchBox } from './searchbox'
 import parser from 'fast-xml-parser'
 import TvgChannel from './tvgChannel/tvgChannel'
+import SlidingPane from 'react-sliding-pane'
+import 'react-sliding-pane/dist/react-sliding-pane.css'
 
 export const AppContext = React.createContext({})
 
@@ -40,6 +42,8 @@ export default class App extends Component {
       openSettingsModal: false,
       noXmltvFiles: false,
       modalSettingsOpen: false,
+      isPaneOpen: false,
+      selectedChannel: undefined,
     }
   }
 
@@ -49,7 +53,7 @@ export default class App extends Component {
         const result = await filesServices.add({ files: [] })
         const id = result.uri.split('bins//')[1]
         this.setState(
-          (prevState) => {
+          prevState => {
             return {
               AppSettings: { ...prevState.AppSettings, MyJsonId: id },
             }
@@ -117,10 +121,7 @@ export default class App extends Component {
       this.toggleSettingsModal()
     }
     // @ts-ignore
-    const xsl = new window.DOMParser().parseFromString(
-      await response.text(),
-      'text/xml'
-    )
+    const xsl = new window.DOMParser().parseFromString(await response.text(), 'text/xml')
     this.state.xsltvProcessor.processor.importStylesheet(xsl)
     await this.loadXML(xmlfileneeded)
   }
@@ -143,10 +144,7 @@ export default class App extends Component {
 
         const xmlString = await response.text()
         // @ts-ignore
-        const xml = new window.DOMParser().parseFromString(
-          xmlString,
-          'text/xml'
-        )
+        const xml = new window.DOMParser().parseFromString(xmlString, 'text/xml')
 
         const docJson = parser.parse(xmlString, {
           attributeNamePrefix: '',
@@ -154,8 +152,8 @@ export default class App extends Component {
         })
 
         if (docJson.tv) {
-          const tvgChannels = docJson.tv.channel.map((c) => {
-            c.programs = docJson.tv.programme.filter((p) => p.channel === c.id)
+          const tvgChannels = docJson.tv.channel.map(c => {
+            c.programs = docJson.tv.programme.filter(p => p.channel === c.id)
             return c
           })
 
@@ -169,10 +167,7 @@ export default class App extends Component {
           loaderText: 'Preparing grid...',
         })
         // @ts-ignore
-        this.Init(
-          this.state.xsltvProcessor.AppSettings.DisplayLength,
-          ...getParamsCurrentDate(new Date())
-        )
+        this.Init(this.state.xsltvProcessor.AppSettings.DisplayLength, ...getParamsCurrentDate(new Date()))
       }
     } else {
       throw new Error("Your browser can't handle this script")
@@ -201,8 +196,7 @@ export default class App extends Component {
 
     this.state.xsltvProcessor.initDate(ch, cd, cm, cy, offset)
     const fragment = this.state.xsltvProcessor.Init(this.state.xml, document)
-    if (fragment === null)
-      throw new Error('An error was occurred while processing the xml file...')
+    if (fragment === null) throw new Error('An error was occurred while processing the xml file...')
     const helperDiv = document.createElement('div')
     helperDiv.appendChild(fragment)
 
@@ -223,13 +217,20 @@ export default class App extends Component {
    * @param {object} e- click event
    * @memberof App
    */
-  onXsltClick = (e) => {
+  onXsltClick = e => {
     let target = e.target.id === 'topcorner' ? e.target : e.target.parentNode
+    const leftchannel = $(target).closest('.leftchannel')
 
     if (target.attributes['data-onclick']) {
       e.preventDefault()
       // console.log(target.attributes['data-onclick'].value)
       eval('_this.' + target.attributes['data-onclick'].value)
+    } else if (leftchannel && leftchannel.attr('data-channel-id')) {
+      e.preventDefault()
+      this.setState({
+        selectedChannel: this.state.tvgChannels.find(c => c.id === leftchannel.attr('data-channel-id')),
+        isPaneOpen: true,
+      })
     }
   }
 
@@ -238,7 +239,7 @@ export default class App extends Component {
     this.toggleSettingsModal()
   }
 
-  onSettingsModalCallback = async (e) => {
+  onSettingsModalCallback = async e => {
     switch (e.type) {
       case Constants.Events.SELECTED_XMLTV_CHANGED:
         this.loadXML(e.file)
@@ -248,38 +249,30 @@ export default class App extends Component {
         break
       case Constants.Events.REMOVE_XMLTV_URL:
         this.setState(
-          (prevState) => {
+          prevState => {
             return {
-              files: prevState.files.filter((f) => f.url != e.file.url),
+              files: prevState.files.filter(f => f.url != e.file.url),
             }
           },
           async () => {
-            await filesServices.update(
-              this.state.AppSettings.MyJsonId,
-              this.state.files
-            )
-            await this.loadXML(
-              this.state.files.length > 0 ? this.state.files[0] : null
-            )
+            await filesServices.update(this.state.AppSettings.MyJsonId, this.state.files)
+            await this.loadXML(this.state.files.length > 0 ? this.state.files[0] : null)
           }
         )
         break
       case Constants.Events.ADD_XMLTV_URL:
         e.file.selected = true
-        this.state.files.forEach((element) => {
+        this.state.files.forEach(element => {
           element.selected = false
         })
         this.setState(
-          (prevState) => {
+          prevState => {
             return {
               files: [e.file, ...prevState.files],
             }
           },
           async () => {
-            await filesServices.update(
-              this.state.AppSettings.MyJsonId,
-              this.state.files
-            )
+            await filesServices.update(this.state.AppSettings.MyJsonId, this.state.files)
             await this.loadXML(e.file)
           }
         )
@@ -289,15 +282,14 @@ export default class App extends Component {
 
   toggleSettingsModal = () => {
     this.setState(
-      (prev) => {
+      prev => {
         return {
           openSettingsModal: !prev.openSettingsModal,
         }
       },
       () => {
         const settingsModal = $('#settingsModal')
-        if (settingsModal)
-          settingsModal.modal(this.state.openSettingsModal ? 'show' : 'hide')
+        if (settingsModal) settingsModal.modal(this.state.openSettingsModal ? 'show' : 'hide')
       }
     )
   }
@@ -315,11 +307,7 @@ export default class App extends Component {
           const data = v.getAttribute('data-content')
           const title = v.getAttribute('data-original-title')
 
-          if (
-            data &&
-            (title.toLowerCase().indexOf(value.toLowerCase()) > -1 ||
-              data.toLowerCase().indexOf(value.toLowerCase()) > -1)
-          ) {
+          if (data && (title.toLowerCase().indexOf(value.toLowerCase()) > -1 || data.toLowerCase().indexOf(value.toLowerCase()) > -1)) {
             v.classList.add('highlight-search')
           } else {
             v.classList.remove('highlight-search')
@@ -337,29 +325,18 @@ export default class App extends Component {
           loadXML: this.loadXML,
           saveSettings: this.saveSettings,
           onSettingsModalCallback: this.onSettingsModalCallback,
-        }}
-      >
+        }}>
         <NavBottom />
         <section className="row-section">
           <SideMenu handleToggleModalClick={this.onSettingsModalClick} />
-          <SettingsModal
-            open={this.state.openSettingsModal}
-            files={this.state.files}
-            callbackEvent={this.onSettingsModalCallback}
-          />
+          <SettingsModal open={this.state.openSettingsModal} files={this.state.files} callbackEvent={this.onSettingsModalCallback} />
           <div className="container">
             <Header title="Xmltv viewer" />
-            <SearchBox submitCallback={(v) => this.handleSearch(v)} />
-            {this.state.tvgChannels && (
-              <TvgChannel channel={this.state.tvgChannels[0]} />
-            )}
-            <div className="row xslt-container" ref={(c) => (this.xsltRef = c)}>
+            <SearchBox submitCallback={v => this.handleSearch(v)} />
+            <div className="row xslt-container" ref={c => (this.xsltRef = c)}>
               {this.state.fragment ? (
                 <React.Fragment>
-                  <Xslt
-                    fragment={this.state.fragment}
-                    onClick={this.onXsltClick}
-                  />
+                  <Xslt fragment={this.state.fragment} onClick={this.onXsltClick} />
                   <Timeline
                     parentNode={this.xsltRef}
                     startDate={this.state.xsltvProcessor.startDate}
@@ -368,10 +345,16 @@ export default class App extends Component {
                   />
                 </React.Fragment>
               ) : null}
-              {this.state.loading ? (
-                <Loader displayText={this.state.loaderText} />
-              ) : null}
+              {this.state.loading ? <Loader displayText={this.state.loaderText} /> : null}
             </div>
+            <SlidingPane
+              isOpen={this.state.isPaneOpen}
+              title="Hey, it is optional pane title.  I can be React component too."
+              from="left"
+              width="500px"
+              onRequestClose={() => this.setState({ isPaneOpen: false })}>
+              <React.Fragment>{this.state.selectedChannel && <TvgChannel channel={this.state.selectedChannel} />}</React.Fragment>
+            </SlidingPane>
           </div>
         </section>
       </AppContext.Provider>

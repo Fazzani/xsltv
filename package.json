@@ -33,6 +33,18 @@
     "url": "https://github.com/Fazzani/xviewer/issues"
   },
   "eslintConfig": {
+    "root": true,
+    "extends": [
+      "prettier",
+      "prettier/react",
+      "plugin:jest/recommended"
+    ],
+    "plugins": [
+      "prettier",
+      "react",
+      "import",
+      "babel"
+    ],
     "env": {
       "browser": true,
       "es6": true,
@@ -58,31 +70,19 @@
         "experimentalObjectRestSpread": true,
         "jsx": true
       },
+      "sourceType": "module",
       "ecmaVersion": 2017
     },
-    "extends": [
-      "prettier",
-      "standard-jsx",
-      "eslint:recommended",
-      "plugin:react/recommended",
-      "plugin:jest/recommended"
-    ],
-    "plugins": [
-      "prettier",
-      "import",
-      "babel",
-      "react"
-    ],
     "settings": {
       "react": {
         "version": "16.5"
       }
     },
     "rules": {
-      "no-console": "error",
+      "no-console": 1,
       "max-len": [
         1,
-        120,
+        150,
         2,
         {
           "ignoreComments": true
@@ -103,19 +103,11 @@
       "react/jsx-uses-vars": "error",
       "react/prop-types": "error",
       "react/react-in-jsx-scope": "error",
+      "import/newline-after-import": "error",
       "jest/consistent-test-it": [
         "error",
         {
           "fn": "it"
-        }
-      ],
-      "prettier/prettier": [
-        "error",
-        {
-          "arrowParens": "always",
-          "semi": false,
-          "singleQuote": true,
-          "trailingComma": "es5"
         }
       ]
     }
@@ -232,6 +224,7 @@
     "react": "^16.5.2",
     "react-bootstrap-tabs": "^1.0.2",
     "react-dom": "^16.5.2",
+    "react-sliding-pane": "^3.0.1",
     "react-toastify": "^4.4.0",
     "styles": "^0.2.1",
     "why-did-you-update": "^0.1.1"
@@ -261,7 +254,7 @@
     "enzyme-adapter-react-16": "^1.6.0",
     "enzyme-to-json": "^3.3.4",
     "eslint": "^5.7.0",
-    "eslint-config-prettier": "^3.0.1",
+    "eslint-config-prettier": "^3.1.0",
     "eslint-config-react": "^1.1.7",
     "eslint-plugin-babel": "^5.2.1",
     "eslint-plugin-import": "^2.14.0",
