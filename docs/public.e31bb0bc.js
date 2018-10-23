@@ -53125,17 +53125,19 @@ function (_React$Component) {
             return _this2.handleClickCollapse(e);
           }
         }, p.title['#text']), React.createElement("span", null, p.category && category(p.category)), React.createElement("div", {
-          className: "row details"
-        }, subtitle(p), date(p), country(p), credits(p)), React.createElement("div", {
           className: "collapse",
           id: i.toString()
+        }, React.createElement("div", {
+          className: "row details"
+        }, subtitle(p), date(p), country(p), credits(p)), React.createElement("div", {
+          className: "row"
         }, React.createElement("p", {
           className: "desc"
-        }, p.desc && p.desc['#text']))), React.createElement("span", {
+        }, p.desc && p.desc['#text']), React.createElement("span", {
           className: "icon"
         }, p.icon && React.createElement("img", {
           src: p.icon.src
-        })));
+        }))))));
       });
       return this.props.channel && React.createElement("div", {
         className: "tvgChannel row"
