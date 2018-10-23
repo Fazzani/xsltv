@@ -2,6 +2,11 @@
 $heighlight-color: #edff00;
 .channel {
     color: white;
+    margin: 0;
+    padding: 1em;
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+    font-weight: 300;
+    font-size: 2em;
 }
 
 .tvgChannel {
@@ -9,14 +14,12 @@ $heighlight-color: #edff00;
     .programs {
         width: 100%;
         list-style: none;
-        background-color: #181819;
         color: white;
         .program-item {
             padding: 5px;
             border-bottom: 1px solid rgba(33, 24, 24, 0.15);
             .start {
                 width: 10%;
-                text-align: center;
                 color: #7b7c7d !important;
                 font-weight: 600;
                 font-size: 13px;
@@ -28,7 +31,6 @@ $heighlight-color: #edff00;
                 width: 65%;
                 .title {
                     color: white;
-                    font-weight: bolder;
                 }
                 .desc {
                     text-transform: none;

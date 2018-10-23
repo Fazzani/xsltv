@@ -11794,6 +11794,19 @@ html body {
   /* END OF DEMO CSS */
   /* *****  MODAL ******* */
 }
+html body::-webkit-scrollbar {
+  width: 1em;
+}
+html body::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+html body::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+html body .fixed-bottom {
+  z-index: 99 !important;
+}
 html body .bg-dark {
   background-color: transparent !important;
 }
@@ -12138,7 +12151,7 @@ html body .navbar-minimal {
   min-height: 60px;
   max-height: 100%;
   border-width: 0px;
-  z-index: 1000;
+  z-index: 10;
 }
 html body .navbar-minimal > .navbar-toggler {
   position: absolute;

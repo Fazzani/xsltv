@@ -1,0 +1,43 @@
+@import '../../styles/vars';
+.sidepanel {
+    position: fixed;
+    background: linear-gradient(to right, #101113 3px, #000000de 5%, #141e30);
+    top: 0;
+    right: -1500px;
+    z-index: 100;
+    width: 50%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: 5px 5px 10px black;
+    -webkit-transform: translateX(1500px);
+    transform: translateX(1500px);
+    -webkit-transition: all 0.25s;
+    transition: all 0.25s;
+    border-radius: 0 0 8px 8px;
+    &.open {
+        right: 0;
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+        -webkit-transition: -webkit-transform 0.5s;
+        transition: transform 0.5s;
+    }
+    &.right {
+        right: 0
+    }
+    .exit {
+        position: absolute;
+        right: 10px;
+        padding: 0px;
+        top: -10px;
+        font-size: 4em;
+        color: white;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.25s;
+        -webkit-transition: all 0.25s;
+    }
+    .exit:hover {
+        color: aquamarine;
+    }
+}

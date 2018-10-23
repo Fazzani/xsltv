@@ -23,8 +23,7 @@ import { toast } from 'react-toastify'
 import { SearchBox } from './searchbox'
 import parser from 'fast-xml-parser'
 import TvgChannel from './tvgChannel/tvgChannel'
-import SlidingPane from 'react-sliding-pane'
-import 'react-sliding-pane/dist/react-sliding-pane.css'
+import SidePanel from './sidePanel/sidePanel'
 
 export const AppContext = React.createContext({})
 
@@ -42,8 +41,8 @@ export default class App extends Component {
       openSettingsModal: false,
       noXmltvFiles: false,
       modalSettingsOpen: false,
-      isPaneOpen: false,
-      selectedChannel: undefined,
+      sidebarOpen: false,
+      selectedChannel: {},
     }
   }
 
@@ -229,7 +228,7 @@ export default class App extends Component {
       e.preventDefault()
       this.setState({
         selectedChannel: this.state.tvgChannels.find(c => c.id === leftchannel.attr('data-channel-id')),
-        isPaneOpen: true,
+        sidebarOpen: true,
       })
     }
   }
@@ -317,6 +316,11 @@ export default class App extends Component {
     }
   }
 
+  handleClosePanel = e => {
+    e.preventDefault()
+    this.setState({ sidebarOpen: false })
+  }
+
   render() {
     return (
       <AppContext.Provider
@@ -347,16 +351,11 @@ export default class App extends Component {
               ) : null}
               {this.state.loading ? <Loader displayText={this.state.loaderText} /> : null}
             </div>
-            <SlidingPane
-              isOpen={this.state.isPaneOpen}
-              title="Hey, it is optional pane title.  I can be React component too."
-              from="left"
-              width="500px"
-              onRequestClose={() => this.setState({ isPaneOpen: false })}>
-              <React.Fragment>{this.state.selectedChannel && <TvgChannel channel={this.state.selectedChannel} />}</React.Fragment>
-            </SlidingPane>
           </div>
         </section>
+        <SidePanel open={this.state.sidebarOpen} pullRight={true} onSetOpen={this.handleClosePanel}>
+          {this.state.selectedChannel && <TvgChannel channel={this.state.selectedChannel} />}
+        </SidePanel>
       </AppContext.Provider>
     )
   }
