@@ -17,7 +17,7 @@ export default class TvgChannel extends React.Component<TvgChannelProps, {}> {
   }
 
   handleClickCollapse = (e: any) => {
-    $(e.target.attributes['data-target'].value).collapse('toggle')
+    ($(e.target.attributes['data-target'].value) as any).collapse('toggle')
   }
 
   getFormatedDateTime = (date: string) => moment(date, 'YYYYMMDDHHmmss [Z]').format('hh:MM')
