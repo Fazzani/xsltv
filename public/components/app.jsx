@@ -24,6 +24,7 @@ import { SearchBox } from './searchbox'
 import parser from 'fast-xml-parser'
 import TvgChannel from './tvgChannel/tvgChannel'
 import SidePanel from './sidePanel/sidePanel'
+import SnackBar from './snackBar/snackBar'
 
 export const AppContext = React.createContext({})
 
@@ -123,6 +124,7 @@ export default class App extends Component {
     const xsl = new window.DOMParser().parseFromString(await response.text(), 'text/xml')
     this.state.xsltvProcessor.processor.importStylesheet(xsl)
     await this.loadXML(xmlfileneeded)
+
   }
 
   /**
@@ -356,6 +358,7 @@ export default class App extends Component {
         <SidePanel open={this.state.sidebarOpen} pullRight={true} onSetOpen={this.handleClosePanel}>
           {this.state.selectedChannel && <TvgChannel channel={this.state.selectedChannel} />}
         </SidePanel>
+        <SnackBar />
       </AppContext.Provider>
     )
   }

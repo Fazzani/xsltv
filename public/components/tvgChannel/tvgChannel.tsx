@@ -8,7 +8,8 @@ import 'bootstrap'
 import { Channel, Program } from './entities'
 
 export interface TvgChannelProps {
-  channel: undefined | Channel
+  channel: undefined | Channel,
+  currentDate?: Date
 }
 
 export default class TvgChannel extends React.Component<TvgChannelProps, {}> {
@@ -23,7 +24,6 @@ export default class TvgChannel extends React.Component<TvgChannelProps, {}> {
   getFormatedDateTime = (date: string) => moment(date, 'YYYYMMDDHHmmss [Z]').format('hh:MM')
 
   render() {
-    const categories = (cs: any[]) => cs.map && cs.map((c, index) => <li key={index}>{c['#text']}</li>)
     const category = (c: any) => <span className="category">{c['#text']}</span>
     const subtitle = (p: Program) => p['sub-title'] && <small className="subtitle">{p['sub-title']['#text']}</small>
     const date = (p: Program) => p.date && <small className="date">{p.date}</small>
