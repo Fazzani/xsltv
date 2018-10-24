@@ -298,7 +298,7 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
 
 module.exports = checkPropTypes;
 },{"./lib/ReactPropTypesSecret":"../node_modules/prop-types/lib/ReactPropTypesSecret.js"}],"../node_modules/react/cjs/react.development.js":[function(require,module,exports) {
-/** @license React v16.6.0
+/** @license React v16.5.2
  * react.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -317,7 +317,7 @@ if ("development" !== "production") {
     var checkPropTypes = require('prop-types/checkPropTypes'); // TODO: this is special because it gets imported during build.
 
 
-    var ReactVersion = '16.6.0'; // The Symbol used to tag the ReactElement-like types. If there is no native Symbol
+    var ReactVersion = '16.5.2'; // The Symbol used to tag the ReactElement-like types. If there is no native Symbol
     // nor polyfill, then a plain number is used for performance.
 
     var hasSymbol = typeof Symbol === 'function' && Symbol.for;
@@ -328,11 +328,9 @@ if ("development" !== "production") {
     var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for('react.profiler') : 0xead2;
     var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for('react.provider') : 0xeacd;
     var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for('react.context') : 0xeace;
-    var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for('react.concurrent_mode') : 0xeacf;
+    var REACT_ASYNC_MODE_TYPE = hasSymbol ? Symbol.for('react.async_mode') : 0xeacf;
     var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
-    var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for('react.suspense') : 0xead1;
-    var REACT_MEMO_TYPE = hasSymbol ? Symbol.for('react.memo') : 0xead3;
-    var REACT_LAZY_TYPE = hasSymbol ? Symbol.for('react.lazy') : 0xead4;
+    var REACT_PLACEHOLDER_TYPE = hasSymbol ? Symbol.for('react.placeholder') : 0xead1;
     var MAYBE_ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
     var FAUX_ITERATOR_SYMBOL = '@@iterator';
 
@@ -348,7 +346,28 @@ if ("development" !== "production") {
       }
 
       return null;
-    }
+    } // Exports ReactDOM.createRoot
+    // Experimental error-boundary API that can recover from errors within a single
+    // render phase
+    // Suspense
+
+
+    var enableSuspense = false; // Helps identify side effects in begin-phase lifecycle hooks and setState reducers:
+    // In some cases, StrictMode should also double-render lifecycles.
+    // This can be confusing for tests though,
+    // And it can be bad for performance in production.
+    // This feature flag can be used to control the behavior:
+    // To preserve the "Pause on caught exceptions" behavior of the debugger, we
+    // replay the begin phase of a failed component inside invokeGuardedCallback.
+    // Warn about deprecated, async-unsafe lifecycles; relates to RFC #6:
+    // Warn about legacy context API
+    // Gather advanced timing metrics for Profiler subtrees.
+    // Trace which interactions trigger each commit.
+    // Only used in www builds.
+    // Only used in www builds.
+    // React Fire: prevent the value and checked attributes from syncing
+    // with their related DOM properties
+
     /**
      * Use invariant() to assert state which your program assumes to be true.
      *
@@ -359,7 +378,6 @@ if ("development" !== "production") {
      * The invariant message will be stripped in production, but the invariant
      * will remain to ensure logic does not differ in production.
      */
-
 
     var validateFormat = function () {};
 
@@ -814,13 +832,8 @@ if ("development" !== "production") {
 
     var Resolved = 1;
 
-    function refineResolvedLazyComponent(lazyComponent) {
-      return lazyComponent._status === Resolved ? lazyComponent._result : null;
-    }
-
-    function getWrappedName(outerType, innerType, wrapperName) {
-      var functionName = innerType.displayName || innerType.name || '';
-      return outerType.displayName || (functionName !== '' ? wrapperName + '(' + functionName + ')' : wrapperName);
+    function refineResolvedThenable(thenable) {
+      return thenable._reactStatus === Resolved ? thenable._reactResult : null;
     }
 
     function getComponentName(type) {
@@ -844,8 +857,8 @@ if ("development" !== "production") {
       }
 
       switch (type) {
-        case REACT_CONCURRENT_MODE_TYPE:
-          return 'ConcurrentMode';
+        case REACT_ASYNC_MODE_TYPE:
+          return 'AsyncMode';
 
         case REACT_FRAGMENT_TYPE:
           return 'Fragment';
@@ -859,8 +872,8 @@ if ("development" !== "production") {
         case REACT_STRICT_MODE_TYPE:
           return 'StrictMode';
 
-        case REACT_SUSPENSE_TYPE:
-          return 'Suspense';
+        case REACT_PLACEHOLDER_TYPE:
+          return 'Placeholder';
       }
 
       if (typeof type === 'object') {
@@ -872,20 +885,18 @@ if ("development" !== "production") {
             return 'Context.Provider';
 
           case REACT_FORWARD_REF_TYPE:
-            return getWrappedName(type, type.render, 'ForwardRef');
+            var renderFn = type.render;
+            var functionName = renderFn.displayName || renderFn.name || '';
+            return type.displayName || (functionName !== '' ? 'ForwardRef(' + functionName + ')' : 'ForwardRef');
+        }
 
-          case REACT_MEMO_TYPE:
-            return getComponentName(type.type);
+        if (typeof type.then === 'function') {
+          var thenable = type;
+          var resolvedThenable = refineResolvedThenable(thenable);
 
-          case REACT_LAZY_TYPE:
-            {
-              var thenable = type;
-              var resolvedThenable = refineResolvedLazyComponent(thenable);
-
-              if (resolvedThenable) {
-                return getComponentName(resolvedThenable);
-              }
-            }
+          if (resolvedThenable) {
+            return getComponentName(resolvedThenable);
+          }
         }
       }
 
@@ -1618,6 +1629,12 @@ if ("development" !== "production") {
       return children;
     }
 
+    function readContext(context, observedBits) {
+      var dispatcher = ReactCurrentOwner.currentDispatcher;
+      !(dispatcher !== null) ? invariant(false, 'Context.unstable_read(): Context can only be read while React is rendering, e.g. inside the render method or getDerivedStateFromProps.') : void 0;
+      return dispatcher.readContext(context, observedBits);
+    }
+
     function createContext(defaultValue, calculateChangedBits) {
       if (calculateChangedBits === undefined) {
         calculateChangedBits = null;
@@ -1639,68 +1656,15 @@ if ("development" !== "production") {
         _currentValue2: defaultValue,
         // These are circular
         Provider: null,
-        Consumer: null
+        Consumer: null,
+        unstable_read: null
       };
       context.Provider = {
         $$typeof: REACT_PROVIDER_TYPE,
         _context: context
       };
-      var hasWarnedAboutUsingNestedContextConsumers = false;
-      var hasWarnedAboutUsingConsumerProvider = false;
-      {
-        // A separate object, but proxies back to the original context object for
-        // backwards compatibility. It has a different $$typeof, so we can properly
-        // warn for the incorrect usage of Context as a Consumer.
-        var Consumer = {
-          $$typeof: REACT_CONTEXT_TYPE,
-          _context: context,
-          _calculateChangedBits: context._calculateChangedBits
-        }; // $FlowFixMe: Flow complains about not setting a value, which is intentional here
-
-        Object.defineProperties(Consumer, {
-          Provider: {
-            get: function () {
-              if (!hasWarnedAboutUsingConsumerProvider) {
-                hasWarnedAboutUsingConsumerProvider = true;
-                warning$1(false, 'Rendering <Context.Consumer.Provider> is not supported and will be removed in ' + 'a future major release. Did you mean to render <Context.Provider> instead?');
-              }
-
-              return context.Provider;
-            },
-            set: function (_Provider) {
-              context.Provider = _Provider;
-            }
-          },
-          _currentValue: {
-            get: function () {
-              return context._currentValue;
-            },
-            set: function (_currentValue) {
-              context._currentValue = _currentValue;
-            }
-          },
-          _currentValue2: {
-            get: function () {
-              return context._currentValue2;
-            },
-            set: function (_currentValue2) {
-              context._currentValue2 = _currentValue2;
-            }
-          },
-          Consumer: {
-            get: function () {
-              if (!hasWarnedAboutUsingNestedContextConsumers) {
-                hasWarnedAboutUsingNestedContextConsumers = true;
-                warning$1(false, 'Rendering <Context.Consumer.Consumer> is not supported and will be removed in ' + 'a future major release. Did you mean to render <Context.Consumer> instead?');
-              }
-
-              return context.Consumer;
-            }
-          }
-        }); // $FlowFixMe: Flow complains about missing properties because it doesn't understand defineProperty
-
-        context.Consumer = Consumer;
-      }
+      context.Consumer = context;
+      context.unstable_read = readContext.bind(null, context);
       {
         context._currentRenderer = null;
         context._currentRenderer2 = null;
@@ -1709,12 +1673,20 @@ if ("development" !== "production") {
     }
 
     function lazy(ctor) {
+      var thenable = null;
       return {
-        $$typeof: REACT_LAZY_TYPE,
-        _ctor: ctor,
+        then: function (resolve, reject) {
+          if (thenable === null) {
+            // Lazily create thenable by wrapping in an extra thenable.
+            thenable = ctor();
+            ctor = null;
+          }
+
+          return thenable.then(resolve, reject);
+        },
         // React uses these fields to store the result.
-        _status: -1,
-        _result: null
+        _reactStatus: -1,
+        _reactResult: null
       };
     }
 
@@ -1739,20 +1711,7 @@ if ("development" !== "production") {
 
     function isValidElementType(type) {
       return typeof type === 'string' || typeof type === 'function' || // Note: its typeof might be other than 'symbol' or 'number' if it's a polyfill.
-      type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || typeof type === 'object' && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE);
-    }
-
-    function memo(type, compare) {
-      {
-        if (!isValidElementType(type)) {
-          warningWithoutStack$1(false, 'memo: The first argument must be a component. Instead ' + 'received: %s', type === null ? 'null' : typeof type);
-        }
-      }
-      return {
-        $$typeof: REACT_MEMO_TYPE,
-        type: type,
-        compare: compare === undefined ? null : compare
-      };
+      type === REACT_FRAGMENT_TYPE || type === REACT_ASYNC_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_PLACEHOLDER_TYPE || typeof type === 'object' && type !== null && (typeof type.then === 'function' || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE);
     }
     /**
      * ReactElementValidator provides a wrapper around a element factory
@@ -1915,7 +1874,7 @@ if ("development" !== "production") {
           propTypes = void 0;
 
       if (typeof type === 'function') {
-        // Class or function component
+        // Class or functional component
         name = type.displayName || type.name;
         propTypes = type.propTypes;
       } else if (typeof type === 'object' && type !== null && type.$$typeof === REACT_FORWARD_REF_TYPE) {
@@ -2071,12 +2030,9 @@ if ("development" !== "production") {
       PureComponent: PureComponent,
       createContext: createContext,
       forwardRef: forwardRef,
-      lazy: lazy,
-      memo: memo,
       Fragment: REACT_FRAGMENT_TYPE,
       StrictMode: REACT_STRICT_MODE_TYPE,
-      unstable_ConcurrentMode: REACT_CONCURRENT_MODE_TYPE,
-      Suspense: REACT_SUSPENSE_TYPE,
+      unstable_AsyncMode: REACT_ASYNC_MODE_TYPE,
       unstable_Profiler: REACT_PROFILER_TYPE,
       createElement: createElementWithValidation,
       cloneElement: cloneElementWithValidation,
@@ -2085,6 +2041,12 @@ if ("development" !== "production") {
       version: ReactVersion,
       __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED: ReactSharedInternals
     };
+
+    if (enableSuspense) {
+      React.Placeholder = REACT_PLACEHOLDER_TYPE;
+      React.lazy = lazy;
+    }
+
     var React$2 = Object.freeze({
       default: React
     });
@@ -2103,9 +2065,9 @@ if ("development" === 'production') {
 } else {
   module.exports = require('./cjs/react.development.js');
 }
-},{"./cjs/react.development.js":"../node_modules/react/cjs/react.development.js"}],"../node_modules/scheduler/cjs/scheduler.development.js":[function(require,module,exports) {
-/** @license React v16.6.0
- * scheduler.development.js
+},{"./cjs/react.development.js":"../node_modules/react/cjs/react.development.js"}],"../node_modules/schedule/cjs/schedule.development.js":[function(require,module,exports) {
+/** @license React v16.5.2
+ * schedule.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
@@ -2122,54 +2084,27 @@ if ("development" !== "production") {
       value: true
     });
     /* eslint-disable no-var */
-    // TODO: Use symbols?
+    // TODO: Currently there's only a single priority level, Deferred. Will add
+    // additional priorities.
 
-    var ImmediatePriority = 1;
-    var UserBlockingPriority = 2;
-    var NormalPriority = 3;
-    var IdlePriority = 4; // Max 31 bit integer. The max integer size in V8 for 32-bit systems.
-    // Math.pow(2, 30) - 1
-    // 0b111111111111111111111111111111
-
-    var maxSigned31BitInt = 1073741823; // Times out immediately
-
-    var IMMEDIATE_PRIORITY_TIMEOUT = -1; // Eventually times out
-
-    var USER_BLOCKING_PRIORITY = 250;
-    var NORMAL_PRIORITY_TIMEOUT = 5000; // Never times out
-
-    var IDLE_PRIORITY = maxSigned31BitInt; // Callbacks are stored as a circular, doubly linked list.
+    var DEFERRED_TIMEOUT = 5000; // Callbacks are stored as a circular, doubly linked list.
 
     var firstCallbackNode = null;
-    var currentPriorityLevel = NormalPriority;
-    var currentEventStartTime = -1;
-    var currentExpirationTime = -1; // This is set when a callback is being executed, to prevent re-entrancy.
-
-    var isExecutingCallback = false;
+    var isPerformingWork = false;
     var isHostCallbackScheduled = false;
     var hasNativePerformanceNow = typeof performance === 'object' && typeof performance.now === 'function';
     var timeRemaining;
 
     if (hasNativePerformanceNow) {
       timeRemaining = function () {
-        if (firstCallbackNode !== null && firstCallbackNode.expirationTime < currentExpirationTime) {
-          // A higher priority callback was scheduled. Yield so we can switch to
-          // working on that.
-          return 0;
-        } // We assume that if we have a performance timer that the rAF callback
+        // We assume that if we have a performance timer that the rAF callback
         // gets a performance timer value. Not sure if this is always true.
-
-
         var remaining = getFrameDeadline() - performance.now();
         return remaining > 0 ? remaining : 0;
       };
     } else {
       timeRemaining = function () {
         // Fallback to Date.now()
-        if (firstCallbackNode !== null && firstCallbackNode.expirationTime < currentExpirationTime) {
-          return 0;
-        }
-
         var remaining = getFrameDeadline() - Date.now();
         return remaining > 0 ? remaining : 0;
       };
@@ -2181,25 +2116,25 @@ if ("development" !== "production") {
     };
 
     function ensureHostCallbackIsScheduled() {
-      if (isExecutingCallback) {
+      if (isPerformingWork) {
         // Don't schedule work yet; wait until the next time we yield.
         return;
-      } // Schedule the host callback using the earliest expiration in the list.
+      } // Schedule the host callback using the earliest timeout in the list.
 
 
-      var expirationTime = firstCallbackNode.expirationTime;
+      var timesOutAt = firstCallbackNode.timesOutAt;
 
       if (!isHostCallbackScheduled) {
         isHostCallbackScheduled = true;
       } else {
         // Cancel the existing host callback.
-        cancelHostCallback();
+        cancelCallback();
       }
 
-      requestHostCallback(flushWork, expirationTime);
+      requestCallback(flushWork, timesOutAt);
     }
 
-    function flushFirstCallback() {
+    function flushFirstCallback(node) {
       var flushedNode = firstCallbackNode; // Remove the node from the list before calling the callback. That way the
       // list is in a consistent state even if the callback throws.
 
@@ -2210,120 +2145,34 @@ if ("development" !== "production") {
         firstCallbackNode = null;
         next = null;
       } else {
-        var lastCallbackNode = firstCallbackNode.previous;
-        firstCallbackNode = lastCallbackNode.next = next;
-        next.previous = lastCallbackNode;
+        var previous = firstCallbackNode.previous;
+        firstCallbackNode = previous.next = next;
+        next.previous = previous;
       }
 
       flushedNode.next = flushedNode.previous = null; // Now it's safe to call the callback.
 
       var callback = flushedNode.callback;
-      var expirationTime = flushedNode.expirationTime;
-      var priorityLevel = flushedNode.priorityLevel;
-      var previousPriorityLevel = currentPriorityLevel;
-      var previousExpirationTime = currentExpirationTime;
-      currentPriorityLevel = priorityLevel;
-      currentExpirationTime = expirationTime;
-      var continuationCallback;
-
-      try {
-        continuationCallback = callback(deadlineObject);
-      } finally {
-        currentPriorityLevel = previousPriorityLevel;
-        currentExpirationTime = previousExpirationTime;
-      } // A callback may return a continuation. The continuation should be scheduled
-      // with the same priority and expiration as the just-finished callback.
-
-
-      if (typeof continuationCallback === 'function') {
-        var continuationNode = {
-          callback: continuationCallback,
-          priorityLevel: priorityLevel,
-          expirationTime: expirationTime,
-          next: null,
-          previous: null
-        }; // Insert the new callback into the list, sorted by its expiration. This is
-        // almost the same as the code in `scheduleCallback`, except the callback
-        // is inserted into the list *before* callbacks of equal expiration instead
-        // of after.
-
-        if (firstCallbackNode === null) {
-          // This is the first callback in the list.
-          firstCallbackNode = continuationNode.next = continuationNode.previous = continuationNode;
-        } else {
-          var nextAfterContinuation = null;
-          var node = firstCallbackNode;
-
-          do {
-            if (node.expirationTime >= expirationTime) {
-              // This callback expires at or after the continuation. We will insert
-              // the continuation *before* this callback.
-              nextAfterContinuation = node;
-              break;
-            }
-
-            node = node.next;
-          } while (node !== firstCallbackNode);
-
-          if (nextAfterContinuation === null) {
-            // No equal or lower priority callback was found, which means the new
-            // callback is the lowest priority callback in the list.
-            nextAfterContinuation = firstCallbackNode;
-          } else if (nextAfterContinuation === firstCallbackNode) {
-            // The new callback is the highest priority callback in the list.
-            firstCallbackNode = continuationNode;
-            ensureHostCallbackIsScheduled();
-          }
-
-          var previous = nextAfterContinuation.previous;
-          previous.next = nextAfterContinuation.previous = continuationNode;
-          continuationNode.next = nextAfterContinuation;
-          continuationNode.previous = previous;
-        }
-      }
-    }
-
-    function flushImmediateWork() {
-      if ( // Confirm we've exited the outer most event handler
-      currentEventStartTime === -1 && firstCallbackNode !== null && firstCallbackNode.priorityLevel === ImmediatePriority) {
-        isExecutingCallback = true;
-        deadlineObject.didTimeout = true;
-
-        try {
-          do {
-            flushFirstCallback();
-          } while ( // Keep flushing until there are no more immediate callbacks
-          firstCallbackNode !== null && firstCallbackNode.priorityLevel === ImmediatePriority);
-        } finally {
-          isExecutingCallback = false;
-
-          if (firstCallbackNode !== null) {
-            // There's still work remaining. Request another callback.
-            ensureHostCallbackIsScheduled();
-          } else {
-            isHostCallbackScheduled = false;
-          }
-        }
-      }
+      callback(deadlineObject);
     }
 
     function flushWork(didTimeout) {
-      isExecutingCallback = true;
+      isPerformingWork = true;
       deadlineObject.didTimeout = didTimeout;
 
       try {
         if (didTimeout) {
-          // Flush all the expired callbacks without yielding.
+          // Flush all the timed out callbacks without yielding.
           while (firstCallbackNode !== null) {
             // Read the current time. Flush all the callbacks that expire at or
             // earlier than that time. Then read the current time again and repeat.
             // This optimizes for as few performance.now calls as possible.
             var currentTime = exports.unstable_now();
 
-            if (firstCallbackNode.expirationTime <= currentTime) {
+            if (firstCallbackNode.timesOutAt <= currentTime) {
               do {
                 flushFirstCallback();
-              } while (firstCallbackNode !== null && firstCallbackNode.expirationTime <= currentTime);
+              } while (firstCallbackNode !== null && firstCallbackNode.timesOutAt <= currentTime);
 
               continue;
             }
@@ -2339,114 +2188,47 @@ if ("development" !== "production") {
           }
         }
       } finally {
-        isExecutingCallback = false;
+        isPerformingWork = false;
 
         if (firstCallbackNode !== null) {
           // There's still work remaining. Request another callback.
-          ensureHostCallbackIsScheduled();
+          ensureHostCallbackIsScheduled(firstCallbackNode);
         } else {
           isHostCallbackScheduled = false;
-        } // Before exiting, flush all the immediate work that was scheduled.
-
-
-        flushImmediateWork();
-      }
-    }
-
-    function unstable_runWithPriority(priorityLevel, eventHandler) {
-      switch (priorityLevel) {
-        case ImmediatePriority:
-        case UserBlockingPriority:
-        case NormalPriority:
-        case IdlePriority:
-          break;
-
-        default:
-          priorityLevel = NormalPriority;
-      }
-
-      var previousPriorityLevel = currentPriorityLevel;
-      var previousEventStartTime = currentEventStartTime;
-      currentPriorityLevel = priorityLevel;
-      currentEventStartTime = exports.unstable_now();
-
-      try {
-        return eventHandler();
-      } finally {
-        currentPriorityLevel = previousPriorityLevel;
-        currentEventStartTime = previousEventStartTime; // Before exiting, flush all the immediate work that was scheduled.
-
-        flushImmediateWork();
-      }
-    }
-
-    function unstable_wrapCallback(callback) {
-      var parentPriorityLevel = currentPriorityLevel;
-      return function () {
-        // This is a fork of runWithPriority, inlined for performance.
-        var previousPriorityLevel = currentPriorityLevel;
-        var previousEventStartTime = currentEventStartTime;
-        currentPriorityLevel = parentPriorityLevel;
-        currentEventStartTime = exports.unstable_now();
-
-        try {
-          return callback.apply(this, arguments);
-        } finally {
-          currentPriorityLevel = previousPriorityLevel;
-          currentEventStartTime = previousEventStartTime;
-          flushImmediateWork();
         }
-      };
+      }
     }
 
-    function unstable_scheduleCallback(callback, deprecated_options) {
-      var startTime = currentEventStartTime !== -1 ? currentEventStartTime : exports.unstable_now();
-      var expirationTime;
+    function unstable_scheduleWork(callback, options) {
+      var currentTime = exports.unstable_now();
+      var timesOutAt;
 
-      if (typeof deprecated_options === 'object' && deprecated_options !== null && typeof deprecated_options.timeout === 'number') {
-        // FIXME: Remove this branch once we lift expiration times out of React.
-        expirationTime = startTime + deprecated_options.timeout;
+      if (options !== undefined && options !== null && options.timeout !== null && options.timeout !== undefined) {
+        // Check for an explicit timeout
+        timesOutAt = currentTime + options.timeout;
       } else {
-        switch (currentPriorityLevel) {
-          case ImmediatePriority:
-            expirationTime = startTime + IMMEDIATE_PRIORITY_TIMEOUT;
-            break;
-
-          case UserBlockingPriority:
-            expirationTime = startTime + USER_BLOCKING_PRIORITY;
-            break;
-
-          case IdlePriority:
-            expirationTime = startTime + IDLE_PRIORITY;
-            break;
-
-          case NormalPriority:
-          default:
-            expirationTime = startTime + NORMAL_PRIORITY_TIMEOUT;
-        }
+        // Compute an absolute timeout using the default constant.
+        timesOutAt = currentTime + DEFERRED_TIMEOUT;
       }
 
       var newNode = {
         callback: callback,
-        priorityLevel: currentPriorityLevel,
-        expirationTime: expirationTime,
+        timesOutAt: timesOutAt,
         next: null,
         previous: null
-      }; // Insert the new callback into the list, ordered first by expiration, then
-      // by insertion. So the new callback is inserted any other callback with
-      // equal expiration.
+      }; // Insert the new callback into the list, sorted by its timeout.
 
       if (firstCallbackNode === null) {
         // This is the first callback in the list.
         firstCallbackNode = newNode.next = newNode.previous = newNode;
-        ensureHostCallbackIsScheduled();
+        ensureHostCallbackIsScheduled(firstCallbackNode);
       } else {
         var next = null;
         var node = firstCallbackNode;
 
         do {
-          if (node.expirationTime > expirationTime) {
-            // The new callback expires before this one.
+          if (node.timesOutAt > timesOutAt) {
+            // The new callback times out before this one.
             next = node;
             break;
           }
@@ -2455,13 +2237,13 @@ if ("development" !== "production") {
         } while (node !== firstCallbackNode);
 
         if (next === null) {
-          // No callback with a later expiration was found, which means the new
-          // callback has the latest expiration in the list.
+          // No callback with a later timeout was found, which means the new
+          // callback has the latest timeout in the list.
           next = firstCallbackNode;
         } else if (next === firstCallbackNode) {
-          // The new callback has the earliest expiration in the entire list.
+          // The new callback has the earliest timeout in the entire list.
           firstCallbackNode = newNode;
-          ensureHostCallbackIsScheduled();
+          ensureHostCallbackIsScheduled(firstCallbackNode);
         }
 
         var previous = next.previous;
@@ -2473,7 +2255,7 @@ if ("development" !== "production") {
       return newNode;
     }
 
-    function unstable_cancelCallback(callbackNode) {
+    function unstable_cancelScheduledWork(callbackNode) {
       var next = callbackNode.next;
 
       if (next === null) {
@@ -2496,10 +2278,6 @@ if ("development" !== "production") {
       }
 
       callbackNode.next = callbackNode.previous = null;
-    }
-
-    function unstable_getCurrentPriorityLevel() {
-      return currentPriorityLevel;
     } // The remaining code is essentially a polyfill for requestIdleCallback. It
     // works by scheduling a requestAnimationFrame, storing the time for the start
     // of the frame, then scheduling a postMessage which gets scheduled after paint.
@@ -2558,64 +2336,34 @@ if ("development" !== "production") {
       };
     }
 
-    var requestHostCallback;
-    var cancelHostCallback;
+    var requestCallback;
+    var cancelCallback;
     var getFrameDeadline;
 
-    if (typeof window !== 'undefined' && window._schedMock) {
-      // Dynamic injection, only for testing purposes.
-      var impl = window._schedMock;
-      requestHostCallback = impl[0];
-      cancelHostCallback = impl[1];
-      getFrameDeadline = impl[2];
-    } else if ( // If Scheduler runs in a non-DOM environment, it falls back to a naive
-    // implementation using setTimeout.
-    typeof window === 'undefined' || // "addEventListener" might not be available on the window object
-    // if this is a mocked "window" object. So we need to validate that too.
-    typeof window.addEventListener !== 'function') {
-      var _callback = null;
+    if (typeof window === 'undefined') {
+      // If this accidentally gets imported in a non-browser environment, fallback
+      // to a naive implementation.
+      var timeoutID = -1;
 
-      var _currentTime = -1;
-
-      var _flushCallback = function (didTimeout, ms) {
-        if (_callback !== null) {
-          var cb = _callback;
-          _callback = null;
-
-          try {
-            _currentTime = ms;
-            cb(didTimeout);
-          } finally {
-            _currentTime = -1;
-          }
-        }
+      requestCallback = function (callback, absoluteTimeout) {
+        timeoutID = setTimeout(callback, 0, true);
       };
 
-      requestHostCallback = function (cb, ms) {
-        if (_currentTime !== -1) {
-          // Protect against re-entrancy.
-          setTimeout(requestHostCallback, 0, cb, ms);
-        } else {
-          _callback = cb;
-          setTimeout(_flushCallback, ms, true, ms);
-          setTimeout(_flushCallback, maxSigned31BitInt, false, maxSigned31BitInt);
-        }
-      };
-
-      cancelHostCallback = function () {
-        _callback = null;
+      cancelCallback = function () {
+        clearTimeout(timeoutID);
       };
 
       getFrameDeadline = function () {
-        return Infinity;
+        return 0;
       };
-
-      exports.unstable_now = function () {
-        return _currentTime === -1 ? 0 : _currentTime;
-      };
+    } else if (window._schedMock) {
+      // Dynamic injection, only for testing purposes.
+      var impl = window._schedMock;
+      requestCallback = impl[0];
+      cancelCallback = impl[1];
+      getFrameDeadline = impl[2];
     } else {
       if (typeof console !== 'undefined') {
-        // TODO: Remove fb.me link
         if (typeof localRequestAnimationFrame !== 'function') {
           console.error("This browser doesn't support requestAnimationFrame. " + 'Make sure that you load a ' + 'polyfill in older browsers. https://fb.me/react-polyfills');
         }
@@ -2625,11 +2373,11 @@ if ("development" !== "production") {
         }
       }
 
-      var scheduledHostCallback = null;
-      var isMessageEventScheduled = false;
+      var scheduledCallback = null;
+      var isIdleScheduled = false;
       var timeoutTime = -1;
       var isAnimationFrameScheduled = false;
-      var isFlushingHostCallback = false;
+      var isPerformingIdleWork = false;
       var frameDeadline = 0; // We start out assuming that we run at 30fps but then the heuristic tracking
       // will adjust this value to a faster fps if we get more frequent animation
       // frames.
@@ -2649,18 +2397,14 @@ if ("development" !== "production") {
           return;
         }
 
-        isMessageEventScheduled = false;
-        var prevScheduledCallback = scheduledHostCallback;
-        var prevTimeoutTime = timeoutTime;
-        scheduledHostCallback = null;
-        timeoutTime = -1;
+        isIdleScheduled = false;
         var currentTime = exports.unstable_now();
         var didTimeout = false;
 
         if (frameDeadline - currentTime <= 0) {
           // There's no time left in this idle period. Check if the callback has
           // a timeout and whether it's been exceeded.
-          if (prevTimeoutTime !== -1 && prevTimeoutTime <= currentTime) {
+          if (timeoutTime !== -1 && timeoutTime <= currentTime) {
             // Exceeded the timeout. Invoke the callback even though there's no
             // time left.
             didTimeout = true;
@@ -2673,19 +2417,21 @@ if ("development" !== "production") {
             } // Exit without invoking the callback.
 
 
-            scheduledHostCallback = prevScheduledCallback;
-            timeoutTime = prevTimeoutTime;
             return;
           }
         }
 
-        if (prevScheduledCallback !== null) {
-          isFlushingHostCallback = true;
+        timeoutTime = -1;
+        var callback = scheduledCallback;
+        scheduledCallback = null;
+
+        if (callback !== null) {
+          isPerformingIdleWork = true;
 
           try {
-            prevScheduledCallback(didTimeout);
+            callback(didTimeout);
           } finally {
-            isFlushingHostCallback = false;
+            isPerformingIdleWork = false;
           }
         }
       }; // Assumes that we have addEventListener in this environment. Might need
@@ -2695,28 +2441,13 @@ if ("development" !== "production") {
       window.addEventListener('message', idleTick, false);
 
       var animationTick = function (rafTime) {
-        if (scheduledHostCallback !== null) {
-          // Eagerly schedule the next animation callback at the beginning of the
-          // frame. If the scheduler queue is not empty at the end of the frame, it
-          // will continue flushing inside that callback. If the queue *is* empty,
-          // then it will exit immediately. Posting the callback at the start of the
-          // frame ensures it's fired within the earliest possible frame. If we
-          // waited until the end of the frame to post the callback, we risk the
-          // browser skipping a frame and not firing the callback until the frame
-          // after that.
-          requestAnimationFrameWithTimeout(animationTick);
-        } else {
-          // No pending work. Exit.
-          isAnimationFrameScheduled = false;
-          return;
-        }
-
+        isAnimationFrameScheduled = false;
         var nextFrameTime = rafTime - frameDeadline + activeFrameTime;
 
         if (nextFrameTime < activeFrameTime && previousFrameTime < activeFrameTime) {
           if (nextFrameTime < 8) {
             // Defensive coding. We don't support higher frame rates than 120hz.
-            // If the calculated frame time gets lower than 8, it is probably a bug.
+            // If we get lower than that, it is probably a bug.
             nextFrameTime = 8;
           } // If one frame goes long, then the next one can be short to catch up.
           // If two frames are short in a row, then that's an indication that we
@@ -2734,17 +2465,18 @@ if ("development" !== "production") {
 
         frameDeadline = rafTime + activeFrameTime;
 
-        if (!isMessageEventScheduled) {
-          isMessageEventScheduled = true;
+        if (!isIdleScheduled) {
+          isIdleScheduled = true;
           window.postMessage(messageKey, '*');
         }
       };
 
-      requestHostCallback = function (callback, absoluteTimeout) {
-        scheduledHostCallback = callback;
+      requestCallback = function (callback, absoluteTimeout) {
+        scheduledCallback = callback;
         timeoutTime = absoluteTimeout;
 
-        if (isFlushingHostCallback || absoluteTimeout < 0) {
+        if (isPerformingIdleWork) {
+          // If we're already performing idle work, an error must have been thrown.
           // Don't wait for the next frame. Continue working ASAP, in a new event.
           window.postMessage(messageKey, '*');
         } else if (!isAnimationFrameScheduled) {
@@ -2757,35 +2489,28 @@ if ("development" !== "production") {
         }
       };
 
-      cancelHostCallback = function () {
-        scheduledHostCallback = null;
-        isMessageEventScheduled = false;
+      cancelCallback = function () {
+        scheduledCallback = null;
+        isIdleScheduled = false;
         timeoutTime = -1;
       };
     }
 
-    exports.unstable_ImmediatePriority = ImmediatePriority;
-    exports.unstable_UserBlockingPriority = UserBlockingPriority;
-    exports.unstable_NormalPriority = NormalPriority;
-    exports.unstable_IdlePriority = IdlePriority;
-    exports.unstable_runWithPriority = unstable_runWithPriority;
-    exports.unstable_scheduleCallback = unstable_scheduleCallback;
-    exports.unstable_cancelCallback = unstable_cancelCallback;
-    exports.unstable_wrapCallback = unstable_wrapCallback;
-    exports.unstable_getCurrentPriorityLevel = unstable_getCurrentPriorityLevel;
+    exports.unstable_scheduleWork = unstable_scheduleWork;
+    exports.unstable_cancelScheduledWork = unstable_cancelScheduledWork;
   })();
 }
-},{}],"../node_modules/scheduler/index.js":[function(require,module,exports) {
+},{}],"../node_modules/schedule/index.js":[function(require,module,exports) {
 'use strict';
 
 if ("development" === 'production') {
-  module.exports = require('./cjs/scheduler.production.min.js');
+  module.exports = require('./cjs/schedule.production.min.js');
 } else {
-  module.exports = require('./cjs/scheduler.development.js');
+  module.exports = require('./cjs/schedule.development.js');
 }
-},{"./cjs/scheduler.development.js":"../node_modules/scheduler/cjs/scheduler.development.js"}],"../node_modules/scheduler/cjs/scheduler-tracing.development.js":[function(require,module,exports) {
-/** @license React v16.6.0
- * scheduler-tracing.development.js
+},{"./cjs/schedule.development.js":"../node_modules/schedule/cjs/schedule.development.js"}],"../node_modules/schedule/cjs/schedule-tracing.development.js":[function(require,module,exports) {
+/** @license React v16.5.2
+ * schedule-tracing.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
@@ -2800,7 +2525,11 @@ if ("development" !== "production") {
 
     Object.defineProperty(exports, '__esModule', {
       value: true
-    }); // Helps identify side effects in begin-phase lifecycle hooks and setState reducers:
+    }); // Exports ReactDOM.createRoot
+    // Experimental error-boundary API that can recover from errors within a single
+    // render phase
+    // Suspense
+    // Helps identify side effects in begin-phase lifecycle hooks and setState reducers:
     // In some cases, StrictMode should also double-render lifecycles.
     // This can be confusing for tests though,
     // And it can be bad for performance in production.
@@ -2808,6 +2537,7 @@ if ("development" !== "production") {
     // To preserve the "Pause on caught exceptions" behavior of the debugger, we
     // replay the begin phase of a failed component inside invokeGuardedCallback.
     // Warn about deprecated, async-unsafe lifecycles; relates to RFC #6:
+    // Warn about legacy context API
     // Gather advanced timing metrics for Profiler subtrees.
     // Trace which interactions trigger each commit.
 
@@ -3167,16 +2897,16 @@ if ("development" !== "production") {
     exports.unstable_unsubscribe = unstable_unsubscribe;
   })();
 }
-},{}],"../node_modules/scheduler/tracing.js":[function(require,module,exports) {
+},{}],"../node_modules/schedule/tracing.js":[function(require,module,exports) {
 'use strict';
 
 if ("development" === 'production') {
-  module.exports = require('./cjs/scheduler-tracing.production.min.js');
+  module.exports = require('./cjs/schedule-tracing.production.min.js');
 } else {
-  module.exports = require('./cjs/scheduler-tracing.development.js');
+  module.exports = require('./cjs/schedule-tracing.development.js');
 }
-},{"./cjs/scheduler-tracing.development.js":"../node_modules/scheduler/cjs/scheduler-tracing.development.js"}],"../node_modules/react-dom/cjs/react-dom.development.js":[function(require,module,exports) {
-/** @license React v16.6.0
+},{"./cjs/schedule-tracing.development.js":"../node_modules/schedule/cjs/schedule-tracing.development.js"}],"../node_modules/react-dom/cjs/react-dom.development.js":[function(require,module,exports) {
+/** @license React v16.5.2
  * react-dom.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -3196,9 +2926,9 @@ if ("development" !== "production") {
 
     var checkPropTypes = require('prop-types/checkPropTypes');
 
-    var scheduler = require('scheduler');
+    var schedule = require('schedule');
 
-    var tracing = require('scheduler/tracing');
+    var tracing = require('schedule/tracing');
     /**
      * Use invariant() to assert state which your program assumes to be true.
      *
@@ -3299,10 +3029,7 @@ if ("development" !== "production") {
           // during the callback to let user code access window.event in the
           // browsers that support it.
 
-          var windowEvent = window.event; // Keeps track of the descriptor of window.event to restore it after event
-          // dispatching: https://github.com/facebook/react/issues/13688
-
-          var windowEventDescriptor = Object.getOwnPropertyDescriptor(window, 'event'); // Create an event handler for our fake event. We will synchronously
+          var windowEvent = window.event; // Create an event handler for our fake event. We will synchronously
           // dispatch our fake event using `dispatchEvent`. Inside the handler, we
           // call the user-provided callback.
 
@@ -3372,10 +3099,6 @@ if ("development" !== "production") {
 
           evt.initEvent(evtType, false, false);
           fakeNode.dispatchEvent(evt);
-
-          if (windowEventDescriptor) {
-            Object.defineProperty(window, 'event', windowEventDescriptor);
-          }
 
           if (didError) {
             if (!didSetError) {
@@ -4091,27 +3814,26 @@ if ("development" !== "production") {
       runEventsInBatch(events, false);
     }
 
-    var FunctionComponent = 0;
-    var ClassComponent = 1;
-    var IndeterminateComponent = 2; // Before we know whether it is function or class
+    var FunctionalComponent = 0;
+    var FunctionalComponentLazy = 1;
+    var ClassComponent = 2;
+    var ClassComponentLazy = 3;
+    var IndeterminateComponent = 4; // Before we know whether it is functional or class
 
-    var HostRoot = 3; // Root of a host tree. Could be nested inside another node.
+    var HostRoot = 5; // Root of a host tree. Could be nested inside another node.
 
-    var HostPortal = 4; // A subtree. Could be an entry point to a different renderer.
+    var HostPortal = 6; // A subtree. Could be an entry point to a different renderer.
 
-    var HostComponent = 5;
-    var HostText = 6;
-    var Fragment = 7;
-    var Mode = 8;
-    var ContextConsumer = 9;
-    var ContextProvider = 10;
-    var ForwardRef = 11;
-    var Profiler = 12;
-    var SuspenseComponent = 13;
-    var MemoComponent = 14;
-    var SimpleMemoComponent = 15;
-    var LazyComponent = 16;
-    var IncompleteClassComponent = 17;
+    var HostComponent = 7;
+    var HostText = 8;
+    var Fragment = 9;
+    var Mode = 10;
+    var ContextConsumer = 11;
+    var ContextProvider = 12;
+    var ForwardRef = 13;
+    var ForwardRefLazy = 14;
+    var Profiler = 15;
+    var PlaceholderComponent = 16;
     var randomKey = Math.random().toString(36).slice(2);
     var internalInstanceKey = '__reactInternalInstance$' + randomKey;
     var internalEventHandlersKey = '__reactEventHandlers$' + randomKey;
@@ -5761,11 +5483,9 @@ if ("development" !== "production") {
     var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for('react.profiler') : 0xead2;
     var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for('react.provider') : 0xeacd;
     var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for('react.context') : 0xeace;
-    var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for('react.concurrent_mode') : 0xeacf;
+    var REACT_ASYNC_MODE_TYPE = hasSymbol ? Symbol.for('react.async_mode') : 0xeacf;
     var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
-    var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for('react.suspense') : 0xead1;
-    var REACT_MEMO_TYPE = hasSymbol ? Symbol.for('react.memo') : 0xead3;
-    var REACT_LAZY_TYPE = hasSymbol ? Symbol.for('react.lazy') : 0xead4;
+    var REACT_PLACEHOLDER_TYPE = hasSymbol ? Symbol.for('react.placeholder') : 0xead1;
     var MAYBE_ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
     var FAUX_ITERATOR_SYMBOL = '@@iterator';
 
@@ -5787,13 +5507,12 @@ if ("development" !== "production") {
     var Resolved = 1;
     var Rejected = 2;
 
-    function refineResolvedLazyComponent(lazyComponent) {
-      return lazyComponent._status === Resolved ? lazyComponent._result : null;
+    function getResultFromResolvedThenable(thenable) {
+      return thenable._reactResult;
     }
 
-    function getWrappedName(outerType, innerType, wrapperName) {
-      var functionName = innerType.displayName || innerType.name || '';
-      return outerType.displayName || (functionName !== '' ? wrapperName + '(' + functionName + ')' : wrapperName);
+    function refineResolvedThenable(thenable) {
+      return thenable._reactStatus === Resolved ? thenable._reactResult : null;
     }
 
     function getComponentName(type) {
@@ -5817,8 +5536,8 @@ if ("development" !== "production") {
       }
 
       switch (type) {
-        case REACT_CONCURRENT_MODE_TYPE:
-          return 'ConcurrentMode';
+        case REACT_ASYNC_MODE_TYPE:
+          return 'AsyncMode';
 
         case REACT_FRAGMENT_TYPE:
           return 'Fragment';
@@ -5832,8 +5551,8 @@ if ("development" !== "production") {
         case REACT_STRICT_MODE_TYPE:
           return 'StrictMode';
 
-        case REACT_SUSPENSE_TYPE:
-          return 'Suspense';
+        case REACT_PLACEHOLDER_TYPE:
+          return 'Placeholder';
       }
 
       if (typeof type === 'object') {
@@ -5845,20 +5564,18 @@ if ("development" !== "production") {
             return 'Context.Provider';
 
           case REACT_FORWARD_REF_TYPE:
-            return getWrappedName(type, type.render, 'ForwardRef');
+            var renderFn = type.render;
+            var functionName = renderFn.displayName || renderFn.name || '';
+            return type.displayName || (functionName !== '' ? 'ForwardRef(' + functionName + ')' : 'ForwardRef');
+        }
 
-          case REACT_MEMO_TYPE:
-            return getComponentName(type.type);
+        if (typeof type.then === 'function') {
+          var thenable = type;
+          var resolvedThenable = refineResolvedThenable(thenable);
 
-          case REACT_LAZY_TYPE:
-            {
-              var thenable = type;
-              var resolvedThenable = refineResolvedLazyComponent(thenable);
-
-              if (resolvedThenable) {
-                return getComponentName(resolvedThenable);
-              }
-            }
+          if (resolvedThenable) {
+            return getComponentName(resolvedThenable);
+          }
         }
       }
 
@@ -5870,9 +5587,10 @@ if ("development" !== "production") {
     function describeFiber(fiber) {
       switch (fiber.tag) {
         case IndeterminateComponent:
-        case LazyComponent:
-        case FunctionComponent:
+        case FunctionalComponent:
+        case FunctionalComponentLazy:
         case ClassComponent:
+        case ClassComponentLazy:
         case HostComponent:
         case Mode:
           var owner = fiber._debugOwner;
@@ -6480,8 +6198,14 @@ if ("development" !== "production") {
       ReactControlledValuePropTypes.checkPropTypes = function (tagName, props) {
         checkPropTypes(propTypes, props, 'prop', tagName, ReactDebugCurrentFrame$1.getStackAddendum);
       };
-    }
-    var enableUserTimingAPI = true; // Helps identify side effects in begin-phase lifecycle hooks and setState reducers:
+    } // Exports ReactDOM.createRoot
+
+    var enableUserTimingAPI = true; // Experimental error-boundary API that can recover from errors within a single
+    // render phase
+
+    var enableGetDerivedStateFromCatch = false; // Suspense
+
+    var enableSuspense = false; // Helps identify side effects in begin-phase lifecycle hooks and setState reducers:
 
     var debugRenderPhaseSideEffects = false; // In some cases, StrictMode should also double-render lifecycles.
     // This can be confusing for tests though,
@@ -6493,7 +6217,9 @@ if ("development" !== "production") {
 
     var replayFailedUnitOfWorkWithInvokeGuardedCallback = true; // Warn about deprecated, async-unsafe lifecycles; relates to RFC #6:
 
-    var warnAboutDeprecatedLifecycles = false; // Gather advanced timing metrics for Profiler subtrees.
+    var warnAboutDeprecatedLifecycles = false; // Warn about legacy context API
+
+    var warnAboutLegacyContextAPI = false; // Gather advanced timing metrics for Profiler subtrees.
 
     var enableProfilerTimer = true; // Trace which interactions trigger each commit.
 
@@ -6688,7 +6414,7 @@ if ("development" !== "production") {
             }
           } else {
             // When syncing the value attribute, the value property should use
-            // the wrapperState._initialValue property. This uses:
+            // the the wrapperState._initialValue property. This uses:
             //
             //   1. The value React property when present
             //   2. The defaultValue React property when present
@@ -6743,7 +6469,7 @@ if ("development" !== "production") {
           node.defaultChecked = !!props.defaultChecked;
         }
       } else {
-        // When syncing the checked attribute, both the checked property and
+        // When syncing the checked attribute, both the the checked property and
         // attribute are assigned at the same time using defaultChecked. This uses:
         //
         //   1. The checked React property when present
@@ -7087,6 +6813,11 @@ if ("development" !== "production") {
       view: null,
       detail: null
     });
+    /**
+     * Translation from modifier key to the associated property in the event.
+     * @see http://www.w3.org/TR/DOM-Level-3-Events/#keys-Modifiers
+     */
+
     var modifierKeyToProp = {
       Alt: 'altKey',
       Control: 'ctrlKey',
@@ -7095,11 +6826,6 @@ if ("development" !== "production") {
     }; // IE8 does not implement getModifierState so we simply map it to the only
     // modifier keys exposed by the event itself, does not support Lock-keys.
     // Currently, all major browsers except Chrome seems to support Lock-keys.
-
-    /**
-     * Translation from modifier key to the associated property in the event.
-     * @see http://www.w3.org/TR/DOM-Level-3-Events/#keys-Modifiers
-     */
 
     function modifierStateGetter(keyArg) {
       var syntheticEvent = this;
@@ -7475,7 +7201,7 @@ if ("development" !== "production") {
       {
         var owner = ReactCurrentOwner$1.current;
 
-        if (owner !== null && owner.tag === ClassComponent) {
+        if (owner !== null && (owner.tag === ClassComponent || owner.tag === ClassComponentLazy)) {
           var ownerFiber = owner;
           var instance = ownerFiber.stateNode;
           !instance._warnedAboutRefsInRender ? warningWithoutStack$1(false, '%s is accessing isMounted inside its render() function. ' + 'render() should be a pure function of props and state. It should ' + 'never access something that requires stale data from the previous ' + 'render, such as refs. Move this logic to componentDidMount and ' + 'componentDidUpdate instead.', getComponentName(ownerFiber.type) || 'A component') : void 0;
@@ -10766,7 +10492,7 @@ if ("development" !== "production") {
     var SUPPRESS_HYDRATION_WARNING$1 = 'suppressHydrationWarning';
     var AUTOFOCUS = 'autoFocus';
     var CHILDREN = 'children';
-    var STYLE$1 = 'style';
+    var STYLE = 'style';
     var HTML = '__html';
     var HTML_NAMESPACE = Namespaces.html;
     var warnedUnknownTags = void 0;
@@ -10925,7 +10651,7 @@ if ("development" !== "production") {
 
         var nextProp = nextProps[propKey];
 
-        if (propKey === STYLE$1) {
+        if (propKey === STYLE) {
           {
             if (nextProp) {
               // Freeze the next style object so that we can assume it won't be
@@ -10980,7 +10706,7 @@ if ("development" !== "production") {
         var propKey = updatePayload[i];
         var propValue = updatePayload[i + 1];
 
-        if (propKey === STYLE$1) {
+        if (propKey === STYLE) {
           setValueForStyles(domElement, propValue);
         } else if (propKey === DANGEROUSLY_SET_INNER_HTML) {
           setInnerHTML(domElement, propValue);
@@ -11242,7 +10968,7 @@ if ("development" !== "production") {
           continue;
         }
 
-        if (propKey === STYLE$1) {
+        if (propKey === STYLE) {
           var lastStyle = lastProps[propKey];
 
           for (styleName in lastStyle) {
@@ -11279,7 +11005,7 @@ if ("development" !== "production") {
           continue;
         }
 
-        if (propKey === STYLE$1) {
+        if (propKey === STYLE) {
           {
             if (nextProp) {
               // Freeze the next style object so that we can assume it won't be
@@ -11362,7 +11088,7 @@ if ("development" !== "production") {
       }
 
       if (styleUpdates) {
-        (updatePayload = updatePayload || []).push(STYLE$1, styleUpdates);
+        (updatePayload = updatePayload || []).push(STYLE, styleUpdates);
       }
 
       return updatePayload;
@@ -11587,7 +11313,7 @@ if ("development" !== "production") {
             if (expectedHTML !== serverHTML) {
               warnForPropDifference(propKey, serverHTML, expectedHTML);
             }
-          } else if (propKey === STYLE$1) {
+          } else if (propKey === STYLE) {
             // $FlowFixMe - Should be inferred as not undefined.
             extraAttributeNames.delete(propKey);
 
@@ -12099,14 +11825,10 @@ if ("development" !== "production") {
     var appendChildToContainerChildSet = shim;
     var finalizeContainerChildren = shim;
     var replaceContainerChildren = shim;
-    var cloneHiddenInstance = shim;
-    var cloneUnhiddenInstance = shim;
-    var createHiddenTextInstance = shim;
     var SUPPRESS_HYDRATION_WARNING = void 0;
     {
       SUPPRESS_HYDRATION_WARNING = 'suppressHydrationWarning';
     }
-    var STYLE = 'style';
     var eventsEnabled = null;
     var selectionInformation = null;
 
@@ -12310,14 +12032,11 @@ if ("development" !== "production") {
       // through the React tree. However, on Mobile Safari the click would
       // never bubble through the *DOM* tree unless an ancestor with onclick
       // event exists. So we wouldn't see it and dispatch it.
-      // This is why we ensure that non React root containers have inline onclick
-      // defined.
+      // This is why we ensure that containers have inline onclick defined.
       // https://github.com/facebook/react/issues/11918
 
 
-      var reactRootContainer = container._reactRootContainer;
-
-      if ((reactRootContainer === null || reactRootContainer === undefined) && parentNode.onclick === null) {
+      if (parentNode.onclick === null) {
         // TODO: This cast may not be sound for SVG, MathML or custom elements.
         trapClickOnNonInteractiveElement(parentNode);
       }
@@ -12345,29 +12064,6 @@ if ("development" !== "production") {
       } else {
         container.removeChild(child);
       }
-    }
-
-    function hideInstance(instance) {
-      // TODO: Does this work for all element types? What about MathML? Should we
-      // pass host context to this method?
-      instance = instance;
-      instance.style.display = 'none';
-    }
-
-    function hideTextInstance(textInstance) {
-      textInstance.nodeValue = '';
-    }
-
-    function unhideInstance(instance, props) {
-      instance = instance;
-      var styleProp = props[STYLE];
-      var display = styleProp !== undefined && styleProp !== null && styleProp.hasOwnProperty('display') ? styleProp.display : null; // $FlowFixMe Setting a style property to null is the valid way to reset it.
-
-      instance.style.display = display;
-    }
-
-    function unhideTextInstance(textInstance, text) {
-      textInstance.nodeValue = text;
     } // -------------------
     //     Hydration
     // -------------------
@@ -12759,7 +12455,7 @@ if ("development" !== "production") {
         }
 
         fiber._debugIsCurrentlyTiming = false;
-        var warning = fiber.tag === SuspenseComponent ? 'Rendering was suspended' : 'An error was thrown inside this error boundary';
+        var warning = 'An error was thrown inside this error boundary';
         endFiberMark(fiber, null, warning);
       }
     }
@@ -13184,7 +12880,7 @@ if ("development" !== "production") {
     function findCurrentUnmaskedContext(fiber) {
       // Currently this is only used with renderSubtreeIntoContainer; not sure if it
       // makes sense elsewhere
-      !(isFiberMounted(fiber) && fiber.tag === ClassComponent) ? invariant(false, 'Expected subtree parent to be a mounted class component. This error is likely caused by a bug in React. Please file an issue.') : void 0;
+      !(isFiberMounted(fiber) && (fiber.tag === ClassComponent || fiber.tag === ClassComponentLazy)) ? invariant(false, 'Expected subtree parent to be a mounted class component. This error is likely caused by a bug in React. Please file an issue.') : void 0;
       var node = fiber;
 
       do {
@@ -13197,6 +12893,17 @@ if ("development" !== "production") {
               var Component = node.type;
 
               if (isContextProvider(Component)) {
+                return node.stateNode.__reactInternalMemoizedMergedChildContext;
+              }
+
+              break;
+            }
+
+          case ClassComponentLazy:
+            {
+              var _Component = getResultFromResolvedThenable(node.type);
+
+              if (isContextProvider(_Component)) {
                 return node.stateNode.__reactInternalMemoizedMergedChildContext;
               }
 
@@ -13337,7 +13044,7 @@ if ("development" !== "production") {
     }
 
     var NoContext = 0;
-    var ConcurrentMode = 1;
+    var AsyncMode = 1;
     var StrictMode = 2;
     var ProfileMode = 4;
     var hasBadMapPolyfill = void 0;
@@ -13369,7 +13076,6 @@ if ("development" !== "production") {
       // Instance
       this.tag = tag;
       this.key = key;
-      this.elementType = null;
       this.type = null;
       this.stateNode = null; // Fiber
 
@@ -13435,23 +13141,11 @@ if ("development" !== "production") {
       return !!(prototype && prototype.isReactComponent);
     }
 
-    function isSimpleFunctionComponent(type) {
-      return typeof type === 'function' && !shouldConstruct(type) && type.defaultProps === undefined;
-    }
-
-    function resolveLazyComponentTag(Component) {
+    function resolveLazyComponentTag(fiber, Component) {
       if (typeof Component === 'function') {
-        return shouldConstruct(Component) ? ClassComponent : FunctionComponent;
-      } else if (Component !== undefined && Component !== null) {
-        var $$typeof = Component.$$typeof;
-
-        if ($$typeof === REACT_FORWARD_REF_TYPE) {
-          return ForwardRef;
-        }
-
-        if ($$typeof === REACT_MEMO_TYPE) {
-          return MemoComponent;
-        }
+        return shouldConstruct(Component) ? ClassComponentLazy : FunctionalComponentLazy;
+      } else if (Component !== undefined && Component !== null && Component.$$typeof) {
+        return ForwardRefLazy;
       }
 
       return IndeterminateComponent;
@@ -13468,7 +13162,6 @@ if ("development" !== "production") {
         // extra objects for things that are never updated. It also allow us to
         // reclaim the extra memory if needed.
         workInProgress = createFiber(current.tag, pendingProps, current.key, current.mode);
-        workInProgress.elementType = current.elementType;
         workInProgress.type = current.type;
         workInProgress.stateNode = current.stateNode;
         {
@@ -13497,10 +13190,19 @@ if ("development" !== "production") {
           workInProgress.actualDuration = 0;
           workInProgress.actualStartTime = -1;
         }
-      }
+      } // Don't touching the subtree's expiration time, which has not changed.
+
 
       workInProgress.childExpirationTime = current.childExpirationTime;
-      workInProgress.expirationTime = current.expirationTime;
+
+      if (pendingProps !== current.pendingProps) {
+        // This fiber has new props.
+        workInProgress.expirationTime = expirationTime;
+      } else {
+        // This fiber's props have not changed.
+        workInProgress.expirationTime = current.expirationTime;
+      }
+
       workInProgress.child = current.child;
       workInProgress.memoizedProps = current.memoizedProps;
       workInProgress.memoizedState = current.memoizedState;
@@ -13519,8 +13221,8 @@ if ("development" !== "production") {
       return workInProgress;
     }
 
-    function createHostRootFiber(isConcurrent) {
-      var mode = isConcurrent ? ConcurrentMode | StrictMode : NoContext;
+    function createHostRootFiber(isAsync) {
+      var mode = isAsync ? AsyncMode | StrictMode : NoContext;
 
       if (enableProfilerTimer && isDevToolsPresent) {
         // Always collect profile timings when DevTools are present.
@@ -13532,17 +13234,19 @@ if ("development" !== "production") {
       return createFiber(HostRoot, null, null, mode);
     }
 
-    function createFiberFromTypeAndProps(type, // React$ElementType
-    key, pendingProps, owner, mode, expirationTime) {
+    function createFiberFromElement(element, mode, expirationTime) {
+      var owner = null;
+      {
+        owner = element._owner;
+      }
       var fiber = void 0;
-      var fiberTag = IndeterminateComponent; // The resolved type is set if we know what the final type will be. I.e. it's not lazy.
-
-      var resolvedType = type;
+      var type = element.type;
+      var key = element.key;
+      var pendingProps = element.props;
+      var fiberTag = void 0;
 
       if (typeof type === 'function') {
-        if (shouldConstruct(type)) {
-          fiberTag = ClassComponent;
-        }
+        fiberTag = shouldConstruct(type) ? ClassComponent : IndeterminateComponent;
       } else if (typeof type === 'string') {
         fiberTag = HostComponent;
       } else {
@@ -13550,17 +13254,22 @@ if ("development" !== "production") {
           case REACT_FRAGMENT_TYPE:
             return createFiberFromFragment(pendingProps.children, mode, expirationTime, key);
 
-          case REACT_CONCURRENT_MODE_TYPE:
-            return createFiberFromMode(pendingProps, mode | ConcurrentMode | StrictMode, expirationTime, key);
+          case REACT_ASYNC_MODE_TYPE:
+            fiberTag = Mode;
+            mode |= AsyncMode | StrictMode;
+            break;
 
           case REACT_STRICT_MODE_TYPE:
-            return createFiberFromMode(pendingProps, mode | StrictMode, expirationTime, key);
+            fiberTag = Mode;
+            mode |= StrictMode;
+            break;
 
           case REACT_PROFILER_TYPE:
             return createFiberFromProfiler(pendingProps, mode, expirationTime, key);
 
-          case REACT_SUSPENSE_TYPE:
-            return createFiberFromSuspense(pendingProps, mode, expirationTime, key);
+          case REACT_PLACEHOLDER_TYPE:
+            fiberTag = PlaceholderComponent;
+            break;
 
           default:
             {
@@ -13579,14 +13288,13 @@ if ("development" !== "production") {
                     fiberTag = ForwardRef;
                     break getTag;
 
-                  case REACT_MEMO_TYPE:
-                    fiberTag = MemoComponent;
-                    break getTag;
-
-                  case REACT_LAZY_TYPE:
-                    fiberTag = LazyComponent;
-                    resolvedType = null;
-                    break getTag;
+                  default:
+                    {
+                      if (typeof type.then === 'function') {
+                        fiberTag = IndeterminateComponent;
+                        break getTag;
+                      }
+                    }
                 }
               }
 
@@ -13608,21 +13316,8 @@ if ("development" !== "production") {
       }
 
       fiber = createFiber(fiberTag, pendingProps, key, mode);
-      fiber.elementType = type;
-      fiber.type = resolvedType;
+      fiber.type = type;
       fiber.expirationTime = expirationTime;
-      return fiber;
-    }
-
-    function createFiberFromElement(element, mode, expirationTime) {
-      var owner = null;
-      {
-        owner = element._owner;
-      }
-      var type = element.type;
-      var key = element.key;
-      var pendingProps = element.props;
-      var fiber = createFiberFromTypeAndProps(type, key, pendingProps, owner, mode, expirationTime);
       {
         fiber._debugSource = element._source;
         fiber._debugOwner = element._owner;
@@ -13642,30 +13337,8 @@ if ("development" !== "production") {
           warningWithoutStack$1(false, 'Profiler must specify an "id" string and "onRender" function as props');
         }
       }
-      var fiber = createFiber(Profiler, pendingProps, key, mode | ProfileMode); // TODO: The Profiler fiber shouldn't have a type. It has a tag.
-
-      fiber.elementType = REACT_PROFILER_TYPE;
+      var fiber = createFiber(Profiler, pendingProps, key, mode | ProfileMode);
       fiber.type = REACT_PROFILER_TYPE;
-      fiber.expirationTime = expirationTime;
-      return fiber;
-    }
-
-    function createFiberFromMode(pendingProps, mode, expirationTime, key) {
-      var fiber = createFiber(Mode, pendingProps, key, mode); // TODO: The Mode fiber shouldn't have a type. It has a tag.
-
-      var type = (mode & ConcurrentMode) === NoContext ? REACT_STRICT_MODE_TYPE : REACT_CONCURRENT_MODE_TYPE;
-      fiber.elementType = type;
-      fiber.type = type;
-      fiber.expirationTime = expirationTime;
-      return fiber;
-    }
-
-    function createFiberFromSuspense(pendingProps, mode, expirationTime, key) {
-      var fiber = createFiber(SuspenseComponent, pendingProps, key, mode); // TODO: The SuspenseComponent fiber shouldn't have a type. It has a tag.
-
-      var type = REACT_SUSPENSE_TYPE;
-      fiber.elementType = type;
-      fiber.type = type;
       fiber.expirationTime = expirationTime;
       return fiber;
     }
@@ -13677,9 +13350,7 @@ if ("development" !== "production") {
     }
 
     function createFiberFromHostInstanceForDeletion() {
-      var fiber = createFiber(HostComponent, null, null, NoContext); // TODO: These should not need a type.
-
-      fiber.elementType = 'DELETED';
+      var fiber = createFiber(HostComponent, null, null, NoContext);
       fiber.type = 'DELETED';
       return fiber;
     }
@@ -13712,7 +13383,6 @@ if ("development" !== "production") {
 
       target.tag = source.tag;
       target.key = source.key;
-      target.elementType = source.elementType;
       target.type = source.type;
       target.stateNode = source.stateNode;
       target.return = source.return;
@@ -13746,7 +13416,9 @@ if ("development" !== "production") {
       target._debugOwner = source._debugOwner;
       target._debugIsCurrentlyTiming = source._debugIsCurrentlyTiming;
       return target;
-    } // TODO: This should be lifted into the renderer.
+    }
+    /* eslint-disable no-use-before-define */
+    // TODO: This should be lifted into the renderer.
     // The following attributes are only used by interaction tracing builds.
     // They enable interactions to be associated with their async work,
     // And expose interaction metadata to the React DevTools Profiler plugin.
@@ -13757,11 +13429,13 @@ if ("development" !== "production") {
     // The types are defined separately within this file to ensure they stay in sync.
     // (We don't have to use an inline :any cast when enableSchedulerTracing is disabled.)
 
+    /* eslint-enable no-use-before-define */
 
-    function createFiberRoot(containerInfo, isConcurrent, hydrate) {
+
+    function createFiberRoot(containerInfo, isAsync, hydrate) {
       // Cyclic construction. This cheats the type system right now because
       // stateNode is any.
-      var uninitializedFiber = createHostRootFiber(isConcurrent);
+      var uninitializedFiber = createHostRootFiber(isAsync);
       var root = void 0;
 
       if (enableSchedulerTracing) {
@@ -14562,7 +14236,7 @@ if ("development" !== "production") {
       }
 
       {
-        if (fiber.tag === ClassComponent && (currentlyProcessingQueue === queue1 || queue2 !== null && currentlyProcessingQueue === queue2) && !didWarnUpdateInsideUpdate) {
+        if ((fiber.tag === ClassComponent || fiber.tag === ClassComponentLazy) && (currentlyProcessingQueue === queue1 || queue2 !== null && currentlyProcessingQueue === queue2) && !didWarnUpdateInsideUpdate) {
           warningWithoutStack$1(false, 'An update (setState, replaceState, or forceUpdate) was scheduled ' + 'from inside an update function. Update functions should be pure, ' + 'with zero side-effects. Consider using componentDidUpdate or a ' + 'callback.');
           didWarnUpdateInsideUpdate = true;
         }
@@ -14952,7 +14626,7 @@ if ("development" !== "production") {
             // Check if the context matches.
             if (dependency.context === context && (dependency.observedBits & changedBits) !== 0) {
               // Match! Schedule an update on this fiber.
-              if (fiber.tag === ClassComponent) {
+              if (fiber.tag === ClassComponent || fiber.tag === ClassComponentLazy) {
                 // Schedule a force update on the work-in-progress.
                 var update = createUpdate(renderExpirationTime);
                 update.tag = ForceUpdate; // TODO: Because we don't have a work-in-progress, this will add the
@@ -15070,7 +14744,7 @@ if ("development" !== "production") {
         };
 
         if (lastContextDependency === null) {
-          !(currentlyRenderingFiber !== null) ? invariant(false, 'Context can only be read while React is rendering, e.g. inside the render method or getDerivedStateFromProps.') : void 0; // This is the first dependency in the list
+          !(currentlyRenderingFiber !== null) ? invariant(false, 'Context.unstable_read(): Context can only be read while React is rendering, e.g. inside the render method or getDerivedStateFromProps.') : void 0; // This is the first dependency in the list
 
           currentlyRenderingFiber.firstContextDependency = lastContextDependency = contextItem;
         } else {
@@ -15165,7 +14839,7 @@ if ("development" !== "production") {
         return;
       }
 
-      commitTime = scheduler.unstable_now();
+      commitTime = schedule.unstable_now();
     }
 
     function startProfilerTimer(fiber) {
@@ -15173,10 +14847,10 @@ if ("development" !== "production") {
         return;
       }
 
-      profilerStartTime = scheduler.unstable_now();
+      profilerStartTime = schedule.unstable_now();
 
       if (fiber.actualStartTime < 0) {
-        fiber.actualStartTime = scheduler.unstable_now();
+        fiber.actualStartTime = schedule.unstable_now();
       }
     }
 
@@ -15194,7 +14868,7 @@ if ("development" !== "production") {
       }
 
       if (profilerStartTime >= 0) {
-        var elapsedTime = scheduler.unstable_now() - profilerStartTime;
+        var elapsedTime = schedule.unstable_now() - profilerStartTime;
         fiber.actualDuration += elapsedTime;
 
         if (overrideBaseTime) {
@@ -15205,15 +14879,8 @@ if ("development" !== "production") {
       }
     }
 
-    var ReactCurrentOwner$4 = ReactSharedInternals.ReactCurrentOwner;
-
-    function readContext$1(contextType) {
-      var dispatcher = ReactCurrentOwner$4.currentDispatcher;
-      return dispatcher.readContext(contextType);
-    }
-
     var fakeInternalInstance = {};
-    var isArray$1 = Array.isArray; // React.Component uses a shared frozen object by default.
+    var isArray = Array.isArray; // React.Component uses a shared frozen object by default.
     // We'll use it to determine whether we need to initialize legacy refs.
 
     var emptyRefsObject = new React.Component().refs;
@@ -15225,8 +14892,6 @@ if ("development" !== "production") {
     var warnOnUndefinedDerivedState = void 0;
     var warnOnInvalidCallback$1 = void 0;
     var didWarnAboutDirectlyAssigningPropsToState = void 0;
-    var didWarnAboutContextTypeAndContextTypes = void 0;
-    var didWarnAboutInvalidateContextType = void 0;
     {
       didWarnAboutStateAssignmentForComponent = new Set();
       didWarnAboutUninitializedState = new Set();
@@ -15234,8 +14899,6 @@ if ("development" !== "production") {
       didWarnAboutLegacyLifecyclesAndDerivedState = new Set();
       didWarnAboutDirectlyAssigningPropsToState = new Set();
       didWarnAboutUndefinedDerivedState = new Set();
-      didWarnAboutContextTypeAndContextTypes = new Set();
-      didWarnAboutInvalidateContextType = new Set();
       var didWarnOnInvalidCallback = new Set();
 
       warnOnInvalidCallback$1 = function (callback, callerName) {
@@ -15356,12 +15019,12 @@ if ("development" !== "production") {
       }
     };
 
-    function checkShouldComponentUpdate(workInProgress, ctor, oldProps, newProps, oldState, newState, nextContext) {
+    function checkShouldComponentUpdate(workInProgress, ctor, oldProps, newProps, oldState, newState, nextLegacyContext) {
       var instance = workInProgress.stateNode;
 
       if (typeof instance.shouldComponentUpdate === 'function') {
         startPhaseTimer(workInProgress, 'shouldComponentUpdate');
-        var shouldUpdate = instance.shouldComponentUpdate(newProps, newState, nextContext);
+        var shouldUpdate = instance.shouldComponentUpdate(newProps, newState, nextLegacyContext);
         stopPhaseTimer();
         {
           !(shouldUpdate !== undefined) ? warningWithoutStack$1(false, '%s.shouldComponentUpdate(): Returned undefined instead of a ' + 'boolean value. Make sure to return true or false.', getComponentName(ctor) || 'Component') : void 0;
@@ -15396,16 +15059,8 @@ if ("development" !== "production") {
         !noGetDefaultPropsOnES6 ? warningWithoutStack$1(false, 'getDefaultProps was defined on %s, a plain JavaScript class. ' + 'This is only supported for classes created using React.createClass. ' + 'Use a static property to define defaultProps instead.', name) : void 0;
         var noInstancePropTypes = !instance.propTypes;
         !noInstancePropTypes ? warningWithoutStack$1(false, 'propTypes was defined as an instance property on %s. Use a static ' + 'property to define propTypes instead.', name) : void 0;
-        var noInstanceContextType = !instance.contextType;
-        !noInstanceContextType ? warningWithoutStack$1(false, 'contextType was defined as an instance property on %s. Use a static ' + 'property to define contextType instead.', name) : void 0;
         var noInstanceContextTypes = !instance.contextTypes;
         !noInstanceContextTypes ? warningWithoutStack$1(false, 'contextTypes was defined as an instance property on %s. Use a static ' + 'property to define contextTypes instead.', name) : void 0;
-
-        if (ctor.contextType && ctor.contextTypes && !didWarnAboutContextTypeAndContextTypes.has(ctor)) {
-          didWarnAboutContextTypeAndContextTypes.add(ctor);
-          warningWithoutStack$1(false, '%s declares both contextTypes and contextType static properties. ' + 'The legacy contextTypes property will be ignored.', name);
-        }
-
         var noComponentShouldUpdate = typeof instance.componentShouldUpdate !== 'function';
         !noComponentShouldUpdate ? warningWithoutStack$1(false, '%s has a method called ' + 'componentShouldUpdate(). Did you mean shouldComponentUpdate()? ' + 'The name is phrased as a question because the function is ' + 'expected to return a value.', name) : void 0;
 
@@ -15433,13 +15088,13 @@ if ("development" !== "production") {
 
         var noInstanceGetDerivedStateFromProps = typeof instance.getDerivedStateFromProps !== 'function';
         !noInstanceGetDerivedStateFromProps ? warningWithoutStack$1(false, '%s: getDerivedStateFromProps() is defined as an instance method ' + 'and will be ignored. Instead, declare it as a static method.', name) : void 0;
-        var noInstanceGetDerivedStateFromCatch = typeof instance.getDerivedStateFromError !== 'function';
-        !noInstanceGetDerivedStateFromCatch ? warningWithoutStack$1(false, '%s: getDerivedStateFromError() is defined as an instance method ' + 'and will be ignored. Instead, declare it as a static method.', name) : void 0;
+        var noInstanceGetDerivedStateFromCatch = typeof instance.getDerivedStateFromCatch !== 'function';
+        !noInstanceGetDerivedStateFromCatch ? warningWithoutStack$1(false, '%s: getDerivedStateFromCatch() is defined as an instance method ' + 'and will be ignored. Instead, declare it as a static method.', name) : void 0;
         var noStaticGetSnapshotBeforeUpdate = typeof ctor.getSnapshotBeforeUpdate !== 'function';
         !noStaticGetSnapshotBeforeUpdate ? warningWithoutStack$1(false, '%s: getSnapshotBeforeUpdate() is defined as a static method ' + 'and will be ignored. Instead, declare it as an instance method.', name) : void 0;
         var _state = instance.state;
 
-        if (_state && (typeof _state !== 'object' || isArray$1(_state))) {
+        if (_state && (typeof _state !== 'object' || isArray(_state))) {
           warningWithoutStack$1(false, '%s.state: must be set to an object or null', name);
         }
 
@@ -15460,26 +15115,10 @@ if ("development" !== "production") {
     }
 
     function constructClassInstance(workInProgress, ctor, props, renderExpirationTime) {
-      var isLegacyContextConsumer = false;
-      var unmaskedContext = emptyContextObject;
-      var context = null;
-      var contextType = ctor.contextType;
-
-      if (typeof contextType === 'object' && contextType !== null) {
-        {
-          if (contextType.$$typeof !== REACT_CONTEXT_TYPE && !didWarnAboutInvalidateContextType.has(ctor)) {
-            didWarnAboutInvalidateContextType.add(ctor);
-            warningWithoutStack$1(false, '%s defines an invalid contextType. ' + 'contextType should point to the Context object returned by React.createContext(). ' + 'Did you accidentally pass the Context.Provider instead?', getComponentName(ctor) || 'Component');
-          }
-        }
-        context = readContext$1(contextType);
-      } else {
-        unmaskedContext = getUnmaskedContext(workInProgress, ctor, true);
-        var contextTypes = ctor.contextTypes;
-        isLegacyContextConsumer = contextTypes !== null && contextTypes !== undefined;
-        context = isLegacyContextConsumer ? getMaskedContext(workInProgress, unmaskedContext) : emptyContextObject;
-      } // Instantiate twice to help detect side-effects.
-
+      var unmaskedContext = getUnmaskedContext(workInProgress, ctor, true);
+      var contextTypes = ctor.contextTypes;
+      var isContextConsumer = contextTypes !== null && contextTypes !== undefined;
+      var context = isContextConsumer ? getMaskedContext(workInProgress, unmaskedContext) : emptyContextObject; // Instantiate twice to help detect side-effects.
 
       {
         if (debugRenderPhaseSideEffects || debugRenderPhaseSideEffectsForStrictMode && workInProgress.mode & StrictMode) {
@@ -15539,7 +15178,7 @@ if ("development" !== "production") {
       } // Cache unmasked context so we can avoid recreating masked context unless necessary.
       // ReactFiberContext usually updates this cache but can't for newly-created instances.
 
-      if (isLegacyContextConsumer) {
+      if (isContextConsumer) {
         cacheContext(workInProgress, unmaskedContext, context);
       }
 
@@ -15568,16 +15207,16 @@ if ("development" !== "production") {
       }
     }
 
-    function callComponentWillReceiveProps(workInProgress, instance, newProps, nextContext) {
+    function callComponentWillReceiveProps(workInProgress, instance, newProps, nextLegacyContext) {
       var oldState = instance.state;
       startPhaseTimer(workInProgress, 'componentWillReceiveProps');
 
       if (typeof instance.componentWillReceiveProps === 'function') {
-        instance.componentWillReceiveProps(newProps, nextContext);
+        instance.componentWillReceiveProps(newProps, nextLegacyContext);
       }
 
       if (typeof instance.UNSAFE_componentWillReceiveProps === 'function') {
-        instance.UNSAFE_componentWillReceiveProps(newProps, nextContext);
+        instance.UNSAFE_componentWillReceiveProps(newProps, nextLegacyContext);
       }
 
       stopPhaseTimer();
@@ -15601,18 +15240,11 @@ if ("development" !== "production") {
         checkClassInstance(workInProgress, ctor, newProps);
       }
       var instance = workInProgress.stateNode;
+      var unmaskedContext = getUnmaskedContext(workInProgress, ctor, true);
       instance.props = newProps;
       instance.state = workInProgress.memoizedState;
       instance.refs = emptyRefsObject;
-      var contextType = ctor.contextType;
-
-      if (typeof contextType === 'object' && contextType !== null) {
-        instance.context = readContext$1(contextType);
-      } else {
-        var unmaskedContext = getUnmaskedContext(workInProgress, ctor, true);
-        instance.context = getMaskedContext(workInProgress, unmaskedContext);
-      }
-
+      instance.context = getMaskedContext(workInProgress, unmaskedContext);
       {
         if (instance.state === newProps) {
           var componentName = getComponentName(ctor) || 'Component';
@@ -15670,16 +15302,8 @@ if ("development" !== "production") {
       var oldProps = workInProgress.memoizedProps;
       instance.props = oldProps;
       var oldContext = instance.context;
-      var contextType = ctor.contextType;
-      var nextContext = void 0;
-
-      if (typeof contextType === 'object' && contextType !== null) {
-        nextContext = readContext$1(contextType);
-      } else {
-        var nextLegacyUnmaskedContext = getUnmaskedContext(workInProgress, ctor, true);
-        nextContext = getMaskedContext(workInProgress, nextLegacyUnmaskedContext);
-      }
-
+      var nextLegacyUnmaskedContext = getUnmaskedContext(workInProgress, ctor, true);
+      var nextLegacyContext = getMaskedContext(workInProgress, nextLegacyUnmaskedContext);
       var getDerivedStateFromProps = ctor.getDerivedStateFromProps;
       var hasNewLifecycles = typeof getDerivedStateFromProps === 'function' || typeof instance.getSnapshotBeforeUpdate === 'function'; // Note: During these life-cycles, instance.props/instance.state are what
       // ever the previously attempted to render - not the "current". However,
@@ -15688,8 +15312,8 @@ if ("development" !== "production") {
       // Unsafe lifecycles should not be invoked for components using the new APIs.
 
       if (!hasNewLifecycles && (typeof instance.UNSAFE_componentWillReceiveProps === 'function' || typeof instance.componentWillReceiveProps === 'function')) {
-        if (oldProps !== newProps || oldContext !== nextContext) {
-          callComponentWillReceiveProps(workInProgress, instance, newProps, nextContext);
+        if (oldProps !== newProps || oldContext !== nextLegacyContext) {
+          callComponentWillReceiveProps(workInProgress, instance, newProps, nextLegacyContext);
         }
       }
 
@@ -15718,7 +15342,7 @@ if ("development" !== "production") {
         newState = workInProgress.memoizedState;
       }
 
-      var shouldUpdate = checkHasForceUpdateAfterProcessing() || checkShouldComponentUpdate(workInProgress, ctor, oldProps, newProps, oldState, newState, nextContext);
+      var shouldUpdate = checkHasForceUpdateAfterProcessing() || checkShouldComponentUpdate(workInProgress, ctor, oldProps, newProps, oldState, newState, nextLegacyContext);
 
       if (shouldUpdate) {
         // In order to support react-lifecycles-compat polyfilled components,
@@ -15757,7 +15381,7 @@ if ("development" !== "production") {
 
       instance.props = newProps;
       instance.state = newState;
-      instance.context = nextContext;
+      instance.context = nextLegacyContext;
       return shouldUpdate;
     } // Invokes the update life-cycles and returns false if it shouldn't rerender.
 
@@ -15767,16 +15391,8 @@ if ("development" !== "production") {
       var oldProps = workInProgress.memoizedProps;
       instance.props = oldProps;
       var oldContext = instance.context;
-      var contextType = ctor.contextType;
-      var nextContext = void 0;
-
-      if (typeof contextType === 'object' && contextType !== null) {
-        nextContext = readContext$1(contextType);
-      } else {
-        var nextUnmaskedContext = getUnmaskedContext(workInProgress, ctor, true);
-        nextContext = getMaskedContext(workInProgress, nextUnmaskedContext);
-      }
-
+      var nextLegacyUnmaskedContext = getUnmaskedContext(workInProgress, ctor, true);
+      var nextLegacyContext = getMaskedContext(workInProgress, nextLegacyUnmaskedContext);
       var getDerivedStateFromProps = ctor.getDerivedStateFromProps;
       var hasNewLifecycles = typeof getDerivedStateFromProps === 'function' || typeof instance.getSnapshotBeforeUpdate === 'function'; // Note: During these life-cycles, instance.props/instance.state are what
       // ever the previously attempted to render - not the "current". However,
@@ -15785,8 +15401,8 @@ if ("development" !== "production") {
       // Unsafe lifecycles should not be invoked for components using the new APIs.
 
       if (!hasNewLifecycles && (typeof instance.UNSAFE_componentWillReceiveProps === 'function' || typeof instance.componentWillReceiveProps === 'function')) {
-        if (oldProps !== newProps || oldContext !== nextContext) {
-          callComponentWillReceiveProps(workInProgress, instance, newProps, nextContext);
+        if (oldProps !== newProps || oldContext !== nextLegacyContext) {
+          callComponentWillReceiveProps(workInProgress, instance, newProps, nextLegacyContext);
         }
       }
 
@@ -15823,7 +15439,7 @@ if ("development" !== "production") {
         newState = workInProgress.memoizedState;
       }
 
-      var shouldUpdate = checkHasForceUpdateAfterProcessing() || checkShouldComponentUpdate(workInProgress, ctor, oldProps, newProps, oldState, newState, nextContext);
+      var shouldUpdate = checkHasForceUpdateAfterProcessing() || checkShouldComponentUpdate(workInProgress, ctor, oldProps, newProps, oldState, newState, nextLegacyContext);
 
       if (shouldUpdate) {
         // In order to support react-lifecycles-compat polyfilled components,
@@ -15832,11 +15448,11 @@ if ("development" !== "production") {
           startPhaseTimer(workInProgress, 'componentWillUpdate');
 
           if (typeof instance.componentWillUpdate === 'function') {
-            instance.componentWillUpdate(newProps, newState, nextContext);
+            instance.componentWillUpdate(newProps, newState, nextLegacyContext);
           }
 
           if (typeof instance.UNSAFE_componentWillUpdate === 'function') {
-            instance.UNSAFE_componentWillUpdate(newProps, newState, nextContext);
+            instance.UNSAFE_componentWillUpdate(newProps, newState, nextLegacyContext);
           }
 
           stopPhaseTimer();
@@ -15874,7 +15490,7 @@ if ("development" !== "production") {
 
       instance.props = newProps;
       instance.state = newState;
-      instance.context = nextContext;
+      instance.context = nextLegacyContext;
       return shouldUpdate;
     }
 
@@ -15920,7 +15536,7 @@ if ("development" !== "production") {
         warning$1(false, 'Each child in an array or iterator should have a unique ' + '"key" prop. See https://fb.me/react-warning-keys for ' + 'more information.');
       };
     }
-    var isArray = Array.isArray;
+    var isArray$1 = Array.isArray;
 
     function coerceRef(returnFiber, current$$1, element) {
       var mixedRef = element.ref;
@@ -15943,7 +15559,7 @@ if ("development" !== "production") {
 
           if (owner) {
             var ownerFiber = owner;
-            !(ownerFiber.tag === ClassComponent) ? invariant(false, 'Function components cannot have refs.') : void 0;
+            !(ownerFiber.tag === ClassComponent || ownerFiber.tag === ClassComponentLazy) ? invariant(false, 'Stateless function components cannot have refs.') : void 0;
             inst = ownerFiber.stateNode;
           }
 
@@ -15973,7 +15589,7 @@ if ("development" !== "production") {
           return ref;
         } else {
           !(typeof mixedRef === 'string') ? invariant(false, 'Expected ref to be a function, a string, an object returned by React.createRef(), or null.') : void 0;
-          !element._owner ? invariant(false, 'Element ref was specified as a string (%s) but no owner was set. This could happen for one of the following reasons:\n1. You may be adding a ref to a function component\n2. You may be adding a ref to a component that was not created inside a component\'s render method\n3. You have multiple copies of React loaded\nSee https://fb.me/react-refs-must-have-owner for more information.', mixedRef) : void 0;
+          !element._owner ? invariant(false, 'Element ref was specified as a string (%s) but no owner was set. This could happen for one of the following reasons:\n1. You may be adding a ref to a functional component\n2. You may be adding a ref to a component that was not created inside a component\'s render method\n3. You have multiple copies of React loaded\nSee https://fb.me/react-refs-must-have-owner for more information.', mixedRef) : void 0;
         }
       }
 
@@ -16129,7 +15745,7 @@ if ("development" !== "production") {
       }
 
       function updateElement(returnFiber, current$$1, element, expirationTime) {
-        if (current$$1 !== null && current$$1.elementType === element.type) {
+        if (current$$1 !== null && current$$1.type === element.type) {
           // Move based on index
           var existing = useFiber(current$$1, element.props, expirationTime);
           existing.ref = coerceRef(returnFiber, current$$1, element);
@@ -16206,7 +15822,7 @@ if ("development" !== "production") {
               }
           }
 
-          if (isArray(newChild) || getIteratorFn(newChild)) {
+          if (isArray$1(newChild) || getIteratorFn(newChild)) {
             var _created3 = createFiberFromFragment(newChild, returnFiber.mode, expirationTime, null);
 
             _created3.return = returnFiber;
@@ -16264,7 +15880,7 @@ if ("development" !== "production") {
               }
           }
 
-          if (isArray(newChild) || getIteratorFn(newChild)) {
+          if (isArray$1(newChild) || getIteratorFn(newChild)) {
             if (key !== null) {
               return null;
             }
@@ -16312,7 +15928,7 @@ if ("development" !== "production") {
               }
           }
 
-          if (isArray(newChild) || getIteratorFn(newChild)) {
+          if (isArray$1(newChild) || getIteratorFn(newChild)) {
             var _matchedFiber3 = existingChildren.get(newIdx) || null;
 
             return updateFragment(returnFiber, _matchedFiber3, newChild, expirationTime, null);
@@ -16711,7 +16327,7 @@ if ("development" !== "production") {
           // TODO: If key === null and child.key === null, then this only applies to
           // the first item in the list.
           if (child.key === key) {
-            if (child.tag === Fragment ? element.type === REACT_FRAGMENT_TYPE : child.elementType === element.type) {
+            if (child.tag === Fragment ? element.type === REACT_FRAGMENT_TYPE : child.type === element.type) {
               deleteRemainingChildren(returnFiber, child.sibling);
               var existing = useFiber(child, element.type === REACT_FRAGMENT_TYPE ? element.props.children : element.props, expirationTime);
               existing.ref = coerceRef(returnFiber, child, element);
@@ -16808,7 +16424,7 @@ if ("development" !== "production") {
           return placeSingleChild(reconcileSingleTextNode(returnFiber, currentFirstChild, '' + newChild, expirationTime));
         }
 
-        if (isArray(newChild)) {
+        if (isArray$1(newChild)) {
           return reconcileChildrenArray(returnFiber, currentFirstChild, newChild, expirationTime);
         }
 
@@ -16832,6 +16448,7 @@ if ("development" !== "production") {
           // we already threw above.
           switch (returnFiber.tag) {
             case ClassComponent:
+            case ClassComponentLazy:
               {
                 {
                   var instance = returnFiber.stateNode;
@@ -16846,7 +16463,7 @@ if ("development" !== "production") {
             // functions and classes
             // eslint-disable-next-lined no-fallthrough
 
-            case FunctionComponent:
+            case FunctionalComponent:
               {
                 var Component = returnFiber.type;
                 invariant(false, '%s(...): Nothing was returned from render. This usually means a return statement is missing. Or, to render nothing, return null.', Component.displayName || Component.name || 'Component');
@@ -17176,70 +16793,58 @@ if ("development" !== "production") {
       isHydrating = false;
     }
 
-    function readLazyComponentType(lazyComponent) {
-      var status = lazyComponent._status;
-      var result = lazyComponent._result;
+    function readLazyComponentType(thenable) {
+      var status = thenable._reactStatus;
 
       switch (status) {
         case Resolved:
-          {
-            var Component = result;
-            return Component;
-          }
+          var Component = thenable._reactResult;
+          return Component;
 
         case Rejected:
-          {
-            var error = result;
-            throw error;
-          }
+          throw thenable._reactResult;
 
         case Pending:
-          {
-            var thenable = result;
-            throw thenable;
-          }
+          throw thenable;
 
         default:
           {
-            lazyComponent._status = Pending;
-            var ctor = lazyComponent._ctor;
+            thenable._reactStatus = Pending;
+            thenable.then(function (resolvedValue) {
+              if (thenable._reactStatus === Pending) {
+                thenable._reactStatus = Resolved;
 
-            var _thenable = ctor();
-
-            _thenable.then(function (moduleObject) {
-              if (lazyComponent._status === Pending) {
-                var defaultExport = moduleObject.default;
-                {
-                  if (defaultExport === undefined) {
-                    warning$1(false, 'lazy: Expected the result of a dynamic import() call. ' + 'Instead received: %s\n\nYour code should look like: \n  ' + "const MyComponent = lazy(() => import('./MyComponent'))", moduleObject);
-                  }
+                if (typeof resolvedValue === 'object' && resolvedValue !== null) {
+                  // If the `default` property is not empty, assume it's the result
+                  // of an async import() and use that. Otherwise, use the
+                  // resolved value itself.
+                  var defaultExport = resolvedValue.default;
+                  resolvedValue = defaultExport !== undefined && defaultExport !== null ? defaultExport : resolvedValue;
+                } else {
+                  resolvedValue = resolvedValue;
                 }
-                lazyComponent._status = Resolved;
-                lazyComponent._result = defaultExport;
+
+                thenable._reactResult = resolvedValue;
               }
             }, function (error) {
-              if (lazyComponent._status === Pending) {
-                lazyComponent._status = Rejected;
-                lazyComponent._result = error;
+              if (thenable._reactStatus === Pending) {
+                thenable._reactStatus = Rejected;
+                thenable._reactResult = error;
               }
             });
-
-            lazyComponent._result = _thenable;
-            throw _thenable;
+            throw thenable;
           }
       }
     }
 
     var ReactCurrentOwner$3 = ReactSharedInternals.ReactCurrentOwner;
     var didWarnAboutBadClass = void 0;
-    var didWarnAboutContextTypeOnFunctionComponent = void 0;
-    var didWarnAboutGetDerivedStateOnFunctionComponent = void 0;
-    var didWarnAboutFunctionRefs = void 0;
+    var didWarnAboutGetDerivedStateOnFunctionalComponent = void 0;
+    var didWarnAboutStatelessRefs = void 0;
     {
       didWarnAboutBadClass = {};
-      didWarnAboutContextTypeOnFunctionComponent = {};
-      didWarnAboutGetDerivedStateOnFunctionComponent = {};
-      didWarnAboutFunctionRefs = {};
+      didWarnAboutGetDerivedStateOnFunctionalComponent = {};
+      didWarnAboutStatelessRefs = {};
     }
 
     function reconcileChildren(current$$1, workInProgress, nextChildren, renderExpirationTime) {
@@ -17257,23 +16862,6 @@ if ("development" !== "production") {
         // let's throw it out.
         workInProgress.child = reconcileChildFibers(workInProgress, current$$1.child, nextChildren, renderExpirationTime);
       }
-    }
-
-    function forceUnmountCurrentAndReconcile(current$$1, workInProgress, nextChildren, renderExpirationTime) {
-      // This function is fork of reconcileChildren. It's used in cases where we
-      // want to reconcile without matching against the existing set. This has the
-      // effect of all current children being unmounted; even if the type and key
-      // are the same, the old child is unmounted and a new child is created.
-      //
-      // To do this, we're going to go through the reconcile algorithm twice. In
-      // the first pass, we schedule a deletion for all the current children by
-      // passing null.
-      workInProgress.child = reconcileChildFibers(workInProgress, current$$1.child, null, renderExpirationTime); // In the second pass, we mount the new children. The trick here is that we
-      // pass null in place of where we usually pass the current child set. This has
-      // the effect of remounting all children regardless of whether their their
-      // identity matches.
-
-      workInProgress.child = reconcileChildFibers(workInProgress, null, nextChildren, renderExpirationTime);
     }
 
     function updateForwardRef(current$$1, workInProgress, type, nextProps, renderExpirationTime) {
@@ -17298,72 +16886,21 @@ if ("development" !== "production") {
         setCurrentPhase(null);
       }
       reconcileChildren(current$$1, workInProgress, nextChildren, renderExpirationTime);
+      memoizeProps(workInProgress, nextProps);
       return workInProgress.child;
-    }
-
-    function updateMemoComponent(current$$1, workInProgress, Component, nextProps, updateExpirationTime, renderExpirationTime) {
-      if (current$$1 === null) {
-        var type = Component.type;
-
-        if (isSimpleFunctionComponent(type) && Component.compare === null) {
-          // If this is a plain function component without default props,
-          // and with only the default shallow comparison, we upgrade it
-          // to a SimpleMemoComponent to allow fast path updates.
-          workInProgress.tag = SimpleMemoComponent;
-          workInProgress.type = type;
-          return updateSimpleMemoComponent(current$$1, workInProgress, type, nextProps, updateExpirationTime, renderExpirationTime);
-        }
-
-        var child = createFiberFromTypeAndProps(Component.type, null, nextProps, null, workInProgress.mode, renderExpirationTime);
-        child.ref = workInProgress.ref;
-        child.return = workInProgress;
-        workInProgress.child = child;
-        return child;
-      }
-
-      var currentChild = current$$1.child; // This is always exactly one child
-
-      if (updateExpirationTime === NoWork || updateExpirationTime > renderExpirationTime) {
-        // This will be the props with resolved defaultProps,
-        // unlike current.memoizedProps which will be the unresolved ones.
-        var prevProps = currentChild.memoizedProps; // Default to shallow comparison
-
-        var compare = Component.compare;
-        compare = compare !== null ? compare : shallowEqual;
-
-        if (compare(prevProps, nextProps) && current$$1.ref === workInProgress.ref) {
-          return bailoutOnAlreadyFinishedWork(current$$1, workInProgress, renderExpirationTime);
-        }
-      }
-
-      var newChild = createWorkInProgress(currentChild, nextProps, renderExpirationTime);
-      newChild.ref = workInProgress.ref;
-      newChild.return = workInProgress;
-      workInProgress.child = newChild;
-      return newChild;
-    }
-
-    function updateSimpleMemoComponent(current$$1, workInProgress, Component, nextProps, updateExpirationTime, renderExpirationTime) {
-      if (current$$1 !== null && (updateExpirationTime === NoWork || updateExpirationTime > renderExpirationTime)) {
-        var prevProps = current$$1.memoizedProps;
-
-        if (shallowEqual(prevProps, nextProps) && current$$1.ref === workInProgress.ref) {
-          return bailoutOnAlreadyFinishedWork(current$$1, workInProgress, renderExpirationTime);
-        }
-      }
-
-      return updateFunctionComponent(current$$1, workInProgress, Component, nextProps, renderExpirationTime);
     }
 
     function updateFragment(current$$1, workInProgress, renderExpirationTime) {
       var nextChildren = workInProgress.pendingProps;
       reconcileChildren(current$$1, workInProgress, nextChildren, renderExpirationTime);
+      memoizeProps(workInProgress, nextChildren);
       return workInProgress.child;
     }
 
     function updateMode(current$$1, workInProgress, renderExpirationTime) {
       var nextChildren = workInProgress.pendingProps.children;
       reconcileChildren(current$$1, workInProgress, nextChildren, renderExpirationTime);
+      memoizeProps(workInProgress, nextChildren);
       return workInProgress.child;
     }
 
@@ -17375,6 +16912,7 @@ if ("development" !== "production") {
       var nextProps = workInProgress.pendingProps;
       var nextChildren = nextProps.children;
       reconcileChildren(current$$1, workInProgress, nextChildren, renderExpirationTime);
+      memoizeProps(workInProgress, nextProps);
       return workInProgress.child;
     }
 
@@ -17387,7 +16925,7 @@ if ("development" !== "production") {
       }
     }
 
-    function updateFunctionComponent(current$$1, workInProgress, Component, nextProps, renderExpirationTime) {
+    function updateFunctionalComponent(current$$1, workInProgress, Component, nextProps, renderExpirationTime) {
       var unmaskedContext = getUnmaskedContext(workInProgress, Component, true);
       var context = getMaskedContext(workInProgress, unmaskedContext);
       var nextChildren = void 0;
@@ -17401,6 +16939,7 @@ if ("development" !== "production") {
 
       workInProgress.effectTag |= PerformedWork;
       reconcileChildren(current$$1, workInProgress, nextChildren, renderExpirationTime);
+      memoizeProps(workInProgress, nextProps);
       return workInProgress.child;
     }
 
@@ -17418,28 +16957,18 @@ if ("development" !== "production") {
       }
 
       prepareToReadContext(workInProgress, renderExpirationTime);
-      var instance = workInProgress.stateNode;
       var shouldUpdate = void 0;
 
-      if (instance === null) {
-        if (current$$1 !== null) {
-          // An class component without an instance only mounts if it suspended
-          // inside a non- concurrent tree, in an inconsistent state. We want to
-          // tree it like a new mount, even though an empty version of it already
-          // committed. Disconnect the alternate pointers.
-          current$$1.alternate = null;
-          workInProgress.alternate = null; // Since this is conceptually a new fiber, schedule a Placement effect
-
-          workInProgress.effectTag |= Placement;
-        } // In the initial pass we might need to construct the instance.
-
-
-        constructClassInstance(workInProgress, Component, nextProps, renderExpirationTime);
-        mountClassInstance(workInProgress, Component, nextProps, renderExpirationTime);
-        shouldUpdate = true;
-      } else if (current$$1 === null) {
-        // In a resume, we'll already have an instance we can reuse.
-        shouldUpdate = resumeMountClassInstance(workInProgress, Component, nextProps, renderExpirationTime);
+      if (current$$1 === null) {
+        if (workInProgress.stateNode === null) {
+          // In the initial pass we might need to construct the instance.
+          constructClassInstance(workInProgress, Component, nextProps, renderExpirationTime);
+          mountClassInstance(workInProgress, Component, nextProps, renderExpirationTime);
+          shouldUpdate = true;
+        } else {
+          // In a resume, we'll already have an instance we can reuse.
+          shouldUpdate = resumeMountClassInstance(workInProgress, Component, nextProps, renderExpirationTime);
+        }
       } else {
         shouldUpdate = updateClassInstance(current$$1, workInProgress, Component, nextProps, renderExpirationTime);
       }
@@ -17466,7 +16995,7 @@ if ("development" !== "production") {
       ReactCurrentOwner$3.current = workInProgress;
       var nextChildren = void 0;
 
-      if (didCaptureError && typeof Component.getDerivedStateFromError !== 'function') {
+      if (didCaptureError && (!enableGetDerivedStateFromCatch || typeof Component.getDerivedStateFromCatch !== 'function')) {
         // If we captured an error, but getDerivedStateFrom catch is not defined,
         // unmount all the children. componentDidCatch will schedule an update to
         // re-render a fallback. This is temporary until we migrate everyone to
@@ -17494,18 +17023,19 @@ if ("development" !== "production") {
       workInProgress.effectTag |= PerformedWork;
 
       if (current$$1 !== null && didCaptureError) {
-        // If we're recovering from an error, reconcile without reusing any of
-        // the existing children. Conceptually, the normal children and the children
-        // that are shown on error are two different sets, so we shouldn't reuse
-        // normal children even if their identities match.
-        forceUnmountCurrentAndReconcile(current$$1, workInProgress, nextChildren, renderExpirationTime);
-      } else {
-        reconcileChildren(current$$1, workInProgress, nextChildren, renderExpirationTime);
-      } // Memoize state using the values we just used to render.
+        // If we're recovering from an error, reconcile twice: first to delete
+        // all the existing children.
+        reconcileChildren(current$$1, workInProgress, null, renderExpirationTime);
+        workInProgress.child = null; // Now we can continue reconciling like normal. This has the effect of
+        // remounting all children regardless of whether their their
+        // identity matches.
+      }
+
+      reconcileChildren(current$$1, workInProgress, nextChildren, renderExpirationTime); // Memoize props and state using the values we just used to render.
       // TODO: Restructure so we never read values from the instance.
 
-
-      workInProgress.memoizedState = instance.state; // The context might have changed so we need to recalculate it.
+      memoizeState(workInProgress, instance.state);
+      memoizeProps(workInProgress, instance.props); // The context might have changed so we need to recalculate it.
 
       if (hasContext) {
         invalidateContextProvider(workInProgress, Component, true);
@@ -17600,22 +17130,26 @@ if ("development" !== "production") {
 
       markRef(current$$1, workInProgress); // Check the host config to see if the children are offscreen/hidden.
 
-      if (renderExpirationTime !== Never && workInProgress.mode & ConcurrentMode && shouldDeprioritizeSubtree(type, nextProps)) {
+      if (renderExpirationTime !== Never && workInProgress.mode & AsyncMode && shouldDeprioritizeSubtree(type, nextProps)) {
         // Schedule this fiber to re-render at offscreen priority. Then bailout.
         workInProgress.expirationTime = Never;
+        workInProgress.memoizedProps = nextProps;
         return null;
       }
 
       reconcileChildren(current$$1, workInProgress, nextChildren, renderExpirationTime);
+      memoizeProps(workInProgress, nextProps);
       return workInProgress.child;
     }
 
     function updateHostText(current$$1, workInProgress) {
       if (current$$1 === null) {
         tryToClaimNextHydratableInstance(workInProgress);
-      } // Nothing to do here. This is terminal. We'll do the completion step
-      // immediately after.
+      }
 
+      var nextProps = workInProgress.pendingProps;
+      memoizeProps(workInProgress, nextProps); // Nothing to do here. This is terminal. We'll do the completion step
+      // immediately after.
 
       return null;
     }
@@ -17639,114 +17173,40 @@ if ("development" !== "production") {
       return baseProps;
     }
 
-    function mountLazyComponent(_current, workInProgress, elementType, updateExpirationTime, renderExpirationTime) {
-      if (_current !== null) {
-        // An lazy component only mounts if it suspended inside a non-
-        // concurrent tree, in an inconsistent state. We want to tree it like
-        // a new mount, even though an empty version of it already committed.
-        // Disconnect the alternate pointers.
-        _current.alternate = null;
-        workInProgress.alternate = null; // Since this is conceptually a new fiber, schedule a Placement effect
-
-        workInProgress.effectTag |= Placement;
-      }
-
-      var props = workInProgress.pendingProps; // We can't start a User Timing measurement with correct label yet.
-      // Cancel and resume right after we know the tag.
-
-      cancelWorkTimer(workInProgress);
-      var Component = readLazyComponentType(elementType); // Store the unwrapped component in the type.
-
-      workInProgress.type = Component;
-      var resolvedTag = workInProgress.tag = resolveLazyComponentTag(Component);
-      startWorkTimer(workInProgress);
-      var resolvedProps = resolveDefaultProps(Component, props);
-      var child = void 0;
-
-      switch (resolvedTag) {
-        case FunctionComponent:
-          {
-            child = updateFunctionComponent(null, workInProgress, Component, resolvedProps, renderExpirationTime);
-            break;
-          }
-
-        case ClassComponent:
-          {
-            child = updateClassComponent(null, workInProgress, Component, resolvedProps, renderExpirationTime);
-            break;
-          }
-
-        case ForwardRef:
-          {
-            child = updateForwardRef(null, workInProgress, Component, resolvedProps, renderExpirationTime);
-            break;
-          }
-
-        case MemoComponent:
-          {
-            child = updateMemoComponent(null, workInProgress, Component, resolveDefaultProps(Component.type, resolvedProps), // The inner type can have defaults too
-            updateExpirationTime, renderExpirationTime);
-            break;
-          }
-
-        default:
-          {
-            // This message intentionally doesn't metion ForwardRef or MemoComponent
-            // because the fact that it's a separate type of work is an
-            // implementation detail.
-            invariant(false, 'Element type is invalid. Received a promise that resolves to: %s. Promise elements must resolve to a class or function.', Component);
-          }
-      }
-
-      return child;
-    }
-
-    function mountIncompleteClassComponent(_current, workInProgress, Component, nextProps, renderExpirationTime) {
-      if (_current !== null) {
-        // An incomplete component only mounts if it suspended inside a non-
-        // concurrent tree, in an inconsistent state. We want to tree it like
-        // a new mount, even though an empty version of it already committed.
-        // Disconnect the alternate pointers.
-        _current.alternate = null;
-        workInProgress.alternate = null; // Since this is conceptually a new fiber, schedule a Placement effect
-
-        workInProgress.effectTag |= Placement;
-      } // Promote the fiber to a class and try rendering again.
-
-
-      workInProgress.tag = ClassComponent; // The rest of this function is a fork of `updateClassComponent`
-      // Push context providers early to prevent context stack mismatches.
-      // During mounting we don't know the child context yet as the instance doesn't exist.
-      // We will invalidate the child context in finishClassComponent() right after rendering.
-
-      var hasContext = void 0;
-
-      if (isContextProvider(Component)) {
-        hasContext = true;
-        pushContextProvider(workInProgress);
-      } else {
-        hasContext = false;
-      }
-
-      prepareToReadContext(workInProgress, renderExpirationTime);
-      constructClassInstance(workInProgress, Component, nextProps, renderExpirationTime);
-      mountClassInstance(workInProgress, Component, nextProps, renderExpirationTime);
-      return finishClassComponent(null, workInProgress, Component, true, hasContext, renderExpirationTime);
-    }
-
-    function mountIndeterminateComponent(_current, workInProgress, Component, renderExpirationTime) {
-      if (_current !== null) {
-        // An indeterminate component only mounts if it suspended inside a non-
-        // concurrent tree, in an inconsistent state. We want to tree it like
-        // a new mount, even though an empty version of it already committed.
-        // Disconnect the alternate pointers.
-        _current.alternate = null;
-        workInProgress.alternate = null; // Since this is conceptually a new fiber, schedule a Placement effect
-
-        workInProgress.effectTag |= Placement;
-      }
-
+    function mountIndeterminateComponent(current$$1, workInProgress, Component, renderExpirationTime) {
+      !(current$$1 === null) ? invariant(false, 'An indeterminate component should never have mounted. This error is likely caused by a bug in React. Please file an issue.') : void 0;
       var props = workInProgress.pendingProps;
+
+      if (typeof Component === 'object' && Component !== null && typeof Component.then === 'function') {
+        Component = readLazyComponentType(Component);
+        var resolvedTag = workInProgress.tag = resolveLazyComponentTag(workInProgress, Component);
+        var resolvedProps = resolveDefaultProps(Component, props);
+
+        switch (resolvedTag) {
+          case FunctionalComponentLazy:
+            {
+              return updateFunctionalComponent(current$$1, workInProgress, Component, resolvedProps, renderExpirationTime);
+            }
+
+          case ClassComponentLazy:
+            {
+              return updateClassComponent(current$$1, workInProgress, Component, resolvedProps, renderExpirationTime);
+            }
+
+          case ForwardRefLazy:
+            {
+              return updateForwardRef(current$$1, workInProgress, Component, resolvedProps, renderExpirationTime);
+            }
+
+          default:
+            {
+              // This message intentionally doesn't metion ForwardRef because the
+              // fact that it's a separate type of work is an implementation detail.
+              invariant(false, 'Element type is invalid. Received a promise that resolves to: %s. Promise elements must resolve to a class or function.', Component);
+            }
+        }
+      }
+
       var unmaskedContext = getUnmaskedContext(workInProgress, Component, false);
       var context = getMaskedContext(workInProgress, unmaskedContext);
       prepareToReadContext(workInProgress, renderExpirationTime);
@@ -17795,13 +17255,13 @@ if ("development" !== "production") {
 
         adoptClassInstance(workInProgress, value);
         mountClassInstance(workInProgress, Component, props, renderExpirationTime);
-        return finishClassComponent(null, workInProgress, Component, true, hasContext, renderExpirationTime);
+        return finishClassComponent(current$$1, workInProgress, Component, true, hasContext, renderExpirationTime);
       } else {
-        // Proceed under the assumption that this is a function component
-        workInProgress.tag = FunctionComponent;
+        // Proceed under the assumption that this is a functional component
+        workInProgress.tag = FunctionalComponent;
         {
           if (Component) {
-            !!Component.childContextTypes ? warningWithoutStack$1(false, '%s(...): childContextTypes cannot be defined on a function component.', Component.displayName || Component.name || 'Component') : void 0;
+            !!Component.childContextTypes ? warningWithoutStack$1(false, '%s(...): childContextTypes cannot be defined on a functional component.', Component.displayName || Component.name || 'Component') : void 0;
           }
 
           if (workInProgress.ref !== null) {
@@ -17819,197 +17279,80 @@ if ("development" !== "production") {
               warningKey = debugSource.fileName + ':' + debugSource.lineNumber;
             }
 
-            if (!didWarnAboutFunctionRefs[warningKey]) {
-              didWarnAboutFunctionRefs[warningKey] = true;
-              warning$1(false, 'Function components cannot be given refs. ' + 'Attempts to access this ref will fail.%s', info);
+            if (!didWarnAboutStatelessRefs[warningKey]) {
+              didWarnAboutStatelessRefs[warningKey] = true;
+              warning$1(false, 'Stateless function components cannot be given refs. ' + 'Attempts to access this ref will fail.%s', info);
             }
           }
 
           if (typeof Component.getDerivedStateFromProps === 'function') {
             var _componentName = getComponentName(Component) || 'Unknown';
 
-            if (!didWarnAboutGetDerivedStateOnFunctionComponent[_componentName]) {
-              warningWithoutStack$1(false, '%s: Function components do not support getDerivedStateFromProps.', _componentName);
-              didWarnAboutGetDerivedStateOnFunctionComponent[_componentName] = true;
-            }
-          }
-
-          if (typeof Component.contextType === 'object' && Component.contextType !== null) {
-            var _componentName2 = getComponentName(Component) || 'Unknown';
-
-            if (!didWarnAboutContextTypeOnFunctionComponent[_componentName2]) {
-              warningWithoutStack$1(false, '%s: Function components do not support contextType.', _componentName2);
-              didWarnAboutContextTypeOnFunctionComponent[_componentName2] = true;
+            if (!didWarnAboutGetDerivedStateOnFunctionalComponent[_componentName]) {
+              warningWithoutStack$1(false, '%s: Stateless functional components do not support getDerivedStateFromProps.', _componentName);
+              didWarnAboutGetDerivedStateOnFunctionalComponent[_componentName] = true;
             }
           }
         }
-        reconcileChildren(null, workInProgress, value, renderExpirationTime);
+        reconcileChildren(current$$1, workInProgress, value, renderExpirationTime);
+        memoizeProps(workInProgress, props);
         return workInProgress.child;
       }
     }
 
-    function updateSuspenseComponent(current$$1, workInProgress, renderExpirationTime) {
-      var mode = workInProgress.mode;
-      var nextProps = workInProgress.pendingProps; // We should attempt to render the primary children unless this boundary
-      // already suspended during this render (`alreadyCaptured` is true).
+    function updatePlaceholderComponent(current$$1, workInProgress, renderExpirationTime) {
+      if (enableSuspense) {
+        var nextProps = workInProgress.pendingProps; // Check if we already attempted to render the normal state. If we did,
+        // and we timed out, render the placeholder state.
 
-      var nextState = workInProgress.memoizedState;
+        var alreadyCaptured = (workInProgress.effectTag & DidCapture) === NoEffect;
+        var nextDidTimeout = void 0;
 
-      if (nextState === null) {// An empty suspense state means this boundary has not yet timed out.
-      } else {
-        if (!nextState.alreadyCaptured) {
-          // Since we haven't already suspended during this commit, clear the
-          // existing suspense state. We'll try rendering again.
-          nextState = null;
+        if (current$$1 !== null && workInProgress.updateQueue !== null) {
+          // We're outside strict mode. Something inside this Placeholder boundary
+          // suspended during the last commit. Switch to the placholder.
+          workInProgress.updateQueue = null;
+          nextDidTimeout = true; // If we're recovering from an error, reconcile twice: first to delete
+          // all the existing children.
+
+          reconcileChildren(current$$1, workInProgress, null, renderExpirationTime);
+          current$$1.child = null; // Now we can continue reconciling like normal. This has the effect of
+          // remounting all children regardless of whether their their
+          // identity matches.
         } else {
-          // Something in this boundary's subtree already suspended. Switch to
-          // rendering the fallback children. Set `alreadyCaptured` to true.
-          if (current$$1 !== null && nextState === current$$1.memoizedState) {
-            // Create a new suspense state to avoid mutating the current tree's.
-            nextState = {
-              alreadyCaptured: true,
-              didTimeout: true,
-              timedOutAt: nextState.timedOutAt
-            };
-          } else {
-            // Already have a clone, so it's safe to mutate.
-            nextState.alreadyCaptured = true;
-            nextState.didTimeout = true;
-          }
+          nextDidTimeout = !alreadyCaptured;
         }
-      }
 
-      var nextDidTimeout = nextState !== null && nextState.didTimeout; // This next part is a bit confusing. If the children timeout, we switch to
-      // showing the fallback children in place of the "primary" children.
-      // However, we don't want to delete the primary children because then their
-      // state will be lost (both the React state and the host state, e.g.
-      // uncontrolled form inputs). Instead we keep them mounted and hide them.
-      // Both the fallback children AND the primary children are rendered at the
-      // same time. Once the primary children are un-suspended, we can delete
-      // the fallback children — don't need to preserve their state.
-      //
-      // The two sets of children are siblings in the host environment, but
-      // semantically, for purposes of reconciliation, they are two separate sets.
-      // So we store them using two fragment fibers.
-      //
-      // However, we want to avoid allocating extra fibers for every placeholder.
-      // They're only necessary when the children time out, because that's the
-      // only time when both sets are mounted.
-      //
-      // So, the extra fragment fibers are only used if the children time out.
-      // Otherwise, we render the primary children directly. This requires some
-      // custom reconciliation logic to preserve the state of the primary
-      // children. It's essentially a very basic form of re-parenting.
-      // `child` points to the child fiber. In the normal case, this is the first
-      // fiber of the primary children set. In the timed-out case, it's a
-      // a fragment fiber containing the primary children.
-
-      var child = void 0; // `next` points to the next fiber React should render. In the normal case,
-      // it's the same as `child`: the first fiber of the primary children set.
-      // In the timed-out case, it's a fragment fiber containing the *fallback*
-      // children -- we skip over the primary children entirely.
-
-      var next = void 0;
-
-      if (current$$1 === null) {
-        // This is the initial mount. This branch is pretty simple because there's
-        // no previous state that needs to be preserved.
-        if (nextDidTimeout) {
-          // Mount separate fragments for primary and fallback children.
-          var nextFallbackChildren = nextProps.fallback;
-          var primaryChildFragment = createFiberFromFragment(null, mode, NoWork, null);
-          var fallbackChildFragment = createFiberFromFragment(nextFallbackChildren, mode, renderExpirationTime, null);
-          primaryChildFragment.sibling = fallbackChildFragment;
-          child = primaryChildFragment; // Skip the primary children, and continue working on the
-          // fallback children.
-
-          next = fallbackChildFragment;
-          child.return = next.return = workInProgress;
-        } else {
-          // Mount the primary children without an intermediate fragment fiber.
-          var nextPrimaryChildren = nextProps.children;
-          child = next = mountChildFibers(workInProgress, null, nextPrimaryChildren, renderExpirationTime);
-        }
-      } else {
-        // This is an update. This branch is more complicated because we need to
-        // ensure the state of the primary children is preserved.
-        var prevState = current$$1.memoizedState;
-        var prevDidTimeout = prevState !== null && prevState.didTimeout;
-
-        if (prevDidTimeout) {
-          // The current tree already timed out. That means each child set is
-          var currentPrimaryChildFragment = current$$1.child;
-          var currentFallbackChildFragment = currentPrimaryChildFragment.sibling;
-
+        if ((workInProgress.mode & StrictMode) !== NoEffect) {
           if (nextDidTimeout) {
-            // Still timed out. Reuse the current primary children by cloning
-            // its fragment. We're going to skip over these entirely.
-            var _nextFallbackChildren = nextProps.fallback;
-
-            var _primaryChildFragment = createWorkInProgress(currentPrimaryChildFragment, currentPrimaryChildFragment.pendingProps, NoWork);
-
-            _primaryChildFragment.effectTag |= Placement; // Clone the fallback child fragment, too. These we'll continue
-            // working on.
-
-            var _fallbackChildFragment = _primaryChildFragment.sibling = createWorkInProgress(currentFallbackChildFragment, _nextFallbackChildren, currentFallbackChildFragment.expirationTime);
-
-            _fallbackChildFragment.effectTag |= Placement;
-            child = _primaryChildFragment;
-            _primaryChildFragment.childExpirationTime = NoWork; // Skip the primary children, and continue working on the
-            // fallback children.
-
-            next = _fallbackChildFragment;
-            child.return = next.return = workInProgress;
+            // If the timed-out view commits, schedule an update effect to record
+            // the committed time.
+            workInProgress.effectTag |= Update;
           } else {
-            // No longer suspended. Switch back to showing the primary children,
-            // and remove the intermediate fragment fiber.
-            var _nextPrimaryChildren = nextProps.children;
-            var currentPrimaryChild = currentPrimaryChildFragment.child;
-            var currentFallbackChild = currentFallbackChildFragment.child;
-            var primaryChild = reconcileChildFibers(workInProgress, currentPrimaryChild, _nextPrimaryChildren, renderExpirationTime); // Delete the fallback children.
-
-            reconcileChildFibers(workInProgress, currentFallbackChild, null, renderExpirationTime); // Continue rendering the children, like we normally do.
-
-            child = next = primaryChild;
+            // The state node points to the time at which placeholder timed out.
+            // We can clear it once we switch back to the normal children.
+            workInProgress.stateNode = null;
           }
+        } // If the `children` prop is a function, treat it like a render prop.
+        // TODO: This is temporary until we finalize a lower level API.
+
+
+        var children = nextProps.children;
+        var nextChildren = void 0;
+
+        if (typeof children === 'function') {
+          nextChildren = children(nextDidTimeout);
         } else {
-          // The current tree has not already timed out. That means the primary
-          var _currentPrimaryChild = current$$1.child;
-
-          if (nextDidTimeout) {
-            // Timed out. Wrap the children in a fragment fiber to keep them
-            // separate from the fallback children.
-            var _nextFallbackChildren2 = nextProps.fallback;
-
-            var _primaryChildFragment2 = createFiberFromFragment( // It shouldn't matter what the pending props are because we aren't
-            // going to render this fragment.
-            null, mode, NoWork, null);
-
-            _primaryChildFragment2.effectTag |= Placement;
-            _primaryChildFragment2.child = _currentPrimaryChild;
-            _currentPrimaryChild.return = _primaryChildFragment2; // Create a fragment from the fallback children, too.
-
-            var _fallbackChildFragment2 = _primaryChildFragment2.sibling = createFiberFromFragment(_nextFallbackChildren2, mode, renderExpirationTime, null);
-
-            _fallbackChildFragment2.effectTag |= Placement;
-            child = _primaryChildFragment2;
-            _primaryChildFragment2.childExpirationTime = NoWork; // Skip the primary children, and continue working on the
-            // fallback children.
-
-            next = _fallbackChildFragment2;
-            child.return = next.return = workInProgress;
-          } else {
-            // Still haven't timed out.  Continue rendering the children, like we
-            // normally do.
-            var _nextPrimaryChildren2 = nextProps.children;
-            next = child = reconcileChildFibers(workInProgress, _currentPrimaryChild, _nextPrimaryChildren2, renderExpirationTime);
-          }
+          nextChildren = nextDidTimeout ? nextProps.fallback : children;
         }
-      }
 
-      workInProgress.memoizedState = nextState;
-      workInProgress.child = child;
-      return next;
+        workInProgress.memoizedProps = nextProps;
+        workInProgress.memoizedState = nextDidTimeout;
+        reconcileChildren(current$$1, workInProgress, nextChildren, renderExpirationTime);
+        return workInProgress.child;
+      } else {
+        return null;
+      }
     }
 
     function updatePortalComponent(current$$1, workInProgress, renderExpirationTime) {
@@ -18023,8 +17366,10 @@ if ("development" !== "production") {
         // the root always starts with a "current" with a null child.
         // TODO: Consider unifying this with how the root works.
         workInProgress.child = reconcileChildFibers(workInProgress, null, nextChildren, renderExpirationTime);
+        memoizeProps(workInProgress, nextChildren);
       } else {
         reconcileChildren(current$$1, workInProgress, nextChildren, renderExpirationTime);
+        memoizeProps(workInProgress, nextChildren);
       }
 
       return workInProgress.child;
@@ -18036,6 +17381,7 @@ if ("development" !== "production") {
       var newProps = workInProgress.pendingProps;
       var oldProps = workInProgress.memoizedProps;
       var newValue = newProps.value;
+      workInProgress.memoizedProps = newProps;
       {
         var providerPropTypes = workInProgress.type.propTypes;
 
@@ -18066,32 +17412,8 @@ if ("development" !== "production") {
       return workInProgress.child;
     }
 
-    var hasWarnedAboutUsingContextAsConsumer = false;
-
     function updateContextConsumer(current$$1, workInProgress, renderExpirationTime) {
-      var context = workInProgress.type; // The logic below for Context differs depending on PROD or DEV mode. In
-      // DEV mode, we create a separate object for Context.Consumer that acts
-      // like a proxy to Context. This proxy object adds unnecessary code in PROD
-      // so we use the old behaviour (Context.Consumer references Context) to
-      // reduce size and overhead. The separate object references context via
-      // a property called "_context", which also gives us the ability to check
-      // in DEV mode if this property exists or not and warn if it does not.
-
-      {
-        if (context._context === undefined) {
-          // This may be because it's a Context (rather than a Consumer).
-          // Or it may be because it's older React where they're the same thing.
-          // We only want to warn if we're sure it's a new React.
-          if (context !== context.Consumer) {
-            if (!hasWarnedAboutUsingContextAsConsumer) {
-              hasWarnedAboutUsingContextAsConsumer = true;
-              warning$1(false, 'Rendering <Context> directly is not supported and will be removed in ' + 'a future major release. Did you mean to render <Context.Consumer> instead?');
-            }
-          }
-        } else {
-          context = context._context;
-        }
-      }
+      var context = workInProgress.type;
       var newProps = workInProgress.pendingProps;
       var render = newProps.children;
       {
@@ -18109,6 +17431,7 @@ if ("development" !== "production") {
 
       workInProgress.effectTag |= PerformedWork;
       reconcileChildren(current$$1, workInProgress, newChildren, renderExpirationTime);
+      workInProgress.memoizedProps = newProps;
       return workInProgress.child;
     }
     /*
@@ -18158,95 +17481,79 @@ if ("development" !== "production") {
         cloneChildFibers(current$$1, workInProgress);
         return workInProgress.child;
       }
+    } // TODO: Delete memoizeProps/State and move to reconcile/bailout instead
+
+
+    function memoizeProps(workInProgress, nextProps) {
+      workInProgress.memoizedProps = nextProps;
+    }
+
+    function memoizeState(workInProgress, nextState) {
+      workInProgress.memoizedState = nextState; // Don't reset the updateQueue, in case there are pending updates. Resetting
+      // is handled by processUpdateQueue.
     }
 
     function beginWork(current$$1, workInProgress, renderExpirationTime) {
       var updateExpirationTime = workInProgress.expirationTime;
 
-      if (current$$1 !== null) {
-        var oldProps = current$$1.memoizedProps;
-        var newProps = workInProgress.pendingProps;
+      if (!hasContextChanged() && (updateExpirationTime === NoWork || updateExpirationTime > renderExpirationTime)) {
+        // This fiber does not have any pending work. Bailout without entering
+        // the begin phase. There's still some bookkeeping we that needs to be done
+        // in this optimized path, mostly pushing stuff onto the stack.
+        switch (workInProgress.tag) {
+          case HostRoot:
+            pushHostRootContext(workInProgress);
+            resetHydrationState();
+            break;
 
-        if (oldProps === newProps && !hasContextChanged() && (updateExpirationTime === NoWork || updateExpirationTime > renderExpirationTime)) {
-          // This fiber does not have any pending work. Bailout without entering
-          // the begin phase. There's still some bookkeeping we that needs to be done
-          // in this optimized path, mostly pushing stuff onto the stack.
-          switch (workInProgress.tag) {
-            case HostRoot:
-              pushHostRootContext(workInProgress);
-              resetHydrationState();
-              break;
+          case HostComponent:
+            pushHostContext(workInProgress);
+            break;
 
-            case HostComponent:
-              pushHostContext(workInProgress);
-              break;
+          case ClassComponent:
+            {
+              var Component = workInProgress.type;
 
-            case ClassComponent:
-              {
-                var Component = workInProgress.type;
-
-                if (isContextProvider(Component)) {
-                  pushContextProvider(workInProgress);
-                }
-
-                break;
-              }
-
-            case HostPortal:
-              pushHostContainer(workInProgress, workInProgress.stateNode.containerInfo);
-              break;
-
-            case ContextProvider:
-              {
-                var newValue = workInProgress.memoizedProps.value;
-                pushProvider(workInProgress, newValue);
-                break;
-              }
-
-            case Profiler:
-              if (enableProfilerTimer) {
-                workInProgress.effectTag |= Update;
+              if (isContextProvider(Component)) {
+                pushContextProvider(workInProgress);
               }
 
               break;
+            }
 
-            case SuspenseComponent:
-              {
-                var state = workInProgress.memoizedState;
-                var didTimeout = state !== null && state.didTimeout;
+          case ClassComponentLazy:
+            {
+              var thenable = workInProgress.type;
 
-                if (didTimeout) {
-                  // If this boundary is currently timed out, we need to decide
-                  // whether to retry the primary children, or to skip over it and
-                  // go straight to the fallback. Check the priority of the primary
-                  var primaryChildFragment = workInProgress.child;
-                  var primaryChildExpirationTime = primaryChildFragment.childExpirationTime;
+              var _Component = getResultFromResolvedThenable(thenable);
 
-                  if (primaryChildExpirationTime !== NoWork && primaryChildExpirationTime <= renderExpirationTime) {
-                    // The primary children have pending work. Use the normal path
-                    // to attempt to render the primary children again.
-                    return updateSuspenseComponent(current$$1, workInProgress, renderExpirationTime);
-                  } else {
-                    // The primary children do not have pending work with sufficient
-                    // priority. Bailout.
-                    var child = bailoutOnAlreadyFinishedWork(current$$1, workInProgress, renderExpirationTime);
-
-                    if (child !== null) {
-                      // The fallback children have pending work. Skip over the
-                      // primary children and work on the fallback.
-                      return child.sibling;
-                    } else {
-                      return null;
-                    }
-                  }
-                }
-
-                break;
+              if (isContextProvider(_Component)) {
+                pushContextProvider(workInProgress);
               }
-          }
 
-          return bailoutOnAlreadyFinishedWork(current$$1, workInProgress, renderExpirationTime);
+              break;
+            }
+
+          case HostPortal:
+            pushHostContainer(workInProgress, workInProgress.stateNode.containerInfo);
+            break;
+
+          case ContextProvider:
+            {
+              var newValue = workInProgress.memoizedProps.value;
+              pushProvider(workInProgress, newValue);
+              break;
+            }
+
+          case Profiler:
+            if (enableProfilerTimer) {
+              workInProgress.effectTag |= Update;
+            }
+
+            break;
         }
+
+        return bailoutOnAlreadyFinishedWork(current$$1, workInProgress, renderExpirationTime);
       } // Before entering the begin phase, clear the expiration time.
 
 
@@ -18255,32 +17562,50 @@ if ("development" !== "production") {
       switch (workInProgress.tag) {
         case IndeterminateComponent:
           {
-            var elementType = workInProgress.elementType;
-            return mountIndeterminateComponent(current$$1, workInProgress, elementType, renderExpirationTime);
+            var _Component3 = workInProgress.type;
+            return mountIndeterminateComponent(current$$1, workInProgress, _Component3, renderExpirationTime);
           }
 
-        case LazyComponent:
+        case FunctionalComponent:
           {
-            var _elementType = workInProgress.elementType;
-            return mountLazyComponent(current$$1, workInProgress, _elementType, updateExpirationTime, renderExpirationTime);
+            var _Component4 = workInProgress.type;
+            var _unresolvedProps = workInProgress.pendingProps;
+            return updateFunctionalComponent(current$$1, workInProgress, _Component4, _unresolvedProps, renderExpirationTime);
           }
 
-        case FunctionComponent:
+        case FunctionalComponentLazy:
           {
-            var _Component = workInProgress.type;
-            var unresolvedProps = workInProgress.pendingProps;
-            var resolvedProps = workInProgress.elementType === _Component ? unresolvedProps : resolveDefaultProps(_Component, unresolvedProps);
-            return updateFunctionComponent(current$$1, workInProgress, _Component, resolvedProps, renderExpirationTime);
+            var _thenable2 = workInProgress.type;
+
+            var _Component5 = getResultFromResolvedThenable(_thenable2);
+
+            var _unresolvedProps2 = workInProgress.pendingProps;
+
+            var _child = updateFunctionalComponent(current$$1, workInProgress, _Component5, resolveDefaultProps(_Component5, _unresolvedProps2), renderExpirationTime);
+
+            workInProgress.memoizedProps = _unresolvedProps2;
+            return _child;
           }
 
         case ClassComponent:
           {
-            var _Component2 = workInProgress.type;
-            var _unresolvedProps = workInProgress.pendingProps;
+            var _Component6 = workInProgress.type;
+            var _unresolvedProps3 = workInProgress.pendingProps;
+            return updateClassComponent(current$$1, workInProgress, _Component6, _unresolvedProps3, renderExpirationTime);
+          }
 
-            var _resolvedProps = workInProgress.elementType === _Component2 ? _unresolvedProps : resolveDefaultProps(_Component2, _unresolvedProps);
+        case ClassComponentLazy:
+          {
+            var _thenable3 = workInProgress.type;
 
-            return updateClassComponent(current$$1, workInProgress, _Component2, _resolvedProps, renderExpirationTime);
+            var _Component7 = getResultFromResolvedThenable(_thenable3);
+
+            var _unresolvedProps4 = workInProgress.pendingProps;
+
+            var _child2 = updateClassComponent(current$$1, workInProgress, _Component7, resolveDefaultProps(_Component7, _unresolvedProps4), renderExpirationTime);
+
+            workInProgress.memoizedProps = _unresolvedProps4;
+            return _child2;
           }
 
         case HostRoot:
@@ -18292,8 +17617,8 @@ if ("development" !== "production") {
         case HostText:
           return updateHostText(current$$1, workInProgress);
 
-        case SuspenseComponent:
-          return updateSuspenseComponent(current$$1, workInProgress, renderExpirationTime);
+        case PlaceholderComponent:
+          return updatePlaceholderComponent(current$$1, workInProgress, renderExpirationTime);
 
         case HostPortal:
           return updatePortalComponent(current$$1, workInProgress, renderExpirationTime);
@@ -18301,12 +17626,18 @@ if ("development" !== "production") {
         case ForwardRef:
           {
             var type = workInProgress.type;
-            var _unresolvedProps2 = workInProgress.pendingProps;
-
-            var _resolvedProps2 = workInProgress.elementType === type ? _unresolvedProps2 : resolveDefaultProps(type, _unresolvedProps2);
-
-            return updateForwardRef(current$$1, workInProgress, type, _resolvedProps2, renderExpirationTime);
+            return updateForwardRef(current$$1, workInProgress, type, workInProgress.pendingProps, renderExpirationTime);
           }
+
+        case ForwardRefLazy:
+          var _thenable = workInProgress.type;
+
+          var _Component2 = getResultFromResolvedThenable(_thenable);
+
+          var unresolvedProps = workInProgress.pendingProps;
+          var child = updateForwardRef(current$$1, workInProgress, _Component2, resolveDefaultProps(_Component2, unresolvedProps), renderExpirationTime);
+          workInProgress.memoizedProps = unresolvedProps;
+          return child;
 
         case Fragment:
           return updateFragment(current$$1, workInProgress, renderExpirationTime);
@@ -18323,31 +17654,6 @@ if ("development" !== "production") {
         case ContextConsumer:
           return updateContextConsumer(current$$1, workInProgress, renderExpirationTime);
 
-        case MemoComponent:
-          {
-            var _type = workInProgress.type;
-            var _unresolvedProps3 = workInProgress.pendingProps;
-
-            var _resolvedProps3 = resolveDefaultProps(_type.type, _unresolvedProps3);
-
-            return updateMemoComponent(current$$1, workInProgress, _type, _resolvedProps3, updateExpirationTime, renderExpirationTime);
-          }
-
-        case SimpleMemoComponent:
-          {
-            return updateSimpleMemoComponent(current$$1, workInProgress, workInProgress.type, workInProgress.pendingProps, updateExpirationTime, renderExpirationTime);
-          }
-
-        case IncompleteClassComponent:
-          {
-            var _Component3 = workInProgress.type;
-            var _unresolvedProps4 = workInProgress.pendingProps;
-
-            var _resolvedProps4 = workInProgress.elementType === _Component3 ? _unresolvedProps4 : resolveDefaultProps(_Component3, _unresolvedProps4);
-
-            return mountIncompleteClassComponent(current$$1, workInProgress, _Component3, _resolvedProps4, renderExpirationTime);
-          }
-
         default:
           invariant(false, 'Unknown unit of work tag. This error is likely caused by a bug in React. Please file an issue.');
       }
@@ -18363,47 +17669,46 @@ if ("development" !== "production") {
       workInProgress.effectTag |= Ref;
     }
 
-    var appendAllChildren = void 0;
+    function appendAllChildren(parent, workInProgress) {
+      // We only have the top Fiber that was created but we need recurse down its
+      // children to find all the terminal nodes.
+      var node = workInProgress.child;
+
+      while (node !== null) {
+        if (node.tag === HostComponent || node.tag === HostText) {
+          appendInitialChild(parent, node.stateNode);
+        } else if (node.tag === HostPortal) {// If we have a portal child, then we don't want to traverse
+          // down its children. Instead, we'll get insertions from each child in
+          // the portal directly.
+        } else if (node.child !== null) {
+          node.child.return = node;
+          node = node.child;
+          continue;
+        }
+
+        if (node === workInProgress) {
+          return;
+        }
+
+        while (node.sibling === null) {
+          if (node.return === null || node.return === workInProgress) {
+            return;
+          }
+
+          node = node.return;
+        }
+
+        node.sibling.return = node.return;
+        node = node.sibling;
+      }
+    }
+
     var updateHostContainer = void 0;
     var updateHostComponent$1 = void 0;
     var updateHostText$1 = void 0;
 
     if (supportsMutation) {
       // Mutation mode
-      appendAllChildren = function (parent, workInProgress, needsVisibilityToggle, isHidden) {
-        // We only have the top Fiber that was created but we need recurse down its
-        // children to find all the terminal nodes.
-        var node = workInProgress.child;
-
-        while (node !== null) {
-          if (node.tag === HostComponent || node.tag === HostText) {
-            appendInitialChild(parent, node.stateNode);
-          } else if (node.tag === HostPortal) {// If we have a portal child, then we don't want to traverse
-            // down its children. Instead, we'll get insertions from each child in
-            // the portal directly.
-          } else if (node.child !== null) {
-            node.child.return = node;
-            node = node.child;
-            continue;
-          }
-
-          if (node === workInProgress) {
-            return;
-          }
-
-          while (node.sibling === null) {
-            if (node.return === null || node.return === workInProgress) {
-              return;
-            }
-
-            node = node.return;
-          }
-
-          node.sibling.return = node.return;
-          node = node.sibling;
-        }
-      };
-
       updateHostContainer = function (workInProgress) {// Noop
       };
 
@@ -18445,199 +17750,23 @@ if ("development" !== "production") {
       };
     } else if (supportsPersistence) {
       // Persistent host tree mode
-      appendAllChildren = function (parent, workInProgress, needsVisibilityToggle, isHidden) {
+      // An unfortunate fork of appendAllChildren because we have two different parent types.
+      var appendAllChildrenToContainer = function (containerChildSet, workInProgress) {
         // We only have the top Fiber that was created but we need recurse down its
         // children to find all the terminal nodes.
         var node = workInProgress.child;
 
         while (node !== null) {
-          // eslint-disable-next-line no-labels
-          branches: if (node.tag === HostComponent) {
-            var instance = node.stateNode;
-
-            if (needsVisibilityToggle) {
-              var props = node.memoizedProps;
-              var type = node.type;
-
-              if (isHidden) {
-                // This child is inside a timed out tree. Hide it.
-                instance = cloneHiddenInstance(instance, type, props, node);
-              } else {
-                // This child was previously inside a timed out tree. If it was not
-                // updated during this render, it may need to be unhidden. Clone
-                // again to be sure.
-                instance = cloneUnhiddenInstance(instance, type, props, node);
-              }
-
-              node.stateNode = instance;
-            }
-
-            appendInitialChild(parent, instance);
-          } else if (node.tag === HostText) {
-            var _instance = node.stateNode;
-
-            if (needsVisibilityToggle) {
-              var text = node.memoizedProps;
-              var rootContainerInstance = getRootHostContainer();
-              var currentHostContext = getHostContext();
-
-              if (isHidden) {
-                _instance = createHiddenTextInstance(text, rootContainerInstance, currentHostContext, workInProgress);
-              } else {
-                _instance = createTextInstance(text, rootContainerInstance, currentHostContext, workInProgress);
-              }
-
-              node.stateNode = _instance;
-            }
-
-            appendInitialChild(parent, _instance);
+          if (node.tag === HostComponent || node.tag === HostText) {
+            appendChildToContainerChildSet(containerChildSet, node.stateNode);
           } else if (node.tag === HostPortal) {// If we have a portal child, then we don't want to traverse
             // down its children. Instead, we'll get insertions from each child in
             // the portal directly.
-          } else if (node.tag === SuspenseComponent) {
-            var current = node.alternate;
-
-            if (current !== null) {
-              var oldState = current.memoizedState;
-              var newState = node.memoizedState;
-              var oldIsHidden = oldState !== null && oldState.didTimeout;
-              var newIsHidden = newState !== null && newState.didTimeout;
-
-              if (oldIsHidden !== newIsHidden) {
-                // The placeholder either just timed out or switched back to the normal
-                // children after having previously timed out. Toggle the visibility of
-                // the direct host children.
-                var primaryChildParent = newIsHidden ? node.child : node;
-
-                if (primaryChildParent !== null) {
-                  appendAllChildren(parent, primaryChildParent, true, newIsHidden);
-                } // eslint-disable-next-line no-labels
-
-
-                break branches;
-              }
-            }
-
-            if (node.child !== null) {
-              // Continue traversing like normal
-              node.child.return = node;
-              node = node.child;
-              continue;
-            }
           } else if (node.child !== null) {
             node.child.return = node;
             node = node.child;
             continue;
-          } // $FlowFixMe This is correct but Flow is confused by the labeled break.
-
-
-          node = node;
-
-          if (node === workInProgress) {
-            return;
           }
-
-          while (node.sibling === null) {
-            if (node.return === null || node.return === workInProgress) {
-              return;
-            }
-
-            node = node.return;
-          }
-
-          node.sibling.return = node.return;
-          node = node.sibling;
-        }
-      }; // An unfortunate fork of appendAllChildren because we have two different parent types.
-
-
-      var appendAllChildrenToContainer = function (containerChildSet, workInProgress, needsVisibilityToggle, isHidden) {
-        // We only have the top Fiber that was created but we need recurse down its
-        // children to find all the terminal nodes.
-        var node = workInProgress.child;
-
-        while (node !== null) {
-          // eslint-disable-next-line no-labels
-          branches: if (node.tag === HostComponent) {
-            var instance = node.stateNode;
-
-            if (needsVisibilityToggle) {
-              var props = node.memoizedProps;
-              var type = node.type;
-
-              if (isHidden) {
-                // This child is inside a timed out tree. Hide it.
-                instance = cloneHiddenInstance(instance, type, props, node);
-              } else {
-                // This child was previously inside a timed out tree. If it was not
-                // updated during this render, it may need to be unhidden. Clone
-                // again to be sure.
-                instance = cloneUnhiddenInstance(instance, type, props, node);
-              }
-
-              node.stateNode = instance;
-            }
-
-            appendChildToContainerChildSet(containerChildSet, instance);
-          } else if (node.tag === HostText) {
-            var _instance2 = node.stateNode;
-
-            if (needsVisibilityToggle) {
-              var text = node.memoizedProps;
-              var rootContainerInstance = getRootHostContainer();
-              var currentHostContext = getHostContext();
-
-              if (isHidden) {
-                _instance2 = createHiddenTextInstance(text, rootContainerInstance, currentHostContext, workInProgress);
-              } else {
-                _instance2 = createTextInstance(text, rootContainerInstance, currentHostContext, workInProgress);
-              }
-
-              node.stateNode = _instance2;
-            }
-
-            appendChildToContainerChildSet(containerChildSet, _instance2);
-          } else if (node.tag === HostPortal) {// If we have a portal child, then we don't want to traverse
-            // down its children. Instead, we'll get insertions from each child in
-            // the portal directly.
-          } else if (node.tag === SuspenseComponent) {
-            var current = node.alternate;
-
-            if (current !== null) {
-              var oldState = current.memoizedState;
-              var newState = node.memoizedState;
-              var oldIsHidden = oldState !== null && oldState.didTimeout;
-              var newIsHidden = newState !== null && newState.didTimeout;
-
-              if (oldIsHidden !== newIsHidden) {
-                // The placeholder either just timed out or switched back to the normal
-                // children after having previously timed out. Toggle the visibility of
-                // the direct host children.
-                var primaryChildParent = newIsHidden ? node.child : node;
-
-                if (primaryChildParent !== null) {
-                  appendAllChildrenToContainer(containerChildSet, primaryChildParent, true, newIsHidden);
-                } // eslint-disable-next-line no-labels
-
-
-                break branches;
-              }
-            }
-
-            if (node.child !== null) {
-              // Continue traversing like normal
-              node.child.return = node;
-              node = node.child;
-              continue;
-            }
-          } else if (node.child !== null) {
-            node.child.return = node;
-            node = node.child;
-            continue;
-          } // $FlowFixMe This is correct but Flow is confused by the labeled break.
-
-
-          node = node;
 
           if (node === workInProgress) {
             return;
@@ -18665,7 +17794,7 @@ if ("development" !== "production") {
           var container = portalOrRoot.containerInfo;
           var newChildSet = createContainerChildSet(container); // If children might have changed, we have to add them all to the set.
 
-          appendAllChildrenToContainer(newChildSet, workInProgress, false, false);
+          appendAllChildrenToContainer(newChildSet, workInProgress);
           portalOrRoot.pendingChildren = newChildSet; // Schedule an update on the container to swap out the container.
 
           markUpdate(workInProgress);
@@ -18717,7 +17846,7 @@ if ("development" !== "production") {
           markUpdate(workInProgress);
         } else {
           // If children might have changed, we have to add them all to the set.
-          appendAllChildren(newInstance, workInProgress, false, false);
+          appendAllChildren(newInstance, workInProgress);
         }
       };
 
@@ -18748,14 +17877,8 @@ if ("development" !== "production") {
       var newProps = workInProgress.pendingProps;
 
       switch (workInProgress.tag) {
-        case IndeterminateComponent:
-          break;
-
-        case LazyComponent:
-          break;
-
-        case SimpleMemoComponent:
-        case FunctionComponent:
+        case FunctionalComponent:
+        case FunctionalComponentLazy:
           break;
 
         case ClassComponent:
@@ -18763,6 +17886,17 @@ if ("development" !== "production") {
             var Component = workInProgress.type;
 
             if (isContextProvider(Component)) {
+              popContext(workInProgress);
+            }
+
+            break;
+          }
+
+        case ClassComponentLazy:
+          {
+            var _Component = getResultFromResolvedThenable(workInProgress.type);
+
+            if (isContextProvider(_Component)) {
               popContext(workInProgress);
             }
 
@@ -18829,7 +17963,7 @@ if ("development" !== "production") {
                 }
               } else {
                 var instance = createInstance(type, newProps, rootContainerInstance, currentHostContext, workInProgress);
-                appendAllChildren(instance, workInProgress, false, false); // Certain renderers require commit-time effects for initial mount.
+                appendAllChildren(instance, workInProgress); // Certain renderers require commit-time effects for initial mount.
                 // (eg DOM renderer supports auto-focus for certain elements).
                 // Make sure such renderers get scheduled for later work.
 
@@ -18882,23 +18016,11 @@ if ("development" !== "production") {
           }
 
         case ForwardRef:
+        case ForwardRefLazy:
           break;
 
-        case SuspenseComponent:
-          {
-            var nextState = workInProgress.memoizedState;
-            var prevState = current !== null ? current.memoizedState : null;
-            var nextDidTimeout = nextState !== null && nextState.didTimeout;
-            var prevDidTimeout = prevState !== null && prevState.didTimeout;
-
-            if (nextDidTimeout !== prevDidTimeout) {
-              // If this render commits, and it switches between the normal state
-              // and the timed-out state, schedule an effect.
-              workInProgress.effectTag |= Update;
-            }
-
-            break;
-          }
+        case PlaceholderComponent:
+          break;
 
         case Fragment:
           break;
@@ -18921,40 +18043,17 @@ if ("development" !== "production") {
 
         case ContextConsumer:
           break;
+        // Error cases
 
-        case MemoComponent:
-          break;
-
-        case IncompleteClassComponent:
-          {
-            // Same as class component case. I put it down here so that the tags are
-            // sequential to ensure this switch is compiled to a jump table.
-            var _Component = workInProgress.type;
-
-            if (isContextProvider(_Component)) {
-              popContext(workInProgress);
-            }
-
-            break;
-          }
+        case IndeterminateComponent:
+          invariant(false, 'An indeterminate component should have become determinate before completing. This error is likely caused by a bug in React. Please file an issue.');
+        // eslint-disable-next-line no-fallthrough
 
         default:
           invariant(false, 'Unknown unit of work tag. This error is likely caused by a bug in React. Please file an issue.');
       }
 
       return null;
-    }
-
-    function shouldCaptureSuspense(current, workInProgress) {
-      // In order to capture, the Suspense component must have a fallback prop.
-      if (workInProgress.memoizedProps.fallback === undefined) {
-        return false;
-      } // If it was the primary children that just suspended, capture and render the
-      // fallback. Otherwise, don't capture and bubble to the next boundary.
-
-
-      var nextState = workInProgress.memoizedState;
-      return nextState === null || !nextState.didTimeout;
     } // This module is forked in different environments.
     // By default, return `true` to log errors to the console.
     // Forks can return `false` if this isn't desirable.
@@ -19020,6 +18119,7 @@ if ("development" !== "production") {
       }
     }
 
+    var emptyObject = {};
     var didWarnAboutUndefinedSnapshotBeforeUpdate = null;
     {
       didWarnAboutUndefinedSnapshotBeforeUpdate = new Set();
@@ -19105,6 +18205,7 @@ if ("development" !== "production") {
     function commitBeforeMutationLifeCycles(current$$1, finishedWork) {
       switch (finishedWork.tag) {
         case ClassComponent:
+        case ClassComponentLazy:
           {
             if (finishedWork.effectTag & Snapshot) {
               if (current$$1 !== null) {
@@ -19135,7 +18236,6 @@ if ("development" !== "production") {
         case HostComponent:
         case HostText:
         case HostPortal:
-        case IncompleteClassComponent:
           // Nothing to do for these component types
           return;
 
@@ -19149,6 +18249,7 @@ if ("development" !== "production") {
     function commitLifeCycles(finishedRoot, current$$1, finishedWork, committedExpirationTime) {
       switch (finishedWork.tag) {
         case ClassComponent:
+        case ClassComponentLazy:
           {
             var instance = finishedWork.stateNode;
 
@@ -19195,6 +18296,7 @@ if ("development" !== "production") {
                     break;
 
                   case ClassComponent:
+                  case ClassComponentLazy:
                     _instance = finishedWork.child.stateNode;
                     break;
                 }
@@ -19249,106 +18351,34 @@ if ("development" !== "production") {
             return;
           }
 
-        case SuspenseComponent:
+        case PlaceholderComponent:
           {
-            if (finishedWork.effectTag & Callback) {
-              // In non-strict mode, a suspense boundary times out by commiting
-              // twice: first, by committing the children in an inconsistent state,
-              // then hiding them and showing the fallback children in a subsequent
-              var _newState = {
-                alreadyCaptured: true,
-                didTimeout: false,
-                timedOutAt: NoWork
-              };
-              finishedWork.memoizedState = _newState;
-              scheduleWork(finishedWork, Sync);
-              return;
-            }
-
-            var oldState = current$$1 !== null ? current$$1.memoizedState : null;
-            var newState = finishedWork.memoizedState;
-            var oldDidTimeout = oldState !== null ? oldState.didTimeout : false;
-            var newDidTimeout = void 0;
-            var primaryChildParent = finishedWork;
-
-            if (newState === null) {
-              newDidTimeout = false;
-            } else {
-              newDidTimeout = newState.didTimeout;
-
-              if (newDidTimeout) {
-                primaryChildParent = finishedWork.child;
-                newState.alreadyCaptured = false;
-
-                if (newState.timedOutAt === NoWork) {
-                  // If the children had not already timed out, record the time.
-                  // This is used to compute the elapsed time during subsequent
-                  // attempts to render the children.
-                  newState.timedOutAt = requestCurrentTime();
-                }
+            if (enableSuspense) {
+              if ((finishedWork.mode & StrictMode) === NoEffect) {
+                // In loose mode, a placeholder times out by scheduling a synchronous
+                // update in the commit phase. Use `updateQueue` field to signal that
+                // the Timeout needs to switch to the placeholder. We don't need an
+                // entire queue. Any non-null value works.
+                // $FlowFixMe - Intentionally using a value other than an UpdateQueue.
+                finishedWork.updateQueue = emptyObject;
+                scheduleWork(finishedWork, Sync);
+              } else {
+                // In strict mode, the Update effect is used to record the time at
+                // which the placeholder timed out.
+                var currentTime = requestCurrentTime();
+                finishedWork.stateNode = {
+                  timedOutAt: currentTime
+                };
               }
-            }
-
-            if (newDidTimeout !== oldDidTimeout && primaryChildParent !== null) {
-              hideOrUnhideAllChildren(primaryChildParent, newDidTimeout);
             }
 
             return;
           }
-
-        case IncompleteClassComponent:
-          break;
 
         default:
           {
             invariant(false, 'This unit of work tag should not have side-effects. This error is likely caused by a bug in React. Please file an issue.');
           }
-      }
-    }
-
-    function hideOrUnhideAllChildren(finishedWork, isHidden) {
-      if (supportsMutation) {
-        // We only have the top Fiber that was inserted but we need recurse down its
-        var node = finishedWork;
-
-        while (true) {
-          if (node.tag === HostComponent) {
-            var instance = node.stateNode;
-
-            if (isHidden) {
-              hideInstance(instance);
-            } else {
-              unhideInstance(node.stateNode, node.memoizedProps);
-            }
-          } else if (node.tag === HostText) {
-            var _instance3 = node.stateNode;
-
-            if (isHidden) {
-              hideTextInstance(_instance3);
-            } else {
-              unhideTextInstance(_instance3, node.memoizedProps);
-            }
-          } else if (node.child !== null) {
-            node.child.return = node;
-            node = node.child;
-            continue;
-          }
-
-          if (node === finishedWork) {
-            return;
-          }
-
-          while (node.sibling === null) {
-            if (node.return === null || node.return === finishedWork) {
-              return;
-            }
-
-            node = node.return;
-          }
-
-          node.sibling.return = node.return;
-          node = node.sibling;
-        }
       }
     }
 
@@ -19401,6 +18431,7 @@ if ("development" !== "production") {
 
       switch (current$$1.tag) {
         case ClassComponent:
+        case ClassComponentLazy:
           {
             safelyDetachRef(current$$1);
             var instance = current$$1.stateNode;
@@ -19503,6 +18534,7 @@ if ("development" !== "production") {
 
       switch (finishedWork.tag) {
         case ClassComponent:
+        case ClassComponentLazy:
           {
             return;
           }
@@ -19798,6 +18830,7 @@ if ("development" !== "production") {
 
       switch (finishedWork.tag) {
         case ClassComponent:
+        case ClassComponentLazy:
           {
             return;
           }
@@ -19849,12 +18882,7 @@ if ("development" !== "production") {
             return;
           }
 
-        case SuspenseComponent:
-          {
-            return;
-          }
-
-        case IncompleteClassComponent:
+        case PlaceholderComponent:
           {
             return;
           }
@@ -19872,6 +18900,10 @@ if ("development" !== "production") {
       }
 
       resetTextContent(current$$1.stateNode);
+    }
+
+    function NoopComponent() {
+      return null;
     }
 
     function createRootErrorUpdate(fiber, errorInfo, expirationTime) {
@@ -19896,13 +18928,13 @@ if ("development" !== "production") {
     function createClassErrorUpdate(fiber, errorInfo, expirationTime) {
       var update = createUpdate(expirationTime);
       update.tag = CaptureUpdate;
-      var getDerivedStateFromError = fiber.type.getDerivedStateFromError;
+      var getDerivedStateFromCatch = fiber.type.getDerivedStateFromCatch;
 
-      if (typeof getDerivedStateFromError === 'function') {
+      if (enableGetDerivedStateFromCatch && typeof getDerivedStateFromCatch === 'function') {
         var error = errorInfo.value;
 
         update.payload = function () {
-          return getDerivedStateFromError(error);
+          return getDerivedStateFromCatch(error);
         };
       }
 
@@ -19910,11 +18942,11 @@ if ("development" !== "production") {
 
       if (inst !== null && typeof inst.componentDidCatch === 'function') {
         update.callback = function callback() {
-          if (typeof getDerivedStateFromError !== 'function') {
+          if (!enableGetDerivedStateFromCatch || getDerivedStateFromCatch !== 'function') {
             // To preserve the preexisting retry behavior of error boundaries,
             // we keep track of which ones already failed during this batch.
             // This gets reset before we yield back to the browser.
-            // TODO: Warn in strict mode if getDerivedStateFromError is
+            // TODO: Warn in strict mode if getDerivedStateFromCatch is
             // not defined.
             markLegacyErrorBoundaryAsFailed(this);
           }
@@ -19925,14 +18957,6 @@ if ("development" !== "production") {
           this.componentDidCatch(error, {
             componentStack: stack !== null ? stack : ''
           });
-          {
-            if (typeof getDerivedStateFromError !== 'function') {
-              // If componentDidCatch is the only error boundary method defined,
-              // then it needs to call setState to recover from errors.
-              // If no state update is scheduled then the boundary will swallow the error.
-              !(fiber.expirationTime === Sync) ? warningWithoutStack$1(false, '%s: Error boundaries should implement getDerivedStateFromError(). ' + 'In that method, return a state update to display an error message or fallback UI.', getComponentName(fiber.type) || 'Unknown') : void 0;
-            }
-          }
         };
       }
 
@@ -19945,7 +18969,7 @@ if ("development" !== "production") {
 
       sourceFiber.firstEffect = sourceFiber.lastEffect = null;
 
-      if (value !== null && typeof value === 'object' && typeof value.then === 'function') {
+      if (enableSuspense && value !== null && typeof value === 'object' && typeof value.then === 'function') {
         // This is a thenable.
         var thenable = value; // Find the earliest timeout threshold of all the placeholders in the
         // ancestor path. We could avoid this traversal by storing the thresholds on
@@ -19958,23 +18982,21 @@ if ("development" !== "production") {
         var startTimeMs = -1;
 
         do {
-          if (_workInProgress.tag === SuspenseComponent) {
+          if (_workInProgress.tag === PlaceholderComponent) {
             var current = _workInProgress.alternate;
 
-            if (current !== null) {
-              var currentState = current.memoizedState;
+            if (current !== null && current.memoizedState === true && current.stateNode !== null) {
+              // Reached a placeholder that already timed out. Each timed out
+              // placeholder acts as the root of a new suspense boundary.
+              // Use the time at which the placeholder timed out as the start time
+              // for the current render.
+              var timedOutAt = current.stateNode.timedOutAt;
+              startTimeMs = expirationTimeToMs(timedOutAt); // Do not search any further.
 
-              if (currentState !== null && currentState.didTimeout) {
-                // Reached a boundary that already timed out. Do not search
-                // any further.
-                var timedOutAt = currentState.timedOutAt;
-                startTimeMs = expirationTimeToMs(timedOutAt); // Do not search any further.
-
-                break;
-              }
+              break;
             }
 
-            var timeoutPropMs = _workInProgress.pendingProps.maxDuration;
+            var timeoutPropMs = _workInProgress.pendingProps.delayMs;
 
             if (typeof timeoutPropMs === 'number') {
               if (timeoutPropMs <= 0) {
@@ -19986,98 +19008,105 @@ if ("development" !== "production") {
           }
 
           _workInProgress = _workInProgress.return;
-        } while (_workInProgress !== null); // Schedule the nearest Suspense to re-render the timed out view.
+        } while (_workInProgress !== null); // Schedule the nearest Placeholder to re-render the timed out view.
 
 
         _workInProgress = returnFiber;
 
         do {
-          if (_workInProgress.tag === SuspenseComponent && shouldCaptureSuspense(_workInProgress.alternate, _workInProgress)) {
-            // Found the nearest boundary.
-            // If the boundary is not in concurrent mode, we should not suspend, and
-            // likewise, when the promise resolves, we should ping synchronously.
-            var pingTime = (_workInProgress.mode & ConcurrentMode) === NoEffect ? Sync : renderExpirationTime; // Attach a listener to the promise to "ping" the root and retry.
+          if (_workInProgress.tag === PlaceholderComponent) {
+            var didTimeout = _workInProgress.memoizedState;
 
-            var onResolveOrReject = retrySuspendedRoot.bind(null, root, _workInProgress, sourceFiber, pingTime);
+            if (!didTimeout) {
+              // Found the nearest boundary.
+              // If the boundary is not in async mode, we should not suspend, and
+              // likewise, when the promise resolves, we should ping synchronously.
+              var pingTime = (_workInProgress.mode & AsyncMode) === NoEffect ? Sync : renderExpirationTime; // Attach a listener to the promise to "ping" the root and retry.
 
-            if (enableSchedulerTracing) {
-              onResolveOrReject = tracing.unstable_wrap(onResolveOrReject);
-            }
+              var onResolveOrReject = retrySuspendedRoot.bind(null, root, _workInProgress, pingTime);
+              thenable.then(onResolveOrReject, onResolveOrReject); // If the boundary is outside of strict mode, we should *not* suspend
+              // the commit. Pretend as if the suspended component rendered null and
+              // keep rendering. In the commit phase, we'll schedule a subsequent
+              // synchronous update to re-render the Placeholder.
+              //
+              // Note: It doesn't matter whether the component that suspended was
+              // inside a strict mode tree. If the Placeholder is outside of it, we
+              // should *not* suspend the commit.
 
-            thenable.then(onResolveOrReject, onResolveOrReject); // If the boundary is outside of concurrent mode, we should *not*
-            // suspend the commit. Pretend as if the suspended component rendered
-            // null and keep rendering. In the commit phase, we'll schedule a
-            // subsequent synchronous update to re-render the Suspense.
-            //
-            // Note: It doesn't matter whether the component that suspended was
-            // inside a concurrent mode tree. If the Suspense is outside of it, we
-            // should *not* suspend the commit.
+              if ((_workInProgress.mode & StrictMode) === NoEffect) {
+                _workInProgress.effectTag |= Update; // Unmount the source fiber's children
 
-            if ((_workInProgress.mode & ConcurrentMode) === NoEffect) {
-              _workInProgress.effectTag |= Callback; // Unmount the source fiber's children
+                var nextChildren = null;
+                reconcileChildren(sourceFiber.alternate, sourceFiber, nextChildren, renderExpirationTime);
+                sourceFiber.effectTag &= ~Incomplete;
 
-              var nextChildren = null;
-              reconcileChildren(sourceFiber.alternate, sourceFiber, nextChildren, renderExpirationTime);
-              sourceFiber.effectTag &= ~Incomplete;
-
-              if (sourceFiber.tag === ClassComponent) {
-                // We're going to commit this fiber even though it didn't complete.
-                // But we shouldn't call any lifecycle methods or callbacks. Remove
-                // all lifecycle effect tags.
-                sourceFiber.effectTag &= ~LifecycleEffectMask;
-                var _current = sourceFiber.alternate;
-
-                if (_current === null) {
-                  // This is a new mount. Change the tag so it's not mistaken for a
-                  // completed component. For example, we should not call
-                  // componentWillUnmount if it is deleted.
-                  sourceFiber.tag = IncompleteClassComponent;
+                if (sourceFiber.tag === IndeterminateComponent) {
+                  // Let's just assume it's a functional component. This fiber will
+                  // be unmounted in the immediate next commit, anyway.
+                  sourceFiber.tag = FunctionalComponent;
                 }
-              } // Exit without suspending.
+
+                if (sourceFiber.tag === ClassComponent || sourceFiber.tag === ClassComponentLazy) {
+                  // We're going to commit this fiber even though it didn't
+                  // complete. But we shouldn't call any lifecycle methods or
+                  // callbacks. Remove all lifecycle effect tags.
+                  sourceFiber.effectTag &= ~LifecycleEffectMask;
+
+                  if (sourceFiber.alternate === null) {
+                    // We're about to mount a class component that doesn't have an
+                    // instance. Turn this into a dummy functional component instead,
+                    // to prevent type errors. This is a bit weird but it's an edge
+                    // case and we're about to synchronously delete this
+                    // component, anyway.
+                    sourceFiber.tag = FunctionalComponent;
+                    sourceFiber.type = NoopComponent;
+                  }
+                } // Exit without suspending.
 
 
+                return;
+              } // Confirmed that the boundary is in a strict mode tree. Continue with
+              // the normal suspend path.
+
+
+              var absoluteTimeoutMs = void 0;
+
+              if (earliestTimeoutMs === -1) {
+                // If no explicit threshold is given, default to an abitrarily large
+                // value. The actual size doesn't matter because the threshold for the
+                // whole tree will be clamped to the expiration time.
+                absoluteTimeoutMs = maxSigned31BitInt;
+              } else {
+                if (startTimeMs === -1) {
+                  // This suspend happened outside of any already timed-out
+                  // placeholders. We don't know exactly when the update was scheduled,
+                  // but we can infer an approximate start time from the expiration
+                  // time. First, find the earliest uncommitted expiration time in the
+                  // tree, including work that is suspended. Then subtract the offset
+                  // used to compute an async update's expiration time. This will cause
+                  // high priority (interactive) work to expire earlier than necessary,
+                  // but we can account for this by adjusting for the Just Noticeable
+                  // Difference.
+                  var earliestExpirationTime = findEarliestOutstandingPriorityLevel(root, renderExpirationTime);
+                  var earliestExpirationTimeMs = expirationTimeToMs(earliestExpirationTime);
+                  startTimeMs = earliestExpirationTimeMs - LOW_PRIORITY_EXPIRATION;
+                }
+
+                absoluteTimeoutMs = startTimeMs + earliestTimeoutMs;
+              } // Mark the earliest timeout in the suspended fiber's ancestor path.
+              // After completing the root, we'll take the largest of all the
+              // suspended fiber's timeouts and use it to compute a timeout for the
+              // whole tree.
+
+
+              renderDidSuspend(root, absoluteTimeoutMs, renderExpirationTime);
+              _workInProgress.effectTag |= ShouldCapture;
+              _workInProgress.expirationTime = renderExpirationTime;
               return;
-            } // Confirmed that the boundary is in a concurrent mode tree. Continue
-            // with the normal suspend path.
+            } // This boundary already captured during this render. Continue to the
+            // next boundary.
 
-
-            var absoluteTimeoutMs = void 0;
-
-            if (earliestTimeoutMs === -1) {
-              // If no explicit threshold is given, default to an abitrarily large
-              // value. The actual size doesn't matter because the threshold for the
-              // whole tree will be clamped to the expiration time.
-              absoluteTimeoutMs = maxSigned31BitInt;
-            } else {
-              if (startTimeMs === -1) {
-                // This suspend happened outside of any already timed-out
-                // placeholders. We don't know exactly when the update was
-                // scheduled, but we can infer an approximate start time from the
-                // expiration time. First, find the earliest uncommitted expiration
-                // time in the tree, including work that is suspended. Then subtract
-                // the offset used to compute an async update's expiration time.
-                // This will cause high priority (interactive) work to expire
-                // earlier than necessary, but we can account for this by adjusting
-                // for the Just Noticeable Difference.
-                var earliestExpirationTime = findEarliestOutstandingPriorityLevel(root, renderExpirationTime);
-                var earliestExpirationTimeMs = expirationTimeToMs(earliestExpirationTime);
-                startTimeMs = earliestExpirationTimeMs - LOW_PRIORITY_EXPIRATION;
-              }
-
-              absoluteTimeoutMs = startTimeMs + earliestTimeoutMs;
-            } // Mark the earliest timeout in the suspended fiber's ancestor path.
-            // After completing the root, we'll take the largest of all the
-            // suspended fiber's timeouts and use it to compute a timeout for the
-            // whole tree.
-
-
-            renderDidSuspend(root, absoluteTimeoutMs, renderExpirationTime);
-            _workInProgress.effectTag |= ShouldCapture;
-            _workInProgress.expirationTime = renderExpirationTime;
-            return;
-          } // This boundary already captured during this render. Continue to the next
-          // boundary.
-
+          }
 
           _workInProgress = _workInProgress.return;
         } while (_workInProgress !== null); // No boundary was found. Fallthrough to error mode.
@@ -20106,12 +19135,13 @@ if ("development" !== "production") {
             }
 
           case ClassComponent:
+          case ClassComponentLazy:
             // Capture and retry
             var errorInfo = value;
             var ctor = workInProgress.type;
             var instance = workInProgress.stateNode;
 
-            if ((workInProgress.effectTag & DidCapture) === NoEffect && (typeof ctor.getDerivedStateFromError === 'function' || instance !== null && typeof instance.componentDidCatch === 'function' && !isAlreadyFailedLegacyErrorBoundary(instance))) {
+            if ((workInProgress.effectTag & DidCapture) === NoEffect && (typeof ctor.getDerivedStateFromCatch === 'function' && enableGetDerivedStateFromCatch || instance !== null && typeof instance.componentDidCatch === 'function' && !isAlreadyFailedLegacyErrorBoundary(instance))) {
               workInProgress.effectTag |= ShouldCapture;
               workInProgress.expirationTime = renderExpirationTime; // Schedule the error boundary to re-render using updated state
 
@@ -20151,13 +19181,31 @@ if ("development" !== "production") {
             return null;
           }
 
+        case ClassComponentLazy:
+          {
+            var _Component = workInProgress.type._reactResult;
+
+            if (isContextProvider(_Component)) {
+              popContext(workInProgress);
+            }
+
+            var _effectTag = workInProgress.effectTag;
+
+            if (_effectTag & ShouldCapture) {
+              workInProgress.effectTag = _effectTag & ~ShouldCapture | DidCapture;
+              return workInProgress;
+            }
+
+            return null;
+          }
+
         case HostRoot:
           {
             popHostContainer(workInProgress);
             popTopLevelContextObject(workInProgress);
-            var _effectTag = workInProgress.effectTag;
-            !((_effectTag & DidCapture) === NoEffect) ? invariant(false, 'The root failed to unmount after an error. This is likely a bug in React. Please file an issue.') : void 0;
-            workInProgress.effectTag = _effectTag & ~ShouldCapture | DidCapture;
+            var _effectTag2 = workInProgress.effectTag;
+            !((_effectTag2 & DidCapture) === NoEffect) ? invariant(false, 'The root failed to unmount after an error. This is likely a bug in React. Please file an issue.') : void 0;
+            workInProgress.effectTag = _effectTag2 & ~ShouldCapture | DidCapture;
             return workInProgress;
           }
 
@@ -20167,40 +19215,12 @@ if ("development" !== "production") {
             return null;
           }
 
-        case SuspenseComponent:
+        case PlaceholderComponent:
           {
-            var _effectTag2 = workInProgress.effectTag;
+            var _effectTag3 = workInProgress.effectTag;
 
-            if (_effectTag2 & ShouldCapture) {
-              workInProgress.effectTag = _effectTag2 & ~ShouldCapture | DidCapture; // Captured a suspense effect. Set the boundary's `alreadyCaptured`
-              // state to true so we know to render the fallback.
-
-              var current = workInProgress.alternate;
-              var currentState = current !== null ? current.memoizedState : null;
-              var nextState = workInProgress.memoizedState;
-
-              if (nextState === null) {
-                // No existing state. Create a new object.
-                nextState = {
-                  alreadyCaptured: true,
-                  didTimeout: false,
-                  timedOutAt: NoWork
-                };
-              } else if (currentState === nextState) {
-                // There is an existing state but it's the same as the current tree's.
-                // Clone the object.
-                nextState = {
-                  alreadyCaptured: true,
-                  didTimeout: nextState.didTimeout,
-                  timedOutAt: nextState.timedOutAt
-                };
-              } else {
-                // Already have a clone, so it's safe to mutate.
-                nextState.alreadyCaptured = true;
-              }
-
-              workInProgress.memoizedState = nextState; // Re-render the boundary.
-
+            if (_effectTag3 & ShouldCapture) {
+              workInProgress.effectTag = _effectTag3 & ~ShouldCapture | DidCapture;
               return workInProgress;
             }
 
@@ -20227,6 +19247,17 @@ if ("development" !== "production") {
             var childContextTypes = interruptedWork.type.childContextTypes;
 
             if (childContextTypes !== null && childContextTypes !== undefined) {
+              popContext(interruptedWork);
+            }
+
+            break;
+          }
+
+        case ClassComponentLazy:
+          {
+            var _childContextTypes = interruptedWork.type._reactResult.childContextTypes;
+
+            if (_childContextTypes !== null && _childContextTypes !== undefined) {
               popContext(interruptedWork);
             }
 
@@ -20333,7 +19364,10 @@ if ("development" !== "production") {
     var isCommitting$1 = false;
     var legacyErrorBoundariesThatAlreadyFailed = null; // Used for performance tracking.
 
-    var interruptedBy = null;
+    var interruptedBy = null; // Do not decrement interaction counts in the event of suspense timeouts.
+    // This would lead to prematurely calling the interaction-complete hook.
+
+    var suspenseDidTimeout = false;
     var stashedWorkInProgressProperties = void 0;
     var replayUnitOfWork = void 0;
     var isReplayingFailedUnitOfWork = void 0;
@@ -20377,6 +19411,17 @@ if ("development" !== "production") {
               var Component = failedUnitOfWork.type;
 
               if (isContextProvider(Component)) {
+                popContext(failedUnitOfWork);
+              }
+
+              break;
+            }
+
+          case ClassComponentLazy:
+            {
+              var _Component = getResultFromResolvedThenable(failedUnitOfWork.type);
+
+              if (isContextProvider(_Component)) {
                 popContext(failedUnitOfWork);
               }
 
@@ -20546,10 +19591,13 @@ if ("development" !== "production") {
     function commitAllLifeCycles(finishedRoot, committedExpirationTime) {
       {
         ReactStrictModeWarnings.flushPendingUnsafeLifecycleWarnings();
-        ReactStrictModeWarnings.flushLegacyContextWarning();
 
         if (warnAboutDeprecatedLifecycles) {
           ReactStrictModeWarnings.flushPendingDeprecationWarnings();
+        }
+
+        if (warnAboutLegacyContextAPI) {
+          ReactStrictModeWarnings.flushLegacyContextWarning();
         }
       }
 
@@ -20607,12 +19655,27 @@ if ("development" !== "production") {
       var earliestRemainingTimeBeforeCommit = updateExpirationTimeBeforeCommit === NoWork || childExpirationTimeBeforeCommit !== NoWork && childExpirationTimeBeforeCommit < updateExpirationTimeBeforeCommit ? childExpirationTimeBeforeCommit : updateExpirationTimeBeforeCommit;
       markCommittedPriorityLevels(root, earliestRemainingTimeBeforeCommit);
       var prevInteractions = null;
+      var committedInteractions = enableSchedulerTracing ? [] : null;
 
       if (enableSchedulerTracing) {
         // Restore any pending interactions at this point,
         // So that cascading work triggered during the render phase will be accounted for.
         prevInteractions = tracing.__interactionsRef.current;
-        tracing.__interactionsRef.current = root.memoizedInteractions;
+        tracing.__interactionsRef.current = root.memoizedInteractions; // We are potentially finished with the current batch of interactions.
+        // So we should clear them out of the pending interaction map.
+        // We do this at the start of commit in case cascading work is scheduled by commit phase lifecycles.
+        // In that event, interaction data may be added back into the pending map for a future commit.
+        // We also store the interactions we are about to commit so that we can notify subscribers after we're done.
+        // These are stored as an Array rather than a Set,
+        // Because the same interaction may be pending for multiple expiration times,
+        // In which case it's important that we decrement the count the right number of times after finishing.
+
+        root.pendingInteractionMap.forEach(function (scheduledInteractions, scheduledExpirationTime) {
+          if (scheduledExpirationTime <= committedExpirationTime) {
+            committedInteractions.push.apply(committedInteractions, Array.from(scheduledInteractions));
+            root.pendingInteractionMap.delete(scheduledExpirationTime);
+          }
+        });
       } // Reset this to null before calling lifecycles
 
 
@@ -20779,34 +19842,29 @@ if ("development" !== "production") {
             unhandledError = error;
           }
         } finally {
-          // Clear completed interactions from the pending Map.
-          // Unless the render was suspended or cascading work was scheduled,
-          // In which case– leave pending interactions until the subsequent render.
-          var pendingInteractionMap = root.pendingInteractionMap;
-          pendingInteractionMap.forEach(function (scheduledInteractions, scheduledExpirationTime) {
-            // Only decrement the pending interaction count if we're done.
-            // If there's still work at the current priority,
-            // That indicates that we are waiting for suspense data.
-            if (earliestRemainingTimeAfterCommit === NoWork || scheduledExpirationTime < earliestRemainingTimeAfterCommit) {
-              pendingInteractionMap.delete(scheduledExpirationTime);
-              scheduledInteractions.forEach(function (interaction) {
-                interaction.__count--;
+          // Don't update interaction counts if we're frozen due to suspense.
+          // In this case, we can skip the completed-work check entirely.
+          if (!suspenseDidTimeout) {
+            // Now that we're done, check the completed batch of interactions.
+            // If no more work is outstanding for a given interaction,
+            // We need to notify the subscribers that it's finished.
+            committedInteractions.forEach(function (interaction) {
+              interaction.__count--;
 
-                if (subscriber !== null && interaction.__count === 0) {
-                  try {
-                    subscriber.onInteractionScheduledWorkCompleted(interaction);
-                  } catch (error) {
-                    // It's not safe for commitRoot() to throw.
-                    // Store the error for now and we'll re-throw in finishRendering().
-                    if (!hasUnhandledError) {
-                      hasUnhandledError = true;
-                      unhandledError = error;
-                    }
+              if (subscriber !== null && interaction.__count === 0) {
+                try {
+                  subscriber.onInteractionScheduledWorkCompleted(interaction);
+                } catch (error) {
+                  // It's not safe for commitRoot() to throw.
+                  // Store the error for now and we'll re-throw in finishRendering().
+                  if (!hasUnhandledError) {
+                    hasUnhandledError = true;
+                    unhandledError = error;
                   }
                 }
-              });
-            }
-          });
+              }
+            });
+          }
         }
       }
     }
@@ -20912,10 +19970,23 @@ if ("development" !== "production") {
             nextUnitOfWork = completeWork(current$$1, workInProgress, nextRenderExpirationTime);
           }
 
+          var next = nextUnitOfWork;
           stopWorkTimer(workInProgress);
           resetChildExpirationTime(workInProgress, nextRenderExpirationTime);
           {
             resetCurrentFiber();
+          }
+
+          if (next !== null) {
+            stopWorkTimer(workInProgress);
+
+            if (true && ReactFiberInstrumentation_1.debugTool) {
+              ReactFiberInstrumentation_1.debugTool.onCompleteWork(workInProgress);
+            } // If completing this work spawned new work, do that next. We'll come
+            // back here again.
+
+
+            return next;
           }
 
           if (returnFiber !== null && // Do not append effects to parents if a sibling failed to complete
@@ -20979,7 +20050,8 @@ if ("development" !== "production") {
           // capture values if possible.
 
 
-          var next = unwindWork(workInProgress, nextRenderExpirationTime); // Because this fiber did not complete, don't reset its expiration time.
+          var _next = unwindWork(workInProgress, nextRenderExpirationTime); // Because this fiber did not complete, don't reset its expiration time.
+
 
           if (workInProgress.effectTag & DidCapture) {
             // Restarting an error boundary
@@ -20992,7 +20064,7 @@ if ("development" !== "production") {
             resetCurrentFiber();
           }
 
-          if (next !== null) {
+          if (_next !== null) {
             stopWorkTimer(workInProgress);
 
             if (true && ReactFiberInstrumentation_1.debugTool) {
@@ -21001,16 +20073,16 @@ if ("development" !== "production") {
 
             if (enableProfilerTimer) {
               // Include the time spent working on failed children before continuing.
-              if (next.mode & ProfileMode) {
-                var actualDuration = next.actualDuration;
-                var child = next.child;
+              if (_next.mode & ProfileMode) {
+                var actualDuration = _next.actualDuration;
+                var child = _next.child;
 
                 while (child !== null) {
                   actualDuration += child.actualDuration;
                   child = child.sibling;
                 }
 
-                next.actualDuration = actualDuration;
+                _next.actualDuration = actualDuration;
               }
             } // If completing this work spawned new work, do that next. We'll come
             // back here again.
@@ -21018,8 +20090,8 @@ if ("development" !== "production") {
             // from the effect tag.
 
 
-            next.effectTag &= HostEffectMask;
-            return next;
+            _next.effectTag &= HostEffectMask;
+            return _next;
           }
 
           if (returnFiber !== null) {
@@ -21075,7 +20147,6 @@ if ("development" !== "production") {
         }
 
         next = beginWork(current$$1, workInProgress, nextRenderExpirationTime);
-        workInProgress.memoizedProps = workInProgress.pendingProps;
 
         if (workInProgress.mode & ProfileMode) {
           // Record the render duration assuming we didn't bailout (or error).
@@ -21083,7 +20154,6 @@ if ("development" !== "production") {
         }
       } else {
         next = beginWork(current$$1, workInProgress, nextRenderExpirationTime);
-        workInProgress.memoizedProps = workInProgress.pendingProps;
       }
 
       {
@@ -21129,8 +20199,17 @@ if ("development" !== "production") {
       !!isWorking ? invariant(false, 'renderRoot was called recursively. This error is likely caused by a bug in React. Please file an issue.') : void 0;
       isWorking = true;
       ReactCurrentOwner$2.currentDispatcher = Dispatcher;
-      var expirationTime = root.nextExpirationTimeToWorkOn; // Check if we're starting from a fresh stack, or if we're resuming from
+      var expirationTime = root.nextExpirationTimeToWorkOn;
+      var prevInteractions = null;
+
+      if (enableSchedulerTracing) {
+        // We're about to start new traced work.
+        // Restore pending interactions so cascading work triggered during the render phase will be accounted for.
+        prevInteractions = tracing.__interactionsRef.current;
+        tracing.__interactionsRef.current = root.memoizedInteractions;
+      } // Check if we're starting from a fresh stack, or if we're resuming from
       // previously yielded work.
+
 
       if (expirationTime !== nextRenderExpirationTime || root !== nextRoot || nextUnitOfWork === null) {
         // Reset the stack and start working from the root.
@@ -21177,15 +20256,6 @@ if ("development" !== "production") {
             }
           }
         }
-      }
-
-      var prevInteractions = null;
-
-      if (enableSchedulerTracing) {
-        // We're about to start new traced work.
-        // Restore pending interactions so cascading work triggered during the render phase will be accounted for.
-        prevInteractions = tracing.__interactionsRef.current;
-        tracing.__interactionsRef.current = root.memoizedInteractions;
       }
 
       var didFatal = false;
@@ -21318,7 +20388,7 @@ if ("development" !== "production") {
         }
       }
 
-      if (!isExpired && nextLatestAbsoluteTimeoutMs !== -1) {
+      if (enableSuspense && !isExpired && nextLatestAbsoluteTimeoutMs !== -1) {
         // The tree was suspended.
         var _suspendedExpirationTime2 = expirationTime;
         markSuspendedPriorityLevel(root, _suspendedExpirationTime2); // Find the earliest uncommitted expiration time in the tree, including
@@ -21356,10 +20426,11 @@ if ("development" !== "production") {
       while (fiber !== null) {
         switch (fiber.tag) {
           case ClassComponent:
+          case ClassComponentLazy:
             var ctor = fiber.type;
             var instance = fiber.stateNode;
 
-            if (typeof ctor.getDerivedStateFromError === 'function' || typeof instance.componentDidCatch === 'function' && !isAlreadyFailedLegacyErrorBoundary(instance)) {
+            if (typeof ctor.getDerivedStateFromCatch === 'function' || typeof instance.componentDidCatch === 'function' && !isAlreadyFailedLegacyErrorBoundary(instance)) {
               var errorInfo = createCapturedValue(value, sourceFiber);
               var update = createClassErrorUpdate(fiber, errorInfo, expirationTime);
               enqueueUpdate(fiber, update);
@@ -21442,7 +20513,7 @@ if ("development" !== "production") {
       } else {
         // No explicit expiration context was set, and we're not currently
         // performing work. Calculate a new expiration time.
-        if (fiber.mode & ConcurrentMode) {
+        if (fiber.mode & AsyncMode) {
           if (isBatchingInteractiveUpdates) {
             // This is an interactive update
             expirationTime = computeInteractiveExpiration(currentTime);
@@ -21466,7 +20537,7 @@ if ("development" !== "production") {
         // This is an interactive update. Keep track of the lowest pending
         // interactive expiration time. This allows us to synchronously flush
         // all interactive updates when needed.
-        if (expirationTime > lowestPriorityPendingInteractiveExpirationTime) {
+        if (lowestPriorityPendingInteractiveExpirationTime === NoWork || expirationTime > lowestPriorityPendingInteractiveExpirationTime) {
           lowestPriorityPendingInteractiveExpirationTime = expirationTime;
         }
       }
@@ -21485,69 +20556,43 @@ if ("development" !== "production") {
       nextRenderDidError = true;
     }
 
-    function retrySuspendedRoot(root, boundaryFiber, sourceFiber, suspendedTime) {
-      var retryTime = void 0;
+    function retrySuspendedRoot(root, fiber, suspendedTime) {
+      if (enableSuspense) {
+        var retryTime = void 0;
 
-      if (isPriorityLevelSuspended(root, suspendedTime)) {
-        // Ping at the original level
-        retryTime = suspendedTime;
-        markPingedPriorityLevel(root, retryTime);
-      } else {
-        // Suspense already timed out. Compute a new expiration time
-        var currentTime = requestCurrentTime();
-        retryTime = computeExpirationForFiber(currentTime, boundaryFiber);
-        markPendingPriorityLevel(root, retryTime);
-      } // TODO: If the suspense fiber has already rendered the primary children
-      // without suspending (that is, all of the promises have already resolved),
-      // we should not trigger another update here. One case this happens is when
-      // we are in sync mode and a single promise is thrown both on initial render
-      // and on update; we attach two .then(retrySuspendedRoot) callbacks and each
-      // one performs Sync work, rerendering the Suspense.
-
-
-      if ((boundaryFiber.mode & ConcurrentMode) !== NoContext) {
-        if (root === nextRoot && nextRenderExpirationTime === suspendedTime) {
-          // Received a ping at the same priority level at which we're currently
-          // rendering. Restart from the root.
-          nextRoot = null;
+        if (isPriorityLevelSuspended(root, suspendedTime)) {
+          // Ping at the original level
+          retryTime = suspendedTime;
+          markPingedPriorityLevel(root, retryTime);
+        } else {
+          // Placeholder already timed out. Compute a new expiration time
+          var currentTime = requestCurrentTime();
+          retryTime = computeExpirationForFiber(currentTime, fiber);
+          markPendingPriorityLevel(root, retryTime);
         }
-      }
 
-      scheduleWorkToRoot(boundaryFiber, retryTime);
+        scheduleWorkToRoot(fiber, retryTime);
+        var rootExpirationTime = root.expirationTime;
 
-      if ((boundaryFiber.mode & ConcurrentMode) === NoContext) {
-        // Outside of concurrent mode, we must schedule an update on the source
-        // fiber, too, since it already committed in an inconsistent state and
-        // therefore does not have any pending work.
-        scheduleWorkToRoot(sourceFiber, retryTime);
-        var sourceTag = sourceFiber.tag;
+        if (rootExpirationTime !== NoWork) {
+          if (enableSchedulerTracing) {
+            // Restore previous interactions so that new work is associated with them.
+            var prevInteractions = tracing.__interactionsRef.current;
+            tracing.__interactionsRef.current = root.memoizedInteractions; // Because suspense timeouts do not decrement the interaction count,
+            // Continued suspense work should also not increment the count.
 
-        if (sourceTag === ClassComponent && sourceFiber.stateNode !== null) {
-          // When we try rendering again, we should not reuse the current fiber,
-          // since it's known to be in an inconsistent state. Use a force updte to
-          // prevent a bail out.
-          var update = createUpdate(retryTime);
-          update.tag = ForceUpdate;
-          enqueueUpdate(sourceFiber, update);
+            storeInteractionsForExpirationTime(root, rootExpirationTime, false);
+            requestWork(root, rootExpirationTime);
+            tracing.__interactionsRef.current = prevInteractions;
+          } else {
+            requestWork(root, rootExpirationTime);
+          }
         }
-      }
-
-      var rootExpirationTime = root.expirationTime;
-
-      if (rootExpirationTime !== NoWork) {
-        requestWork(root, rootExpirationTime);
       }
     }
 
     function scheduleWorkToRoot(fiber, expirationTime) {
-      recordScheduleUpdate();
-      {
-        if (fiber.tag === ClassComponent) {
-          var instance = fiber.stateNode;
-          warnAboutInvalidUpdates(instance);
-        }
-      } // Update the source fiber's expiration time
-
+      // Update the source fiber's expiration time
       if (fiber.expirationTime === NoWork || fiber.expirationTime > expirationTime) {
         fiber.expirationTime = expirationTime;
       }
@@ -21560,82 +20605,92 @@ if ("development" !== "production") {
 
 
       var node = fiber.return;
-      var root = null;
 
       if (node === null && fiber.tag === HostRoot) {
-        root = fiber.stateNode;
-      } else {
-        while (node !== null) {
-          alternate = node.alternate;
+        return fiber.stateNode;
+      }
 
-          if (node.childExpirationTime === NoWork || node.childExpirationTime > expirationTime) {
-            node.childExpirationTime = expirationTime;
+      while (node !== null) {
+        alternate = node.alternate;
 
-            if (alternate !== null && (alternate.childExpirationTime === NoWork || alternate.childExpirationTime > expirationTime)) {
-              alternate.childExpirationTime = expirationTime;
-            }
-          } else if (alternate !== null && (alternate.childExpirationTime === NoWork || alternate.childExpirationTime > expirationTime)) {
+        if (node.childExpirationTime === NoWork || node.childExpirationTime > expirationTime) {
+          node.childExpirationTime = expirationTime;
+
+          if (alternate !== null && (alternate.childExpirationTime === NoWork || alternate.childExpirationTime > expirationTime)) {
             alternate.childExpirationTime = expirationTime;
           }
-
-          if (node.return === null && node.tag === HostRoot) {
-            root = node.stateNode;
-            break;
-          }
-
-          node = node.return;
-        }
-      }
-
-      if (root === null) {
-        if (true && fiber.tag === ClassComponent) {
-          warnAboutUpdateOnUnmounted(fiber);
+        } else if (alternate !== null && (alternate.childExpirationTime === NoWork || alternate.childExpirationTime > expirationTime)) {
+          alternate.childExpirationTime = expirationTime;
         }
 
-        return null;
+        if (node.return === null && node.tag === HostRoot) {
+          return node.stateNode;
+        }
+
+        node = node.return;
       }
 
-      if (enableSchedulerTracing) {
-        var interactions = tracing.__interactionsRef.current;
+      return null;
+    }
 
-        if (interactions.size > 0) {
-          var pendingInteractionMap = root.pendingInteractionMap;
-          var pendingInteractions = pendingInteractionMap.get(expirationTime);
+    function storeInteractionsForExpirationTime(root, expirationTime, updateInteractionCounts) {
+      if (!enableSchedulerTracing) {
+        return;
+      }
 
-          if (pendingInteractions != null) {
-            interactions.forEach(function (interaction) {
-              if (!pendingInteractions.has(interaction)) {
-                // Update the pending async work count for previously unscheduled interaction.
-                interaction.__count++;
-              }
+      var interactions = tracing.__interactionsRef.current;
 
-              pendingInteractions.add(interaction);
-            });
-          } else {
-            pendingInteractionMap.set(expirationTime, new Set(interactions)); // Update the pending async work count for the current interactions.
+      if (interactions.size > 0) {
+        var pendingInteractions = root.pendingInteractionMap.get(expirationTime);
 
+        if (pendingInteractions != null) {
+          interactions.forEach(function (interaction) {
+            if (updateInteractionCounts && !pendingInteractions.has(interaction)) {
+              // Update the pending async work count for previously unscheduled interaction.
+              interaction.__count++;
+            }
+
+            pendingInteractions.add(interaction);
+          });
+        } else {
+          root.pendingInteractionMap.set(expirationTime, new Set(interactions)); // Update the pending async work count for the current interactions.
+
+          if (updateInteractionCounts) {
             interactions.forEach(function (interaction) {
               interaction.__count++;
             });
           }
+        }
 
-          var subscriber = tracing.__subscriberRef.current;
+        var subscriber = tracing.__subscriberRef.current;
 
-          if (subscriber !== null) {
-            var threadID = computeThreadID(expirationTime, root.interactionThreadID);
-            subscriber.onWorkScheduled(interactions, threadID);
-          }
+        if (subscriber !== null) {
+          var threadID = computeThreadID(expirationTime, root.interactionThreadID);
+          subscriber.onWorkScheduled(interactions, threadID);
         }
       }
-
-      return root;
     }
 
     function scheduleWork(fiber, expirationTime) {
+      recordScheduleUpdate();
+      {
+        if (fiber.tag === ClassComponent || fiber.tag === ClassComponentLazy) {
+          var instance = fiber.stateNode;
+          warnAboutInvalidUpdates(instance);
+        }
+      }
       var root = scheduleWorkToRoot(fiber, expirationTime);
 
       if (root === null) {
+        if (true && (fiber.tag === ClassComponent || fiber.tag === ClassComponentLazy)) {
+          warnAboutUpdateOnUnmounted(fiber);
+        }
+
         return;
+      }
+
+      if (enableSchedulerTracing) {
+        storeInteractionsForExpirationTime(root, expirationTime, true);
       }
 
       if (!isWorking && nextRenderExpirationTime !== NoWork && expirationTime < nextRenderExpirationTime) {
@@ -21691,7 +20746,7 @@ if ("development" !== "production") {
     var isUnbatchingUpdates = false;
     var isBatchingInteractiveUpdates = false;
     var completedBatches = null;
-    var originalStartTimeMs = scheduler.unstable_now();
+    var originalStartTimeMs = schedule.unstable_now();
     var currentRendererTime = msToExpirationTime(originalStartTimeMs);
     var currentSchedulerTime = currentRendererTime; // Use these to prevent an infinite loop of nested updates
 
@@ -21701,7 +20756,7 @@ if ("development" !== "production") {
     var timeHeuristicForUnitOfWork = 1;
 
     function recomputeCurrentRendererTime() {
-      var currentTimeMs = scheduler.unstable_now() - originalStartTimeMs;
+      var currentTimeMs = schedule.unstable_now() - originalStartTimeMs;
       currentRendererTime = msToExpirationTime(currentTimeMs);
     }
 
@@ -21715,7 +20770,7 @@ if ("development" !== "production") {
           if (callbackID !== null) {
             // Existing callback has insufficient timeout. Cancel and schedule a
             // new one.
-            scheduler.unstable_cancelCallback(callbackID);
+            schedule.unstable_cancelScheduledWork(callbackID);
           }
         } // The request callback timer is already running. Don't start a new one.
 
@@ -21724,10 +20779,10 @@ if ("development" !== "production") {
       }
 
       callbackExpirationTime = expirationTime;
-      var currentMs = scheduler.unstable_now() - originalStartTimeMs;
+      var currentMs = schedule.unstable_now() - originalStartTimeMs;
       var expirationTimeMs = expirationTimeToMs(expirationTime);
       var timeout = expirationTimeMs - currentMs;
-      callbackID = scheduler.unstable_scheduleCallback(performAsyncWork, {
+      callbackID = schedule.unstable_scheduleWork(performAsyncWork, {
         timeout: timeout
       });
     } // For every call to renderRoot, one of onFatal, onComplete, onSuspend, and
@@ -21748,7 +20803,7 @@ if ("development" !== "production") {
     function onSuspend(root, finishedWork, suspendedExpirationTime, rootExpirationTime, msUntilTimeout) {
       root.expirationTime = rootExpirationTime;
 
-      if (msUntilTimeout === 0 && !shouldYield()) {
+      if (enableSuspense && msUntilTimeout === 0 && !shouldYield()) {
         // Don't wait an additional tick. Commit the tree immediately.
         root.pendingCommitExpirationTime = suspendedExpirationTime;
         root.finishedWork = finishedWork;
@@ -21763,15 +20818,26 @@ if ("development" !== "production") {
     }
 
     function onTimeout(root, finishedWork, suspendedExpirationTime) {
-      // The root timed out. Commit it.
-      root.pendingCommitExpirationTime = suspendedExpirationTime;
-      root.finishedWork = finishedWork; // Read the current time before entering the commit phase. We can be
-      // certain this won't cause tearing related to batching of event updates
-      // because we're at the top of a timer event.
+      if (enableSuspense) {
+        // The root timed out. Commit it.
+        root.pendingCommitExpirationTime = suspendedExpirationTime;
+        root.finishedWork = finishedWork; // Read the current time before entering the commit phase. We can be
+        // certain this won't cause tearing related to batching of event updates
+        // because we're at the top of a timer event.
 
-      recomputeCurrentRendererTime();
-      currentSchedulerTime = currentRendererTime;
-      flushRoot(root, suspendedExpirationTime);
+        recomputeCurrentRendererTime();
+        currentSchedulerTime = currentRendererTime;
+
+        if (enableSchedulerTracing) {
+          // Don't update pending interaction counts for suspense timeouts,
+          // Because we know we still need to do more work in this case.
+          suspenseDidTimeout = true;
+          flushRoot(root, suspendedExpirationTime);
+          suspenseDidTimeout = false;
+        } else {
+          flushRoot(root, suspendedExpirationTime);
+        }
+      }
     }
 
     function onCommit(root, expirationTime) {
@@ -22083,7 +21149,7 @@ if ("development" !== "production") {
 
           var timeoutHandle = root.timeoutHandle;
 
-          if (timeoutHandle !== noTimeout) {
+          if (enableSuspense && timeoutHandle !== noTimeout) {
             root.timeoutHandle = noTimeout; // $FlowFixMe Complains noTimeout is not a TimeoutID, despite the check above
 
             cancelTimeout(timeoutHandle);
@@ -22111,7 +21177,7 @@ if ("development" !== "production") {
 
           var _timeoutHandle = root.timeoutHandle;
 
-          if (_timeoutHandle !== noTimeout) {
+          if (enableSuspense && _timeoutHandle !== noTimeout) {
             root.timeoutHandle = noTimeout; // $FlowFixMe Complains noTimeout is not a TimeoutID, despite the check above
 
             cancelTimeout(_timeoutHandle);
@@ -22311,10 +21377,8 @@ if ("development" !== "production") {
 
 
     var didWarnAboutNestedUpdates = void 0;
-    var didWarnAboutFindNodeInStrictMode = void 0;
     {
       didWarnAboutNestedUpdates = false;
-      didWarnAboutFindNodeInStrictMode = {};
     }
 
     function getContextForSubtree(parentComponent) {
@@ -22330,6 +21394,12 @@ if ("development" !== "production") {
 
         if (isContextProvider(Component)) {
           return processChildContext(fiber, Component, parentContext);
+        }
+      } else if (fiber.tag === ClassComponentLazy) {
+        var _Component = getResultFromResolvedThenable(fiber.type);
+
+        if (isContextProvider(_Component)) {
+          return processChildContext(fiber, _Component, parentContext);
         }
       }
 
@@ -22406,45 +21476,8 @@ if ("development" !== "production") {
       return hostFiber.stateNode;
     }
 
-    function findHostInstanceWithWarning(component, methodName) {
-      {
-        var fiber = get(component);
-
-        if (fiber === undefined) {
-          if (typeof component.render === 'function') {
-            invariant(false, 'Unable to find node on an unmounted component.');
-          } else {
-            invariant(false, 'Argument appears to not be a ReactComponent. Keys: %s', Object.keys(component));
-          }
-        }
-
-        var hostFiber = findCurrentHostFiber(fiber);
-
-        if (hostFiber === null) {
-          return null;
-        }
-
-        if (hostFiber.mode & StrictMode) {
-          var componentName = getComponentName(fiber.type) || 'Component';
-
-          if (!didWarnAboutFindNodeInStrictMode[componentName]) {
-            didWarnAboutFindNodeInStrictMode[componentName] = true;
-
-            if (fiber.mode & StrictMode) {
-              warningWithoutStack$1(false, '%s is deprecated in StrictMode. ' + '%s was passed an instance of %s which is inside StrictMode. ' + 'Instead, add a ref directly to the element you want to reference.' + '\n%s' + '\n\nLearn more about using refs safely here:' + '\nhttps://fb.me/react-strict-mode-find-node', methodName, methodName, componentName, getStackByFiberInDevAndProd(hostFiber));
-            } else {
-              warningWithoutStack$1(false, '%s is deprecated in StrictMode. ' + '%s was passed an instance of %s which renders StrictMode children. ' + 'Instead, add a ref directly to the element you want to reference.' + '\n%s' + '\n\nLearn more about using refs safely here:' + '\nhttps://fb.me/react-strict-mode-find-node', methodName, methodName, componentName, getStackByFiberInDevAndProd(hostFiber));
-            }
-          }
-        }
-
-        return hostFiber.stateNode;
-      }
-      return findHostInstance(component);
-    }
-
-    function createContainer(containerInfo, isConcurrent, hydrate) {
-      return createFiberRoot(containerInfo, isConcurrent, hydrate);
+    function createContainer(containerInfo, isAsync, hydrate) {
+      return createFiberRoot(containerInfo, isAsync, hydrate);
     }
 
     function updateContainer(element, container, parentComponent, callback) {
@@ -22519,7 +21552,7 @@ if ("development" !== "production") {
     } // TODO: this is special because it gets imported during build.
 
 
-    var ReactVersion = '16.6.0'; // TODO: This type is shared between the reconciler and ReactDOM, but will
+    var ReactVersion = '16.5.2'; // TODO: This type is shared between the reconciler and ReactDOM, but will
     // eventually be lifted out to the renderer.
 
     var ReactCurrentOwner = ReactSharedInternals.ReactCurrentOwner;
@@ -22554,6 +21587,9 @@ if ("development" !== "production") {
       };
     }
     setRestoreImplementation(restoreControlledState$1);
+    /* eslint-disable no-use-before-define */
+
+    /* eslint-enable no-use-before-define */
 
     function ReactBatch(root) {
       var expirationTime = computeUniqueAsyncExpiration();
@@ -22713,8 +21749,8 @@ if ("development" !== "production") {
       }
     };
 
-    function ReactRoot(container, isConcurrent, hydrate) {
-      var root = createContainer(container, isConcurrent, hydrate);
+    function ReactRoot(container, isAsync, hydrate) {
+      var root = createContainer(container, isAsync, hydrate);
       this._internalRoot = root;
     }
 
@@ -22852,8 +21888,8 @@ if ("development" !== "production") {
         }
       } // Legacy roots are not async by default.
 
-      var isConcurrent = false;
-      return new ReactRoot(container, isConcurrent, shouldHydrate);
+      var isAsync = false;
+      return new ReactRoot(container, isAsync, shouldHydrate);
     }
 
     function legacyRenderSubtreeIntoContainer(parentComponent, children, container, forceHydrate, callback) {
@@ -22937,9 +21973,6 @@ if ("development" !== "production") {
           return componentOrElement;
         }
 
-        {
-          return findHostInstanceWithWarning(componentOrElement, 'findDOMNode');
-        }
         return findHostInstance(componentOrElement);
       },
       hydrate: function (element, container, callback) {
@@ -23038,7 +22071,7 @@ if ("development" !== "production") {
     module.exports = reactDom;
   })();
 }
-},{"react":"../node_modules/react/index.js","object-assign":"../node_modules/object-assign/index.js","prop-types/checkPropTypes":"../node_modules/prop-types/checkPropTypes.js","scheduler":"../node_modules/scheduler/index.js","scheduler/tracing":"../node_modules/scheduler/tracing.js"}],"../node_modules/react-dom/index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","object-assign":"../node_modules/object-assign/index.js","prop-types/checkPropTypes":"../node_modules/prop-types/checkPropTypes.js","schedule":"../node_modules/schedule/index.js","schedule/tracing":"../node_modules/schedule/tracing.js"}],"../node_modules/react-dom/index.js":[function(require,module,exports) {
 'use strict';
 
 function checkDCE() {
@@ -23076,132 +22109,811 @@ if ("development" === 'production') {
 } else {
   module.exports = require('./cjs/react-dom.development.js');
 }
-},{"./cjs/react-dom.development.js":"../node_modules/react-dom/cjs/react-dom.development.js"}],"registerServiceWorker.js":[function(require,module,exports) {
-"use strict";
+},{"./cjs/react-dom.development.js":"../node_modules/react-dom/cjs/react-dom.development.js"}],"../node_modules/regenerator-runtime/runtime.js":[function(require,module,exports) {
+var global = arguments[3];
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = register;
-exports.unregister = unregister;
-// In production, we register a service worker to serve assets from local cache.
-// This lets the app load faster on subsequent visits in production, and gives
-// it offline capabilities. However, it also means that developers (and users)
-// will only see deployed updates on the "N+1" visit to a page, since previously
-// cached resources are updated in the background.
-// To learn more about the benefits of this model, read https://goo.gl/KwvDNy.
-// This link also includes instructions on opting out of this behavior.
-var isLocalhost = Boolean(window.location.hostname === 'localhost' || // [::1] is the IPv6 localhost address.
-window.location.hostname === '[::1]' || // 127.0.0.1/8 is considered localhost for IPv4.
-window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/));
+!(function(global) {
+  "use strict";
 
-var showUpdateBar = function showUpdateBar() {
-  var snackbar = document.getElementById('snackbar');
-  snackbar.className = 'show';
-}; // $(function() {
-//   // The click event on the pop up notification
-//   document.getElementById('reload').addEventListener('click', function() {
-//     newWorker.postMessage({
-//       action: 'skipWaiting',
-//     })
-//   })
-// })
+  var Op = Object.prototype;
+  var hasOwn = Op.hasOwnProperty;
+  var undefined; // More compressible than void 0.
+  var $Symbol = typeof Symbol === "function" ? Symbol : {};
+  var iteratorSymbol = $Symbol.iterator || "@@iterator";
+  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
+  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
 
-
-function register() {
-  if ("development" === 'production' && 'serviceWorker' in navigator) {
-    // The URL constructor is available in all browsers that support SW.
-    var publicUrl = new URL(undefined, window.location);
-
-    if (publicUrl.origin !== window.location.origin) {
-      // Our service worker won't work if PUBLIC_URL is on a different origin
-      // from what our page is served on. This might happen if a CDN is used to
-      // serve assets; see https://github.com/facebookincubator/create-react-app/issues/2374
-      return;
+  var inModule = typeof module === "object";
+  var runtime = global.regeneratorRuntime;
+  if (runtime) {
+    if (inModule) {
+      // If regeneratorRuntime is defined globally and we're in a module,
+      // make the exports object identical to regeneratorRuntime.
+      module.exports = runtime;
     }
+    // Don't bother evaluating the rest of this file if the runtime was
+    // already defined globally.
+    return;
+  }
 
-    window.addEventListener('load', function () {
-      var swUrl = "service-worker.js";
+  // Define the runtime globally (as expected by generated code) as either
+  // module.exports (if we're in a module) or a new, empty object.
+  runtime = global.regeneratorRuntime = inModule ? module.exports : {};
 
-      if (isLocalhost) {
-        // This is running on localhost. Lets check if a service worker still exists or not.
-        checkValidServiceWorker(swUrl); // Add some additional logging to localhost, pointing developers to the
-        // service worker/PWA documentation.
+  function wrap(innerFn, outerFn, self, tryLocsList) {
+    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
+    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
+    var generator = Object.create(protoGenerator.prototype);
+    var context = new Context(tryLocsList || []);
 
-        navigator.serviceWorker.ready.then(function () {// console.log(
-          //   'This web app is being served cache-first by a service ' +
-          //     'worker. To learn more, visit https://goo.gl/SC7cgQ'
-          // )
-        });
-      } else {
-        // Is not local host. Just register service worker
-        registerValidSW(swUrl);
-      }
+    // The ._invoke method unifies the implementations of the .next,
+    // .throw, and .return methods.
+    generator._invoke = makeInvokeMethod(innerFn, self, context);
+
+    return generator;
+  }
+  runtime.wrap = wrap;
+
+  // Try/catch helper to minimize deoptimizations. Returns a completion
+  // record like context.tryEntries[i].completion. This interface could
+  // have been (and was previously) designed to take a closure to be
+  // invoked without arguments, but in all the cases we care about we
+  // already have an existing method we want to call, so there's no need
+  // to create a new function object. We can even get away with assuming
+  // the method takes exactly one argument, since that happens to be true
+  // in every case, so we don't have to touch the arguments object. The
+  // only additional allocation required is the completion record, which
+  // has a stable shape and so hopefully should be cheap to allocate.
+  function tryCatch(fn, obj, arg) {
+    try {
+      return { type: "normal", arg: fn.call(obj, arg) };
+    } catch (err) {
+      return { type: "throw", arg: err };
+    }
+  }
+
+  var GenStateSuspendedStart = "suspendedStart";
+  var GenStateSuspendedYield = "suspendedYield";
+  var GenStateExecuting = "executing";
+  var GenStateCompleted = "completed";
+
+  // Returning this object from the innerFn has the same effect as
+  // breaking out of the dispatch switch statement.
+  var ContinueSentinel = {};
+
+  // Dummy constructor functions that we use as the .constructor and
+  // .constructor.prototype properties for functions that return Generator
+  // objects. For full spec compliance, you may wish to configure your
+  // minifier not to mangle the names of these two functions.
+  function Generator() {}
+  function GeneratorFunction() {}
+  function GeneratorFunctionPrototype() {}
+
+  // This is a polyfill for %IteratorPrototype% for environments that
+  // don't natively support it.
+  var IteratorPrototype = {};
+  IteratorPrototype[iteratorSymbol] = function () {
+    return this;
+  };
+
+  var getProto = Object.getPrototypeOf;
+  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+  if (NativeIteratorPrototype &&
+      NativeIteratorPrototype !== Op &&
+      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
+    // This environment has a native %IteratorPrototype%; use it instead
+    // of the polyfill.
+    IteratorPrototype = NativeIteratorPrototype;
+  }
+
+  var Gp = GeneratorFunctionPrototype.prototype =
+    Generator.prototype = Object.create(IteratorPrototype);
+  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
+  GeneratorFunctionPrototype.constructor = GeneratorFunction;
+  GeneratorFunctionPrototype[toStringTagSymbol] =
+    GeneratorFunction.displayName = "GeneratorFunction";
+
+  // Helper for defining the .next, .throw, and .return methods of the
+  // Iterator interface in terms of a single ._invoke method.
+  function defineIteratorMethods(prototype) {
+    ["next", "throw", "return"].forEach(function(method) {
+      prototype[method] = function(arg) {
+        return this._invoke(method, arg);
+      };
     });
   }
-}
 
-function registerValidSW(swUrl) {
-  navigator.serviceWorker.register(swUrl).then(function (registration) {
-    registration.onupdatefound = function () {
-      var installingWorker = registration.installing;
+  runtime.isGeneratorFunction = function(genFun) {
+    var ctor = typeof genFun === "function" && genFun.constructor;
+    return ctor
+      ? ctor === GeneratorFunction ||
+        // For the native GeneratorFunction constructor, the best we can
+        // do is to check its .name property.
+        (ctor.displayName || ctor.name) === "GeneratorFunction"
+      : false;
+  };
 
-      installingWorker.onstatechange = function () {
-        if (installingWorker.state === 'installed') {
-          if (navigator.serviceWorker.controller) {
-            showUpdateBar();
-          } else {// At this point, everything has been precached.
-            // It's the perfect time to display a
-            // "Content is cached for offline use." message.
-            //console.log('Content is cached for offline use.')
+  runtime.mark = function(genFun) {
+    if (Object.setPrototypeOf) {
+      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
+    } else {
+      genFun.__proto__ = GeneratorFunctionPrototype;
+      if (!(toStringTagSymbol in genFun)) {
+        genFun[toStringTagSymbol] = "GeneratorFunction";
+      }
+    }
+    genFun.prototype = Object.create(Gp);
+    return genFun;
+  };
+
+  // Within the body of any async function, `await x` is transformed to
+  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
+  // `hasOwn.call(value, "__await")` to determine if the yielded value is
+  // meant to be awaited.
+  runtime.awrap = function(arg) {
+    return { __await: arg };
+  };
+
+  function AsyncIterator(generator) {
+    function invoke(method, arg, resolve, reject) {
+      var record = tryCatch(generator[method], generator, arg);
+      if (record.type === "throw") {
+        reject(record.arg);
+      } else {
+        var result = record.arg;
+        var value = result.value;
+        if (value &&
+            typeof value === "object" &&
+            hasOwn.call(value, "__await")) {
+          return Promise.resolve(value.__await).then(function(value) {
+            invoke("next", value, resolve, reject);
+          }, function(err) {
+            invoke("throw", err, resolve, reject);
+          });
+        }
+
+        return Promise.resolve(value).then(function(unwrapped) {
+          // When a yielded Promise is resolved, its final value becomes
+          // the .value of the Promise<{value,done}> result for the
+          // current iteration.
+          result.value = unwrapped;
+          resolve(result);
+        }, function(error) {
+          // If a rejected Promise was yielded, throw the rejection back
+          // into the async generator function so it can be handled there.
+          return invoke("throw", error, resolve, reject);
+        });
+      }
+    }
+
+    var previousPromise;
+
+    function enqueue(method, arg) {
+      function callInvokeWithMethodAndArg() {
+        return new Promise(function(resolve, reject) {
+          invoke(method, arg, resolve, reject);
+        });
+      }
+
+      return previousPromise =
+        // If enqueue has been called before, then we want to wait until
+        // all previous Promises have been resolved before calling invoke,
+        // so that results are always delivered in the correct order. If
+        // enqueue has not been called before, then it is important to
+        // call invoke immediately, without waiting on a callback to fire,
+        // so that the async generator function has the opportunity to do
+        // any necessary setup in a predictable way. This predictability
+        // is why the Promise constructor synchronously invokes its
+        // executor callback, and why async functions synchronously
+        // execute code before the first await. Since we implement simple
+        // async functions in terms of async generators, it is especially
+        // important to get this right, even though it requires care.
+        previousPromise ? previousPromise.then(
+          callInvokeWithMethodAndArg,
+          // Avoid propagating failures to Promises returned by later
+          // invocations of the iterator.
+          callInvokeWithMethodAndArg
+        ) : callInvokeWithMethodAndArg();
+    }
+
+    // Define the unified helper method that is used to implement .next,
+    // .throw, and .return (see defineIteratorMethods).
+    this._invoke = enqueue;
+  }
+
+  defineIteratorMethods(AsyncIterator.prototype);
+  AsyncIterator.prototype[asyncIteratorSymbol] = function () {
+    return this;
+  };
+  runtime.AsyncIterator = AsyncIterator;
+
+  // Note that simple async functions are implemented on top of
+  // AsyncIterator objects; they just return a Promise for the value of
+  // the final result produced by the iterator.
+  runtime.async = function(innerFn, outerFn, self, tryLocsList) {
+    var iter = new AsyncIterator(
+      wrap(innerFn, outerFn, self, tryLocsList)
+    );
+
+    return runtime.isGeneratorFunction(outerFn)
+      ? iter // If outerFn is a generator, return the full iterator.
+      : iter.next().then(function(result) {
+          return result.done ? result.value : iter.next();
+        });
+  };
+
+  function makeInvokeMethod(innerFn, self, context) {
+    var state = GenStateSuspendedStart;
+
+    return function invoke(method, arg) {
+      if (state === GenStateExecuting) {
+        throw new Error("Generator is already running");
+      }
+
+      if (state === GenStateCompleted) {
+        if (method === "throw") {
+          throw arg;
+        }
+
+        // Be forgiving, per 25.3.3.3.3 of the spec:
+        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
+        return doneResult();
+      }
+
+      context.method = method;
+      context.arg = arg;
+
+      while (true) {
+        var delegate = context.delegate;
+        if (delegate) {
+          var delegateResult = maybeInvokeDelegate(delegate, context);
+          if (delegateResult) {
+            if (delegateResult === ContinueSentinel) continue;
+            return delegateResult;
           }
         }
-      };
+
+        if (context.method === "next") {
+          // Setting context._sent for legacy support of Babel's
+          // function.sent implementation.
+          context.sent = context._sent = context.arg;
+
+        } else if (context.method === "throw") {
+          if (state === GenStateSuspendedStart) {
+            state = GenStateCompleted;
+            throw context.arg;
+          }
+
+          context.dispatchException(context.arg);
+
+        } else if (context.method === "return") {
+          context.abrupt("return", context.arg);
+        }
+
+        state = GenStateExecuting;
+
+        var record = tryCatch(innerFn, self, context);
+        if (record.type === "normal") {
+          // If an exception is thrown from innerFn, we leave state ===
+          // GenStateExecuting and loop back for another invocation.
+          state = context.done
+            ? GenStateCompleted
+            : GenStateSuspendedYield;
+
+          if (record.arg === ContinueSentinel) {
+            continue;
+          }
+
+          return {
+            value: record.arg,
+            done: context.done
+          };
+
+        } else if (record.type === "throw") {
+          state = GenStateCompleted;
+          // Dispatch the exception by looping back around to the
+          // context.dispatchException(context.arg) call above.
+          context.method = "throw";
+          context.arg = record.arg;
+        }
+      }
     };
-  }).catch(function (error) {
-    //console.error('Error during service worker registration:', error)
-    throw error;
-  });
-}
+  }
 
-function checkValidServiceWorker(swUrl) {
-  // Check if the service worker can be found. If it can't reload the page.
-  fetch(swUrl).then(function (response) {
-    // Ensure service worker exists, and that we really are getting a JS file.
-    if (response.status === 404 || response.headers.get('content-type').indexOf('javascript') === -1) {
-      // No service worker found. Probably a different app. Reload the page.
-      navigator.serviceWorker.ready.then(function (registration) {
-        registration.unregister().then(function () {
-          window.location.reload();
-        });
-      });
-    } else {
-      // Service worker found. Proceed as normal.
-      registerValidSW(swUrl);
+  // Call delegate.iterator[context.method](context.arg) and handle the
+  // result, either by returning a { value, done } result from the
+  // delegate iterator, or by modifying context.method and context.arg,
+  // setting context.delegate to null, and returning the ContinueSentinel.
+  function maybeInvokeDelegate(delegate, context) {
+    var method = delegate.iterator[context.method];
+    if (method === undefined) {
+      // A .throw or .return when the delegate iterator has no .throw
+      // method always terminates the yield* loop.
+      context.delegate = null;
+
+      if (context.method === "throw") {
+        if (delegate.iterator.return) {
+          // If the delegate iterator has a return method, give it a
+          // chance to clean up.
+          context.method = "return";
+          context.arg = undefined;
+          maybeInvokeDelegate(delegate, context);
+
+          if (context.method === "throw") {
+            // If maybeInvokeDelegate(context) changed context.method from
+            // "return" to "throw", let that override the TypeError below.
+            return ContinueSentinel;
+          }
+        }
+
+        context.method = "throw";
+        context.arg = new TypeError(
+          "The iterator does not provide a 'throw' method");
+      }
+
+      return ContinueSentinel;
     }
-  }).catch(function (err) {
-    // console.log(
-    //   'No internet connection found. App is running in offline mode.'
-    // )
-    throw err;
-  });
-}
 
-function unregister() {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.ready.then(function (registration) {
-      registration.unregister();
-    });
+    var record = tryCatch(method, delegate.iterator, context.arg);
+
+    if (record.type === "throw") {
+      context.method = "throw";
+      context.arg = record.arg;
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    var info = record.arg;
+
+    if (! info) {
+      context.method = "throw";
+      context.arg = new TypeError("iterator result is not an object");
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    if (info.done) {
+      // Assign the result of the finished delegate to the temporary
+      // variable specified by delegate.resultName (see delegateYield).
+      context[delegate.resultName] = info.value;
+
+      // Resume execution at the desired location (see delegateYield).
+      context.next = delegate.nextLoc;
+
+      // If context.method was "throw" but the delegate handled the
+      // exception, let the outer generator proceed normally. If
+      // context.method was "next", forget context.arg since it has been
+      // "consumed" by the delegate iterator. If context.method was
+      // "return", allow the original .return call to continue in the
+      // outer generator.
+      if (context.method !== "return") {
+        context.method = "next";
+        context.arg = undefined;
+      }
+
+    } else {
+      // Re-yield the result returned by the delegate method.
+      return info;
+    }
+
+    // The delegate iterator is finished, so forget it and continue with
+    // the outer generator.
+    context.delegate = null;
+    return ContinueSentinel;
+  }
+
+  // Define Generator.prototype.{next,throw,return} in terms of the
+  // unified ._invoke helper method.
+  defineIteratorMethods(Gp);
+
+  Gp[toStringTagSymbol] = "Generator";
+
+  // A Generator should always return itself as the iterator object when the
+  // @@iterator function is called on it. Some browsers' implementations of the
+  // iterator prototype chain incorrectly implement this, causing the Generator
+  // object to not be returned from this call. This ensures that doesn't happen.
+  // See https://github.com/facebook/regenerator/issues/274 for more details.
+  Gp[iteratorSymbol] = function() {
+    return this;
+  };
+
+  Gp.toString = function() {
+    return "[object Generator]";
+  };
+
+  function pushTryEntry(locs) {
+    var entry = { tryLoc: locs[0] };
+
+    if (1 in locs) {
+      entry.catchLoc = locs[1];
+    }
+
+    if (2 in locs) {
+      entry.finallyLoc = locs[2];
+      entry.afterLoc = locs[3];
+    }
+
+    this.tryEntries.push(entry);
+  }
+
+  function resetTryEntry(entry) {
+    var record = entry.completion || {};
+    record.type = "normal";
+    delete record.arg;
+    entry.completion = record;
+  }
+
+  function Context(tryLocsList) {
+    // The root entry object (effectively a try statement without a catch
+    // or a finally block) gives us a place to store values thrown from
+    // locations where there is no enclosing try statement.
+    this.tryEntries = [{ tryLoc: "root" }];
+    tryLocsList.forEach(pushTryEntry, this);
+    this.reset(true);
+  }
+
+  runtime.keys = function(object) {
+    var keys = [];
+    for (var key in object) {
+      keys.push(key);
+    }
+    keys.reverse();
+
+    // Rather than returning an object with a next method, we keep
+    // things simple and return the next function itself.
+    return function next() {
+      while (keys.length) {
+        var key = keys.pop();
+        if (key in object) {
+          next.value = key;
+          next.done = false;
+          return next;
+        }
+      }
+
+      // To avoid creating an additional object, we just hang the .value
+      // and .done properties off the next function object itself. This
+      // also ensures that the minifier will not anonymize the function.
+      next.done = true;
+      return next;
+    };
+  };
+
+  function values(iterable) {
+    if (iterable) {
+      var iteratorMethod = iterable[iteratorSymbol];
+      if (iteratorMethod) {
+        return iteratorMethod.call(iterable);
+      }
+
+      if (typeof iterable.next === "function") {
+        return iterable;
+      }
+
+      if (!isNaN(iterable.length)) {
+        var i = -1, next = function next() {
+          while (++i < iterable.length) {
+            if (hasOwn.call(iterable, i)) {
+              next.value = iterable[i];
+              next.done = false;
+              return next;
+            }
+          }
+
+          next.value = undefined;
+          next.done = true;
+
+          return next;
+        };
+
+        return next.next = next;
+      }
+    }
+
+    // Return an iterator with no values.
+    return { next: doneResult };
+  }
+  runtime.values = values;
+
+  function doneResult() {
+    return { value: undefined, done: true };
+  }
+
+  Context.prototype = {
+    constructor: Context,
+
+    reset: function(skipTempReset) {
+      this.prev = 0;
+      this.next = 0;
+      // Resetting context._sent for legacy support of Babel's
+      // function.sent implementation.
+      this.sent = this._sent = undefined;
+      this.done = false;
+      this.delegate = null;
+
+      this.method = "next";
+      this.arg = undefined;
+
+      this.tryEntries.forEach(resetTryEntry);
+
+      if (!skipTempReset) {
+        for (var name in this) {
+          // Not sure about the optimal order of these conditions:
+          if (name.charAt(0) === "t" &&
+              hasOwn.call(this, name) &&
+              !isNaN(+name.slice(1))) {
+            this[name] = undefined;
+          }
+        }
+      }
+    },
+
+    stop: function() {
+      this.done = true;
+
+      var rootEntry = this.tryEntries[0];
+      var rootRecord = rootEntry.completion;
+      if (rootRecord.type === "throw") {
+        throw rootRecord.arg;
+      }
+
+      return this.rval;
+    },
+
+    dispatchException: function(exception) {
+      if (this.done) {
+        throw exception;
+      }
+
+      var context = this;
+      function handle(loc, caught) {
+        record.type = "throw";
+        record.arg = exception;
+        context.next = loc;
+
+        if (caught) {
+          // If the dispatched exception was caught by a catch block,
+          // then let that catch block handle the exception normally.
+          context.method = "next";
+          context.arg = undefined;
+        }
+
+        return !! caught;
+      }
+
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        var record = entry.completion;
+
+        if (entry.tryLoc === "root") {
+          // Exception thrown outside of any try block that could handle
+          // it, so set the completion value of the entire function to
+          // throw the exception.
+          return handle("end");
+        }
+
+        if (entry.tryLoc <= this.prev) {
+          var hasCatch = hasOwn.call(entry, "catchLoc");
+          var hasFinally = hasOwn.call(entry, "finallyLoc");
+
+          if (hasCatch && hasFinally) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            } else if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else if (hasCatch) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            }
+
+          } else if (hasFinally) {
+            if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else {
+            throw new Error("try statement without catch or finally");
+          }
+        }
+      }
+    },
+
+    abrupt: function(type, arg) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc <= this.prev &&
+            hasOwn.call(entry, "finallyLoc") &&
+            this.prev < entry.finallyLoc) {
+          var finallyEntry = entry;
+          break;
+        }
+      }
+
+      if (finallyEntry &&
+          (type === "break" ||
+           type === "continue") &&
+          finallyEntry.tryLoc <= arg &&
+          arg <= finallyEntry.finallyLoc) {
+        // Ignore the finally entry if control is not jumping to a
+        // location outside the try/catch block.
+        finallyEntry = null;
+      }
+
+      var record = finallyEntry ? finallyEntry.completion : {};
+      record.type = type;
+      record.arg = arg;
+
+      if (finallyEntry) {
+        this.method = "next";
+        this.next = finallyEntry.finallyLoc;
+        return ContinueSentinel;
+      }
+
+      return this.complete(record);
+    },
+
+    complete: function(record, afterLoc) {
+      if (record.type === "throw") {
+        throw record.arg;
+      }
+
+      if (record.type === "break" ||
+          record.type === "continue") {
+        this.next = record.arg;
+      } else if (record.type === "return") {
+        this.rval = this.arg = record.arg;
+        this.method = "return";
+        this.next = "end";
+      } else if (record.type === "normal" && afterLoc) {
+        this.next = afterLoc;
+      }
+
+      return ContinueSentinel;
+    },
+
+    finish: function(finallyLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.finallyLoc === finallyLoc) {
+          this.complete(entry.completion, entry.afterLoc);
+          resetTryEntry(entry);
+          return ContinueSentinel;
+        }
+      }
+    },
+
+    "catch": function(tryLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc === tryLoc) {
+          var record = entry.completion;
+          if (record.type === "throw") {
+            var thrown = record.arg;
+            resetTryEntry(entry);
+          }
+          return thrown;
+        }
+      }
+
+      // The context.catch method must only be called with a location
+      // argument that corresponds to a known catch block.
+      throw new Error("illegal catch attempt");
+    },
+
+    delegateYield: function(iterable, resultName, nextLoc) {
+      this.delegate = {
+        iterator: values(iterable),
+        resultName: resultName,
+        nextLoc: nextLoc
+      };
+
+      if (this.method === "next") {
+        // Deliberately forget the last sent value so that we don't
+        // accidentally pass it on to the delegate.
+        this.arg = undefined;
+      }
+
+      return ContinueSentinel;
+    }
+  };
+})(
+  // In sloppy mode, unbound `this` refers to the global object, fallback to
+  // Function constructor if we're in global strict mode. That is sadly a form
+  // of indirect eval which violates Content Security Policy.
+  (function() {
+    return this || (typeof self === "object" && self);
+  })() || Function("return this")()
+);
+
+},{}],"../node_modules/regenerator-runtime/runtime-module.js":[function(require,module,exports) {
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+// This method of obtaining a reference to the global object needs to be
+// kept identical to the way it is obtained in runtime.js
+var g = (function() {
+  return this || (typeof self === "object" && self);
+})() || Function("return this")();
+
+// Use `getOwnPropertyNames` because not all browsers support calling
+// `hasOwnProperty` on the global `self` object in a worker. See #183.
+var hadRuntime = g.regeneratorRuntime &&
+  Object.getOwnPropertyNames(g).indexOf("regeneratorRuntime") >= 0;
+
+// Save the old regeneratorRuntime in case it needs to be restored later.
+var oldRuntime = hadRuntime && g.regeneratorRuntime;
+
+// Force reevalutation of runtime.js.
+g.regeneratorRuntime = undefined;
+
+module.exports = require("./runtime");
+
+if (hadRuntime) {
+  // Restore the original runtime.
+  g.regeneratorRuntime = oldRuntime;
+} else {
+  // Remove the global property added by runtime.js.
+  try {
+    delete g.regeneratorRuntime;
+  } catch(e) {
+    g.regeneratorRuntime = undefined;
   }
 }
-},{}],"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js":[function(require,module,exports) {
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
 
-module.exports = _classCallCheck;
+},{"./runtime":"../node_modules/regenerator-runtime/runtime.js"}],"../node_modules/@babel/runtime-corejs2/regenerator/index.js":[function(require,module,exports) {
+module.exports = require("regenerator-runtime");
+
+},{"regenerator-runtime":"../node_modules/regenerator-runtime/runtime-module.js"}],"../node_modules/core-js/library/modules/es6.object.to-string.js":[function(require,module,exports) {
+
+},{}],"../node_modules/core-js/library/modules/_to-integer.js":[function(require,module,exports) {
+// 7.1.4 ToInteger
+var ceil = Math.ceil;
+var floor = Math.floor;
+module.exports = function (it) {
+  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
+};
+
+},{}],"../node_modules/core-js/library/modules/_defined.js":[function(require,module,exports) {
+// 7.2.1 RequireObjectCoercible(argument)
+module.exports = function (it) {
+  if (it == undefined) throw TypeError("Can't call method on  " + it);
+  return it;
+};
+
+},{}],"../node_modules/core-js/library/modules/_string-at.js":[function(require,module,exports) {
+var toInteger = require('./_to-integer');
+var defined = require('./_defined');
+// true  -> String#at
+// false -> String#codePointAt
+module.exports = function (TO_STRING) {
+  return function (that, pos) {
+    var s = String(defined(that));
+    var i = toInteger(pos);
+    var l = s.length;
+    var a, b;
+    if (i < 0 || i >= l) return TO_STRING ? '' : undefined;
+    a = s.charCodeAt(i);
+    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
+      ? TO_STRING ? s.charAt(i) : a
+      : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
+  };
+};
+
+},{"./_to-integer":"../node_modules/core-js/library/modules/_to-integer.js","./_defined":"../node_modules/core-js/library/modules/_defined.js"}],"../node_modules/core-js/library/modules/_library.js":[function(require,module,exports) {
+module.exports = true;
+
 },{}],"../node_modules/core-js/library/modules/_global.js":[function(require,module,exports) {
 
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
@@ -23407,79 +23119,7 @@ $export.U = 64;  // safe
 $export.R = 128; // real proto method for `library`
 module.exports = $export;
 
-},{"./_global":"../node_modules/core-js/library/modules/_global.js","./_core":"../node_modules/core-js/library/modules/_core.js","./_ctx":"../node_modules/core-js/library/modules/_ctx.js","./_hide":"../node_modules/core-js/library/modules/_hide.js","./_has":"../node_modules/core-js/library/modules/_has.js"}],"../node_modules/core-js/library/modules/es6.object.define-property.js":[function(require,module,exports) {
-var $export = require('./_export');
-// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
-$export($export.S + $export.F * !require('./_descriptors'), 'Object', { defineProperty: require('./_object-dp').f });
-
-},{"./_export":"../node_modules/core-js/library/modules/_export.js","./_descriptors":"../node_modules/core-js/library/modules/_descriptors.js","./_object-dp":"../node_modules/core-js/library/modules/_object-dp.js"}],"../node_modules/core-js/library/fn/object/define-property.js":[function(require,module,exports) {
-require('../../modules/es6.object.define-property');
-var $Object = require('../../modules/_core').Object;
-module.exports = function defineProperty(it, key, desc) {
-  return $Object.defineProperty(it, key, desc);
-};
-
-},{"../../modules/es6.object.define-property":"../node_modules/core-js/library/modules/es6.object.define-property.js","../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js":[function(require,module,exports) {
-module.exports = require("core-js/library/fn/object/define-property");
-},{"core-js/library/fn/object/define-property":"../node_modules/core-js/library/fn/object/define-property.js"}],"../node_modules/@babel/runtime-corejs2/helpers/createClass.js":[function(require,module,exports) {
-var _Object$defineProperty = require("../core-js/object/define-property");
-
-function _defineProperties(target, props) {
-  for (var i = 0; i < props.length; i++) {
-    var descriptor = props[i];
-    descriptor.enumerable = descriptor.enumerable || false;
-    descriptor.configurable = true;
-    if ("value" in descriptor) descriptor.writable = true;
-
-    _Object$defineProperty(target, descriptor.key, descriptor);
-  }
-}
-
-function _createClass(Constructor, protoProps, staticProps) {
-  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-  if (staticProps) _defineProperties(Constructor, staticProps);
-  return Constructor;
-}
-
-module.exports = _createClass;
-},{"../core-js/object/define-property":"../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js"}],"../node_modules/core-js/library/modules/_to-integer.js":[function(require,module,exports) {
-// 7.1.4 ToInteger
-var ceil = Math.ceil;
-var floor = Math.floor;
-module.exports = function (it) {
-  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
-};
-
-},{}],"../node_modules/core-js/library/modules/_defined.js":[function(require,module,exports) {
-// 7.2.1 RequireObjectCoercible(argument)
-module.exports = function (it) {
-  if (it == undefined) throw TypeError("Can't call method on  " + it);
-  return it;
-};
-
-},{}],"../node_modules/core-js/library/modules/_string-at.js":[function(require,module,exports) {
-var toInteger = require('./_to-integer');
-var defined = require('./_defined');
-// true  -> String#at
-// false -> String#codePointAt
-module.exports = function (TO_STRING) {
-  return function (that, pos) {
-    var s = String(defined(that));
-    var i = toInteger(pos);
-    var l = s.length;
-    var a, b;
-    if (i < 0 || i >= l) return TO_STRING ? '' : undefined;
-    a = s.charCodeAt(i);
-    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
-      ? TO_STRING ? s.charAt(i) : a
-      : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
-  };
-};
-
-},{"./_to-integer":"../node_modules/core-js/library/modules/_to-integer.js","./_defined":"../node_modules/core-js/library/modules/_defined.js"}],"../node_modules/core-js/library/modules/_library.js":[function(require,module,exports) {
-module.exports = true;
-
-},{}],"../node_modules/core-js/library/modules/_redefine.js":[function(require,module,exports) {
+},{"./_global":"../node_modules/core-js/library/modules/_global.js","./_core":"../node_modules/core-js/library/modules/_core.js","./_ctx":"../node_modules/core-js/library/modules/_ctx.js","./_hide":"../node_modules/core-js/library/modules/_hide.js","./_has":"../node_modules/core-js/library/modules/_has.js"}],"../node_modules/core-js/library/modules/_redefine.js":[function(require,module,exports) {
 module.exports = require('./_hide');
 
 },{"./_hide":"../node_modules/core-js/library/modules/_hide.js"}],"../node_modules/core-js/library/modules/_iterators.js":[function(require,module,exports) {
@@ -23890,7 +23530,1042 @@ for (var i = 0; i < DOMIterables.length; i++) {
   Iterators[NAME] = Iterators.Array;
 }
 
-},{"./es6.array.iterator":"../node_modules/core-js/library/modules/es6.array.iterator.js","./_global":"../node_modules/core-js/library/modules/_global.js","./_hide":"../node_modules/core-js/library/modules/_hide.js","./_iterators":"../node_modules/core-js/library/modules/_iterators.js","./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/_wks-ext.js":[function(require,module,exports) {
+},{"./es6.array.iterator":"../node_modules/core-js/library/modules/es6.array.iterator.js","./_global":"../node_modules/core-js/library/modules/_global.js","./_hide":"../node_modules/core-js/library/modules/_hide.js","./_iterators":"../node_modules/core-js/library/modules/_iterators.js","./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/_classof.js":[function(require,module,exports) {
+// getting tag from 19.1.3.6 Object.prototype.toString()
+var cof = require('./_cof');
+var TAG = require('./_wks')('toStringTag');
+// ES3 wrong here
+var ARG = cof(function () { return arguments; }()) == 'Arguments';
+
+// fallback for IE11 Script Access Denied error
+var tryGet = function (it, key) {
+  try {
+    return it[key];
+  } catch (e) { /* empty */ }
+};
+
+module.exports = function (it) {
+  var O, T, B;
+  return it === undefined ? 'Undefined' : it === null ? 'Null'
+    // @@toStringTag case
+    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
+    // builtinTag case
+    : ARG ? cof(O)
+    // ES3 arguments fallback
+    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
+};
+
+},{"./_cof":"../node_modules/core-js/library/modules/_cof.js","./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/_an-instance.js":[function(require,module,exports) {
+module.exports = function (it, Constructor, name, forbiddenField) {
+  if (!(it instanceof Constructor) || (forbiddenField !== undefined && forbiddenField in it)) {
+    throw TypeError(name + ': incorrect invocation!');
+  } return it;
+};
+
+},{}],"../node_modules/core-js/library/modules/_iter-call.js":[function(require,module,exports) {
+// call something on iterator step with safe closing on error
+var anObject = require('./_an-object');
+module.exports = function (iterator, fn, value, entries) {
+  try {
+    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
+  // 7.4.6 IteratorClose(iterator, completion)
+  } catch (e) {
+    var ret = iterator['return'];
+    if (ret !== undefined) anObject(ret.call(iterator));
+    throw e;
+  }
+};
+
+},{"./_an-object":"../node_modules/core-js/library/modules/_an-object.js"}],"../node_modules/core-js/library/modules/_is-array-iter.js":[function(require,module,exports) {
+// check on default Array iterator
+var Iterators = require('./_iterators');
+var ITERATOR = require('./_wks')('iterator');
+var ArrayProto = Array.prototype;
+
+module.exports = function (it) {
+  return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
+};
+
+},{"./_iterators":"../node_modules/core-js/library/modules/_iterators.js","./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/core.get-iterator-method.js":[function(require,module,exports) {
+var classof = require('./_classof');
+var ITERATOR = require('./_wks')('iterator');
+var Iterators = require('./_iterators');
+module.exports = require('./_core').getIteratorMethod = function (it) {
+  if (it != undefined) return it[ITERATOR]
+    || it['@@iterator']
+    || Iterators[classof(it)];
+};
+
+},{"./_classof":"../node_modules/core-js/library/modules/_classof.js","./_wks":"../node_modules/core-js/library/modules/_wks.js","./_iterators":"../node_modules/core-js/library/modules/_iterators.js","./_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/core-js/library/modules/_for-of.js":[function(require,module,exports) {
+var ctx = require('./_ctx');
+var call = require('./_iter-call');
+var isArrayIter = require('./_is-array-iter');
+var anObject = require('./_an-object');
+var toLength = require('./_to-length');
+var getIterFn = require('./core.get-iterator-method');
+var BREAK = {};
+var RETURN = {};
+var exports = module.exports = function (iterable, entries, fn, that, ITERATOR) {
+  var iterFn = ITERATOR ? function () { return iterable; } : getIterFn(iterable);
+  var f = ctx(fn, that, entries ? 2 : 1);
+  var index = 0;
+  var length, step, iterator, result;
+  if (typeof iterFn != 'function') throw TypeError(iterable + ' is not iterable!');
+  // fast case for arrays with default iterator
+  if (isArrayIter(iterFn)) for (length = toLength(iterable.length); length > index; index++) {
+    result = entries ? f(anObject(step = iterable[index])[0], step[1]) : f(iterable[index]);
+    if (result === BREAK || result === RETURN) return result;
+  } else for (iterator = iterFn.call(iterable); !(step = iterator.next()).done;) {
+    result = call(iterator, f, step.value, entries);
+    if (result === BREAK || result === RETURN) return result;
+  }
+};
+exports.BREAK = BREAK;
+exports.RETURN = RETURN;
+
+},{"./_ctx":"../node_modules/core-js/library/modules/_ctx.js","./_iter-call":"../node_modules/core-js/library/modules/_iter-call.js","./_is-array-iter":"../node_modules/core-js/library/modules/_is-array-iter.js","./_an-object":"../node_modules/core-js/library/modules/_an-object.js","./_to-length":"../node_modules/core-js/library/modules/_to-length.js","./core.get-iterator-method":"../node_modules/core-js/library/modules/core.get-iterator-method.js"}],"../node_modules/core-js/library/modules/_species-constructor.js":[function(require,module,exports) {
+// 7.3.20 SpeciesConstructor(O, defaultConstructor)
+var anObject = require('./_an-object');
+var aFunction = require('./_a-function');
+var SPECIES = require('./_wks')('species');
+module.exports = function (O, D) {
+  var C = anObject(O).constructor;
+  var S;
+  return C === undefined || (S = anObject(C)[SPECIES]) == undefined ? D : aFunction(S);
+};
+
+},{"./_an-object":"../node_modules/core-js/library/modules/_an-object.js","./_a-function":"../node_modules/core-js/library/modules/_a-function.js","./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/_invoke.js":[function(require,module,exports) {
+// fast apply, http://jsperf.lnkit.com/fast-apply/5
+module.exports = function (fn, args, that) {
+  var un = that === undefined;
+  switch (args.length) {
+    case 0: return un ? fn()
+                      : fn.call(that);
+    case 1: return un ? fn(args[0])
+                      : fn.call(that, args[0]);
+    case 2: return un ? fn(args[0], args[1])
+                      : fn.call(that, args[0], args[1]);
+    case 3: return un ? fn(args[0], args[1], args[2])
+                      : fn.call(that, args[0], args[1], args[2]);
+    case 4: return un ? fn(args[0], args[1], args[2], args[3])
+                      : fn.call(that, args[0], args[1], args[2], args[3]);
+  } return fn.apply(that, args);
+};
+
+},{}],"../node_modules/core-js/library/modules/_task.js":[function(require,module,exports) {
+
+
+var ctx = require('./_ctx');
+var invoke = require('./_invoke');
+var html = require('./_html');
+var cel = require('./_dom-create');
+var global = require('./_global');
+var process = global.process;
+var setTask = global.setImmediate;
+var clearTask = global.clearImmediate;
+var MessageChannel = global.MessageChannel;
+var Dispatch = global.Dispatch;
+var counter = 0;
+var queue = {};
+var ONREADYSTATECHANGE = 'onreadystatechange';
+var defer, channel, port;
+var run = function () {
+  var id = +this;
+  // eslint-disable-next-line no-prototype-builtins
+  if (queue.hasOwnProperty(id)) {
+    var fn = queue[id];
+    delete queue[id];
+    fn();
+  }
+};
+var listener = function (event) {
+  run.call(event.data);
+};
+// Node.js 0.9+ & IE10+ has setImmediate, otherwise:
+if (!setTask || !clearTask) {
+  setTask = function setImmediate(fn) {
+    var args = [];
+    var i = 1;
+    while (arguments.length > i) args.push(arguments[i++]);
+    queue[++counter] = function () {
+      // eslint-disable-next-line no-new-func
+      invoke(typeof fn == 'function' ? fn : Function(fn), args);
+    };
+    defer(counter);
+    return counter;
+  };
+  clearTask = function clearImmediate(id) {
+    delete queue[id];
+  };
+  // Node.js 0.8-
+  if (require('./_cof')(process) == 'process') {
+    defer = function (id) {
+      process.nextTick(ctx(run, id, 1));
+    };
+  // Sphere (JS game engine) Dispatch API
+  } else if (Dispatch && Dispatch.now) {
+    defer = function (id) {
+      Dispatch.now(ctx(run, id, 1));
+    };
+  // Browsers with MessageChannel, includes WebWorkers
+  } else if (MessageChannel) {
+    channel = new MessageChannel();
+    port = channel.port2;
+    channel.port1.onmessage = listener;
+    defer = ctx(port.postMessage, port, 1);
+  // Browsers with postMessage, skip WebWorkers
+  // IE8 has postMessage, but it's sync & typeof its postMessage is 'object'
+  } else if (global.addEventListener && typeof postMessage == 'function' && !global.importScripts) {
+    defer = function (id) {
+      global.postMessage(id + '', '*');
+    };
+    global.addEventListener('message', listener, false);
+  // IE8-
+  } else if (ONREADYSTATECHANGE in cel('script')) {
+    defer = function (id) {
+      html.appendChild(cel('script'))[ONREADYSTATECHANGE] = function () {
+        html.removeChild(this);
+        run.call(id);
+      };
+    };
+  // Rest old browsers
+  } else {
+    defer = function (id) {
+      setTimeout(ctx(run, id, 1), 0);
+    };
+  }
+}
+module.exports = {
+  set: setTask,
+  clear: clearTask
+};
+
+},{"./_ctx":"../node_modules/core-js/library/modules/_ctx.js","./_invoke":"../node_modules/core-js/library/modules/_invoke.js","./_html":"../node_modules/core-js/library/modules/_html.js","./_dom-create":"../node_modules/core-js/library/modules/_dom-create.js","./_global":"../node_modules/core-js/library/modules/_global.js","./_cof":"../node_modules/core-js/library/modules/_cof.js"}],"../node_modules/core-js/library/modules/_microtask.js":[function(require,module,exports) {
+
+
+var global = require('./_global');
+var macrotask = require('./_task').set;
+var Observer = global.MutationObserver || global.WebKitMutationObserver;
+var process = global.process;
+var Promise = global.Promise;
+var isNode = require('./_cof')(process) == 'process';
+
+module.exports = function () {
+  var head, last, notify;
+
+  var flush = function () {
+    var parent, fn;
+    if (isNode && (parent = process.domain)) parent.exit();
+    while (head) {
+      fn = head.fn;
+      head = head.next;
+      try {
+        fn();
+      } catch (e) {
+        if (head) notify();
+        else last = undefined;
+        throw e;
+      }
+    } last = undefined;
+    if (parent) parent.enter();
+  };
+
+  // Node.js
+  if (isNode) {
+    notify = function () {
+      process.nextTick(flush);
+    };
+  // browsers with MutationObserver, except iOS Safari - https://github.com/zloirock/core-js/issues/339
+  } else if (Observer && !(global.navigator && global.navigator.standalone)) {
+    var toggle = true;
+    var node = document.createTextNode('');
+    new Observer(flush).observe(node, { characterData: true }); // eslint-disable-line no-new
+    notify = function () {
+      node.data = toggle = !toggle;
+    };
+  // environments with maybe non-completely correct, but existent Promise
+  } else if (Promise && Promise.resolve) {
+    // Promise.resolve without an argument throws an error in LG WebOS 2
+    var promise = Promise.resolve(undefined);
+    notify = function () {
+      promise.then(flush);
+    };
+  // for other environments - macrotask based on:
+  // - setImmediate
+  // - MessageChannel
+  // - window.postMessag
+  // - onreadystatechange
+  // - setTimeout
+  } else {
+    notify = function () {
+      // strange IE + webpack dev server bug - use .call(global)
+      macrotask.call(global, flush);
+    };
+  }
+
+  return function (fn) {
+    var task = { fn: fn, next: undefined };
+    if (last) last.next = task;
+    if (!head) {
+      head = task;
+      notify();
+    } last = task;
+  };
+};
+
+},{"./_global":"../node_modules/core-js/library/modules/_global.js","./_task":"../node_modules/core-js/library/modules/_task.js","./_cof":"../node_modules/core-js/library/modules/_cof.js"}],"../node_modules/core-js/library/modules/_new-promise-capability.js":[function(require,module,exports) {
+'use strict';
+// 25.4.1.5 NewPromiseCapability(C)
+var aFunction = require('./_a-function');
+
+function PromiseCapability(C) {
+  var resolve, reject;
+  this.promise = new C(function ($$resolve, $$reject) {
+    if (resolve !== undefined || reject !== undefined) throw TypeError('Bad Promise constructor');
+    resolve = $$resolve;
+    reject = $$reject;
+  });
+  this.resolve = aFunction(resolve);
+  this.reject = aFunction(reject);
+}
+
+module.exports.f = function (C) {
+  return new PromiseCapability(C);
+};
+
+},{"./_a-function":"../node_modules/core-js/library/modules/_a-function.js"}],"../node_modules/core-js/library/modules/_perform.js":[function(require,module,exports) {
+module.exports = function (exec) {
+  try {
+    return { e: false, v: exec() };
+  } catch (e) {
+    return { e: true, v: e };
+  }
+};
+
+},{}],"../node_modules/core-js/library/modules/_user-agent.js":[function(require,module,exports) {
+
+var global = require('./_global');
+var navigator = global.navigator;
+
+module.exports = navigator && navigator.userAgent || '';
+
+},{"./_global":"../node_modules/core-js/library/modules/_global.js"}],"../node_modules/core-js/library/modules/_promise-resolve.js":[function(require,module,exports) {
+var anObject = require('./_an-object');
+var isObject = require('./_is-object');
+var newPromiseCapability = require('./_new-promise-capability');
+
+module.exports = function (C, x) {
+  anObject(C);
+  if (isObject(x) && x.constructor === C) return x;
+  var promiseCapability = newPromiseCapability.f(C);
+  var resolve = promiseCapability.resolve;
+  resolve(x);
+  return promiseCapability.promise;
+};
+
+},{"./_an-object":"../node_modules/core-js/library/modules/_an-object.js","./_is-object":"../node_modules/core-js/library/modules/_is-object.js","./_new-promise-capability":"../node_modules/core-js/library/modules/_new-promise-capability.js"}],"../node_modules/core-js/library/modules/_redefine-all.js":[function(require,module,exports) {
+var hide = require('./_hide');
+module.exports = function (target, src, safe) {
+  for (var key in src) {
+    if (safe && target[key]) target[key] = src[key];
+    else hide(target, key, src[key]);
+  } return target;
+};
+
+},{"./_hide":"../node_modules/core-js/library/modules/_hide.js"}],"../node_modules/core-js/library/modules/_set-species.js":[function(require,module,exports) {
+
+'use strict';
+var global = require('./_global');
+var core = require('./_core');
+var dP = require('./_object-dp');
+var DESCRIPTORS = require('./_descriptors');
+var SPECIES = require('./_wks')('species');
+
+module.exports = function (KEY) {
+  var C = typeof core[KEY] == 'function' ? core[KEY] : global[KEY];
+  if (DESCRIPTORS && C && !C[SPECIES]) dP.f(C, SPECIES, {
+    configurable: true,
+    get: function () { return this; }
+  });
+};
+
+},{"./_global":"../node_modules/core-js/library/modules/_global.js","./_core":"../node_modules/core-js/library/modules/_core.js","./_object-dp":"../node_modules/core-js/library/modules/_object-dp.js","./_descriptors":"../node_modules/core-js/library/modules/_descriptors.js","./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/_iter-detect.js":[function(require,module,exports) {
+var ITERATOR = require('./_wks')('iterator');
+var SAFE_CLOSING = false;
+
+try {
+  var riter = [7][ITERATOR]();
+  riter['return'] = function () { SAFE_CLOSING = true; };
+  // eslint-disable-next-line no-throw-literal
+  Array.from(riter, function () { throw 2; });
+} catch (e) { /* empty */ }
+
+module.exports = function (exec, skipClosing) {
+  if (!skipClosing && !SAFE_CLOSING) return false;
+  var safe = false;
+  try {
+    var arr = [7];
+    var iter = arr[ITERATOR]();
+    iter.next = function () { return { done: safe = true }; };
+    arr[ITERATOR] = function () { return iter; };
+    exec(arr);
+  } catch (e) { /* empty */ }
+  return safe;
+};
+
+},{"./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/es6.promise.js":[function(require,module,exports) {
+
+
+'use strict';
+var LIBRARY = require('./_library');
+var global = require('./_global');
+var ctx = require('./_ctx');
+var classof = require('./_classof');
+var $export = require('./_export');
+var isObject = require('./_is-object');
+var aFunction = require('./_a-function');
+var anInstance = require('./_an-instance');
+var forOf = require('./_for-of');
+var speciesConstructor = require('./_species-constructor');
+var task = require('./_task').set;
+var microtask = require('./_microtask')();
+var newPromiseCapabilityModule = require('./_new-promise-capability');
+var perform = require('./_perform');
+var userAgent = require('./_user-agent');
+var promiseResolve = require('./_promise-resolve');
+var PROMISE = 'Promise';
+var TypeError = global.TypeError;
+var process = global.process;
+var versions = process && process.versions;
+var v8 = versions && versions.v8 || '';
+var $Promise = global[PROMISE];
+var isNode = classof(process) == 'process';
+var empty = function () { /* empty */ };
+var Internal, newGenericPromiseCapability, OwnPromiseCapability, Wrapper;
+var newPromiseCapability = newGenericPromiseCapability = newPromiseCapabilityModule.f;
+
+var USE_NATIVE = !!function () {
+  try {
+    // correct subclassing with @@species support
+    var promise = $Promise.resolve(1);
+    var FakePromise = (promise.constructor = {})[require('./_wks')('species')] = function (exec) {
+      exec(empty, empty);
+    };
+    // unhandled rejections tracking support, NodeJS Promise without it fails @@species test
+    return (isNode || typeof PromiseRejectionEvent == 'function')
+      && promise.then(empty) instanceof FakePromise
+      // v8 6.6 (Node 10 and Chrome 66) have a bug with resolving custom thenables
+      // https://bugs.chromium.org/p/chromium/issues/detail?id=830565
+      // we can't detect it synchronously, so just check versions
+      && v8.indexOf('6.6') !== 0
+      && userAgent.indexOf('Chrome/66') === -1;
+  } catch (e) { /* empty */ }
+}();
+
+// helpers
+var isThenable = function (it) {
+  var then;
+  return isObject(it) && typeof (then = it.then) == 'function' ? then : false;
+};
+var notify = function (promise, isReject) {
+  if (promise._n) return;
+  promise._n = true;
+  var chain = promise._c;
+  microtask(function () {
+    var value = promise._v;
+    var ok = promise._s == 1;
+    var i = 0;
+    var run = function (reaction) {
+      var handler = ok ? reaction.ok : reaction.fail;
+      var resolve = reaction.resolve;
+      var reject = reaction.reject;
+      var domain = reaction.domain;
+      var result, then, exited;
+      try {
+        if (handler) {
+          if (!ok) {
+            if (promise._h == 2) onHandleUnhandled(promise);
+            promise._h = 1;
+          }
+          if (handler === true) result = value;
+          else {
+            if (domain) domain.enter();
+            result = handler(value); // may throw
+            if (domain) {
+              domain.exit();
+              exited = true;
+            }
+          }
+          if (result === reaction.promise) {
+            reject(TypeError('Promise-chain cycle'));
+          } else if (then = isThenable(result)) {
+            then.call(result, resolve, reject);
+          } else resolve(result);
+        } else reject(value);
+      } catch (e) {
+        if (domain && !exited) domain.exit();
+        reject(e);
+      }
+    };
+    while (chain.length > i) run(chain[i++]); // variable length - can't use forEach
+    promise._c = [];
+    promise._n = false;
+    if (isReject && !promise._h) onUnhandled(promise);
+  });
+};
+var onUnhandled = function (promise) {
+  task.call(global, function () {
+    var value = promise._v;
+    var unhandled = isUnhandled(promise);
+    var result, handler, console;
+    if (unhandled) {
+      result = perform(function () {
+        if (isNode) {
+          process.emit('unhandledRejection', value, promise);
+        } else if (handler = global.onunhandledrejection) {
+          handler({ promise: promise, reason: value });
+        } else if ((console = global.console) && console.error) {
+          console.error('Unhandled promise rejection', value);
+        }
+      });
+      // Browsers should not trigger `rejectionHandled` event if it was handled here, NodeJS - should
+      promise._h = isNode || isUnhandled(promise) ? 2 : 1;
+    } promise._a = undefined;
+    if (unhandled && result.e) throw result.v;
+  });
+};
+var isUnhandled = function (promise) {
+  return promise._h !== 1 && (promise._a || promise._c).length === 0;
+};
+var onHandleUnhandled = function (promise) {
+  task.call(global, function () {
+    var handler;
+    if (isNode) {
+      process.emit('rejectionHandled', promise);
+    } else if (handler = global.onrejectionhandled) {
+      handler({ promise: promise, reason: promise._v });
+    }
+  });
+};
+var $reject = function (value) {
+  var promise = this;
+  if (promise._d) return;
+  promise._d = true;
+  promise = promise._w || promise; // unwrap
+  promise._v = value;
+  promise._s = 2;
+  if (!promise._a) promise._a = promise._c.slice();
+  notify(promise, true);
+};
+var $resolve = function (value) {
+  var promise = this;
+  var then;
+  if (promise._d) return;
+  promise._d = true;
+  promise = promise._w || promise; // unwrap
+  try {
+    if (promise === value) throw TypeError("Promise can't be resolved itself");
+    if (then = isThenable(value)) {
+      microtask(function () {
+        var wrapper = { _w: promise, _d: false }; // wrap
+        try {
+          then.call(value, ctx($resolve, wrapper, 1), ctx($reject, wrapper, 1));
+        } catch (e) {
+          $reject.call(wrapper, e);
+        }
+      });
+    } else {
+      promise._v = value;
+      promise._s = 1;
+      notify(promise, false);
+    }
+  } catch (e) {
+    $reject.call({ _w: promise, _d: false }, e); // wrap
+  }
+};
+
+// constructor polyfill
+if (!USE_NATIVE) {
+  // 25.4.3.1 Promise(executor)
+  $Promise = function Promise(executor) {
+    anInstance(this, $Promise, PROMISE, '_h');
+    aFunction(executor);
+    Internal.call(this);
+    try {
+      executor(ctx($resolve, this, 1), ctx($reject, this, 1));
+    } catch (err) {
+      $reject.call(this, err);
+    }
+  };
+  // eslint-disable-next-line no-unused-vars
+  Internal = function Promise(executor) {
+    this._c = [];             // <- awaiting reactions
+    this._a = undefined;      // <- checked in isUnhandled reactions
+    this._s = 0;              // <- state
+    this._d = false;          // <- done
+    this._v = undefined;      // <- value
+    this._h = 0;              // <- rejection state, 0 - default, 1 - handled, 2 - unhandled
+    this._n = false;          // <- notify
+  };
+  Internal.prototype = require('./_redefine-all')($Promise.prototype, {
+    // 25.4.5.3 Promise.prototype.then(onFulfilled, onRejected)
+    then: function then(onFulfilled, onRejected) {
+      var reaction = newPromiseCapability(speciesConstructor(this, $Promise));
+      reaction.ok = typeof onFulfilled == 'function' ? onFulfilled : true;
+      reaction.fail = typeof onRejected == 'function' && onRejected;
+      reaction.domain = isNode ? process.domain : undefined;
+      this._c.push(reaction);
+      if (this._a) this._a.push(reaction);
+      if (this._s) notify(this, false);
+      return reaction.promise;
+    },
+    // 25.4.5.1 Promise.prototype.catch(onRejected)
+    'catch': function (onRejected) {
+      return this.then(undefined, onRejected);
+    }
+  });
+  OwnPromiseCapability = function () {
+    var promise = new Internal();
+    this.promise = promise;
+    this.resolve = ctx($resolve, promise, 1);
+    this.reject = ctx($reject, promise, 1);
+  };
+  newPromiseCapabilityModule.f = newPromiseCapability = function (C) {
+    return C === $Promise || C === Wrapper
+      ? new OwnPromiseCapability(C)
+      : newGenericPromiseCapability(C);
+  };
+}
+
+$export($export.G + $export.W + $export.F * !USE_NATIVE, { Promise: $Promise });
+require('./_set-to-string-tag')($Promise, PROMISE);
+require('./_set-species')(PROMISE);
+Wrapper = require('./_core')[PROMISE];
+
+// statics
+$export($export.S + $export.F * !USE_NATIVE, PROMISE, {
+  // 25.4.4.5 Promise.reject(r)
+  reject: function reject(r) {
+    var capability = newPromiseCapability(this);
+    var $$reject = capability.reject;
+    $$reject(r);
+    return capability.promise;
+  }
+});
+$export($export.S + $export.F * (LIBRARY || !USE_NATIVE), PROMISE, {
+  // 25.4.4.6 Promise.resolve(x)
+  resolve: function resolve(x) {
+    return promiseResolve(LIBRARY && this === Wrapper ? $Promise : this, x);
+  }
+});
+$export($export.S + $export.F * !(USE_NATIVE && require('./_iter-detect')(function (iter) {
+  $Promise.all(iter)['catch'](empty);
+})), PROMISE, {
+  // 25.4.4.1 Promise.all(iterable)
+  all: function all(iterable) {
+    var C = this;
+    var capability = newPromiseCapability(C);
+    var resolve = capability.resolve;
+    var reject = capability.reject;
+    var result = perform(function () {
+      var values = [];
+      var index = 0;
+      var remaining = 1;
+      forOf(iterable, false, function (promise) {
+        var $index = index++;
+        var alreadyCalled = false;
+        values.push(undefined);
+        remaining++;
+        C.resolve(promise).then(function (value) {
+          if (alreadyCalled) return;
+          alreadyCalled = true;
+          values[$index] = value;
+          --remaining || resolve(values);
+        }, reject);
+      });
+      --remaining || resolve(values);
+    });
+    if (result.e) reject(result.v);
+    return capability.promise;
+  },
+  // 25.4.4.4 Promise.race(iterable)
+  race: function race(iterable) {
+    var C = this;
+    var capability = newPromiseCapability(C);
+    var reject = capability.reject;
+    var result = perform(function () {
+      forOf(iterable, false, function (promise) {
+        C.resolve(promise).then(capability.resolve, reject);
+      });
+    });
+    if (result.e) reject(result.v);
+    return capability.promise;
+  }
+});
+
+},{"./_library":"../node_modules/core-js/library/modules/_library.js","./_global":"../node_modules/core-js/library/modules/_global.js","./_ctx":"../node_modules/core-js/library/modules/_ctx.js","./_classof":"../node_modules/core-js/library/modules/_classof.js","./_export":"../node_modules/core-js/library/modules/_export.js","./_is-object":"../node_modules/core-js/library/modules/_is-object.js","./_a-function":"../node_modules/core-js/library/modules/_a-function.js","./_an-instance":"../node_modules/core-js/library/modules/_an-instance.js","./_for-of":"../node_modules/core-js/library/modules/_for-of.js","./_species-constructor":"../node_modules/core-js/library/modules/_species-constructor.js","./_task":"../node_modules/core-js/library/modules/_task.js","./_microtask":"../node_modules/core-js/library/modules/_microtask.js","./_new-promise-capability":"../node_modules/core-js/library/modules/_new-promise-capability.js","./_perform":"../node_modules/core-js/library/modules/_perform.js","./_user-agent":"../node_modules/core-js/library/modules/_user-agent.js","./_promise-resolve":"../node_modules/core-js/library/modules/_promise-resolve.js","./_wks":"../node_modules/core-js/library/modules/_wks.js","./_redefine-all":"../node_modules/core-js/library/modules/_redefine-all.js","./_set-to-string-tag":"../node_modules/core-js/library/modules/_set-to-string-tag.js","./_set-species":"../node_modules/core-js/library/modules/_set-species.js","./_core":"../node_modules/core-js/library/modules/_core.js","./_iter-detect":"../node_modules/core-js/library/modules/_iter-detect.js"}],"../node_modules/core-js/library/modules/es7.promise.finally.js":[function(require,module,exports) {
+
+// https://github.com/tc39/proposal-promise-finally
+'use strict';
+var $export = require('./_export');
+var core = require('./_core');
+var global = require('./_global');
+var speciesConstructor = require('./_species-constructor');
+var promiseResolve = require('./_promise-resolve');
+
+$export($export.P + $export.R, 'Promise', { 'finally': function (onFinally) {
+  var C = speciesConstructor(this, core.Promise || global.Promise);
+  var isFunction = typeof onFinally == 'function';
+  return this.then(
+    isFunction ? function (x) {
+      return promiseResolve(C, onFinally()).then(function () { return x; });
+    } : onFinally,
+    isFunction ? function (e) {
+      return promiseResolve(C, onFinally()).then(function () { throw e; });
+    } : onFinally
+  );
+} });
+
+},{"./_export":"../node_modules/core-js/library/modules/_export.js","./_core":"../node_modules/core-js/library/modules/_core.js","./_global":"../node_modules/core-js/library/modules/_global.js","./_species-constructor":"../node_modules/core-js/library/modules/_species-constructor.js","./_promise-resolve":"../node_modules/core-js/library/modules/_promise-resolve.js"}],"../node_modules/core-js/library/modules/es7.promise.try.js":[function(require,module,exports) {
+'use strict';
+// https://github.com/tc39/proposal-promise-try
+var $export = require('./_export');
+var newPromiseCapability = require('./_new-promise-capability');
+var perform = require('./_perform');
+
+$export($export.S, 'Promise', { 'try': function (callbackfn) {
+  var promiseCapability = newPromiseCapability.f(this);
+  var result = perform(callbackfn);
+  (result.e ? promiseCapability.reject : promiseCapability.resolve)(result.v);
+  return promiseCapability.promise;
+} });
+
+},{"./_export":"../node_modules/core-js/library/modules/_export.js","./_new-promise-capability":"../node_modules/core-js/library/modules/_new-promise-capability.js","./_perform":"../node_modules/core-js/library/modules/_perform.js"}],"../node_modules/core-js/library/fn/promise.js":[function(require,module,exports) {
+require('../modules/es6.object.to-string');
+require('../modules/es6.string.iterator');
+require('../modules/web.dom.iterable');
+require('../modules/es6.promise');
+require('../modules/es7.promise.finally');
+require('../modules/es7.promise.try');
+module.exports = require('../modules/_core').Promise;
+
+},{"../modules/es6.object.to-string":"../node_modules/core-js/library/modules/es6.object.to-string.js","../modules/es6.string.iterator":"../node_modules/core-js/library/modules/es6.string.iterator.js","../modules/web.dom.iterable":"../node_modules/core-js/library/modules/web.dom.iterable.js","../modules/es6.promise":"../node_modules/core-js/library/modules/es6.promise.js","../modules/es7.promise.finally":"../node_modules/core-js/library/modules/es7.promise.finally.js","../modules/es7.promise.try":"../node_modules/core-js/library/modules/es7.promise.try.js","../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/promise.js":[function(require,module,exports) {
+module.exports = require("core-js/library/fn/promise");
+},{"core-js/library/fn/promise":"../node_modules/core-js/library/fn/promise.js"}],"../node_modules/@babel/runtime-corejs2/helpers/asyncToGenerator.js":[function(require,module,exports) {
+var _Promise = require("../core-js/promise");
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg);
+    var value = info.value;
+  } catch (error) {
+    reject(error);
+    return;
+  }
+
+  if (info.done) {
+    resolve(value);
+  } else {
+    _Promise.resolve(value).then(_next, _throw);
+  }
+}
+
+function _asyncToGenerator(fn) {
+  return function () {
+    var self = this,
+        args = arguments;
+    return new _Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
+
+      function _next(value) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+      }
+
+      function _throw(err) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      }
+
+      _next(undefined);
+    });
+  };
+}
+
+module.exports = _asyncToGenerator;
+},{"../core-js/promise":"../node_modules/@babel/runtime-corejs2/core-js/promise.js"}],"service-worker.js":[function(require,module,exports) {
+"use strict";
+
+var _regenerator = _interopRequireDefault(require("@babel/runtime-corejs2/regenerator"));
+
+var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/asyncToGenerator"));
+
+var _promise = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/promise"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var CACHE_NAME = 'pwa-xviewers-asset-cache-2';
+var RESOURCES_TO_PRELOAD = ['/xmltv']; // Preload some resources during install
+
+self.addEventListener('install', function (event) {
+  event.waitUntil(caches.open(CACHE_NAME).then(function (cache) {
+    return cache.addAll(RESOURCES_TO_PRELOAD); // if any item isn't successfully added to
+    // cache, the whole operation fails.
+  }).catch(function (error) {
+    // console.error(error)
+    throw error;
+  }));
+}); // Delete obsolete caches during activate
+
+self.addEventListener('activate', function (event) {
+  event.waitUntil(caches.keys().then(function (keyList) {
+    return _promise.default.all(keyList.map(function (key) {
+      if (key !== CACHE_NAME) {
+        return caches.delete(key);
+      }
+    }));
+  }));
+});
+/**
+ * The fetch event is fired every time the browser sends a request.
+ * In this case, the service worker acts as a proxy. We can for example return the cached
+ * version of the ressource matching the request, or send the request to the internet
+ * , we can even make our own response from scratch !
+ * Here, we are going to use cache first strategy
+ */
+
+self.addEventListener('fetch', function (event) {
+  if (event.request.method !== 'GET' || event.request.url.indexOf('https') !== 0 || event.request.url.indexOf('.xmltv') !== 0) return; //We defind the promise (the async code block) that return either the cached response or the network one
+  //It should return a response object
+
+  var getCustomResponsePromise =
+  /*#__PURE__*/
+  function () {
+    var _ref = (0, _asyncToGenerator2.default)(
+    /*#__PURE__*/
+    _regenerator.default.mark(function _callee() {
+      var cachedResponse, netResponse, cache;
+      return _regenerator.default.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.prev = 0;
+              _context.next = 3;
+              return caches.match(event.request);
+
+            case 3:
+              cachedResponse = _context.sent;
+
+              if (!cachedResponse) {
+                _context.next = 6;
+                break;
+              }
+
+              return _context.abrupt("return", cachedResponse);
+
+            case 6:
+              _context.next = 8;
+              return fetch(event.request);
+
+            case 8:
+              netResponse = _context.sent;
+              _context.next = 11;
+              return caches.open(CACHE_NAME);
+
+            case 11:
+              cache = _context.sent;
+              //We must provide a clone of the response here
+              cache.put(event.request, netResponse.clone()); //return the network response
+
+              return _context.abrupt("return", netResponse);
+
+            case 16:
+              _context.prev = 16;
+              _context.t0 = _context["catch"](0);
+              throw _context.t0;
+
+            case 19:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, this, [[0, 16]]);
+    }));
+
+    return function getCustomResponsePromise() {
+      return _ref.apply(this, arguments);
+    };
+  }(); //In order to override the default fetch behavior, we must provide the result of our custom behavoir to the
+  //event.respondWith method
+
+
+  event.respondWith(getCustomResponsePromise());
+});
+},{"@babel/runtime-corejs2/regenerator":"../node_modules/@babel/runtime-corejs2/regenerator/index.js","@babel/runtime-corejs2/helpers/asyncToGenerator":"../node_modules/@babel/runtime-corejs2/helpers/asyncToGenerator.js","@babel/runtime-corejs2/core-js/promise":"../node_modules/@babel/runtime-corejs2/core-js/promise.js"}],"registerServiceWorker.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = register;
+exports.unregister = unregister;
+
+var _serviceWorker = _interopRequireDefault(require("./service-worker"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// In production, we register a service worker to serve assets from local cache.
+// This lets the app load faster on subsequent visits in production, and gives
+// it offline capabilities. However, it also means that developers (and users)
+// will only see deployed updates on the "N+1" visit to a page, since previously
+// cached resources are updated in the background.
+// To learn more about the benefits of this model, read https://goo.gl/KwvDNy.
+// This link also includes instructions on opting out of this behavior.
+var isLocalhost = Boolean(window.location.hostname === 'localhost' || // [::1] is the IPv6 localhost address.
+window.location.hostname === '[::1]' || // 127.0.0.1/8 is considered localhost for IPv4.
+window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/));
+
+var showUpdateBar = function showUpdateBar() {
+  var snackBar = document.getElementById('snackbar');
+  snackBar.className = 'show';
+}; // $(function() {
+//   // The click event on the pop up notification
+//   document.getElementById('reload').addEventListener('click', function() {
+//     newWorker.postMessage({
+//       action: 'skipWaiting',
+//     })
+//   })
+// })
+
+
+function register() {
+  if ("development" === 'production' && 'serviceWorker' in navigator) {
+    // The URL constructor is available in all browsers that support SW.
+    var publicUrl = new URL(undefined, window.location);
+
+    if (publicUrl.origin !== window.location.origin) {
+      // Our service worker won't work if PUBLIC_URL is on a different origin
+      // from what our page is served on. This might happen if a CDN is used to
+      // serve assets; see https://github.com/facebookincubator/create-react-app/issues/2374
+      return;
+    }
+
+    window.addEventListener('load', function () {
+      var swUrl = "sw";
+
+      if (isLocalhost) {
+        // This is running on localhost. Lets check if a service worker still exists or not.
+        checkValidServiceWorker(swUrl); // Add some additional logging to localhost, pointing developers to the
+        // service worker/PWA documentation.
+
+        navigator.serviceWorker.ready.then(function () {// console.log(
+          //   'This web app is being served cache-first by a service ' +
+          //     'worker. To learn more, visit https://goo.gl/SC7cgQ'
+          // )
+        });
+      } else {
+        // Is not local host. Just register service worker
+        registerValidSW(swUrl);
+      }
+    });
+  }
+}
+
+function registerValidSW(swUrl) {
+  navigator.serviceWorker.register(swUrl).then(function (registration) {
+    registration.onupdatefound = function () {
+      var installingWorker = registration.installing;
+
+      installingWorker.onstatechange = function () {
+        if (installingWorker.state === 'installed') {
+          if (navigator.serviceWorker.controller) {
+            showUpdateBar();
+          } else {// At this point, everything has been precached.
+            // It's the perfect time to display a
+            // "Content is cached for offline use." message.
+            //console.log('Content is cached for offline use.')
+          }
+        }
+      };
+    };
+  }).catch(function (error) {
+    //console.error('Error during service worker registration:', error)
+    throw error;
+  });
+}
+
+function checkValidServiceWorker(swUrl) {
+  // Check if the service worker can be found. If it can't reload the page.
+  fetch(swUrl).then(function (response) {
+    // Ensure service worker exists, and that we really are getting a JS file.
+    if (response.status === 404 || response.headers.get('content-type').indexOf('javascript') === -1) {
+      // No service worker found. Probably a different app. Reload the page.
+      navigator.serviceWorker.ready.then(function (registration) {
+        registration.unregister().then(function () {
+          window.location.reload();
+        });
+      });
+    } else {
+      // Service worker found. Proceed as normal.
+      registerValidSW(swUrl);
+    }
+  }).catch(function (err) {
+    // console.log(
+    //   'No internet connection found. App is running in offline mode.'
+    // )
+    throw err;
+  });
+}
+
+function unregister() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.ready.then(function (registration) {
+      registration.unregister();
+    });
+  }
+}
+},{"./service-worker":"service-worker.js"}],"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js":[function(require,module,exports) {
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+module.exports = _classCallCheck;
+},{}],"../node_modules/core-js/library/modules/es6.object.define-property.js":[function(require,module,exports) {
+var $export = require('./_export');
+// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
+$export($export.S + $export.F * !require('./_descriptors'), 'Object', { defineProperty: require('./_object-dp').f });
+
+},{"./_export":"../node_modules/core-js/library/modules/_export.js","./_descriptors":"../node_modules/core-js/library/modules/_descriptors.js","./_object-dp":"../node_modules/core-js/library/modules/_object-dp.js"}],"../node_modules/core-js/library/fn/object/define-property.js":[function(require,module,exports) {
+require('../../modules/es6.object.define-property');
+var $Object = require('../../modules/_core').Object;
+module.exports = function defineProperty(it, key, desc) {
+  return $Object.defineProperty(it, key, desc);
+};
+
+},{"../../modules/es6.object.define-property":"../node_modules/core-js/library/modules/es6.object.define-property.js","../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js":[function(require,module,exports) {
+module.exports = require("core-js/library/fn/object/define-property");
+},{"core-js/library/fn/object/define-property":"../node_modules/core-js/library/fn/object/define-property.js"}],"../node_modules/@babel/runtime-corejs2/helpers/createClass.js":[function(require,module,exports) {
+var _Object$defineProperty = require("../core-js/object/define-property");
+
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+
+    _Object$defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+module.exports = _createClass;
+},{"../core-js/object/define-property":"../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js"}],"../node_modules/core-js/library/modules/_wks-ext.js":[function(require,module,exports) {
 exports.f = require('./_wks');
 
 },{"./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/fn/symbol/iterator.js":[function(require,module,exports) {
@@ -24282,9 +24957,7 @@ setToStringTag(Math, 'Math', true);
 // 24.3.3 JSON[@@toStringTag]
 setToStringTag(global.JSON, 'JSON', true);
 
-},{"./_global":"../node_modules/core-js/library/modules/_global.js","./_has":"../node_modules/core-js/library/modules/_has.js","./_descriptors":"../node_modules/core-js/library/modules/_descriptors.js","./_export":"../node_modules/core-js/library/modules/_export.js","./_redefine":"../node_modules/core-js/library/modules/_redefine.js","./_meta":"../node_modules/core-js/library/modules/_meta.js","./_fails":"../node_modules/core-js/library/modules/_fails.js","./_shared":"../node_modules/core-js/library/modules/_shared.js","./_set-to-string-tag":"../node_modules/core-js/library/modules/_set-to-string-tag.js","./_uid":"../node_modules/core-js/library/modules/_uid.js","./_wks":"../node_modules/core-js/library/modules/_wks.js","./_wks-ext":"../node_modules/core-js/library/modules/_wks-ext.js","./_wks-define":"../node_modules/core-js/library/modules/_wks-define.js","./_enum-keys":"../node_modules/core-js/library/modules/_enum-keys.js","./_is-array":"../node_modules/core-js/library/modules/_is-array.js","./_an-object":"../node_modules/core-js/library/modules/_an-object.js","./_is-object":"../node_modules/core-js/library/modules/_is-object.js","./_to-iobject":"../node_modules/core-js/library/modules/_to-iobject.js","./_to-primitive":"../node_modules/core-js/library/modules/_to-primitive.js","./_property-desc":"../node_modules/core-js/library/modules/_property-desc.js","./_object-create":"../node_modules/core-js/library/modules/_object-create.js","./_object-gopn-ext":"../node_modules/core-js/library/modules/_object-gopn-ext.js","./_object-gopd":"../node_modules/core-js/library/modules/_object-gopd.js","./_object-dp":"../node_modules/core-js/library/modules/_object-dp.js","./_object-keys":"../node_modules/core-js/library/modules/_object-keys.js","./_object-gopn":"../node_modules/core-js/library/modules/_object-gopn.js","./_object-pie":"../node_modules/core-js/library/modules/_object-pie.js","./_object-gops":"../node_modules/core-js/library/modules/_object-gops.js","./_library":"../node_modules/core-js/library/modules/_library.js","./_hide":"../node_modules/core-js/library/modules/_hide.js"}],"../node_modules/core-js/library/modules/es6.object.to-string.js":[function(require,module,exports) {
-
-},{}],"../node_modules/core-js/library/modules/es7.symbol.async-iterator.js":[function(require,module,exports) {
+},{"./_global":"../node_modules/core-js/library/modules/_global.js","./_has":"../node_modules/core-js/library/modules/_has.js","./_descriptors":"../node_modules/core-js/library/modules/_descriptors.js","./_export":"../node_modules/core-js/library/modules/_export.js","./_redefine":"../node_modules/core-js/library/modules/_redefine.js","./_meta":"../node_modules/core-js/library/modules/_meta.js","./_fails":"../node_modules/core-js/library/modules/_fails.js","./_shared":"../node_modules/core-js/library/modules/_shared.js","./_set-to-string-tag":"../node_modules/core-js/library/modules/_set-to-string-tag.js","./_uid":"../node_modules/core-js/library/modules/_uid.js","./_wks":"../node_modules/core-js/library/modules/_wks.js","./_wks-ext":"../node_modules/core-js/library/modules/_wks-ext.js","./_wks-define":"../node_modules/core-js/library/modules/_wks-define.js","./_enum-keys":"../node_modules/core-js/library/modules/_enum-keys.js","./_is-array":"../node_modules/core-js/library/modules/_is-array.js","./_an-object":"../node_modules/core-js/library/modules/_an-object.js","./_is-object":"../node_modules/core-js/library/modules/_is-object.js","./_to-iobject":"../node_modules/core-js/library/modules/_to-iobject.js","./_to-primitive":"../node_modules/core-js/library/modules/_to-primitive.js","./_property-desc":"../node_modules/core-js/library/modules/_property-desc.js","./_object-create":"../node_modules/core-js/library/modules/_object-create.js","./_object-gopn-ext":"../node_modules/core-js/library/modules/_object-gopn-ext.js","./_object-gopd":"../node_modules/core-js/library/modules/_object-gopd.js","./_object-dp":"../node_modules/core-js/library/modules/_object-dp.js","./_object-keys":"../node_modules/core-js/library/modules/_object-keys.js","./_object-gopn":"../node_modules/core-js/library/modules/_object-gopn.js","./_object-pie":"../node_modules/core-js/library/modules/_object-pie.js","./_object-gops":"../node_modules/core-js/library/modules/_object-gops.js","./_library":"../node_modules/core-js/library/modules/_library.js","./_hide":"../node_modules/core-js/library/modules/_hide.js"}],"../node_modules/core-js/library/modules/es7.symbol.async-iterator.js":[function(require,module,exports) {
 require('./_wks-define')('asyncIterator');
 
 },{"./_wks-define":"../node_modules/core-js/library/modules/_wks-define.js"}],"../node_modules/core-js/library/modules/es7.symbol.observable.js":[function(require,module,exports) {
@@ -27755,42 +28428,7 @@ function _objectSpread(target) {
 }
 
 module.exports = _objectSpread;
-},{"../core-js/object/get-own-property-descriptor":"../node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptor.js","../core-js/object/get-own-property-symbols":"../node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-symbols.js","../core-js/object/keys":"../node_modules/@babel/runtime-corejs2/core-js/object/keys.js","./defineProperty":"../node_modules/@babel/runtime-corejs2/helpers/defineProperty.js"}],"../node_modules/core-js/library/modules/_classof.js":[function(require,module,exports) {
-// getting tag from 19.1.3.6 Object.prototype.toString()
-var cof = require('./_cof');
-var TAG = require('./_wks')('toStringTag');
-// ES3 wrong here
-var ARG = cof(function () { return arguments; }()) == 'Arguments';
-
-// fallback for IE11 Script Access Denied error
-var tryGet = function (it, key) {
-  try {
-    return it[key];
-  } catch (e) { /* empty */ }
-};
-
-module.exports = function (it) {
-  var O, T, B;
-  return it === undefined ? 'Undefined' : it === null ? 'Null'
-    // @@toStringTag case
-    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
-    // builtinTag case
-    : ARG ? cof(O)
-    // ES3 arguments fallback
-    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
-};
-
-},{"./_cof":"../node_modules/core-js/library/modules/_cof.js","./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/core.get-iterator-method.js":[function(require,module,exports) {
-var classof = require('./_classof');
-var ITERATOR = require('./_wks')('iterator');
-var Iterators = require('./_iterators');
-module.exports = require('./_core').getIteratorMethod = function (it) {
-  if (it != undefined) return it[ITERATOR]
-    || it['@@iterator']
-    || Iterators[classof(it)];
-};
-
-},{"./_classof":"../node_modules/core-js/library/modules/_classof.js","./_wks":"../node_modules/core-js/library/modules/_wks.js","./_iterators":"../node_modules/core-js/library/modules/_iterators.js","./_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/core-js/library/modules/core.get-iterator.js":[function(require,module,exports) {
+},{"../core-js/object/get-own-property-descriptor":"../node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptor.js","../core-js/object/get-own-property-symbols":"../node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-symbols.js","../core-js/object/keys":"../node_modules/@babel/runtime-corejs2/core-js/object/keys.js","./defineProperty":"../node_modules/@babel/runtime-corejs2/helpers/defineProperty.js"}],"../node_modules/core-js/library/modules/core.get-iterator.js":[function(require,module,exports) {
 var anObject = require('./_an-object');
 var get = require('./core.get-iterator-method');
 module.exports = require('./_core').getIterator = function (it) {
@@ -27832,31 +28470,7 @@ function _arrayWithoutHoles(arr) {
 }
 
 module.exports = _arrayWithoutHoles;
-},{"../core-js/array/is-array":"../node_modules/@babel/runtime-corejs2/core-js/array/is-array.js"}],"../node_modules/core-js/library/modules/_iter-call.js":[function(require,module,exports) {
-// call something on iterator step with safe closing on error
-var anObject = require('./_an-object');
-module.exports = function (iterator, fn, value, entries) {
-  try {
-    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
-  // 7.4.6 IteratorClose(iterator, completion)
-  } catch (e) {
-    var ret = iterator['return'];
-    if (ret !== undefined) anObject(ret.call(iterator));
-    throw e;
-  }
-};
-
-},{"./_an-object":"../node_modules/core-js/library/modules/_an-object.js"}],"../node_modules/core-js/library/modules/_is-array-iter.js":[function(require,module,exports) {
-// check on default Array iterator
-var Iterators = require('./_iterators');
-var ITERATOR = require('./_wks')('iterator');
-var ArrayProto = Array.prototype;
-
-module.exports = function (it) {
-  return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
-};
-
-},{"./_iterators":"../node_modules/core-js/library/modules/_iterators.js","./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/_create-property.js":[function(require,module,exports) {
+},{"../core-js/array/is-array":"../node_modules/@babel/runtime-corejs2/core-js/array/is-array.js"}],"../node_modules/core-js/library/modules/_create-property.js":[function(require,module,exports) {
 'use strict';
 var $defineProperty = require('./_object-dp');
 var createDesc = require('./_property-desc');
@@ -27866,31 +28480,7 @@ module.exports = function (object, index, value) {
   else object[index] = value;
 };
 
-},{"./_object-dp":"../node_modules/core-js/library/modules/_object-dp.js","./_property-desc":"../node_modules/core-js/library/modules/_property-desc.js"}],"../node_modules/core-js/library/modules/_iter-detect.js":[function(require,module,exports) {
-var ITERATOR = require('./_wks')('iterator');
-var SAFE_CLOSING = false;
-
-try {
-  var riter = [7][ITERATOR]();
-  riter['return'] = function () { SAFE_CLOSING = true; };
-  // eslint-disable-next-line no-throw-literal
-  Array.from(riter, function () { throw 2; });
-} catch (e) { /* empty */ }
-
-module.exports = function (exec, skipClosing) {
-  if (!skipClosing && !SAFE_CLOSING) return false;
-  var safe = false;
-  try {
-    var arr = [7];
-    var iter = arr[ITERATOR]();
-    iter.next = function () { return { done: safe = true }; };
-    arr[ITERATOR] = function () { return iter; };
-    exec(arr);
-  } catch (e) { /* empty */ }
-  return safe;
-};
-
-},{"./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/es6.array.from.js":[function(require,module,exports) {
+},{"./_object-dp":"../node_modules/core-js/library/modules/_object-dp.js","./_property-desc":"../node_modules/core-js/library/modules/_property-desc.js"}],"../node_modules/core-js/library/modules/es6.array.from.js":[function(require,module,exports) {
 'use strict';
 var ctx = require('./_ctx');
 var $export = require('./_export');
@@ -27983,1451 +28573,7 @@ function _toConsumableArray(arr) {
 }
 
 module.exports = _toConsumableArray;
-},{"./arrayWithoutHoles":"../node_modules/@babel/runtime-corejs2/helpers/arrayWithoutHoles.js","./iterableToArray":"../node_modules/@babel/runtime-corejs2/helpers/iterableToArray.js","./nonIterableSpread":"../node_modules/@babel/runtime-corejs2/helpers/nonIterableSpread.js"}],"../node_modules/regenerator-runtime/runtime.js":[function(require,module,exports) {
-var global = arguments[3];
-/**
- * Copyright (c) 2014-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-!(function(global) {
-  "use strict";
-
-  var Op = Object.prototype;
-  var hasOwn = Op.hasOwnProperty;
-  var undefined; // More compressible than void 0.
-  var $Symbol = typeof Symbol === "function" ? Symbol : {};
-  var iteratorSymbol = $Symbol.iterator || "@@iterator";
-  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
-  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-
-  var inModule = typeof module === "object";
-  var runtime = global.regeneratorRuntime;
-  if (runtime) {
-    if (inModule) {
-      // If regeneratorRuntime is defined globally and we're in a module,
-      // make the exports object identical to regeneratorRuntime.
-      module.exports = runtime;
-    }
-    // Don't bother evaluating the rest of this file if the runtime was
-    // already defined globally.
-    return;
-  }
-
-  // Define the runtime globally (as expected by generated code) as either
-  // module.exports (if we're in a module) or a new, empty object.
-  runtime = global.regeneratorRuntime = inModule ? module.exports : {};
-
-  function wrap(innerFn, outerFn, self, tryLocsList) {
-    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
-    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
-    var generator = Object.create(protoGenerator.prototype);
-    var context = new Context(tryLocsList || []);
-
-    // The ._invoke method unifies the implementations of the .next,
-    // .throw, and .return methods.
-    generator._invoke = makeInvokeMethod(innerFn, self, context);
-
-    return generator;
-  }
-  runtime.wrap = wrap;
-
-  // Try/catch helper to minimize deoptimizations. Returns a completion
-  // record like context.tryEntries[i].completion. This interface could
-  // have been (and was previously) designed to take a closure to be
-  // invoked without arguments, but in all the cases we care about we
-  // already have an existing method we want to call, so there's no need
-  // to create a new function object. We can even get away with assuming
-  // the method takes exactly one argument, since that happens to be true
-  // in every case, so we don't have to touch the arguments object. The
-  // only additional allocation required is the completion record, which
-  // has a stable shape and so hopefully should be cheap to allocate.
-  function tryCatch(fn, obj, arg) {
-    try {
-      return { type: "normal", arg: fn.call(obj, arg) };
-    } catch (err) {
-      return { type: "throw", arg: err };
-    }
-  }
-
-  var GenStateSuspendedStart = "suspendedStart";
-  var GenStateSuspendedYield = "suspendedYield";
-  var GenStateExecuting = "executing";
-  var GenStateCompleted = "completed";
-
-  // Returning this object from the innerFn has the same effect as
-  // breaking out of the dispatch switch statement.
-  var ContinueSentinel = {};
-
-  // Dummy constructor functions that we use as the .constructor and
-  // .constructor.prototype properties for functions that return Generator
-  // objects. For full spec compliance, you may wish to configure your
-  // minifier not to mangle the names of these two functions.
-  function Generator() {}
-  function GeneratorFunction() {}
-  function GeneratorFunctionPrototype() {}
-
-  // This is a polyfill for %IteratorPrototype% for environments that
-  // don't natively support it.
-  var IteratorPrototype = {};
-  IteratorPrototype[iteratorSymbol] = function () {
-    return this;
-  };
-
-  var getProto = Object.getPrototypeOf;
-  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
-  if (NativeIteratorPrototype &&
-      NativeIteratorPrototype !== Op &&
-      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
-    // This environment has a native %IteratorPrototype%; use it instead
-    // of the polyfill.
-    IteratorPrototype = NativeIteratorPrototype;
-  }
-
-  var Gp = GeneratorFunctionPrototype.prototype =
-    Generator.prototype = Object.create(IteratorPrototype);
-  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
-  GeneratorFunctionPrototype.constructor = GeneratorFunction;
-  GeneratorFunctionPrototype[toStringTagSymbol] =
-    GeneratorFunction.displayName = "GeneratorFunction";
-
-  // Helper for defining the .next, .throw, and .return methods of the
-  // Iterator interface in terms of a single ._invoke method.
-  function defineIteratorMethods(prototype) {
-    ["next", "throw", "return"].forEach(function(method) {
-      prototype[method] = function(arg) {
-        return this._invoke(method, arg);
-      };
-    });
-  }
-
-  runtime.isGeneratorFunction = function(genFun) {
-    var ctor = typeof genFun === "function" && genFun.constructor;
-    return ctor
-      ? ctor === GeneratorFunction ||
-        // For the native GeneratorFunction constructor, the best we can
-        // do is to check its .name property.
-        (ctor.displayName || ctor.name) === "GeneratorFunction"
-      : false;
-  };
-
-  runtime.mark = function(genFun) {
-    if (Object.setPrototypeOf) {
-      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
-    } else {
-      genFun.__proto__ = GeneratorFunctionPrototype;
-      if (!(toStringTagSymbol in genFun)) {
-        genFun[toStringTagSymbol] = "GeneratorFunction";
-      }
-    }
-    genFun.prototype = Object.create(Gp);
-    return genFun;
-  };
-
-  // Within the body of any async function, `await x` is transformed to
-  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
-  // `hasOwn.call(value, "__await")` to determine if the yielded value is
-  // meant to be awaited.
-  runtime.awrap = function(arg) {
-    return { __await: arg };
-  };
-
-  function AsyncIterator(generator) {
-    function invoke(method, arg, resolve, reject) {
-      var record = tryCatch(generator[method], generator, arg);
-      if (record.type === "throw") {
-        reject(record.arg);
-      } else {
-        var result = record.arg;
-        var value = result.value;
-        if (value &&
-            typeof value === "object" &&
-            hasOwn.call(value, "__await")) {
-          return Promise.resolve(value.__await).then(function(value) {
-            invoke("next", value, resolve, reject);
-          }, function(err) {
-            invoke("throw", err, resolve, reject);
-          });
-        }
-
-        return Promise.resolve(value).then(function(unwrapped) {
-          // When a yielded Promise is resolved, its final value becomes
-          // the .value of the Promise<{value,done}> result for the
-          // current iteration.
-          result.value = unwrapped;
-          resolve(result);
-        }, function(error) {
-          // If a rejected Promise was yielded, throw the rejection back
-          // into the async generator function so it can be handled there.
-          return invoke("throw", error, resolve, reject);
-        });
-      }
-    }
-
-    var previousPromise;
-
-    function enqueue(method, arg) {
-      function callInvokeWithMethodAndArg() {
-        return new Promise(function(resolve, reject) {
-          invoke(method, arg, resolve, reject);
-        });
-      }
-
-      return previousPromise =
-        // If enqueue has been called before, then we want to wait until
-        // all previous Promises have been resolved before calling invoke,
-        // so that results are always delivered in the correct order. If
-        // enqueue has not been called before, then it is important to
-        // call invoke immediately, without waiting on a callback to fire,
-        // so that the async generator function has the opportunity to do
-        // any necessary setup in a predictable way. This predictability
-        // is why the Promise constructor synchronously invokes its
-        // executor callback, and why async functions synchronously
-        // execute code before the first await. Since we implement simple
-        // async functions in terms of async generators, it is especially
-        // important to get this right, even though it requires care.
-        previousPromise ? previousPromise.then(
-          callInvokeWithMethodAndArg,
-          // Avoid propagating failures to Promises returned by later
-          // invocations of the iterator.
-          callInvokeWithMethodAndArg
-        ) : callInvokeWithMethodAndArg();
-    }
-
-    // Define the unified helper method that is used to implement .next,
-    // .throw, and .return (see defineIteratorMethods).
-    this._invoke = enqueue;
-  }
-
-  defineIteratorMethods(AsyncIterator.prototype);
-  AsyncIterator.prototype[asyncIteratorSymbol] = function () {
-    return this;
-  };
-  runtime.AsyncIterator = AsyncIterator;
-
-  // Note that simple async functions are implemented on top of
-  // AsyncIterator objects; they just return a Promise for the value of
-  // the final result produced by the iterator.
-  runtime.async = function(innerFn, outerFn, self, tryLocsList) {
-    var iter = new AsyncIterator(
-      wrap(innerFn, outerFn, self, tryLocsList)
-    );
-
-    return runtime.isGeneratorFunction(outerFn)
-      ? iter // If outerFn is a generator, return the full iterator.
-      : iter.next().then(function(result) {
-          return result.done ? result.value : iter.next();
-        });
-  };
-
-  function makeInvokeMethod(innerFn, self, context) {
-    var state = GenStateSuspendedStart;
-
-    return function invoke(method, arg) {
-      if (state === GenStateExecuting) {
-        throw new Error("Generator is already running");
-      }
-
-      if (state === GenStateCompleted) {
-        if (method === "throw") {
-          throw arg;
-        }
-
-        // Be forgiving, per 25.3.3.3.3 of the spec:
-        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
-        return doneResult();
-      }
-
-      context.method = method;
-      context.arg = arg;
-
-      while (true) {
-        var delegate = context.delegate;
-        if (delegate) {
-          var delegateResult = maybeInvokeDelegate(delegate, context);
-          if (delegateResult) {
-            if (delegateResult === ContinueSentinel) continue;
-            return delegateResult;
-          }
-        }
-
-        if (context.method === "next") {
-          // Setting context._sent for legacy support of Babel's
-          // function.sent implementation.
-          context.sent = context._sent = context.arg;
-
-        } else if (context.method === "throw") {
-          if (state === GenStateSuspendedStart) {
-            state = GenStateCompleted;
-            throw context.arg;
-          }
-
-          context.dispatchException(context.arg);
-
-        } else if (context.method === "return") {
-          context.abrupt("return", context.arg);
-        }
-
-        state = GenStateExecuting;
-
-        var record = tryCatch(innerFn, self, context);
-        if (record.type === "normal") {
-          // If an exception is thrown from innerFn, we leave state ===
-          // GenStateExecuting and loop back for another invocation.
-          state = context.done
-            ? GenStateCompleted
-            : GenStateSuspendedYield;
-
-          if (record.arg === ContinueSentinel) {
-            continue;
-          }
-
-          return {
-            value: record.arg,
-            done: context.done
-          };
-
-        } else if (record.type === "throw") {
-          state = GenStateCompleted;
-          // Dispatch the exception by looping back around to the
-          // context.dispatchException(context.arg) call above.
-          context.method = "throw";
-          context.arg = record.arg;
-        }
-      }
-    };
-  }
-
-  // Call delegate.iterator[context.method](context.arg) and handle the
-  // result, either by returning a { value, done } result from the
-  // delegate iterator, or by modifying context.method and context.arg,
-  // setting context.delegate to null, and returning the ContinueSentinel.
-  function maybeInvokeDelegate(delegate, context) {
-    var method = delegate.iterator[context.method];
-    if (method === undefined) {
-      // A .throw or .return when the delegate iterator has no .throw
-      // method always terminates the yield* loop.
-      context.delegate = null;
-
-      if (context.method === "throw") {
-        if (delegate.iterator.return) {
-          // If the delegate iterator has a return method, give it a
-          // chance to clean up.
-          context.method = "return";
-          context.arg = undefined;
-          maybeInvokeDelegate(delegate, context);
-
-          if (context.method === "throw") {
-            // If maybeInvokeDelegate(context) changed context.method from
-            // "return" to "throw", let that override the TypeError below.
-            return ContinueSentinel;
-          }
-        }
-
-        context.method = "throw";
-        context.arg = new TypeError(
-          "The iterator does not provide a 'throw' method");
-      }
-
-      return ContinueSentinel;
-    }
-
-    var record = tryCatch(method, delegate.iterator, context.arg);
-
-    if (record.type === "throw") {
-      context.method = "throw";
-      context.arg = record.arg;
-      context.delegate = null;
-      return ContinueSentinel;
-    }
-
-    var info = record.arg;
-
-    if (! info) {
-      context.method = "throw";
-      context.arg = new TypeError("iterator result is not an object");
-      context.delegate = null;
-      return ContinueSentinel;
-    }
-
-    if (info.done) {
-      // Assign the result of the finished delegate to the temporary
-      // variable specified by delegate.resultName (see delegateYield).
-      context[delegate.resultName] = info.value;
-
-      // Resume execution at the desired location (see delegateYield).
-      context.next = delegate.nextLoc;
-
-      // If context.method was "throw" but the delegate handled the
-      // exception, let the outer generator proceed normally. If
-      // context.method was "next", forget context.arg since it has been
-      // "consumed" by the delegate iterator. If context.method was
-      // "return", allow the original .return call to continue in the
-      // outer generator.
-      if (context.method !== "return") {
-        context.method = "next";
-        context.arg = undefined;
-      }
-
-    } else {
-      // Re-yield the result returned by the delegate method.
-      return info;
-    }
-
-    // The delegate iterator is finished, so forget it and continue with
-    // the outer generator.
-    context.delegate = null;
-    return ContinueSentinel;
-  }
-
-  // Define Generator.prototype.{next,throw,return} in terms of the
-  // unified ._invoke helper method.
-  defineIteratorMethods(Gp);
-
-  Gp[toStringTagSymbol] = "Generator";
-
-  // A Generator should always return itself as the iterator object when the
-  // @@iterator function is called on it. Some browsers' implementations of the
-  // iterator prototype chain incorrectly implement this, causing the Generator
-  // object to not be returned from this call. This ensures that doesn't happen.
-  // See https://github.com/facebook/regenerator/issues/274 for more details.
-  Gp[iteratorSymbol] = function() {
-    return this;
-  };
-
-  Gp.toString = function() {
-    return "[object Generator]";
-  };
-
-  function pushTryEntry(locs) {
-    var entry = { tryLoc: locs[0] };
-
-    if (1 in locs) {
-      entry.catchLoc = locs[1];
-    }
-
-    if (2 in locs) {
-      entry.finallyLoc = locs[2];
-      entry.afterLoc = locs[3];
-    }
-
-    this.tryEntries.push(entry);
-  }
-
-  function resetTryEntry(entry) {
-    var record = entry.completion || {};
-    record.type = "normal";
-    delete record.arg;
-    entry.completion = record;
-  }
-
-  function Context(tryLocsList) {
-    // The root entry object (effectively a try statement without a catch
-    // or a finally block) gives us a place to store values thrown from
-    // locations where there is no enclosing try statement.
-    this.tryEntries = [{ tryLoc: "root" }];
-    tryLocsList.forEach(pushTryEntry, this);
-    this.reset(true);
-  }
-
-  runtime.keys = function(object) {
-    var keys = [];
-    for (var key in object) {
-      keys.push(key);
-    }
-    keys.reverse();
-
-    // Rather than returning an object with a next method, we keep
-    // things simple and return the next function itself.
-    return function next() {
-      while (keys.length) {
-        var key = keys.pop();
-        if (key in object) {
-          next.value = key;
-          next.done = false;
-          return next;
-        }
-      }
-
-      // To avoid creating an additional object, we just hang the .value
-      // and .done properties off the next function object itself. This
-      // also ensures that the minifier will not anonymize the function.
-      next.done = true;
-      return next;
-    };
-  };
-
-  function values(iterable) {
-    if (iterable) {
-      var iteratorMethod = iterable[iteratorSymbol];
-      if (iteratorMethod) {
-        return iteratorMethod.call(iterable);
-      }
-
-      if (typeof iterable.next === "function") {
-        return iterable;
-      }
-
-      if (!isNaN(iterable.length)) {
-        var i = -1, next = function next() {
-          while (++i < iterable.length) {
-            if (hasOwn.call(iterable, i)) {
-              next.value = iterable[i];
-              next.done = false;
-              return next;
-            }
-          }
-
-          next.value = undefined;
-          next.done = true;
-
-          return next;
-        };
-
-        return next.next = next;
-      }
-    }
-
-    // Return an iterator with no values.
-    return { next: doneResult };
-  }
-  runtime.values = values;
-
-  function doneResult() {
-    return { value: undefined, done: true };
-  }
-
-  Context.prototype = {
-    constructor: Context,
-
-    reset: function(skipTempReset) {
-      this.prev = 0;
-      this.next = 0;
-      // Resetting context._sent for legacy support of Babel's
-      // function.sent implementation.
-      this.sent = this._sent = undefined;
-      this.done = false;
-      this.delegate = null;
-
-      this.method = "next";
-      this.arg = undefined;
-
-      this.tryEntries.forEach(resetTryEntry);
-
-      if (!skipTempReset) {
-        for (var name in this) {
-          // Not sure about the optimal order of these conditions:
-          if (name.charAt(0) === "t" &&
-              hasOwn.call(this, name) &&
-              !isNaN(+name.slice(1))) {
-            this[name] = undefined;
-          }
-        }
-      }
-    },
-
-    stop: function() {
-      this.done = true;
-
-      var rootEntry = this.tryEntries[0];
-      var rootRecord = rootEntry.completion;
-      if (rootRecord.type === "throw") {
-        throw rootRecord.arg;
-      }
-
-      return this.rval;
-    },
-
-    dispatchException: function(exception) {
-      if (this.done) {
-        throw exception;
-      }
-
-      var context = this;
-      function handle(loc, caught) {
-        record.type = "throw";
-        record.arg = exception;
-        context.next = loc;
-
-        if (caught) {
-          // If the dispatched exception was caught by a catch block,
-          // then let that catch block handle the exception normally.
-          context.method = "next";
-          context.arg = undefined;
-        }
-
-        return !! caught;
-      }
-
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        var record = entry.completion;
-
-        if (entry.tryLoc === "root") {
-          // Exception thrown outside of any try block that could handle
-          // it, so set the completion value of the entire function to
-          // throw the exception.
-          return handle("end");
-        }
-
-        if (entry.tryLoc <= this.prev) {
-          var hasCatch = hasOwn.call(entry, "catchLoc");
-          var hasFinally = hasOwn.call(entry, "finallyLoc");
-
-          if (hasCatch && hasFinally) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            } else if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
-
-          } else if (hasCatch) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            }
-
-          } else if (hasFinally) {
-            if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
-
-          } else {
-            throw new Error("try statement without catch or finally");
-          }
-        }
-      }
-    },
-
-    abrupt: function(type, arg) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc <= this.prev &&
-            hasOwn.call(entry, "finallyLoc") &&
-            this.prev < entry.finallyLoc) {
-          var finallyEntry = entry;
-          break;
-        }
-      }
-
-      if (finallyEntry &&
-          (type === "break" ||
-           type === "continue") &&
-          finallyEntry.tryLoc <= arg &&
-          arg <= finallyEntry.finallyLoc) {
-        // Ignore the finally entry if control is not jumping to a
-        // location outside the try/catch block.
-        finallyEntry = null;
-      }
-
-      var record = finallyEntry ? finallyEntry.completion : {};
-      record.type = type;
-      record.arg = arg;
-
-      if (finallyEntry) {
-        this.method = "next";
-        this.next = finallyEntry.finallyLoc;
-        return ContinueSentinel;
-      }
-
-      return this.complete(record);
-    },
-
-    complete: function(record, afterLoc) {
-      if (record.type === "throw") {
-        throw record.arg;
-      }
-
-      if (record.type === "break" ||
-          record.type === "continue") {
-        this.next = record.arg;
-      } else if (record.type === "return") {
-        this.rval = this.arg = record.arg;
-        this.method = "return";
-        this.next = "end";
-      } else if (record.type === "normal" && afterLoc) {
-        this.next = afterLoc;
-      }
-
-      return ContinueSentinel;
-    },
-
-    finish: function(finallyLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.finallyLoc === finallyLoc) {
-          this.complete(entry.completion, entry.afterLoc);
-          resetTryEntry(entry);
-          return ContinueSentinel;
-        }
-      }
-    },
-
-    "catch": function(tryLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc === tryLoc) {
-          var record = entry.completion;
-          if (record.type === "throw") {
-            var thrown = record.arg;
-            resetTryEntry(entry);
-          }
-          return thrown;
-        }
-      }
-
-      // The context.catch method must only be called with a location
-      // argument that corresponds to a known catch block.
-      throw new Error("illegal catch attempt");
-    },
-
-    delegateYield: function(iterable, resultName, nextLoc) {
-      this.delegate = {
-        iterator: values(iterable),
-        resultName: resultName,
-        nextLoc: nextLoc
-      };
-
-      if (this.method === "next") {
-        // Deliberately forget the last sent value so that we don't
-        // accidentally pass it on to the delegate.
-        this.arg = undefined;
-      }
-
-      return ContinueSentinel;
-    }
-  };
-})(
-  // In sloppy mode, unbound `this` refers to the global object, fallback to
-  // Function constructor if we're in global strict mode. That is sadly a form
-  // of indirect eval which violates Content Security Policy.
-  (function() {
-    return this || (typeof self === "object" && self);
-  })() || Function("return this")()
-);
-
-},{}],"../node_modules/regenerator-runtime/runtime-module.js":[function(require,module,exports) {
-/**
- * Copyright (c) 2014-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-// This method of obtaining a reference to the global object needs to be
-// kept identical to the way it is obtained in runtime.js
-var g = (function() {
-  return this || (typeof self === "object" && self);
-})() || Function("return this")();
-
-// Use `getOwnPropertyNames` because not all browsers support calling
-// `hasOwnProperty` on the global `self` object in a worker. See #183.
-var hadRuntime = g.regeneratorRuntime &&
-  Object.getOwnPropertyNames(g).indexOf("regeneratorRuntime") >= 0;
-
-// Save the old regeneratorRuntime in case it needs to be restored later.
-var oldRuntime = hadRuntime && g.regeneratorRuntime;
-
-// Force reevalutation of runtime.js.
-g.regeneratorRuntime = undefined;
-
-module.exports = require("./runtime");
-
-if (hadRuntime) {
-  // Restore the original runtime.
-  g.regeneratorRuntime = oldRuntime;
-} else {
-  // Remove the global property added by runtime.js.
-  try {
-    delete g.regeneratorRuntime;
-  } catch(e) {
-    g.regeneratorRuntime = undefined;
-  }
-}
-
-},{"./runtime":"../node_modules/regenerator-runtime/runtime.js"}],"../node_modules/@babel/runtime-corejs2/regenerator/index.js":[function(require,module,exports) {
-module.exports = require("regenerator-runtime");
-
-},{"regenerator-runtime":"../node_modules/regenerator-runtime/runtime-module.js"}],"../node_modules/core-js/library/modules/_an-instance.js":[function(require,module,exports) {
-module.exports = function (it, Constructor, name, forbiddenField) {
-  if (!(it instanceof Constructor) || (forbiddenField !== undefined && forbiddenField in it)) {
-    throw TypeError(name + ': incorrect invocation!');
-  } return it;
-};
-
-},{}],"../node_modules/core-js/library/modules/_for-of.js":[function(require,module,exports) {
-var ctx = require('./_ctx');
-var call = require('./_iter-call');
-var isArrayIter = require('./_is-array-iter');
-var anObject = require('./_an-object');
-var toLength = require('./_to-length');
-var getIterFn = require('./core.get-iterator-method');
-var BREAK = {};
-var RETURN = {};
-var exports = module.exports = function (iterable, entries, fn, that, ITERATOR) {
-  var iterFn = ITERATOR ? function () { return iterable; } : getIterFn(iterable);
-  var f = ctx(fn, that, entries ? 2 : 1);
-  var index = 0;
-  var length, step, iterator, result;
-  if (typeof iterFn != 'function') throw TypeError(iterable + ' is not iterable!');
-  // fast case for arrays with default iterator
-  if (isArrayIter(iterFn)) for (length = toLength(iterable.length); length > index; index++) {
-    result = entries ? f(anObject(step = iterable[index])[0], step[1]) : f(iterable[index]);
-    if (result === BREAK || result === RETURN) return result;
-  } else for (iterator = iterFn.call(iterable); !(step = iterator.next()).done;) {
-    result = call(iterator, f, step.value, entries);
-    if (result === BREAK || result === RETURN) return result;
-  }
-};
-exports.BREAK = BREAK;
-exports.RETURN = RETURN;
-
-},{"./_ctx":"../node_modules/core-js/library/modules/_ctx.js","./_iter-call":"../node_modules/core-js/library/modules/_iter-call.js","./_is-array-iter":"../node_modules/core-js/library/modules/_is-array-iter.js","./_an-object":"../node_modules/core-js/library/modules/_an-object.js","./_to-length":"../node_modules/core-js/library/modules/_to-length.js","./core.get-iterator-method":"../node_modules/core-js/library/modules/core.get-iterator-method.js"}],"../node_modules/core-js/library/modules/_species-constructor.js":[function(require,module,exports) {
-// 7.3.20 SpeciesConstructor(O, defaultConstructor)
-var anObject = require('./_an-object');
-var aFunction = require('./_a-function');
-var SPECIES = require('./_wks')('species');
-module.exports = function (O, D) {
-  var C = anObject(O).constructor;
-  var S;
-  return C === undefined || (S = anObject(C)[SPECIES]) == undefined ? D : aFunction(S);
-};
-
-},{"./_an-object":"../node_modules/core-js/library/modules/_an-object.js","./_a-function":"../node_modules/core-js/library/modules/_a-function.js","./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/_invoke.js":[function(require,module,exports) {
-// fast apply, http://jsperf.lnkit.com/fast-apply/5
-module.exports = function (fn, args, that) {
-  var un = that === undefined;
-  switch (args.length) {
-    case 0: return un ? fn()
-                      : fn.call(that);
-    case 1: return un ? fn(args[0])
-                      : fn.call(that, args[0]);
-    case 2: return un ? fn(args[0], args[1])
-                      : fn.call(that, args[0], args[1]);
-    case 3: return un ? fn(args[0], args[1], args[2])
-                      : fn.call(that, args[0], args[1], args[2]);
-    case 4: return un ? fn(args[0], args[1], args[2], args[3])
-                      : fn.call(that, args[0], args[1], args[2], args[3]);
-  } return fn.apply(that, args);
-};
-
-},{}],"../node_modules/core-js/library/modules/_task.js":[function(require,module,exports) {
-
-
-var ctx = require('./_ctx');
-var invoke = require('./_invoke');
-var html = require('./_html');
-var cel = require('./_dom-create');
-var global = require('./_global');
-var process = global.process;
-var setTask = global.setImmediate;
-var clearTask = global.clearImmediate;
-var MessageChannel = global.MessageChannel;
-var Dispatch = global.Dispatch;
-var counter = 0;
-var queue = {};
-var ONREADYSTATECHANGE = 'onreadystatechange';
-var defer, channel, port;
-var run = function () {
-  var id = +this;
-  // eslint-disable-next-line no-prototype-builtins
-  if (queue.hasOwnProperty(id)) {
-    var fn = queue[id];
-    delete queue[id];
-    fn();
-  }
-};
-var listener = function (event) {
-  run.call(event.data);
-};
-// Node.js 0.9+ & IE10+ has setImmediate, otherwise:
-if (!setTask || !clearTask) {
-  setTask = function setImmediate(fn) {
-    var args = [];
-    var i = 1;
-    while (arguments.length > i) args.push(arguments[i++]);
-    queue[++counter] = function () {
-      // eslint-disable-next-line no-new-func
-      invoke(typeof fn == 'function' ? fn : Function(fn), args);
-    };
-    defer(counter);
-    return counter;
-  };
-  clearTask = function clearImmediate(id) {
-    delete queue[id];
-  };
-  // Node.js 0.8-
-  if (require('./_cof')(process) == 'process') {
-    defer = function (id) {
-      process.nextTick(ctx(run, id, 1));
-    };
-  // Sphere (JS game engine) Dispatch API
-  } else if (Dispatch && Dispatch.now) {
-    defer = function (id) {
-      Dispatch.now(ctx(run, id, 1));
-    };
-  // Browsers with MessageChannel, includes WebWorkers
-  } else if (MessageChannel) {
-    channel = new MessageChannel();
-    port = channel.port2;
-    channel.port1.onmessage = listener;
-    defer = ctx(port.postMessage, port, 1);
-  // Browsers with postMessage, skip WebWorkers
-  // IE8 has postMessage, but it's sync & typeof its postMessage is 'object'
-  } else if (global.addEventListener && typeof postMessage == 'function' && !global.importScripts) {
-    defer = function (id) {
-      global.postMessage(id + '', '*');
-    };
-    global.addEventListener('message', listener, false);
-  // IE8-
-  } else if (ONREADYSTATECHANGE in cel('script')) {
-    defer = function (id) {
-      html.appendChild(cel('script'))[ONREADYSTATECHANGE] = function () {
-        html.removeChild(this);
-        run.call(id);
-      };
-    };
-  // Rest old browsers
-  } else {
-    defer = function (id) {
-      setTimeout(ctx(run, id, 1), 0);
-    };
-  }
-}
-module.exports = {
-  set: setTask,
-  clear: clearTask
-};
-
-},{"./_ctx":"../node_modules/core-js/library/modules/_ctx.js","./_invoke":"../node_modules/core-js/library/modules/_invoke.js","./_html":"../node_modules/core-js/library/modules/_html.js","./_dom-create":"../node_modules/core-js/library/modules/_dom-create.js","./_global":"../node_modules/core-js/library/modules/_global.js","./_cof":"../node_modules/core-js/library/modules/_cof.js"}],"../node_modules/core-js/library/modules/_microtask.js":[function(require,module,exports) {
-
-
-var global = require('./_global');
-var macrotask = require('./_task').set;
-var Observer = global.MutationObserver || global.WebKitMutationObserver;
-var process = global.process;
-var Promise = global.Promise;
-var isNode = require('./_cof')(process) == 'process';
-
-module.exports = function () {
-  var head, last, notify;
-
-  var flush = function () {
-    var parent, fn;
-    if (isNode && (parent = process.domain)) parent.exit();
-    while (head) {
-      fn = head.fn;
-      head = head.next;
-      try {
-        fn();
-      } catch (e) {
-        if (head) notify();
-        else last = undefined;
-        throw e;
-      }
-    } last = undefined;
-    if (parent) parent.enter();
-  };
-
-  // Node.js
-  if (isNode) {
-    notify = function () {
-      process.nextTick(flush);
-    };
-  // browsers with MutationObserver, except iOS Safari - https://github.com/zloirock/core-js/issues/339
-  } else if (Observer && !(global.navigator && global.navigator.standalone)) {
-    var toggle = true;
-    var node = document.createTextNode('');
-    new Observer(flush).observe(node, { characterData: true }); // eslint-disable-line no-new
-    notify = function () {
-      node.data = toggle = !toggle;
-    };
-  // environments with maybe non-completely correct, but existent Promise
-  } else if (Promise && Promise.resolve) {
-    // Promise.resolve without an argument throws an error in LG WebOS 2
-    var promise = Promise.resolve(undefined);
-    notify = function () {
-      promise.then(flush);
-    };
-  // for other environments - macrotask based on:
-  // - setImmediate
-  // - MessageChannel
-  // - window.postMessag
-  // - onreadystatechange
-  // - setTimeout
-  } else {
-    notify = function () {
-      // strange IE + webpack dev server bug - use .call(global)
-      macrotask.call(global, flush);
-    };
-  }
-
-  return function (fn) {
-    var task = { fn: fn, next: undefined };
-    if (last) last.next = task;
-    if (!head) {
-      head = task;
-      notify();
-    } last = task;
-  };
-};
-
-},{"./_global":"../node_modules/core-js/library/modules/_global.js","./_task":"../node_modules/core-js/library/modules/_task.js","./_cof":"../node_modules/core-js/library/modules/_cof.js"}],"../node_modules/core-js/library/modules/_new-promise-capability.js":[function(require,module,exports) {
-'use strict';
-// 25.4.1.5 NewPromiseCapability(C)
-var aFunction = require('./_a-function');
-
-function PromiseCapability(C) {
-  var resolve, reject;
-  this.promise = new C(function ($$resolve, $$reject) {
-    if (resolve !== undefined || reject !== undefined) throw TypeError('Bad Promise constructor');
-    resolve = $$resolve;
-    reject = $$reject;
-  });
-  this.resolve = aFunction(resolve);
-  this.reject = aFunction(reject);
-}
-
-module.exports.f = function (C) {
-  return new PromiseCapability(C);
-};
-
-},{"./_a-function":"../node_modules/core-js/library/modules/_a-function.js"}],"../node_modules/core-js/library/modules/_perform.js":[function(require,module,exports) {
-module.exports = function (exec) {
-  try {
-    return { e: false, v: exec() };
-  } catch (e) {
-    return { e: true, v: e };
-  }
-};
-
-},{}],"../node_modules/core-js/library/modules/_user-agent.js":[function(require,module,exports) {
-
-var global = require('./_global');
-var navigator = global.navigator;
-
-module.exports = navigator && navigator.userAgent || '';
-
-},{"./_global":"../node_modules/core-js/library/modules/_global.js"}],"../node_modules/core-js/library/modules/_promise-resolve.js":[function(require,module,exports) {
-var anObject = require('./_an-object');
-var isObject = require('./_is-object');
-var newPromiseCapability = require('./_new-promise-capability');
-
-module.exports = function (C, x) {
-  anObject(C);
-  if (isObject(x) && x.constructor === C) return x;
-  var promiseCapability = newPromiseCapability.f(C);
-  var resolve = promiseCapability.resolve;
-  resolve(x);
-  return promiseCapability.promise;
-};
-
-},{"./_an-object":"../node_modules/core-js/library/modules/_an-object.js","./_is-object":"../node_modules/core-js/library/modules/_is-object.js","./_new-promise-capability":"../node_modules/core-js/library/modules/_new-promise-capability.js"}],"../node_modules/core-js/library/modules/_redefine-all.js":[function(require,module,exports) {
-var hide = require('./_hide');
-module.exports = function (target, src, safe) {
-  for (var key in src) {
-    if (safe && target[key]) target[key] = src[key];
-    else hide(target, key, src[key]);
-  } return target;
-};
-
-},{"./_hide":"../node_modules/core-js/library/modules/_hide.js"}],"../node_modules/core-js/library/modules/_set-species.js":[function(require,module,exports) {
-
-'use strict';
-var global = require('./_global');
-var core = require('./_core');
-var dP = require('./_object-dp');
-var DESCRIPTORS = require('./_descriptors');
-var SPECIES = require('./_wks')('species');
-
-module.exports = function (KEY) {
-  var C = typeof core[KEY] == 'function' ? core[KEY] : global[KEY];
-  if (DESCRIPTORS && C && !C[SPECIES]) dP.f(C, SPECIES, {
-    configurable: true,
-    get: function () { return this; }
-  });
-};
-
-},{"./_global":"../node_modules/core-js/library/modules/_global.js","./_core":"../node_modules/core-js/library/modules/_core.js","./_object-dp":"../node_modules/core-js/library/modules/_object-dp.js","./_descriptors":"../node_modules/core-js/library/modules/_descriptors.js","./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/es6.promise.js":[function(require,module,exports) {
-
-
-'use strict';
-var LIBRARY = require('./_library');
-var global = require('./_global');
-var ctx = require('./_ctx');
-var classof = require('./_classof');
-var $export = require('./_export');
-var isObject = require('./_is-object');
-var aFunction = require('./_a-function');
-var anInstance = require('./_an-instance');
-var forOf = require('./_for-of');
-var speciesConstructor = require('./_species-constructor');
-var task = require('./_task').set;
-var microtask = require('./_microtask')();
-var newPromiseCapabilityModule = require('./_new-promise-capability');
-var perform = require('./_perform');
-var userAgent = require('./_user-agent');
-var promiseResolve = require('./_promise-resolve');
-var PROMISE = 'Promise';
-var TypeError = global.TypeError;
-var process = global.process;
-var versions = process && process.versions;
-var v8 = versions && versions.v8 || '';
-var $Promise = global[PROMISE];
-var isNode = classof(process) == 'process';
-var empty = function () { /* empty */ };
-var Internal, newGenericPromiseCapability, OwnPromiseCapability, Wrapper;
-var newPromiseCapability = newGenericPromiseCapability = newPromiseCapabilityModule.f;
-
-var USE_NATIVE = !!function () {
-  try {
-    // correct subclassing with @@species support
-    var promise = $Promise.resolve(1);
-    var FakePromise = (promise.constructor = {})[require('./_wks')('species')] = function (exec) {
-      exec(empty, empty);
-    };
-    // unhandled rejections tracking support, NodeJS Promise without it fails @@species test
-    return (isNode || typeof PromiseRejectionEvent == 'function')
-      && promise.then(empty) instanceof FakePromise
-      // v8 6.6 (Node 10 and Chrome 66) have a bug with resolving custom thenables
-      // https://bugs.chromium.org/p/chromium/issues/detail?id=830565
-      // we can't detect it synchronously, so just check versions
-      && v8.indexOf('6.6') !== 0
-      && userAgent.indexOf('Chrome/66') === -1;
-  } catch (e) { /* empty */ }
-}();
-
-// helpers
-var isThenable = function (it) {
-  var then;
-  return isObject(it) && typeof (then = it.then) == 'function' ? then : false;
-};
-var notify = function (promise, isReject) {
-  if (promise._n) return;
-  promise._n = true;
-  var chain = promise._c;
-  microtask(function () {
-    var value = promise._v;
-    var ok = promise._s == 1;
-    var i = 0;
-    var run = function (reaction) {
-      var handler = ok ? reaction.ok : reaction.fail;
-      var resolve = reaction.resolve;
-      var reject = reaction.reject;
-      var domain = reaction.domain;
-      var result, then, exited;
-      try {
-        if (handler) {
-          if (!ok) {
-            if (promise._h == 2) onHandleUnhandled(promise);
-            promise._h = 1;
-          }
-          if (handler === true) result = value;
-          else {
-            if (domain) domain.enter();
-            result = handler(value); // may throw
-            if (domain) {
-              domain.exit();
-              exited = true;
-            }
-          }
-          if (result === reaction.promise) {
-            reject(TypeError('Promise-chain cycle'));
-          } else if (then = isThenable(result)) {
-            then.call(result, resolve, reject);
-          } else resolve(result);
-        } else reject(value);
-      } catch (e) {
-        if (domain && !exited) domain.exit();
-        reject(e);
-      }
-    };
-    while (chain.length > i) run(chain[i++]); // variable length - can't use forEach
-    promise._c = [];
-    promise._n = false;
-    if (isReject && !promise._h) onUnhandled(promise);
-  });
-};
-var onUnhandled = function (promise) {
-  task.call(global, function () {
-    var value = promise._v;
-    var unhandled = isUnhandled(promise);
-    var result, handler, console;
-    if (unhandled) {
-      result = perform(function () {
-        if (isNode) {
-          process.emit('unhandledRejection', value, promise);
-        } else if (handler = global.onunhandledrejection) {
-          handler({ promise: promise, reason: value });
-        } else if ((console = global.console) && console.error) {
-          console.error('Unhandled promise rejection', value);
-        }
-      });
-      // Browsers should not trigger `rejectionHandled` event if it was handled here, NodeJS - should
-      promise._h = isNode || isUnhandled(promise) ? 2 : 1;
-    } promise._a = undefined;
-    if (unhandled && result.e) throw result.v;
-  });
-};
-var isUnhandled = function (promise) {
-  return promise._h !== 1 && (promise._a || promise._c).length === 0;
-};
-var onHandleUnhandled = function (promise) {
-  task.call(global, function () {
-    var handler;
-    if (isNode) {
-      process.emit('rejectionHandled', promise);
-    } else if (handler = global.onrejectionhandled) {
-      handler({ promise: promise, reason: promise._v });
-    }
-  });
-};
-var $reject = function (value) {
-  var promise = this;
-  if (promise._d) return;
-  promise._d = true;
-  promise = promise._w || promise; // unwrap
-  promise._v = value;
-  promise._s = 2;
-  if (!promise._a) promise._a = promise._c.slice();
-  notify(promise, true);
-};
-var $resolve = function (value) {
-  var promise = this;
-  var then;
-  if (promise._d) return;
-  promise._d = true;
-  promise = promise._w || promise; // unwrap
-  try {
-    if (promise === value) throw TypeError("Promise can't be resolved itself");
-    if (then = isThenable(value)) {
-      microtask(function () {
-        var wrapper = { _w: promise, _d: false }; // wrap
-        try {
-          then.call(value, ctx($resolve, wrapper, 1), ctx($reject, wrapper, 1));
-        } catch (e) {
-          $reject.call(wrapper, e);
-        }
-      });
-    } else {
-      promise._v = value;
-      promise._s = 1;
-      notify(promise, false);
-    }
-  } catch (e) {
-    $reject.call({ _w: promise, _d: false }, e); // wrap
-  }
-};
-
-// constructor polyfill
-if (!USE_NATIVE) {
-  // 25.4.3.1 Promise(executor)
-  $Promise = function Promise(executor) {
-    anInstance(this, $Promise, PROMISE, '_h');
-    aFunction(executor);
-    Internal.call(this);
-    try {
-      executor(ctx($resolve, this, 1), ctx($reject, this, 1));
-    } catch (err) {
-      $reject.call(this, err);
-    }
-  };
-  // eslint-disable-next-line no-unused-vars
-  Internal = function Promise(executor) {
-    this._c = [];             // <- awaiting reactions
-    this._a = undefined;      // <- checked in isUnhandled reactions
-    this._s = 0;              // <- state
-    this._d = false;          // <- done
-    this._v = undefined;      // <- value
-    this._h = 0;              // <- rejection state, 0 - default, 1 - handled, 2 - unhandled
-    this._n = false;          // <- notify
-  };
-  Internal.prototype = require('./_redefine-all')($Promise.prototype, {
-    // 25.4.5.3 Promise.prototype.then(onFulfilled, onRejected)
-    then: function then(onFulfilled, onRejected) {
-      var reaction = newPromiseCapability(speciesConstructor(this, $Promise));
-      reaction.ok = typeof onFulfilled == 'function' ? onFulfilled : true;
-      reaction.fail = typeof onRejected == 'function' && onRejected;
-      reaction.domain = isNode ? process.domain : undefined;
-      this._c.push(reaction);
-      if (this._a) this._a.push(reaction);
-      if (this._s) notify(this, false);
-      return reaction.promise;
-    },
-    // 25.4.5.1 Promise.prototype.catch(onRejected)
-    'catch': function (onRejected) {
-      return this.then(undefined, onRejected);
-    }
-  });
-  OwnPromiseCapability = function () {
-    var promise = new Internal();
-    this.promise = promise;
-    this.resolve = ctx($resolve, promise, 1);
-    this.reject = ctx($reject, promise, 1);
-  };
-  newPromiseCapabilityModule.f = newPromiseCapability = function (C) {
-    return C === $Promise || C === Wrapper
-      ? new OwnPromiseCapability(C)
-      : newGenericPromiseCapability(C);
-  };
-}
-
-$export($export.G + $export.W + $export.F * !USE_NATIVE, { Promise: $Promise });
-require('./_set-to-string-tag')($Promise, PROMISE);
-require('./_set-species')(PROMISE);
-Wrapper = require('./_core')[PROMISE];
-
-// statics
-$export($export.S + $export.F * !USE_NATIVE, PROMISE, {
-  // 25.4.4.5 Promise.reject(r)
-  reject: function reject(r) {
-    var capability = newPromiseCapability(this);
-    var $$reject = capability.reject;
-    $$reject(r);
-    return capability.promise;
-  }
-});
-$export($export.S + $export.F * (LIBRARY || !USE_NATIVE), PROMISE, {
-  // 25.4.4.6 Promise.resolve(x)
-  resolve: function resolve(x) {
-    return promiseResolve(LIBRARY && this === Wrapper ? $Promise : this, x);
-  }
-});
-$export($export.S + $export.F * !(USE_NATIVE && require('./_iter-detect')(function (iter) {
-  $Promise.all(iter)['catch'](empty);
-})), PROMISE, {
-  // 25.4.4.1 Promise.all(iterable)
-  all: function all(iterable) {
-    var C = this;
-    var capability = newPromiseCapability(C);
-    var resolve = capability.resolve;
-    var reject = capability.reject;
-    var result = perform(function () {
-      var values = [];
-      var index = 0;
-      var remaining = 1;
-      forOf(iterable, false, function (promise) {
-        var $index = index++;
-        var alreadyCalled = false;
-        values.push(undefined);
-        remaining++;
-        C.resolve(promise).then(function (value) {
-          if (alreadyCalled) return;
-          alreadyCalled = true;
-          values[$index] = value;
-          --remaining || resolve(values);
-        }, reject);
-      });
-      --remaining || resolve(values);
-    });
-    if (result.e) reject(result.v);
-    return capability.promise;
-  },
-  // 25.4.4.4 Promise.race(iterable)
-  race: function race(iterable) {
-    var C = this;
-    var capability = newPromiseCapability(C);
-    var reject = capability.reject;
-    var result = perform(function () {
-      forOf(iterable, false, function (promise) {
-        C.resolve(promise).then(capability.resolve, reject);
-      });
-    });
-    if (result.e) reject(result.v);
-    return capability.promise;
-  }
-});
-
-},{"./_library":"../node_modules/core-js/library/modules/_library.js","./_global":"../node_modules/core-js/library/modules/_global.js","./_ctx":"../node_modules/core-js/library/modules/_ctx.js","./_classof":"../node_modules/core-js/library/modules/_classof.js","./_export":"../node_modules/core-js/library/modules/_export.js","./_is-object":"../node_modules/core-js/library/modules/_is-object.js","./_a-function":"../node_modules/core-js/library/modules/_a-function.js","./_an-instance":"../node_modules/core-js/library/modules/_an-instance.js","./_for-of":"../node_modules/core-js/library/modules/_for-of.js","./_species-constructor":"../node_modules/core-js/library/modules/_species-constructor.js","./_task":"../node_modules/core-js/library/modules/_task.js","./_microtask":"../node_modules/core-js/library/modules/_microtask.js","./_new-promise-capability":"../node_modules/core-js/library/modules/_new-promise-capability.js","./_perform":"../node_modules/core-js/library/modules/_perform.js","./_user-agent":"../node_modules/core-js/library/modules/_user-agent.js","./_promise-resolve":"../node_modules/core-js/library/modules/_promise-resolve.js","./_wks":"../node_modules/core-js/library/modules/_wks.js","./_redefine-all":"../node_modules/core-js/library/modules/_redefine-all.js","./_set-to-string-tag":"../node_modules/core-js/library/modules/_set-to-string-tag.js","./_set-species":"../node_modules/core-js/library/modules/_set-species.js","./_core":"../node_modules/core-js/library/modules/_core.js","./_iter-detect":"../node_modules/core-js/library/modules/_iter-detect.js"}],"../node_modules/core-js/library/modules/es7.promise.finally.js":[function(require,module,exports) {
-
-// https://github.com/tc39/proposal-promise-finally
-'use strict';
-var $export = require('./_export');
-var core = require('./_core');
-var global = require('./_global');
-var speciesConstructor = require('./_species-constructor');
-var promiseResolve = require('./_promise-resolve');
-
-$export($export.P + $export.R, 'Promise', { 'finally': function (onFinally) {
-  var C = speciesConstructor(this, core.Promise || global.Promise);
-  var isFunction = typeof onFinally == 'function';
-  return this.then(
-    isFunction ? function (x) {
-      return promiseResolve(C, onFinally()).then(function () { return x; });
-    } : onFinally,
-    isFunction ? function (e) {
-      return promiseResolve(C, onFinally()).then(function () { throw e; });
-    } : onFinally
-  );
-} });
-
-},{"./_export":"../node_modules/core-js/library/modules/_export.js","./_core":"../node_modules/core-js/library/modules/_core.js","./_global":"../node_modules/core-js/library/modules/_global.js","./_species-constructor":"../node_modules/core-js/library/modules/_species-constructor.js","./_promise-resolve":"../node_modules/core-js/library/modules/_promise-resolve.js"}],"../node_modules/core-js/library/modules/es7.promise.try.js":[function(require,module,exports) {
-'use strict';
-// https://github.com/tc39/proposal-promise-try
-var $export = require('./_export');
-var newPromiseCapability = require('./_new-promise-capability');
-var perform = require('./_perform');
-
-$export($export.S, 'Promise', { 'try': function (callbackfn) {
-  var promiseCapability = newPromiseCapability.f(this);
-  var result = perform(callbackfn);
-  (result.e ? promiseCapability.reject : promiseCapability.resolve)(result.v);
-  return promiseCapability.promise;
-} });
-
-},{"./_export":"../node_modules/core-js/library/modules/_export.js","./_new-promise-capability":"../node_modules/core-js/library/modules/_new-promise-capability.js","./_perform":"../node_modules/core-js/library/modules/_perform.js"}],"../node_modules/core-js/library/fn/promise.js":[function(require,module,exports) {
-require('../modules/es6.object.to-string');
-require('../modules/es6.string.iterator');
-require('../modules/web.dom.iterable');
-require('../modules/es6.promise');
-require('../modules/es7.promise.finally');
-require('../modules/es7.promise.try');
-module.exports = require('../modules/_core').Promise;
-
-},{"../modules/es6.object.to-string":"../node_modules/core-js/library/modules/es6.object.to-string.js","../modules/es6.string.iterator":"../node_modules/core-js/library/modules/es6.string.iterator.js","../modules/web.dom.iterable":"../node_modules/core-js/library/modules/web.dom.iterable.js","../modules/es6.promise":"../node_modules/core-js/library/modules/es6.promise.js","../modules/es7.promise.finally":"../node_modules/core-js/library/modules/es7.promise.finally.js","../modules/es7.promise.try":"../node_modules/core-js/library/modules/es7.promise.try.js","../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/promise.js":[function(require,module,exports) {
-module.exports = require("core-js/library/fn/promise");
-},{"core-js/library/fn/promise":"../node_modules/core-js/library/fn/promise.js"}],"../node_modules/@babel/runtime-corejs2/helpers/asyncToGenerator.js":[function(require,module,exports) {
-var _Promise = require("../core-js/promise");
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
-  try {
-    var info = gen[key](arg);
-    var value = info.value;
-  } catch (error) {
-    reject(error);
-    return;
-  }
-
-  if (info.done) {
-    resolve(value);
-  } else {
-    _Promise.resolve(value).then(_next, _throw);
-  }
-}
-
-function _asyncToGenerator(fn) {
-  return function () {
-    var self = this,
-        args = arguments;
-    return new _Promise(function (resolve, reject) {
-      var gen = fn.apply(self, args);
-
-      function _next(value) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
-      }
-
-      function _throw(err) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
-      }
-
-      _next(undefined);
-    });
-  };
-}
-
-module.exports = _asyncToGenerator;
-},{"../core-js/promise":"../node_modules/@babel/runtime-corejs2/core-js/promise.js"}],"../node_modules/process/browser.js":[function(require,module,exports) {
+},{"./arrayWithoutHoles":"../node_modules/@babel/runtime-corejs2/helpers/arrayWithoutHoles.js","./iterableToArray":"../node_modules/@babel/runtime-corejs2/helpers/iterableToArray.js","./nonIterableSpread":"../node_modules/@babel/runtime-corejs2/helpers/nonIterableSpread.js"}],"../node_modules/process/browser.js":[function(require,module,exports) {
 
 // shim for using process in browser
 var process = module.exports = {}; // cached from whatever global is present so that test runners that stub it
@@ -54199,11 +53345,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var SnackBar = function SnackBar() {
   return _react.default.createElement("div", {
-    id: "snackbar"
-  }, "A new version of this app is available. Click", _react.default.createElement("a", {
+    id: "snackbar",
+    className: "show"
+  }, "A new version of this app is available. Click", ' ', _react.default.createElement("a", {
     id: "reload",
     href: "_self"
-  }, "here"), "to update.");
+  }, "here"), ' ', "to update.");
 };
 
 var _default = SnackBar;
@@ -54988,7 +54135,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49829" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60269" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

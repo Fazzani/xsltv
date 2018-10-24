@@ -1,4 +1,4 @@
-var CACHE_NAME = 'pwa-xviewers-asset-cache-1'
+var CACHE_NAME = 'pwa-xviewers-asset-cache-2'
 var RESOURCES_TO_PRELOAD = ['/xmltv']
 
 // Preload some resources during install
