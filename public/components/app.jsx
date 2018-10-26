@@ -158,7 +158,7 @@ export default class App extends Component {
             return c
           })
 
-          console.log(tvgChannels)
+          //console.log(tvgChannels)
           this.setState({ tvgChannels })
         }
 
