@@ -5,7 +5,7 @@ import './style.scss'
 import moment from 'moment'
 import $ from 'jquery'
 import 'bootstrap'
-import { Channel, Program } from './entities'
+import { Channel, Program } from '../entities'
 
 export interface TvgChannelProps {
   channel: undefined | Channel,

@@ -7,7 +7,6 @@ import $ from 'jquery'
 import '../lang/english'
 import XsltvProcessor from '../js/xsltvProcessor'
 import SettingsModal from './settingsModal/settingsModal'
-import NavBottom from './navBottom'
 import SideMenu from './sidemenu/sidemenu'
 import Header from './header/header'
 import Settings, { SettingsService } from '../js/settings'
@@ -24,7 +23,6 @@ import { SearchBox } from './searchbox'
 import parser from 'fast-xml-parser'
 import TvgChannel from './tvgChannel/tvgChannel'
 import SidePanel from './sidePanel/sidePanel'
-import SnackBar from './snackBar/snackBar'
 
 export const AppContext = React.createContext({})
 
@@ -204,12 +202,7 @@ export default class App extends Component {
     this.setState({ fragment: helperDiv.innerHTML, loading: false })
   }
 
-  handleErrors = (origin = 'XViewer App', response) => {
-    if (!response.ok) {
-      throw Error(`${origin} : ${response.statusText}`)
-    }
-    return response
-  }
+  
 
   /**
    * handle click on epg table corners. that's allow as to navigate
@@ -332,7 +325,6 @@ export default class App extends Component {
           saveSettings: this.saveSettings,
           onSettingsModalCallback: this.onSettingsModalCallback,
         }}>
-        <NavBottom />
         <section className="row-section">
           <SideMenu handleToggleModalClick={this.onSettingsModalClick} />
           <SettingsModal open={this.state.openSettingsModal} files={this.state.files} callbackEvent={this.onSettingsModalCallback} />
@@ -358,7 +350,6 @@ export default class App extends Component {
         <SidePanel open={this.state.sidebarOpen} pullRight={true} onSetOpen={this.handleClosePanel}>
           {this.state.selectedChannel && <TvgChannel channel={this.state.selectedChannel} />}
         </SidePanel>
-        <SnackBar />
       </AppContext.Provider>
     )
   }
