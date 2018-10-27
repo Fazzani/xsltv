@@ -57454,7 +57454,308 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/home/index.tsx":[function(require,module,exports) {
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/sidePanel/style.scss":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/sidePanel/sidePanel.tsx":[function(require,module,exports) {
+"use strict";
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var __importStar = void 0 && (void 0).__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var React = __importStar(require("react"));
+
+require("./style.scss");
+
+var SidePanel =
+/*#__PURE__*/
+function (_React$Component) {
+  (0, _inherits2.default)(SidePanel, _React$Component);
+
+  function SidePanel() {
+    (0, _classCallCheck2.default)(this, SidePanel);
+    return (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(SidePanel).apply(this, arguments));
+  }
+
+  (0, _createClass2.default)(SidePanel, [{
+    key: "render",
+    value: function render() {
+      var _this = this;
+
+      return React.createElement("div", {
+        className: this.props.open ? 'sidepanel container open' : 'sidepanel container'
+      }, React.createElement("span", {
+        className: "exit",
+        onClick: function onClick(e) {
+          return _this.props.onSetOpen(e);
+        }
+      }, "x"), this.props.children);
+    }
+  }]);
+  return SidePanel;
+}(React.Component);
+
+exports.default = SidePanel;
+},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","./style.scss":"components/sidePanel/style.scss"}],"../node_modules/core-js/library/modules/_object-assign.js":[function(require,module,exports) {
+'use strict';
+// 19.1.2.1 Object.assign(target, source, ...)
+var getKeys = require('./_object-keys');
+var gOPS = require('./_object-gops');
+var pIE = require('./_object-pie');
+var toObject = require('./_to-object');
+var IObject = require('./_iobject');
+var $assign = Object.assign;
+
+// should work with symbols and should have deterministic property order (V8 bug)
+module.exports = !$assign || require('./_fails')(function () {
+  var A = {};
+  var B = {};
+  // eslint-disable-next-line no-undef
+  var S = Symbol();
+  var K = 'abcdefghijklmnopqrst';
+  A[S] = 7;
+  K.split('').forEach(function (k) { B[k] = k; });
+  return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
+}) ? function assign(target, source) { // eslint-disable-line no-unused-vars
+  var T = toObject(target);
+  var aLen = arguments.length;
+  var index = 1;
+  var getSymbols = gOPS.f;
+  var isEnum = pIE.f;
+  while (aLen > index) {
+    var S = IObject(arguments[index++]);
+    var keys = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S);
+    var length = keys.length;
+    var j = 0;
+    var key;
+    while (length > j) if (isEnum.call(S, key = keys[j++])) T[key] = S[key];
+  } return T;
+} : $assign;
+
+},{"./_object-keys":"../node_modules/core-js/library/modules/_object-keys.js","./_object-gops":"../node_modules/core-js/library/modules/_object-gops.js","./_object-pie":"../node_modules/core-js/library/modules/_object-pie.js","./_to-object":"../node_modules/core-js/library/modules/_to-object.js","./_iobject":"../node_modules/core-js/library/modules/_iobject.js","./_fails":"../node_modules/core-js/library/modules/_fails.js"}],"../node_modules/core-js/library/modules/es6.object.assign.js":[function(require,module,exports) {
+// 19.1.3.1 Object.assign(target, source)
+var $export = require('./_export');
+
+$export($export.S + $export.F, 'Object', { assign: require('./_object-assign') });
+
+},{"./_export":"../node_modules/core-js/library/modules/_export.js","./_object-assign":"../node_modules/core-js/library/modules/_object-assign.js"}],"../node_modules/core-js/library/fn/object/assign.js":[function(require,module,exports) {
+require('../../modules/es6.object.assign');
+module.exports = require('../../modules/_core').Object.assign;
+
+},{"../../modules/es6.object.assign":"../node_modules/core-js/library/modules/es6.object.assign.js","../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/object/assign.js":[function(require,module,exports) {
+module.exports = require("core-js/library/fn/object/assign");
+},{"core-js/library/fn/object/assign":"../node_modules/core-js/library/fn/object/assign.js"}],"../node_modules/@babel/runtime-corejs2/helpers/extends.js":[function(require,module,exports) {
+var _Object$assign = require("../core-js/object/assign");
+
+function _extends() {
+  module.exports = _extends = _Object$assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+module.exports = _extends;
+},{"../core-js/object/assign":"../node_modules/@babel/runtime-corejs2/core-js/object/assign.js"}],"components/tvgChannel/style.scss":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/tvgChannel/tvgChannel.tsx":[function(require,module,exports) {
+"use strict";
+
+var _typeof2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/typeof"));
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/extends"));
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var __importStar = void 0 && (void 0).__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
+var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var React = __importStar(require("react"));
+
+require("../../styles/loader.scss");
+
+require("./style.scss");
+
+var moment_1 = __importDefault(require("moment"));
+
+var jquery_1 = __importDefault(require("jquery"));
+
+require("bootstrap");
+
+var TvgChannel =
+/*#__PURE__*/
+function (_React$Component) {
+  (0, _inherits2.default)(TvgChannel, _React$Component);
+
+  function TvgChannel(props) {
+    var _this;
+
+    (0, _classCallCheck2.default)(this, TvgChannel);
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(TvgChannel).call(this, props));
+
+    _this.handleClickCollapse = function (e) {
+      jquery_1.default(e.target.attributes['data-target'].value).collapse('toggle');
+    };
+
+    _this.getFormatedDateTime = function (date) {
+      return moment_1.default(date, 'YYYYMMDDHHmmss [Z]').format('hh:MM');
+    };
+
+    return _this;
+  }
+
+  (0, _createClass2.default)(TvgChannel, [{
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      var category = function category(c) {
+        return React.createElement("span", {
+          className: "category"
+        }, c['#text']);
+      };
+
+      var subtitle = function subtitle(p) {
+        return p['sub-title'] && React.createElement("small", {
+          className: "subtitle"
+        }, p['sub-title']['#text']);
+      };
+
+      var date = function date(p) {
+        return p.date && React.createElement("small", {
+          className: "date"
+        }, p.date);
+      };
+
+      var persons = function persons(actors) {
+        return actors && actors.map(function (f, i) {
+          return React.createElement("li", {
+            key: i
+          }, f);
+        });
+      };
+
+      var credits = function credits(p) {
+        return p.credits && React.createElement("ul", {
+          className: "credits"
+        }, persons((0, _extends2.default)([], p.credits.director && (0, _typeof2.default)('1') === (0, _typeof2.default)(p.credits.director) ? [p.credits.director] : p.credits.director, p.credits.presenter && (0, _typeof2.default)('1') === (0, _typeof2.default)(p.credits.presenter) ? [p.credits.presenter] : p.credits.presenter, p.credits.actor && (0, _typeof2.default)('1') === (0, _typeof2.default)(p.credits.actor) ? [p.credits.actor] : p.credits.actor, p.credits.writer && (0, _typeof2.default)('1') === (0, _typeof2.default)(p.credits.writer) ? [p.credits.writer] : p.credits.writer)));
+      };
+
+      var country = function country(p) {
+        return p.country && React.createElement("small", {
+          className: "country"
+        }, p.country['#text']);
+      };
+
+      var listItems = this.props.channel && this.props.channel.programs && this.props.channel.programs.map(function (p, i) {
+        return React.createElement("li", {
+          className: "program-item row",
+          key: i
+        }, React.createElement("span", {
+          className: "start"
+        }, React.createElement("h3", null, _this2.getFormatedDateTime(p.start))), React.createElement("span", {
+          className: "content"
+        }, React.createElement("a", {
+          className: "title",
+          "data-toggle": "collapse",
+          "data-target": '#' + i.toString(),
+          onClick: function onClick(e) {
+            return _this2.handleClickCollapse(e);
+          }
+        }, p.title['#text']), React.createElement("span", null, p.category && category(p.category)), React.createElement("div", {
+          className: "collapse",
+          id: i.toString()
+        }, React.createElement("div", {
+          className: "row details"
+        }, subtitle(p), date(p), country(p), credits(p)), React.createElement("div", {
+          className: "row"
+        }, React.createElement("p", {
+          className: "desc"
+        }, p.desc && p.desc['#text']), React.createElement("span", {
+          className: "icon"
+        }, p.icon && React.createElement("img", {
+          src: p.icon.src
+        }))))));
+      });
+      return this.props.channel && React.createElement("div", {
+        className: "tvgChannel row"
+      }, React.createElement("div", {
+        className: "channel"
+      }, " ", this.props.channel.id, " "), React.createElement("ul", {
+        className: "programs"
+      }, listItems));
+    }
+  }]);
+  return TvgChannel;
+}(React.Component);
+
+exports.default = TvgChannel;
+},{"@babel/runtime-corejs2/helpers/typeof":"../node_modules/@babel/runtime-corejs2/helpers/typeof.js","@babel/runtime-corejs2/helpers/extends":"../node_modules/@babel/runtime-corejs2/helpers/extends.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","../../styles/loader.scss":"styles/loader.scss","./style.scss":"components/tvgChannel/style.scss","moment":"../node_modules/moment/moment.js","jquery":"../node_modules/jquery/dist/jquery.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js"}],"components/home/index.tsx":[function(require,module,exports) {
 "use strict";
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime-corejs2/regenerator"));
@@ -57533,7 +57834,11 @@ var moment_timezone_1 = __importDefault(require("moment-timezone"));
 
 require("./style.scss");
 
-require("bootstrap"); //TODO: channel detail
+require("bootstrap");
+
+var sidePanel_1 = __importDefault(require("../sidePanel/sidePanel"));
+
+var tvgChannel_1 = __importDefault(require("../tvgChannel/tvgChannel")); //TODO: channel detail
 //TODO: prog detail
 //TODO: add navigation time (perDay + limit detection)
 //TODO: Gérér les tz
@@ -57580,6 +57885,22 @@ function (_React$Component) {
       }
     };
 
+    _this.onSelectChannel = function (e, c) {
+      e.preventDefault();
+
+      _this.setState({
+        selectedChannel: c,
+        sidebarOpen: true
+      });
+    };
+
+    _this.handleClosePanel = function () {
+      _this.setState({
+        selectedChannel: undefined,
+        sidebarOpen: false
+      });
+    };
+
     var halfHourWidth = 100;
     _this.state = {
       halfHourWidth: halfHourWidth,
@@ -57587,6 +57908,7 @@ function (_React$Component) {
       channelLeftWidth: halfHourWidth + 80
     };
     _this.state.totalWidth = halfHourWidth * 48 + _this.state.channelLeftWidth;
+    _this.state.sidebarOpen = false;
     return _this;
   }
 
@@ -57601,8 +57923,8 @@ function (_React$Component) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'; // const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
-
+                // const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'
+                testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv';
                 _context.next = 3;
                 return this.loadFile(this.props.xmltvFile || testUrl);
 
@@ -57622,6 +57944,14 @@ function (_React$Component) {
           }
         }, _callee, this);
       }));
+    }
+  }, {
+    key: "onSelectProgram",
+    value: function onSelectProgram(e, p) {
+      e.preventDefault();
+      this.setState({
+        selectedProgram: p
+      });
     }
   }, {
     key: "loadFile",
@@ -57711,13 +58041,18 @@ function (_React$Component) {
           style: {
             width: _this3.state.channelLeftWidth
           }
+        }, React.createElement("a", {
+          href: "#",
+          onClick: function onClick(e) {
+            return _this3.onSelectChannel(e, c);
+          }
         }, c.icon ? React.createElement("img", {
           src: c.icon.src,
           "data-toggle": "tooltip",
           "data-placement": "top",
           title: c['display-name']['#text'],
           alt: c['display-name']['#text']
-        }) : c['display-name']['#text']));
+        }) : c['display-name']['#text'])));
       });
 
       var Programs = function Programs(programs) {
@@ -57730,7 +58065,12 @@ function (_React$Component) {
             key: i
           }, React.createElement("div", {
             className: "listings-program-title"
-          }, p.title['#text']), React.createElement("div", {
+          }, React.createElement("a", {
+            href: "#",
+            onClick: function onClick(e) {
+              return _this3.onSelectProgram(e, p);
+            }
+          }, p.title['#text'])), React.createElement("div", {
             className: "listings-details"
           }, React.createElement("span", {
             className: "listings-details-first"
@@ -57781,7 +58121,13 @@ function (_React$Component) {
         className: "listings-grid grid-channels"
       }, Channels), React.createElement("ul", {
         className: "listings-grid grid-progs"
-      }, Progs)));
+      }, Progs)), React.createElement(sidePanel_1.default, {
+        open: this.state.sidebarOpen,
+        pullRight: true,
+        onSetOpen: this.handleClosePanel
+      }, this.state.selectedChannel && React.createElement(tvgChannel_1.default, {
+        channel: this.state.selectedChannel
+      })));
     }
   }]);
   return Home;
@@ -57789,7 +58135,7 @@ function (_React$Component) {
 
 Home.contextType = appContext_1.default;
 exports.default = Home;
-},{"@babel/runtime-corejs2/regenerator":"../node_modules/@babel/runtime-corejs2/regenerator/index.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","@babel/runtime-corejs2/core-js/promise":"../node_modules/@babel/runtime-corejs2/core-js/promise.js","react":"../node_modules/react/index.js","fast-xml-parser":"../node_modules/fast-xml-parser/src/parser.js","../entities":"components/entities.ts","../appContext":"components/appContext.ts","moment-timezone":"../node_modules/moment-timezone/index.js","./style.scss":"components/home/style.scss","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js"}],"routes.js":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/regenerator":"../node_modules/@babel/runtime-corejs2/regenerator/index.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","@babel/runtime-corejs2/core-js/promise":"../node_modules/@babel/runtime-corejs2/core-js/promise.js","react":"../node_modules/react/index.js","fast-xml-parser":"../node_modules/fast-xml-parser/src/parser.js","../entities":"components/entities.ts","../appContext":"components/appContext.ts","moment-timezone":"../node_modules/moment-timezone/index.js","./style.scss":"components/home/style.scss","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","../sidePanel/sidePanel":"components/sidePanel/sidePanel.tsx","../tvgChannel/tvgChannel":"components/tvgChannel/tvgChannel.tsx"}],"routes.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -58154,7 +58500,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65499" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62921" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

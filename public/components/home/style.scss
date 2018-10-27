@@ -1,5 +1,13 @@
 $cell-height:83px;
 .epg-container {
+    a {
+        text-decoration: none;
+        color: white;
+        &:hover {
+            color: white;
+            text-decoration: none;
+        }
+    }
     display: flex;
     position: relative;
     overflow: hidden;

@@ -107,6 +107,14 @@
   margin: 0 auto;
   background-color: black;
 }
+.epg-container a {
+  text-decoration: none;
+  color: white;
+}
+.epg-container a:hover {
+  color: white;
+  text-decoration: none;
+}
 .epg-container .toolbar {
   position: absolute;
   top: 0;
@@ -274,6 +282,171 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}.sidepanel {
+  position: fixed;
+  background: linear-gradient(to right, #101113 3px, #000000de 5%, #606266);
+  max-width: 50% !important;
+  top: 0;
+  right: -1500px;
+  z-index: 100;
+  width: 50%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 5px 5px 10px black;
+  -webkit-transform: translateX(1500px);
+  transform: translateX(1500px);
+  -webkit-transition: all 0.25s;
+  transition: all 0.25s;
+  border-radius: 0 0 8px 8px;
+}
+.sidepanel.open {
+  right: 0;
+  -webkit-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transition: -webkit-transform 0.5s;
+  transition: transform 0.5s;
+}
+.sidepanel.right {
+  right: 0;
+}
+.sidepanel .exit {
+  position: absolute;
+  right: 10px;
+  padding: 0px;
+  top: -10px;
+  font-size: 4em;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s;
+  -webkit-transition: all 0.25s;
+}
+.sidepanel .exit:hover {
+  color: aquamarine;
+}@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css?family=Charmonman");
+.channel {
+  color: white;
+  margin: 0;
+  padding: 1em;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+  font-weight: 300;
+  font-size: 2em;
+}
+
+.tvgChannel {
+  font-family: "Libre Baskerville", BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+.tvgChannel .programs {
+  width: 100%;
+  list-style: none;
+  color: white;
+}
+.tvgChannel .programs .program-item {
+  padding: 5px;
+  border-bottom: 1px solid rgba(33, 24, 24, 0.15);
+}
+.tvgChannel .programs .program-item .start {
+  width: 15%;
+  color: #7b7c7d !important;
+  font-weight: 600;
+  font-size: 13px;
+}
+.tvgChannel .programs .program-item .content .title {
+  color: white;
+}
+.tvgChannel .programs .program-item .content .collapse .row {
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+}
+.tvgChannel .programs .program-item .content .collapse .row .icon {
+  width: 25%;
+  vertical-align: middle;
+  display: inline-flex;
+}
+.tvgChannel .programs .program-item .content .collapse .row .icon img {
+  width: 100%;
+  box-shadow: 3px 3px 3px 2px black;
+  translate: -1rem;
+}
+.tvgChannel .programs .program-item .content .collapse .row .desc {
+  width: 66%;
+  text-transform: none;
+  letter-spacing: 0.125rem;
+  color: #cfcfcf;
+  font-size: 0.7rem;
+  text-overflow: ellipsis;
+  padding: 6px 28px 6px 8px;
+  display: inline-block;
+  line-height: 1.15rem;
+  border-left: 0.25rem #edff00 solid;
+}
+.tvgChannel .programs .program-item .content .details {
+  padding: 0.7rem;
+  display: inline-block;
+  line-height: 1.6rem;
+}
+.tvgChannel .programs .program-item .content .details .subtitle {
+  display: inline;
+  color: aquamarine;
+  font-weight: bolder;
+}
+.tvgChannel .programs .program-item .content .details .date {
+  color: #6af4ff;
+  display: inline-block;
+  opacity: 1 !important;
+  margin: 0.5rem;
+}
+.tvgChannel .programs .program-item .content .details .date:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: "";
+  margin-right: 0.25rem;
+}
+.tvgChannel .programs .program-item .content .details .country {
+  color: #6af4ff;
+}
+.tvgChannel .programs .program-item .content .details .country:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  content: "";
+  margin-right: 0.25rem;
+}
+.tvgChannel .programs .program-item .content .details .credits {
+  margin: 0;
+  padding: 0;
+  font-size: smaller;
+  line-height: 1rem;
+  list-style-type: none;
+}
+.tvgChannel .programs .program-item .content .details .credits li {
+  display: inline;
+  margin-right: 0.25rem;
+}
+.tvgChannel .programs .program-item .content .details .credits li:before {
+  font: normal normal normal 14px/1 FontAwesome;
+  margin-right: 0.25rem;
+  color: #6af4ff;
+  content: "";
+}
+.tvgChannel .programs .program-item .content .category {
+  display: inline-block;
+  background-color: #343f4c;
+  height: 30px;
+  border-radius: 20px;
+  text-decoration: none;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+  font-size: 10px;
+  line-height: 23px;
+  padding: 4px 11px;
+  color: #edff00;
+  margin-left: 1rem;
+  font-weight: bold;
+}
+.tvgChannel .programs .program-item .content a {
+  text-decoration: none;
+  cursor: pointer;
 }/****** snackbar********/
 #snackbar {
   visibility: hidden;

@@ -1,7 +1,8 @@
 @import '../../styles/vars';
 .sidepanel {
     position: fixed;
-    background: linear-gradient(to right, #101113 3px, #000000de 5%, #141e30);
+    background: linear-gradient(to right, #101113 3px, #000000de 5%, #606266);
+    max-width: 50% !important;
     top: 0;
     right: -1500px;
     z-index: 100;

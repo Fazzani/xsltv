@@ -5,17 +5,23 @@ import AppContext, { AppContextInterface } from '../appContext'
 import moment from 'moment-timezone'
 import './style.scss'
 import 'bootstrap'
+import SidePanel from '../sidePanel/sidePanel'
+import TvgChannel from '../tvgChannel/tvgChannel'
 
 interface HomeProps {
   xmltvFile: string
 }
 interface HomeState {
   tvgChannels: Channel[]
+  selectedChannel: Channel | undefined
+  selectedProgram: Program | undefined
   currentDate: string
   halfHourWidth: number
   totalWidth: number
   offset: number
   channelLeftWidth: number
+  sidebarOpen: boolean
+  handleClosePanel: void
 }
 
 //TODO: channel detail
@@ -34,11 +40,12 @@ export default class Home extends React.Component<HomeProps, HomeState> {
     const halfHourWidth = 100
     this.state = { halfHourWidth, totalWidth: halfHourWidth * 49, channelLeftWidth: halfHourWidth + 80 }
     this.state.totalWidth = halfHourWidth * 48 + this.state.channelLeftWidth
+    this.state.sidebarOpen = false
   }
 
   async componentDidMount() {
-    const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'
-    // const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
+    // const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'
+    const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
     await this.loadFile(this.props.xmltvFile || testUrl)
     console.log(this.context.settings.tz)
     const m = moment()
@@ -60,6 +67,20 @@ export default class Home extends React.Component<HomeProps, HomeState> {
     } else {
       this.setState({ offset: this.state.offset - this.state.halfHourWidth })
     }
+  }
+
+  onSelectChannel = (e: Event, c: Channel) => {
+    e.preventDefault()
+    this.setState({ selectedChannel: c, sidebarOpen: true })
+  }
+
+  onSelectProgram(e: Event, p: Program): void {
+    e.preventDefault()
+    this.setState({ selectedProgram: p })
+  }
+
+  handleClosePanel = () => {
+    this.setState({ selectedChannel: undefined, sidebarOpen: false })
   }
 
   async loadFile(fileUrl: string) {
@@ -116,17 +137,19 @@ export default class Home extends React.Component<HomeProps, HomeState> {
         return (
           <li key={i} className="listings-channel-row">
             <div className="listings-channel" style={{ width: this.state.channelLeftWidth }}>
-              {c.icon ? (
-                <img
-                  src={c.icon.src}
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  title={c['display-name']['#text']}
-                  alt={c['display-name']['#text']}
-                />
-              ) : (
-                c['display-name']['#text']
-              )}
+              <a href="#" onClick={e => this.onSelectChannel(e, c)}>
+                {c.icon ? (
+                  <img
+                    src={c.icon.src}
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title={c['display-name']['#text']}
+                    alt={c['display-name']['#text']}
+                  />
+                ) : (
+                  c['display-name']['#text']
+                )}
+              </a>
             </div>
           </li>
         )
@@ -136,7 +159,11 @@ export default class Home extends React.Component<HomeProps, HomeState> {
       return programs.map((p, i) => {
         return (
           <div className="listings-program" style={{ minWidth: p.width }} key={i}>
-            <div className="listings-program-title">{p.title['#text']}</div>
+            <div className="listings-program-title">
+              <a href="#" onClick={e => this.onSelectProgram(e, p)}>
+                {p.title['#text']}
+              </a>
+            </div>
             <div className="listings-details">
               <span className="listings-details-first">{p.duration}</span>
               {p.width}
@@ -180,6 +207,9 @@ export default class Home extends React.Component<HomeProps, HomeState> {
           <ul className="listings-grid grid-channels">{Channels}</ul>
           <ul className="listings-grid grid-progs">{Progs}</ul>
         </div>
+        <SidePanel open={this.state.sidebarOpen} pullRight={true} onSetOpen={this.handleClosePanel}>
+          {this.state.selectedChannel && <TvgChannel channel={this.state.selectedChannel} />}
+        </SidePanel>
       </React.Fragment>
     )
   }
