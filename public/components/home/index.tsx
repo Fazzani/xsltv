@@ -83,7 +83,7 @@ export default class Home extends React.Component<HomeProps, HomeState> {
     const Programs = (programs: Program[]) => {
       return programs.map((p, i) => {
         return (
-          <div className="listings-program" style={{ 'min-width': p.width }} key={i}>
+          <div className="listings-program" style={{ minWidth: p.width }} key={i}>
             <div className="listings-program-title">{p.title['#text']}</div>
             <div className="listings-details">
               <span className="listings-details-first">{p.duration}</span>
@@ -140,7 +140,7 @@ export default class Home extends React.Component<HomeProps, HomeState> {
     return (
       <React.Fragment>
         <h1>{this.context.name}</h1>
-        <div className="epg-container" id="slider">
+        <div className="epg-container">
           <ul className="listings-grid grid-channels">{Channels}</ul>
           <ul className="listings-grid grid-progs">{Progs}</ul>
         </div>
