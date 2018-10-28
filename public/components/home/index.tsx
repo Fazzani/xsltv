@@ -2,7 +2,7 @@ import * as React from 'react'
 import parser from 'fast-xml-parser'
 import { Channel, Program, INTERVALS, MinutesPerDay } from '../entities'
 import AppContext, { AppContextInterface } from '../appContext'
-import moment from 'moment-timezone'
+import { DateTime, Interval } from 'luxon'
 import './style.scss'
 import 'bootstrap'
 import SidePanel from '../sidePanel/sidePanel'
@@ -47,18 +47,20 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
     // const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'
     const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
     console.log(this.context.settings.tz)
-    const m = moment()
-    this.setState({ currentDate: m.format('YYYY-MM-DD'), intervals: INTERVALS, offset: this.getTimeOffsetPerDay() })
+    const current_date = DateTime.local()
+    this.setState({ currentDate: current_date, intervals: INTERVALS, offset: this.getTimeOffsetPerDay() })
     await this.loadFile(this.props.xmltvFile || testUrl)
   }
 
   // calculate time offset from midnight
   getTimeOffsetPerDay = () => {
-    const m = moment()
-    m.set({ hour: 0, minute: 0, second: 0, millisecond: 0 })
-    m.toISOString()
-    m.format()
-    return `-${moment().diff(m, 'h') * this.state.halfHourWidth * 2}`
+    const now = DateTime.local()
+    const { year, month, day } = now
+    const dt = DateTime.local(year, month, day)
+    // console.log(`now ${now} dt: ${dt}`)
+    const inter = Interval.fromDateTimes(dt, now)
+    console.log(`Interval ${inter.length('hour')}`)
+    return `-${inter.length('hour') * this.state.halfHourWidth * 2}`
   }
 
   onSlide = (isLeft: boolean = true) => {
@@ -95,9 +97,10 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
 
     if (docJson.tv) {
       docJson.tv.programme.map(p => {
-        p.startTime = moment(p.start, 'YYYYMMDDhhmmss [Z]')
-        p.stopTime = moment(p.stop, 'YYYYMMDDhhmmss [Z]')
-        p.duration = moment.duration(p.stopTime - p.startTime).as('minutes')
+        p.startTime = DateTime.fromFormat(p.start, 'yyyyMMddhhmmss ZZZ')
+        p.stopTime = DateTime.fromFormat(p.stop, 'yyyyMMddhhmmss ZZZ')
+
+        p.duration = Interval.fromDateTimes(p.startTime, p.stopTime).length('minute')
         p.coefficient = p.duration / 30
         p.durationPercent = Math.floor((p.duration / MinutesPerDay) * 100)
         p.width = this.state.halfHourWidth * p.coefficient
@@ -167,8 +170,9 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
             <div className="listings-details">
               <span className="listings-details-first">{p.category && p.category['#text']}</span>
               {p['sub-title'] && p['sub-title']['#text']}
+              {p.width}
               <div className="small">
-                {p.startTime.format('hh:mm')} &nbsp;-&nbsp; {p.stopTime.format('hh:mm')}
+                {p.startTime.toString('hh:mm')} &nbsp;-&nbsp; {p.stopTime.toString('hh:mm')}
               </div>
             </div>
           </div>

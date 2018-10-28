@@ -7,6 +7,9 @@ export interface Channel {
 }
 
 export interface Program {
+  width: string;
+  stopTime: any;
+  startTime: any;
   category: TextProp
   channel: string
   country: TextProp

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import * as moment from 'moment-timezone'
+import { DateTime } from 'luxon';
 
 export interface AppContextInterface {
   name: string
@@ -21,7 +21,7 @@ interface Settings {
 const AppContext = React.createContext<AppContextInterface>({
   name: 'XViewer',
   loader: { loading: false, text: 'Loading' },
-  settings: { hours: 4, tz: moment.tz.guess(true) },
+  settings: { hours: 4, tz: DateTime.local().zoneName },
   handleErrors: (response: Response, origin = 'XViewer App') => {
     if (!response.ok) {
       throw Error(`${origin} : ${response.statusText}`)
