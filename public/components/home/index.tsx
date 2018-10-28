@@ -32,7 +32,7 @@ interface HomeState {
 //TODO: Gérer mobile version
 //TODO: Afficher la timebar
 
-export default class Home extends React.Component<HomeProps, HomeState> {
+export default class Home extends React.PureComponent<HomeProps, HomeState> {
   static contextType: React.Context<AppContextInterface> = AppContext
 
   constructor(props: HomeProps) {
@@ -44,12 +44,12 @@ export default class Home extends React.Component<HomeProps, HomeState> {
   }
 
   async componentDidMount() {
-    const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'
-    // const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
-    await this.loadFile(this.props.xmltvFile || testUrl)
+    // const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'
+    const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
     console.log(this.context.settings.tz)
     const m = moment()
     this.setState({ currentDate: m.format('YYYY-MM-DD'), intervals: INTERVALS, offset: this.getTimeOffsetPerDay() })
+    await this.loadFile(this.props.xmltvFile || testUrl)
   }
 
   // calculate time offset from midnight
@@ -83,7 +83,7 @@ export default class Home extends React.Component<HomeProps, HomeState> {
     this.setState({ selectedChannel: undefined, sidebarOpen: false })
   }
 
-  async loadFile(fileUrl: string) {
+  async loadFile(fileUrl: string, currentDate: Date | undefined) {
     // this.context.loader.loading = true
     const response = await fetch(fileUrl)
     this.context.handleErrors(response)
@@ -160,7 +160,7 @@ export default class Home extends React.Component<HomeProps, HomeState> {
         return (
           <div className="listings-program" style={{ minWidth: p.width }} key={i}>
             <div className="listings-program-title">
-              <a href="#" onClick={(e) => this.onSelectProgram(e, p)}>
+              <a href="#" onClick={e => this.onSelectProgram(e, p)}>
                 {p.title['#text']}
               </a>
             </div>

@@ -225,6 +225,7 @@
   width: 100%;
 }
 .epg-container ul.listings-grid.grid-progs .listings-grid-progs {
+  transition: all 1s ease;
   position: absolute;
 }
 .epg-container ul.listings-grid .listings-timebar {

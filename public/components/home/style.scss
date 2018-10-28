@@ -121,6 +121,7 @@ $cell-height:83px;
             position: relative;
             width: 100%;
             .listings-grid-progs {
+                transition: all 1s ease;
                 position: absolute
             }
         }

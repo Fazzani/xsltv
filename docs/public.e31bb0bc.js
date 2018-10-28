@@ -57849,8 +57849,8 @@ var tvgChannel_1 = __importDefault(require("../tvgChannel/tvgChannel")); //TODO:
 
 var Home =
 /*#__PURE__*/
-function (_React$Component) {
-  (0, _inherits2.default)(Home, _React$Component);
+function (_React$PureComponent) {
+  (0, _inherits2.default)(Home, _React$PureComponent);
 
   function Home(props) {
     var _this;
@@ -57923,12 +57923,8 @@ function (_React$Component) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'; // const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
-
-                _context.next = 3;
-                return this.loadFile(this.props.xmltvFile || testUrl);
-
-              case 3:
+                // const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'
+                testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv';
                 console.log(this.context.settings.tz);
                 m = moment_timezone_1.default();
                 this.setState({
@@ -57936,6 +57932,8 @@ function (_React$Component) {
                   intervals: entities_1.INTERVALS,
                   offset: this.getTimeOffsetPerDay()
                 });
+                _context.next = 6;
+                return this.loadFile(this.props.xmltvFile || testUrl);
 
               case 6:
               case "end":
@@ -57955,7 +57953,7 @@ function (_React$Component) {
     }
   }, {
     key: "loadFile",
-    value: function loadFile(fileUrl) {
+    value: function loadFile(fileUrl, currentDate) {
       return __awaiter(this, void 0, void 0,
       /*#__PURE__*/
       _regenerator.default.mark(function _callee2() {
@@ -58133,7 +58131,7 @@ function (_React$Component) {
     }
   }]);
   return Home;
-}(React.Component);
+}(React.PureComponent);
 
 Home.contextType = appContext_1.default;
 exports.default = Home;
