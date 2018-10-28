@@ -59112,7 +59112,668 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/moment/moment.js":[function(require,module,exports) {
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/tvgChannel/tvgChannel.tsx":[function(require,module,exports) {
+"use strict";
+
+var _typeof2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/typeof"));
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/extends"));
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var __importStar = void 0 && (void 0).__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
+var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var React = __importStar(require("react"));
+
+require("../../styles/loader.scss");
+
+require("./style.scss");
+
+var jquery_1 = __importDefault(require("jquery"));
+
+require("bootstrap");
+
+var luxon_1 = require("luxon");
+
+var TvgChannel =
+/*#__PURE__*/
+function (_React$PureComponent) {
+  (0, _inherits2.default)(TvgChannel, _React$PureComponent);
+
+  function TvgChannel(props) {
+    var _this;
+
+    (0, _classCallCheck2.default)(this, TvgChannel);
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(TvgChannel).call(this, props));
+
+    _this.handleClickCollapse = function (e) {
+      ;
+      jquery_1.default(e.target.attributes['data-target'].value).collapse('toggle');
+    };
+
+    return _this;
+  }
+
+  (0, _createClass2.default)(TvgChannel, [{
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      var category = function category(c) {
+        return React.createElement("span", {
+          className: "category"
+        }, c['#text']);
+      };
+
+      var subtitle = function subtitle(p) {
+        return p['sub-title'] && React.createElement("small", {
+          className: "subtitle"
+        }, p['sub-title']['#text']);
+      };
+
+      var date = function date(p) {
+        return p.date && React.createElement("small", {
+          className: "date"
+        }, p.date);
+      };
+
+      var persons = function persons(actors) {
+        return actors && actors.map(function (f, i) {
+          return React.createElement("li", {
+            key: i
+          }, f);
+        });
+      };
+
+      var credits = function credits(p) {
+        return p.credits && React.createElement("ul", {
+          className: "credits"
+        }, persons((0, _extends2.default)([], p.credits.director && (0, _typeof2.default)('1') === (0, _typeof2.default)(p.credits.director) ? [p.credits.director] : p.credits.director, p.credits.presenter && (0, _typeof2.default)('1') === (0, _typeof2.default)(p.credits.presenter) ? [p.credits.presenter] : p.credits.presenter, p.credits.actor && (0, _typeof2.default)('1') === (0, _typeof2.default)(p.credits.actor) ? [p.credits.actor] : p.credits.actor, p.credits.writer && (0, _typeof2.default)('1') === (0, _typeof2.default)(p.credits.writer) ? [p.credits.writer] : p.credits.writer)));
+      };
+
+      var country = function country(p) {
+        return p.country && React.createElement("small", {
+          className: "country"
+        }, p.country['#text']);
+      };
+
+      var listItems = this.props.channel && this.props.channel.programs && this.props.channel.programs.map(function (p) {
+        return React.createElement("li", {
+          className: "program-item row",
+          key: p.channel + p.start
+        }, React.createElement("span", {
+          className: "start"
+        }, React.createElement("h3", null, p.startTime.toLocaleString(luxon_1.DateTime.TIME_24_SIMPLE))), React.createElement("span", {
+          className: "content"
+        }, React.createElement("a", {
+          className: "title",
+          "data-toggle": "collapse",
+          "data-target": '#' + p.start,
+          onClick: function onClick(e) {
+            return _this2.handleClickCollapse(e);
+          }
+        }, p.title['#text']), React.createElement("span", null, p.category && category(p.category)), React.createElement("div", {
+          className: "collapse",
+          id: p.start
+        }, React.createElement("div", {
+          className: "row details"
+        }, subtitle(p), date(p), country(p), credits(p)), React.createElement("div", {
+          className: "row"
+        }, React.createElement("p", {
+          className: "desc"
+        }, p.desc && p.desc['#text']), React.createElement("span", {
+          className: "icon"
+        }, p.icon && React.createElement("img", {
+          src: p.icon.src
+        }))))));
+      });
+      return this.props.channel && React.createElement("div", {
+        className: "tvgChannel row"
+      }, React.createElement("div", {
+        className: "channel"
+      }, " ", this.props.channel.id, " "), React.createElement("ul", {
+        className: "programs"
+      }, listItems));
+    }
+  }]);
+  return TvgChannel;
+}(React.PureComponent);
+
+exports.default = TvgChannel;
+},{"@babel/runtime-corejs2/helpers/typeof":"../node_modules/@babel/runtime-corejs2/helpers/typeof.js","@babel/runtime-corejs2/helpers/extends":"../node_modules/@babel/runtime-corejs2/helpers/extends.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","../../styles/loader.scss":"styles/loader.scss","./style.scss":"components/tvgChannel/style.scss","jquery":"../node_modules/jquery/dist/jquery.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","luxon":"../node_modules/luxon/build/cjs-browser/luxon.js"}],"components/home/index.tsx":[function(require,module,exports) {
+"use strict";
+
+var _regenerator = _interopRequireDefault(require("@babel/runtime-corejs2/regenerator"));
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/extends"));
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
+
+var _promise = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/promise"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var __awaiter = void 0 && (void 0).__awaiter || function (thisArg, _arguments, P, generator) {
+  return new (P || (P = _promise.default))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : new P(function (resolve) {
+        resolve(result.value);
+      }).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+
+var __importStar = void 0 && (void 0).__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
+var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var React = __importStar(require("react"));
+
+var fast_xml_parser_1 = __importDefault(require("fast-xml-parser"));
+
+var entities_1 = require("../entities");
+
+var appContext_1 = __importDefault(require("../appContext"));
+
+var luxon_1 = require("luxon");
+
+require("./style.scss");
+
+require("bootstrap");
+
+var sidePanel_1 = __importDefault(require("../sidePanel/sidePanel"));
+
+var tvgChannel_1 = __importDefault(require("../tvgChannel/tvgChannel")); //TODO: react optimizations
+//TODO: prog detail
+//TODO: add navigation time (perDay + limit detection)
+//TODO: Gérér les tz
+//TODO: Gérer les gaps
+//TODO: Gérer mobile version
+//TODO: Afficher the vertical timebar
+
+
+var Home =
+/*#__PURE__*/
+function (_React$PureComponent) {
+  (0, _inherits2.default)(Home, _React$PureComponent);
+
+  function Home(props) {
+    var _this;
+
+    (0, _classCallCheck2.default)(this, Home);
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Home).call(this, props));
+
+    _this.fetchPrograms = function () {
+      var currentDay = luxon_1.DateTime.local(_this.state.currentDate.year, _this.state.currentDate.month, _this.state.currentDate.day);
+      var tvgChannelsDay = [];
+
+      _this.state.allTvgChannels.forEach(function (c) {
+        var ch = (0, _extends2.default)({}, c);
+        ch.programs = c.programs.filter(function (p) {
+          return p.startTime.diff(currentDay, 'minutes').minutes >= 0 && p.startTime.diff(currentDay, 'minutes').minutes <= entities_1.MinutesPerDay || p.stopTime.diff(currentDay, 'minutes').minutes >= 0 && p.stopTime.diff(currentDay, 'minutes').minutes <= entities_1.MinutesPerDay;
+        }).slice();
+        tvgChannelsDay.push(ch);
+      });
+
+      _this.setState({
+        tvgChannelsDay: tvgChannelsDay
+      });
+
+      _this.context.loader.loading = false;
+    }; // calculate time offset from midnight
+
+
+    _this.getTimeOffsetPerDay = function () {
+      var _this$state$currentDa = _this.state.currentDate,
+          year = _this$state$currentDa.year,
+          month = _this$state$currentDa.month,
+          day = _this$state$currentDa.day;
+      var dt = luxon_1.DateTime.local(year, month, day);
+      var inter = luxon_1.Interval.fromDateTimes(dt, _this.state.currentDate); // console.log(`Interval ${inter.length('hour')}`)
+
+      return -(inter.length('hour') * _this.state.halfHourWidth * 2);
+    };
+
+    _this.onDayChanged = function (e) {
+      var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+
+      var date = _this.state.currentDate.plus({
+        days: offset
+      });
+
+      _this.setState({
+        currentDate: date
+      }, function () {
+        _this.fetchPrograms();
+      });
+    };
+
+    _this.onSlide = function (e) {
+      var isLeft = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+      e.preventDefault();
+
+      if (isLeft) {
+        _this.setState({
+          offset: _this.state.offset + _this.state.halfHourWidth
+        });
+      } else {
+        _this.setState({
+          offset: _this.state.offset - _this.state.halfHourWidth
+        });
+      }
+    };
+
+    _this.onSelectChannel = function (e, c) {
+      e.preventDefault();
+
+      _this.setState({
+        selectedChannel: c,
+        sidebarOpen: true
+      });
+    };
+
+    _this.handleClosePanel = function () {
+      _this.setState({
+        selectedChannel: undefined,
+        sidebarOpen: false
+      });
+    };
+
+    return _this;
+  }
+
+  (0, _createClass2.default)(Home, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      return __awaiter(this, void 0, void 0,
+      /*#__PURE__*/
+      _regenerator.default.mark(function _callee2() {
+        var _this2 = this;
+
+        var testUrl, current_date, halfHourWidth;
+        return _regenerator.default.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                // const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'
+                testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv';
+                console.log(this.context.settings.tz);
+                current_date = luxon_1.DateTime.local();
+                halfHourWidth = 100;
+                this.setState({
+                  currentDate: current_date,
+                  intervals: entities_1.INTERVALS,
+                  halfHourWidth: halfHourWidth,
+                  totalWidth: halfHourWidth * 49,
+                  channelLeftWidth: halfHourWidth + 80,
+                  sidebarOpen: false
+                }, function () {
+                  return __awaiter(_this2, void 0, void 0,
+                  /*#__PURE__*/
+                  _regenerator.default.mark(function _callee() {
+                    return _regenerator.default.wrap(function _callee$(_context) {
+                      while (1) {
+                        switch (_context.prev = _context.next) {
+                          case 0:
+                            this.setState({
+                              totalWidth: halfHourWidth * 48 + this.state.channelLeftWidth,
+                              offset: this.getTimeOffsetPerDay()
+                            });
+                            _context.next = 3;
+                            return this.loadFile(this.props.xmltvFile || testUrl);
+
+                          case 3:
+                          case "end":
+                            return _context.stop();
+                        }
+                      }
+                    }, _callee, this);
+                  }));
+                });
+
+              case 5:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+    }
+  }, {
+    key: "loadFile",
+    value: function loadFile(fileUrl) {
+      return __awaiter(this, void 0, void 0,
+      /*#__PURE__*/
+      _regenerator.default.mark(function _callee3() {
+        var _this3 = this;
+
+        var response, xmlString, docJson, allTvgChannels;
+        return _regenerator.default.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return fetch(fileUrl);
+
+              case 2:
+                response = _context3.sent;
+                this.context.handleErrors(response);
+                _context3.next = 6;
+                return response.text();
+
+              case 6:
+                xmlString = _context3.sent;
+                docJson = fast_xml_parser_1.default.parse(xmlString, {
+                  attributeNamePrefix: '',
+                  ignoreAttributes: false
+                });
+
+                if (docJson.tv) {
+                  docJson.tv.programme.map(function (p) {
+                    p.startTime = luxon_1.DateTime.fromFormat(p.start, 'yyyyMMddhhmmss ZZZ');
+                    p.stopTime = luxon_1.DateTime.fromFormat(p.stop, 'yyyyMMddhhmmss ZZZ');
+                    p.duration = luxon_1.Interval.fromDateTimes(p.startTime, p.stopTime).length('minute');
+                    p.coefficient = p.duration / 30;
+                    p.durationPercent = Math.floor(p.duration / entities_1.MinutesPerDay * 100);
+                    p.width = _this3.state.halfHourWidth * p.coefficient;
+                    return p;
+                  });
+                  allTvgChannels = docJson.tv.channel.map(function (c) {
+                    c.programs = docJson.tv.programme.filter(function (p) {
+                      return p.channel === c.id;
+                    });
+                    return c;
+                  });
+                  this.setState({
+                    allTvgChannels: allTvgChannels
+                  }, function () {
+                    _this3.fetchPrograms();
+                  });
+                }
+
+              case 9:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+    }
+  }, {
+    key: "onSelectProgram",
+    value: function onSelectProgram(e, p) {
+      e.preventDefault();
+      this.setState({
+        selectedProgram: p
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this4 = this;
+
+      var headerTimeBar = function headerTimeBar(totalWidth) {
+        return React.createElement("li", {
+          className: "listings-timebar"
+        }, entities_1.INTERVALS.map(function (x) {
+          return React.createElement("div", {
+            className: "listings-timebar-time",
+            style: {
+              width: _this4.state.halfHourWidth
+            },
+            key: x
+          }, x);
+        }));
+      };
+
+      var Channels = this.state && this.state.tvgChannelsDay && this.state.tvgChannelsDay !== null && this.state.tvgChannelsDay.map(function (c) {
+        return React.createElement("li", {
+          key: c.id,
+          className: "listings-channel-row"
+        }, React.createElement("div", {
+          className: "listings-channel",
+          style: {
+            width: _this4.state.channelLeftWidth
+          }
+        }, React.createElement("a", {
+          href: "#",
+          onClick: function onClick(e) {
+            return _this4.onSelectChannel(e, c);
+          }
+        }, c.icon ? React.createElement("img", {
+          src: c.icon.src,
+          "data-toggle": "tooltip",
+          "data-placement": "top",
+          title: c['display-name']['#text'],
+          alt: c['display-name']['#text']
+        }) : c['display-name']['#text'])));
+      });
+
+      var Programs = function Programs(programs) {
+        return programs.map(function (p) {
+          return React.createElement("div", {
+            className: "listings-program",
+            style: {
+              minWidth: p.width
+            },
+            key: p.channel + p.startTime
+          }, React.createElement("div", {
+            className: "listings-program-title"
+          }, React.createElement("a", {
+            href: "#",
+            onClick: function onClick(e) {
+              return _this4.onSelectProgram(e, p);
+            }
+          }, p.title['#text'])), React.createElement("div", {
+            className: "listings-details"
+          }, React.createElement("span", {
+            className: "listings-details-first"
+          }, p.category && p.category['#text']), p['sub-title'] && p['sub-title']['#text'], p.country && ' | ' + p.country['#text'], p.duration && ' | ' + p.duration + 'min', React.createElement("div", {
+            className: "small"
+          }, p.startTime.toLocaleString(luxon_1.DateTime.TIME_24_SIMPLE), " \xA0-\xA0 ", p.stopTime.toLocaleString(luxon_1.DateTime.TIME_24_SIMPLE))));
+        });
+      };
+
+      var Progs = this.state && this.state.tvgChannelsDay && this.state.tvgChannelsDay !== null && React.createElement("ul", {
+        className: "listings-grid-progs",
+        style: {
+          width: this.state.totalWidth,
+          left: "".concat(this.state.offset, "px")
+        }
+      }, headerTimeBar(this.state.totalWidth), this.state.tvgChannelsDay.map(function (c) {
+        return React.createElement("li", {
+          key: c.id,
+          className: "col-md-12 listings-channel-row"
+        }, c.programs && Programs(c.programs));
+      }));
+      var navigationButtons = React.createElement("div", {
+        className: "toolbar"
+      }, React.createElement("a", {
+        href: "#",
+        className: "previous-day pull-left",
+        onClick: function onClick(e) {
+          return _this4.onDayChanged(e, -1);
+        },
+        "data-toggle": "tooltip",
+        "data-placement": "top",
+        title: "Previous day"
+      }, React.createElement("i", {
+        className: "fa fa-angle-double-left"
+      }), ' ' + this.PreviousDay.toISODate()), React.createElement("a", {
+        href: "#",
+        className: "previous pull-left",
+        onClick: function onClick(e) {
+          return _this4.onSlide(e);
+        },
+        "data-toggle": "tooltip",
+        "data-placement": "top",
+        title: "Previous"
+      }, React.createElement("i", {
+        className: "fa fa-arrow-circle-left"
+      })), React.createElement("a", {
+        href: "#",
+        className: "next-day pull-right",
+        onClick: function onClick(e) {
+          return _this4.onDayChanged(e);
+        },
+        "data-toggle": "tooltip",
+        "data-placement": "top",
+        title: "Next day"
+      }, this.NextDay.toISODate() + ' ', React.createElement("i", {
+        className: "fa fa-angle-double-right"
+      })), React.createElement("a", {
+        href: "#",
+        className: "next pull-right",
+        onClick: function onClick(e) {
+          return _this4.onSlide(e, false);
+        },
+        "data-toggle": "tooltip",
+        "data-placement": "top",
+        title: "Next"
+      }, React.createElement("i", {
+        className: "fa fa-arrow-circle-right"
+      })));
+      return React.createElement(React.Fragment, null, React.createElement("h1", null, this.context.name), React.createElement("div", {
+        className: "epg-container"
+      }, navigationButtons, React.createElement("ul", {
+        className: "listings-grid grid-channels"
+      }, Channels), React.createElement("ul", {
+        className: "listings-grid grid-progs"
+      }, Progs)), this.state && React.createElement(sidePanel_1.default, {
+        open: this.state.sidebarOpen,
+        pullRight: true,
+        onSetOpen: this.handleClosePanel
+      }, this.state.selectedChannel && React.createElement(tvgChannel_1.default, {
+        channel: this.state.selectedChannel
+      })));
+    }
+  }, {
+    key: "PreviousDay",
+    get: function get() {
+      if (!this.state || !this.state.currentDate) return luxon_1.DateTime.local().plus({
+        days: -1
+      });
+      return this.state.currentDate.plus({
+        days: -1
+      });
+    }
+  }, {
+    key: "NextDay",
+    get: function get() {
+      if (!this.state || !this.state.currentDate) return luxon_1.DateTime.local().plus({
+        days: +1
+      });
+      return this.state.currentDate.plus({
+        days: +1
+      });
+    }
+  }]);
+  return Home;
+}(React.PureComponent);
+
+Home.contextType = appContext_1.default;
+exports.default = Home;
+},{"@babel/runtime-corejs2/regenerator":"../node_modules/@babel/runtime-corejs2/regenerator/index.js","@babel/runtime-corejs2/helpers/extends":"../node_modules/@babel/runtime-corejs2/helpers/extends.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","@babel/runtime-corejs2/core-js/promise":"../node_modules/@babel/runtime-corejs2/core-js/promise.js","react":"../node_modules/react/index.js","fast-xml-parser":"../node_modules/fast-xml-parser/src/parser.js","../entities":"components/entities.ts","../appContext":"components/appContext.ts","luxon":"../node_modules/luxon/build/cjs-browser/luxon.js","./style.scss":"components/home/style.scss","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","../sidePanel/sidePanel":"components/sidePanel/sidePanel.tsx","../tvgChannel/tvgChannel":"components/tvgChannel/tvgChannel.tsx"}],"routes.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _index = _interopRequireDefault(require("./components/about/index"));
+
+var _settingsPage = _interopRequireDefault(require("./components/settingsModal/settingsPage"));
+
+var _home = _interopRequireDefault(require("./components/home"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// then our route config
+var routes = [{
+  path: '/about',
+  component: _index.default
+}, {
+  path: '/settings',
+  component: _settingsPage.default
+}, {
+  path: '/',
+  exact: true,
+  component: _home.default
+}];
+var _default = routes;
+exports.default = _default;
+},{"./components/about/index":"components/about/index.tsx","./components/settingsModal/settingsPage":"components/settingsModal/settingsPage.tsx","./components/home":"components/home/index.tsx"}],"../node_modules/moment/moment.js":[function(require,module,exports) {
 var define;
 var global = arguments[3];
 //! moment.js
@@ -63622,673 +64283,7 @@ var global = arguments[3];
 
 })));
 
-},{}],"components/tvgChannel/tvgChannel.tsx":[function(require,module,exports) {
-"use strict";
-
-var _typeof2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/typeof"));
-
-var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/extends"));
-
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
-
-var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
-
-var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var __importStar = void 0 && (void 0).__importStar || function (mod) {
-  if (mod && mod.__esModule) return mod;
-  var result = {};
-  if (mod != null) for (var k in mod) {
-    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-  }
-  result["default"] = mod;
-  return result;
-};
-
-var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var React = __importStar(require("react"));
-
-require("../../styles/loader.scss");
-
-require("./style.scss");
-
-var moment_1 = __importDefault(require("moment"));
-
-var jquery_1 = __importDefault(require("jquery"));
-
-require("bootstrap");
-
-var TvgChannel =
-/*#__PURE__*/
-function (_React$Component) {
-  (0, _inherits2.default)(TvgChannel, _React$Component);
-
-  function TvgChannel(props) {
-    var _this;
-
-    (0, _classCallCheck2.default)(this, TvgChannel);
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(TvgChannel).call(this, props));
-
-    _this.handleClickCollapse = function (e) {
-      jquery_1.default(e.target.attributes['data-target'].value).collapse('toggle');
-    };
-
-    _this.getFormatedDateTime = function (date) {
-      return moment_1.default(date, 'YYYYMMDDHHmmss [Z]').format('hh:MM');
-    };
-
-    return _this;
-  }
-
-  (0, _createClass2.default)(TvgChannel, [{
-    key: "render",
-    value: function render() {
-      var _this2 = this;
-
-      var category = function category(c) {
-        return React.createElement("span", {
-          className: "category"
-        }, c['#text']);
-      };
-
-      var subtitle = function subtitle(p) {
-        return p['sub-title'] && React.createElement("small", {
-          className: "subtitle"
-        }, p['sub-title']['#text']);
-      };
-
-      var date = function date(p) {
-        return p.date && React.createElement("small", {
-          className: "date"
-        }, p.date);
-      };
-
-      var persons = function persons(actors) {
-        return actors && actors.map(function (f, i) {
-          return React.createElement("li", {
-            key: i
-          }, f);
-        });
-      };
-
-      var credits = function credits(p) {
-        return p.credits && React.createElement("ul", {
-          className: "credits"
-        }, persons((0, _extends2.default)([], p.credits.director && (0, _typeof2.default)('1') === (0, _typeof2.default)(p.credits.director) ? [p.credits.director] : p.credits.director, p.credits.presenter && (0, _typeof2.default)('1') === (0, _typeof2.default)(p.credits.presenter) ? [p.credits.presenter] : p.credits.presenter, p.credits.actor && (0, _typeof2.default)('1') === (0, _typeof2.default)(p.credits.actor) ? [p.credits.actor] : p.credits.actor, p.credits.writer && (0, _typeof2.default)('1') === (0, _typeof2.default)(p.credits.writer) ? [p.credits.writer] : p.credits.writer)));
-      };
-
-      var country = function country(p) {
-        return p.country && React.createElement("small", {
-          className: "country"
-        }, p.country['#text']);
-      };
-
-      var listItems = this.props.channel && this.props.channel.programs && this.props.channel.programs.map(function (p) {
-        return React.createElement("li", {
-          className: "program-item row",
-          key: p.channel + p.start
-        }, React.createElement("span", {
-          className: "start"
-        }, React.createElement("h3", null, _this2.getFormatedDateTime(p.start))), React.createElement("span", {
-          className: "content"
-        }, React.createElement("a", {
-          className: "title",
-          "data-toggle": "collapse",
-          "data-target": '#' + p.start,
-          onClick: function onClick(e) {
-            return _this2.handleClickCollapse(e);
-          }
-        }, p.title['#text']), React.createElement("span", null, p.category && category(p.category)), React.createElement("div", {
-          className: "collapse",
-          id: p.start
-        }, React.createElement("div", {
-          className: "row details"
-        }, subtitle(p), date(p), country(p), credits(p)), React.createElement("div", {
-          className: "row"
-        }, React.createElement("p", {
-          className: "desc"
-        }, p.desc && p.desc['#text']), React.createElement("span", {
-          className: "icon"
-        }, p.icon && React.createElement("img", {
-          src: p.icon.src
-        }))))));
-      });
-      return this.props.channel && React.createElement("div", {
-        className: "tvgChannel row"
-      }, React.createElement("div", {
-        className: "channel"
-      }, " ", this.props.channel.id, " "), React.createElement("ul", {
-        className: "programs"
-      }, listItems));
-    }
-  }]);
-  return TvgChannel;
-}(React.Component);
-
-exports.default = TvgChannel;
-},{"@babel/runtime-corejs2/helpers/typeof":"../node_modules/@babel/runtime-corejs2/helpers/typeof.js","@babel/runtime-corejs2/helpers/extends":"../node_modules/@babel/runtime-corejs2/helpers/extends.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","../../styles/loader.scss":"styles/loader.scss","./style.scss":"components/tvgChannel/style.scss","moment":"../node_modules/moment/moment.js","jquery":"../node_modules/jquery/dist/jquery.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js"}],"components/home/index.tsx":[function(require,module,exports) {
-"use strict";
-
-var _regenerator = _interopRequireDefault(require("@babel/runtime-corejs2/regenerator"));
-
-var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/extends"));
-
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
-
-var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
-
-var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
-
-var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
-
-var _promise = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/promise"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var __awaiter = void 0 && (void 0).__awaiter || function (thisArg, _arguments, P, generator) {
-  return new (P || (P = _promise.default))(function (resolve, reject) {
-    function fulfilled(value) {
-      try {
-        step(generator.next(value));
-      } catch (e) {
-        reject(e);
-      }
-    }
-
-    function rejected(value) {
-      try {
-        step(generator["throw"](value));
-      } catch (e) {
-        reject(e);
-      }
-    }
-
-    function step(result) {
-      result.done ? resolve(result.value) : new P(function (resolve) {
-        resolve(result.value);
-      }).then(fulfilled, rejected);
-    }
-
-    step((generator = generator.apply(thisArg, _arguments || [])).next());
-  });
-};
-
-var __importStar = void 0 && (void 0).__importStar || function (mod) {
-  if (mod && mod.__esModule) return mod;
-  var result = {};
-  if (mod != null) for (var k in mod) {
-    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-  }
-  result["default"] = mod;
-  return result;
-};
-
-var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var React = __importStar(require("react"));
-
-var fast_xml_parser_1 = __importDefault(require("fast-xml-parser"));
-
-var entities_1 = require("../entities");
-
-var appContext_1 = __importDefault(require("../appContext"));
-
-var luxon_1 = require("luxon");
-
-require("./style.scss");
-
-require("bootstrap");
-
-var sidePanel_1 = __importDefault(require("../sidePanel/sidePanel"));
-
-var tvgChannel_1 = __importDefault(require("../tvgChannel/tvgChannel")); //TODO: react optimizations
-//TODO: prog detail
-//TODO: add navigation time (perDay + limit detection)
-//TODO: Gérér les tz
-//TODO: Gérer les gaps
-//TODO: Gérer mobile version
-//TODO: Afficher the vertical timebar
-
-
-var Home =
-/*#__PURE__*/
-function (_React$PureComponent) {
-  (0, _inherits2.default)(Home, _React$PureComponent);
-
-  function Home(props) {
-    var _this;
-
-    (0, _classCallCheck2.default)(this, Home);
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Home).call(this, props));
-
-    _this.fetchPrograms = function () {
-      var currentDay = luxon_1.DateTime.local(_this.state.currentDate.year, _this.state.currentDate.month, _this.state.currentDate.day);
-      var tvgChannelsDay = [];
-
-      _this.state.allTvgChannels.forEach(function (c) {
-        var ch = (0, _extends2.default)({}, c);
-        ch.programs = c.programs.filter(function (p) {
-          return p.startTime.diff(currentDay, 'minutes').minutes >= 0 && p.startTime.diff(currentDay, 'minutes').minutes <= 1440 || p.stopTime.diff(currentDay, 'minutes').minutes >= 0 && p.stopTime.diff(currentDay, 'minutes').minutes <= 1440;
-        }).slice();
-        tvgChannelsDay.push(ch);
-      });
-
-      _this.setState({
-        tvgChannelsDay: tvgChannelsDay
-      });
-
-      _this.context.loader.loading = false;
-    }; // calculate time offset from midnight
-
-
-    _this.getTimeOffsetPerDay = function () {
-      var _this$state$currentDa = _this.state.currentDate,
-          year = _this$state$currentDa.year,
-          month = _this$state$currentDa.month,
-          day = _this$state$currentDa.day;
-      var dt = luxon_1.DateTime.local(year, month, day);
-      var inter = luxon_1.Interval.fromDateTimes(dt, _this.state.currentDate);
-      console.log("Interval ".concat(inter.length('hour')));
-      return "-".concat(inter.length('hour') * _this.state.halfHourWidth * 2);
-    };
-
-    _this.onDayChanged = function (e) {
-      var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
-
-      var date = _this.state.currentDate.plus({
-        days: offset
-      });
-
-      _this.setState({
-        currentDate: date
-      }, function () {
-        _this.fetchPrograms();
-      });
-    };
-
-    _this.onSlide = function (e) {
-      var isLeft = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-      e.preventDefault();
-
-      if (isLeft) {
-        _this.setState({
-          offset: _this.state.offset + _this.state.halfHourWidth
-        });
-      } else {
-        _this.setState({
-          offset: _this.state.offset - _this.state.halfHourWidth
-        });
-      }
-    };
-
-    _this.onSelectChannel = function (e, c) {
-      e.preventDefault();
-
-      _this.setState({
-        selectedChannel: c,
-        sidebarOpen: true
-      });
-    };
-
-    _this.handleClosePanel = function () {
-      _this.setState({
-        selectedChannel: undefined,
-        sidebarOpen: false
-      });
-    };
-
-    var halfHourWidth = 100;
-    _this.state = {
-      halfHourWidth: halfHourWidth,
-      totalWidth: halfHourWidth * 49,
-      channelLeftWidth: halfHourWidth + 80
-    };
-    _this.state.totalWidth = halfHourWidth * 48 + _this.state.channelLeftWidth;
-    _this.state.sidebarOpen = false;
-    return _this;
-  }
-
-  (0, _createClass2.default)(Home, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      return __awaiter(this, void 0, void 0,
-      /*#__PURE__*/
-      _regenerator.default.mark(function _callee2() {
-        var _this2 = this;
-
-        var testUrl, current_date;
-        return _regenerator.default.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'; // const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
-
-                console.log(this.context.settings.tz);
-                current_date = luxon_1.DateTime.local();
-                this.setState({
-                  currentDate: current_date,
-                  intervals: entities_1.INTERVALS
-                }, function () {
-                  return __awaiter(_this2, void 0, void 0,
-                  /*#__PURE__*/
-                  _regenerator.default.mark(function _callee() {
-                    return _regenerator.default.wrap(function _callee$(_context) {
-                      while (1) {
-                        switch (_context.prev = _context.next) {
-                          case 0:
-                            this.setState({
-                              offset: this.getTimeOffsetPerDay()
-                            });
-                            _context.next = 3;
-                            return this.loadFile(this.props.xmltvFile || testUrl, current_date);
-
-                          case 3:
-                          case "end":
-                            return _context.stop();
-                        }
-                      }
-                    }, _callee, this);
-                  }));
-                });
-
-              case 4:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, this);
-      }));
-    }
-  }, {
-    key: "loadFile",
-    value: function loadFile(fileUrl) {
-      return __awaiter(this, void 0, void 0,
-      /*#__PURE__*/
-      _regenerator.default.mark(function _callee3() {
-        var _this3 = this;
-
-        var response, xmlString, docJson, allTvgChannels;
-        return _regenerator.default.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return fetch(fileUrl);
-
-              case 2:
-                response = _context3.sent;
-                this.context.handleErrors(response);
-                _context3.next = 6;
-                return response.text();
-
-              case 6:
-                xmlString = _context3.sent;
-                docJson = fast_xml_parser_1.default.parse(xmlString, {
-                  attributeNamePrefix: '',
-                  ignoreAttributes: false
-                });
-
-                if (docJson.tv) {
-                  docJson.tv.programme.map(function (p) {
-                    p.startTime = luxon_1.DateTime.fromFormat(p.start, 'yyyyMMddhhmmss ZZZ');
-                    p.stopTime = luxon_1.DateTime.fromFormat(p.stop, 'yyyyMMddhhmmss ZZZ');
-                    p.duration = luxon_1.Interval.fromDateTimes(p.startTime, p.stopTime).length('minute');
-                    p.coefficient = p.duration / 30;
-                    p.durationPercent = Math.floor(p.duration / entities_1.MinutesPerDay * 100);
-                    p.width = _this3.state.halfHourWidth * p.coefficient;
-                    return p;
-                  });
-                  allTvgChannels = docJson.tv.channel.map(function (c) {
-                    c.programs = docJson.tv.programme.filter(function (p) {
-                      return p.channel === c.id;
-                    });
-                    return c;
-                  });
-                  this.setState({
-                    allTvgChannels: allTvgChannels
-                  }, function () {
-                    _this3.fetchPrograms();
-                  });
-                }
-
-              case 9:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3, this);
-      }));
-    }
-  }, {
-    key: "onSelectProgram",
-    value: function onSelectProgram(e, p) {
-      e.preventDefault();
-      this.setState({
-        selectedProgram: p
-      });
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this4 = this;
-
-      var headerTimeBar = function headerTimeBar(totalWidth) {
-        return React.createElement("li", {
-          className: "listings-timebar"
-        }, entities_1.INTERVALS.map(function (x) {
-          return React.createElement("div", {
-            className: "listings-timebar-time",
-            style: {
-              width: _this4.state.halfHourWidth
-            },
-            key: x
-          }, x);
-        }));
-      };
-
-      var Channels = this.state && this.state.tvgChannelsDay && this.state.tvgChannelsDay !== null && this.state.tvgChannelsDay.map(function (c) {
-        return React.createElement("li", {
-          key: c.id,
-          className: "listings-channel-row"
-        }, React.createElement("div", {
-          className: "listings-channel",
-          style: {
-            width: _this4.state.channelLeftWidth
-          }
-        }, React.createElement("a", {
-          href: "#",
-          onClick: function onClick(e) {
-            return _this4.onSelectChannel(e, c);
-          }
-        }, c.icon ? React.createElement("img", {
-          src: c.icon.src,
-          "data-toggle": "tooltip",
-          "data-placement": "top",
-          title: c['display-name']['#text'],
-          alt: c['display-name']['#text']
-        }) : c['display-name']['#text'])));
-      });
-
-      var Programs = function Programs(programs) {
-        return programs.map(function (p) {
-          return React.createElement("div", {
-            className: "listings-program",
-            style: {
-              minWidth: p.width
-            },
-            key: p.channel + p.startTime
-          }, React.createElement("div", {
-            className: "listings-program-title"
-          }, React.createElement("a", {
-            href: "#",
-            onClick: function onClick(e) {
-              return _this4.onSelectProgram(e, p);
-            }
-          }, p.title['#text'])), React.createElement("div", {
-            className: "listings-details"
-          }, React.createElement("span", {
-            className: "listings-details-first"
-          }, p.category && p.category['#text']), p['sub-title'] && p['sub-title']['#text'], p.country && ' | ' + p.country['#text'], p.duration && ' | ' + p.duration + 'min', React.createElement("div", {
-            className: "small"
-          }, p.startTime.toLocaleString(luxon_1.DateTime.TIME_24_SIMPLE), " \xA0-\xA0 ", p.stopTime.toLocaleString(luxon_1.DateTime.TIME_24_SIMPLE))));
-        });
-      };
-
-      var Progs = this.state && this.state.tvgChannelsDay && this.state.tvgChannelsDay !== null && React.createElement("ul", {
-        className: "listings-grid-progs",
-        style: {
-          width: this.state.totalWidth,
-          left: "".concat(this.state.offset, "px")
-        }
-      }, headerTimeBar(this.state.totalWidth), this.state.tvgChannelsDay.map(function (c) {
-        return React.createElement("li", {
-          key: c.id,
-          className: "col-md-12 listings-channel-row"
-        }, c.programs && Programs(c.programs));
-      }));
-      var navigationButtons = React.createElement("div", {
-        className: "toolbar"
-      }, React.createElement("a", {
-        href: "#",
-        className: "previous-day pull-left",
-        onClick: function onClick(e) {
-          return _this4.onDayChanged(e, -1);
-        },
-        "data-toggle": "tooltip",
-        "data-placement": "top",
-        title: "Previous day"
-      }, React.createElement("i", {
-        className: "fa fa-angle-double-left"
-      }), ' ' + this.PreviousDay.toISODate()), React.createElement("a", {
-        href: "#",
-        className: "previous pull-left",
-        onClick: function onClick(e) {
-          return _this4.onSlide(e);
-        },
-        "data-toggle": "tooltip",
-        "data-placement": "top",
-        title: "Previous"
-      }, React.createElement("i", {
-        className: "fa fa-arrow-circle-left"
-      })), React.createElement("a", {
-        href: "#",
-        className: "next-day pull-right",
-        onClick: function onClick(e) {
-          return _this4.onDayChanged(e);
-        },
-        "data-toggle": "tooltip",
-        "data-placement": "top",
-        title: "Next day"
-      }, this.NextDay.toISODate() + ' ', React.createElement("i", {
-        className: "fa fa-angle-double-right"
-      })), React.createElement("a", {
-        href: "#",
-        className: "next pull-right",
-        onClick: function onClick(e) {
-          return _this4.onSlide(e, false);
-        },
-        "data-toggle": "tooltip",
-        "data-placement": "top",
-        title: "Next"
-      }, React.createElement("i", {
-        className: "fa fa-arrow-circle-right"
-      })));
-      return React.createElement(React.Fragment, null, React.createElement("h1", null, this.context.name), React.createElement("div", {
-        className: "epg-container"
-      }, navigationButtons, React.createElement("ul", {
-        className: "listings-grid grid-channels"
-      }, Channels), React.createElement("ul", {
-        className: "listings-grid grid-progs"
-      }, Progs)), React.createElement(sidePanel_1.default, {
-        open: this.state.sidebarOpen,
-        pullRight: true,
-        onSetOpen: this.handleClosePanel
-      }, this.state.selectedChannel && React.createElement(tvgChannel_1.default, {
-        channel: this.state.selectedChannel
-      })));
-    }
-  }, {
-    key: "PreviousDay",
-    get: function get() {
-      if (!this.state.currentDate) return luxon_1.DateTime.local().plus({
-        days: -1
-      });
-      return this.state.currentDate.plus({
-        days: -1
-      });
-    }
-  }, {
-    key: "NextDay",
-    get: function get() {
-      if (!this.state.currentDate) return luxon_1.DateTime.local().plus({
-        days: +1
-      });
-      return this.state.currentDate.plus({
-        days: +1
-      });
-    }
-  }]);
-  return Home;
-}(React.PureComponent);
-
-Home.contextType = appContext_1.default;
-exports.default = Home;
-},{"@babel/runtime-corejs2/regenerator":"../node_modules/@babel/runtime-corejs2/regenerator/index.js","@babel/runtime-corejs2/helpers/extends":"../node_modules/@babel/runtime-corejs2/helpers/extends.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","@babel/runtime-corejs2/core-js/promise":"../node_modules/@babel/runtime-corejs2/core-js/promise.js","react":"../node_modules/react/index.js","fast-xml-parser":"../node_modules/fast-xml-parser/src/parser.js","../entities":"components/entities.ts","../appContext":"components/appContext.ts","luxon":"../node_modules/luxon/build/cjs-browser/luxon.js","./style.scss":"components/home/style.scss","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","../sidePanel/sidePanel":"components/sidePanel/sidePanel.tsx","../tvgChannel/tvgChannel":"components/tvgChannel/tvgChannel.tsx"}],"routes.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _index = _interopRequireDefault(require("./components/about/index"));
-
-var _settingsPage = _interopRequireDefault(require("./components/settingsModal/settingsPage"));
-
-var _home = _interopRequireDefault(require("./components/home"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// then our route config
-var routes = [{
-  path: '/about',
-  component: _index.default
-}, {
-  path: '/settings',
-  component: _settingsPage.default
-}, {
-  path: '/',
-  exact: true,
-  component: _home.default
-}];
-var _default = routes;
-exports.default = _default;
-},{"./components/about/index":"components/about/index.tsx","./components/settingsModal/settingsPage":"components/settingsModal/settingsPage.tsx","./components/home":"components/home/index.tsx"}],"components/navBottom/clock.jsx":[function(require,module,exports) {
+},{}],"components/navBottom/clock.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -64623,7 +64618,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56602" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64829" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

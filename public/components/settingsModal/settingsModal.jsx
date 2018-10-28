@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { Constants } from '../../js/common'
 import $ from 'jquery'
 import XmltvFilesComponent from '../xmltvFiles/xmltvFiles'
 import { AppContext } from '../app'
 
-class SettingsModal extends Component {
+class SettingsModal extends PureComponent {
   static propTypes = {
     files: PropTypes.array.isRequired,
     callbackEvent: PropTypes.func,
@@ -22,12 +22,11 @@ class SettingsModal extends Component {
 
   componentDidUpdate() {
     if (this.props.files.length > 0) {
-      this.selectedXmltvFile =
-        this.props.files.filter((x) => x.selected)[0] || this.props.files[0]
+      this.selectedXmltvFile = this.props.files.filter(x => x.selected)[0] || this.props.files[0]
     }
   }
 
-  viewXmltvUrl = (e) => {
+  viewXmltvUrl = e => {
     e.preventDefault()
     if (this.props.callbackEvent) {
       this.props.callbackEvent({
@@ -38,7 +37,7 @@ class SettingsModal extends Component {
     }
   }
 
-  addXmltvUrl = (e) => {
+  addXmltvUrl = e => {
     e.preventDefault()
     if (this.props.callbackEvent) {
       this.props.callbackEvent({
@@ -53,13 +52,13 @@ class SettingsModal extends Component {
    * @param {string} xmltv_file_url - xmltv file url
    * @memberof SettingsModal
    */
-  createFileObject = (xmltv_file_url) => {
+  createFileObject = xmltv_file_url => {
     return { name: xmltv_file_url.split('/').pop(), url: xmltv_file_url }
   }
 
-  onXmltvSelectChange = (e) => {
+  onXmltvSelectChange = e => {
     e.preventDefault()
-    let file = this.props.files.find((x) => x.url === e.target.value)
+    let file = this.props.files.find(x => x.url === e.target.value)
     file.selected = true
     if (this.props.callbackEvent) {
       this.props.callbackEvent({
@@ -77,12 +76,7 @@ class SettingsModal extends Component {
           <label htmlFor="xmltv_list" className="col-form-label">
             Xmltv sources
           </label>
-          <select
-            className="form-control"
-            id="xmltv_list"
-            onChange={this.onXmltvSelectChange}
-            value={this.selectedXmltvFile}
-          >
+          <select className="form-control" id="xmltv_list" onChange={this.onXmltvSelectChange} value={this.selectedXmltvFile}>
             {this.props.files.map((e, key) => {
               return (
                 <option key={key} value={e.url}>
@@ -103,18 +97,12 @@ class SettingsModal extends Component {
         role="dialog"
         ref={this.meRef}
         aria-labelledby="exampleModalLabel"
-        aria-hidden={this.props.open ? 'false' : 'true'}
-      >
+        aria-hidden={this.props.open ? 'false' : 'true'}>
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title">Settings</h5>
-              <button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
@@ -128,32 +116,25 @@ class SettingsModal extends Component {
                         data-toggle="collapse"
                         data-target="#collapseOne"
                         aria-expanded="true"
-                        aria-controls="collapseOne"
-                      >
+                        aria-controls="collapseOne">
                         Sources
                       </button>
                     </h5>
                   </div>
 
-                  <div
-                    id="collapseOne"
-                    className="collapse show"
-                    aria-labelledby="headingOne"
-                    data-parent="#accordion"
-                  >
+                  <div id="collapseOne" className="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                     <div className="card-body">
                       {selectXmltv}
                       <div className="input-group mb-3">
                         <form
                           className="form-inline"
-                          ref={(x) => {
+                          ref={x => {
                             this.xmltv_file_form = x
-                          }}
-                        >
+                          }}>
                           <div className="form-group">
                             <input
                               type="url"
-                              ref={(x) => {
+                              ref={x => {
                                 this.xmltv_url = x
                               }}
                               required
@@ -173,26 +154,14 @@ class SettingsModal extends Component {
                                 className="btn btn-outline-info btn-sm dropdown-toggle"
                                 data-toggle="dropdown"
                                 aria-haspopup="true"
-                                aria-expanded="false"
-                              >
+                                aria-expanded="false">
                                 Dropdown
                               </button>
-                              <div
-                                className="dropdown-menu"
-                                aria-labelledby="btnGroupDrop1"
-                              >
-                                <a
-                                  className="dropdown-item"
-                                  href="#"
-                                  onClick={this.viewXmltvUrl}
-                                >
+                              <div className="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                <a className="dropdown-item" href="#" onClick={this.viewXmltvUrl}>
                                   View
                                 </a>
-                                <a
-                                  className="dropdown-item"
-                                  href="#"
-                                  onClick={this.addXmltvUrl}
-                                >
+                                <a className="dropdown-item" href="#" onClick={this.addXmltvUrl}>
                                   Add
                                 </a>
                               </div>
@@ -211,25 +180,16 @@ class SettingsModal extends Component {
                         data-toggle="collapse"
                         data-target="#collapseTwo"
                         aria-expanded="false"
-                        aria-controls="collapseTwo"
-                      >
+                        aria-controls="collapseTwo">
                         Settings
                       </button>
                     </h5>
                   </div>
-                  <div
-                    id="collapseTwo"
-                    className="collapse"
-                    aria-labelledby="headingTwo"
-                    data-parent="#accordion"
-                  >
+                  <div id="collapseTwo" className="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                     <div className="card-body">
                       <AppContext.Consumer>
                         {({ onSettingsModalCallback }) => (
-                          <XmltvFilesComponent
-                            files={this.props.files}
-                            onSettingsModalCallback={onSettingsModalCallback}
-                          />
+                          <XmltvFilesComponent files={this.props.files} onSettingsModalCallback={onSettingsModalCallback} />
                         )}
                       </AppContext.Consumer>
                     </div>
@@ -238,11 +198,7 @@ class SettingsModal extends Component {
               </div>
             </div>
             <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-dismiss="modal"
-              >
+              <button type="button" className="btn btn-secondary" data-dismiss="modal">
                 Close
               </button>
             </div>

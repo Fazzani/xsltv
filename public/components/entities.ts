@@ -1,3 +1,5 @@
+import { DateTime } from "luxon";
+
 export interface Channel {
   id: string
   url: string
@@ -7,9 +9,12 @@ export interface Channel {
 }
 
 export interface Program {
-  width: string;
-  stopTime: any;
-  startTime: any;
+  duration: number;
+  durationPercent: number;
+  coefficient: number;
+  width: number;
+  stopTime: DateTime;
+  startTime: DateTime;
   category: TextProp
   channel: string
   country: TextProp

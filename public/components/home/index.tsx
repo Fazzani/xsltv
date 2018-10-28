@@ -2,12 +2,11 @@ import * as React from 'react'
 import parser from 'fast-xml-parser'
 import { Channel, Program, INTERVALS, MinutesPerDay } from '../entities'
 import AppContext, { AppContextInterface } from '../appContext'
-import { DateTime, Interval, Duration } from 'luxon'
+import { DateTime, Interval } from 'luxon'
 import './style.scss'
 import 'bootstrap'
 import SidePanel from '../sidePanel/sidePanel'
 import TvgChannel from '../tvgChannel/tvgChannel'
-import { Channel } from './../entities'
 
 interface HomeProps {
   xmltvFile: string
@@ -26,6 +25,7 @@ interface HomeState {
   channelLeftWidth: number
   sidebarOpen: boolean
   handleClosePanel: void
+  intervals: string[]
 }
 
 //TODO: react optimizations
@@ -41,21 +41,28 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
 
   constructor(props: HomeProps) {
     super(props)
-    const halfHourWidth = 100
-    this.state = { halfHourWidth, totalWidth: halfHourWidth * 49, channelLeftWidth: halfHourWidth + 80 }
-    this.state.totalWidth = halfHourWidth * 48 + this.state.channelLeftWidth
-    this.state.sidebarOpen = false
   }
 
   async componentDidMount() {
-    const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'
-    // const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
+    // const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'
+    const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
     console.log(this.context.settings.tz)
     const current_date = DateTime.local()
-    this.setState({ currentDate: current_date, intervals: INTERVALS }, async () => {
-      this.setState({ offset: this.getTimeOffsetPerDay() })
-      await this.loadFile(this.props.xmltvFile || testUrl, current_date)
-    })
+    const halfHourWidth = 100
+    this.setState(
+      {
+        currentDate: current_date,
+        intervals: INTERVALS,
+        halfHourWidth,
+        totalWidth: halfHourWidth * 49,
+        channelLeftWidth: halfHourWidth + 80,
+        sidebarOpen: false,
+      },
+      async () => {
+        this.setState({ totalWidth: halfHourWidth * 48 + this.state.channelLeftWidth, offset: this.getTimeOffsetPerDay() })
+        await this.loadFile(this.props.xmltvFile || testUrl)
+      }
+    )
   }
 
   async loadFile(fileUrl: string) {
@@ -69,7 +76,7 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
     })
 
     if (docJson.tv) {
-      docJson.tv.programme.map(p => {
+      docJson.tv.programme.map((p: Program) => {
         p.startTime = DateTime.fromFormat(p.start, 'yyyyMMddhhmmss ZZZ')
         p.stopTime = DateTime.fromFormat(p.stop, 'yyyyMMddhhmmss ZZZ')
 
@@ -98,8 +105,8 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
       ch.programs = c.programs
         .filter((p: Program) => {
           return (
-            (p.startTime.diff(currentDay, 'minutes').minutes >= 0 && p.startTime.diff(currentDay, 'minutes').minutes <= 1440) ||
-            (p.stopTime.diff(currentDay, 'minutes').minutes >= 0 && p.stopTime.diff(currentDay, 'minutes').minutes <= 1440)
+            (p.startTime.diff(currentDay, 'minutes').minutes >= 0 && p.startTime.diff(currentDay, 'minutes').minutes <= MinutesPerDay) ||
+            (p.stopTime.diff(currentDay, 'minutes').minutes >= 0 && p.stopTime.diff(currentDay, 'minutes').minutes <= MinutesPerDay)
           )
         })
         .slice()
@@ -110,15 +117,15 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
   }
 
   // calculate time offset from midnight
-  getTimeOffsetPerDay = () => {
+  getTimeOffsetPerDay = (): number => {
     const { year, month, day } = this.state.currentDate
     const dt = DateTime.local(year, month, day)
     const inter = Interval.fromDateTimes(dt, this.state.currentDate)
-    console.log(`Interval ${inter.length('hour')}`)
-    return `-${inter.length('hour') * this.state.halfHourWidth * 2}`
+    // console.log(`Interval ${inter.length('hour')}`)
+    return -(inter.length('hour') * this.state.halfHourWidth * 2)
   }
 
-  onDayChanged = (e: Event, offset = 1) => {
+  onDayChanged = (e: React.MouseEvent<HTMLElement>, offset = 1) => {
     const date = this.state.currentDate.plus({ days: offset })
     this.setState({ currentDate: date }, () => {
       this.fetchPrograms()
@@ -126,15 +133,15 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
   }
 
   get PreviousDay(): DateTime {
-    if (!this.state.currentDate) return DateTime.local().plus({ days: -1 })
+    if (!this.state || !this.state.currentDate) return DateTime.local().plus({ days: -1 })
     return this.state.currentDate.plus({ days: -1 })
   }
   get NextDay(): DateTime {
-    if (!this.state.currentDate) return DateTime.local().plus({ days: +1 })
+    if (!this.state || !this.state.currentDate) return DateTime.local().plus({ days: +1 })
     return this.state.currentDate.plus({ days: +1 })
   }
 
-  onSlide = (e: Event, isLeft: boolean = true) => {
+  onSlide = (e: React.MouseEvent<HTMLElement>, isLeft: boolean = true) => {
     e.preventDefault()
     if (isLeft) {
       this.setState({ offset: this.state.offset + this.state.halfHourWidth })
@@ -143,12 +150,12 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
     }
   }
 
-  onSelectChannel = (e: Event, c: Channel) => {
+  onSelectChannel = (e: React.MouseEvent<HTMLElement>, c: Channel) => {
     e.preventDefault()
     this.setState({ selectedChannel: c, sidebarOpen: true })
   }
 
-  onSelectProgram(e: Event, p: Program): void {
+  onSelectProgram(e: React.MouseEvent<HTMLElement>, p: Program): void {
     e.preventDefault()
     this.setState({ selectedProgram: p })
   }
@@ -270,9 +277,11 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
           <ul className="listings-grid grid-channels">{Channels}</ul>
           <ul className="listings-grid grid-progs">{Progs}</ul>
         </div>
-        <SidePanel open={this.state.sidebarOpen} pullRight={true} onSetOpen={this.handleClosePanel}>
-          {this.state.selectedChannel && <TvgChannel channel={this.state.selectedChannel} />}
-        </SidePanel>
+        {this.state && (
+          <SidePanel open={this.state.sidebarOpen} pullRight={true} onSetOpen={this.handleClosePanel}>
+            {this.state.selectedChannel && <TvgChannel channel={this.state.selectedChannel} />}
+          </SidePanel>
+        )}
       </React.Fragment>
     )
   }
