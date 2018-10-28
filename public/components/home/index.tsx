@@ -2,7 +2,7 @@ import * as React from 'react'
 import parser from 'fast-xml-parser'
 import { Channel, Program, INTERVALS, MinutesPerDay } from '../entities'
 import AppContext, { AppContextInterface } from '../appContext'
-import { DateTime, Interval } from 'luxon'
+import { DateTime, Interval, Duration } from 'luxon'
 import './style.scss'
 import 'bootstrap'
 import SidePanel from '../sidePanel/sidePanel'
@@ -12,7 +12,10 @@ interface HomeProps {
   xmltvFile: string
 }
 interface HomeState {
-  tvgChannels: Channel[]
+  //channel with programs for selected day only
+  tvgChannelsDay: Channel[]
+  // channel with all programs
+  allTvgChannels: Channel[]
   selectedChannel: Channel | undefined
   selectedProgram: Program | undefined
   currentDate: DateTime
@@ -50,7 +53,7 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
     const current_date = DateTime.local()
     this.setState({ currentDate: current_date, intervals: INTERVALS }, async () => {
       this.setState({ offset: this.getTimeOffsetPerDay() })
-      await this.loadFile(this.props.xmltvFile || testUrl)
+      await this.loadFile(this.props.xmltvFile || testUrl, current_date)
     })
   }
 
@@ -86,7 +89,7 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
     this.setState({ selectedChannel: undefined, sidebarOpen: false })
   }
 
-  async loadFile(fileUrl: string, currentDate: Date | undefined) {
+  async loadFile(fileUrl: string, currentDate: DateTime) {
     // this.context.loader.loading = true
     const response = await fetch(fileUrl)
     this.context.handleErrors(response)
@@ -107,13 +110,25 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
         p.width = this.state.halfHourWidth * p.coefficient
         return p
       })
-      const tvgChannels = docJson.tv.channel.map(c => {
-        c.programs = docJson.tv.programme.filter(p => p.channel === c.id)
+
+      const allTvgChannels = docJson.tv.channel.map((c: Channel) => {
+        c.programs = docJson.tv.programme.filter((p: Program) => p.channel === c.id)
         return c
       })
 
-      console.log(tvgChannels)
-      this.setState({ tvgChannels })
+      const currentDay = DateTime.local(this.state.currentDate.year, this.state.currentDate.month, this.state.currentDate.day)
+      const tvgChannelsDay = [...allTvgChannels]
+      tvgChannelsDay.forEach((c: Channel) => {
+        c.programs = c.programs.filter((p: Program) => {
+          return (
+            (p.startTime.diff(currentDay, 'minutes').minutes >= 0 && p.startTime.diff(currentDay, 'minutes').minutes <= 1440) ||
+            (p.stopTime.diff(currentDay, 'minutes').minutes >= 0 && p.stopTime.diff(currentDay, 'minutes').minutes <= 1440)
+          )
+        })
+      })
+
+      console.log(allTvgChannels)
+      this.setState({ allTvgChannels, tvgChannelsDay })
       this.context.loader.loading = false
     }
   }
@@ -135,9 +150,9 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
 
     const Channels =
       this.state &&
-      this.state.tvgChannels &&
-      this.state.tvgChannels !== null &&
-      this.state.tvgChannels.map(c => {
+      this.state.tvgChannelsDay &&
+      this.state.tvgChannelsDay !== null &&
+      this.state.tvgChannelsDay.map(c => {
         return (
           <li key={c.id} className="listings-channel-row">
             <div className="listings-channel" style={{ width: this.state.channelLeftWidth }}>
@@ -183,11 +198,11 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
     }
 
     const Progs = this.state &&
-      this.state.tvgChannels &&
-      this.state.tvgChannels !== null && (
+      this.state.tvgChannelsDay &&
+      this.state.tvgChannelsDay !== null && (
         <ul className="listings-grid-progs" style={{ width: this.state.totalWidth, left: `${this.state.offset}px` }}>
           {timeBar(this.state.totalWidth)}
-          {this.state.tvgChannels.map(c => {
+          {this.state.tvgChannelsDay.map(c => {
             return (
               <li key={c.id} className="col-md-12 listings-channel-row">
                 {c.programs && Programs(c.programs)}
