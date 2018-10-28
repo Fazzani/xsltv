@@ -59355,7 +59355,6 @@ var sidePanel_1 = __importDefault(require("../sidePanel/sidePanel"));
 
 var tvgChannel_1 = __importDefault(require("../tvgChannel/tvgChannel")); //TODO: react optimizations
 //TODO: prog detail
-//TODO: add navigation time (perDay + limit detection)
 //TODO: Gérér les tz
 //TODO: Gérer les gaps
 //TODO: Gérer mobile version
