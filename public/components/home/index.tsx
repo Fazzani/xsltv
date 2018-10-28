@@ -27,13 +27,13 @@ interface HomeState {
   handleClosePanel: void
 }
 
-//TODO: channel detail
+//TODO: react optimizations
 //TODO: prog detail
 //TODO: add navigation time (perDay + limit detection)
 //TODO: Gérér les tz
 //TODO: Gérer les gaps
 //TODO: Gérer mobile version
-//TODO: Afficher la timebar
+//TODO: Afficher the vertical timebar
 
 export default class Home extends React.PureComponent<HomeProps, HomeState> {
   static contextType: React.Context<AppContextInterface> = AppContext
@@ -55,6 +55,54 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
       this.setState({ offset: this.getTimeOffsetPerDay() })
       await this.loadFile(this.props.xmltvFile || testUrl, current_date)
     })
+  }
+
+  async loadFile(fileUrl: string) {
+    // this.context.loader.loading = true
+    const response = await fetch(fileUrl)
+    this.context.handleErrors(response)
+    const xmlString = await response.text()
+    const docJson = parser.parse(xmlString, {
+      attributeNamePrefix: '',
+      ignoreAttributes: false,
+    })
+
+    if (docJson.tv) {
+      docJson.tv.programme.map(p => {
+        p.startTime = DateTime.fromFormat(p.start, 'yyyyMMddhhmmss ZZZ')
+        p.stopTime = DateTime.fromFormat(p.stop, 'yyyyMMddhhmmss ZZZ')
+
+        p.duration = Interval.fromDateTimes(p.startTime, p.stopTime).length('minute')
+        p.coefficient = p.duration / 30
+        p.durationPercent = Math.floor((p.duration / MinutesPerDay) * 100)
+        p.width = this.state.halfHourWidth * p.coefficient
+        return p
+      })
+
+      const allTvgChannels = docJson.tv.channel.map((c: Channel) => {
+        c.programs = docJson.tv.programme.filter((p: Program) => p.channel === c.id)
+        return c
+      })
+
+      this.setState({ allTvgChannels }, () => {
+        this.fetchPrograms()
+      })
+    }
+  }
+
+  fetchPrograms = () => {
+    const currentDay = DateTime.local(this.state.currentDate.year, this.state.currentDate.month, this.state.currentDate.day)
+    const tvgChannelsDay = [...this.state.allTvgChannels]
+    tvgChannelsDay.forEach((c: Channel) => {
+      c.programs = c.programs.filter((p: Program) => {
+        return (
+          (p.startTime.diff(currentDay, 'minutes').minutes >= 0 && p.startTime.diff(currentDay, 'minutes').minutes <= 1440) ||
+          (p.stopTime.diff(currentDay, 'minutes').minutes >= 0 && p.stopTime.diff(currentDay, 'minutes').minutes <= 1440)
+        )
+      })
+    })
+    this.setState({ tvgChannelsDay })
+    this.context.loader.loading = false
   }
 
   // calculate time offset from midnight
@@ -87,50 +135,6 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
 
   handleClosePanel = () => {
     this.setState({ selectedChannel: undefined, sidebarOpen: false })
-  }
-
-  async loadFile(fileUrl: string, currentDate: DateTime) {
-    // this.context.loader.loading = true
-    const response = await fetch(fileUrl)
-    this.context.handleErrors(response)
-    const xmlString = await response.text()
-    const docJson = parser.parse(xmlString, {
-      attributeNamePrefix: '',
-      ignoreAttributes: false,
-    })
-
-    if (docJson.tv) {
-      docJson.tv.programme.map(p => {
-        p.startTime = DateTime.fromFormat(p.start, 'yyyyMMddhhmmss ZZZ')
-        p.stopTime = DateTime.fromFormat(p.stop, 'yyyyMMddhhmmss ZZZ')
-
-        p.duration = Interval.fromDateTimes(p.startTime, p.stopTime).length('minute')
-        p.coefficient = p.duration / 30
-        p.durationPercent = Math.floor((p.duration / MinutesPerDay) * 100)
-        p.width = this.state.halfHourWidth * p.coefficient
-        return p
-      })
-
-      const allTvgChannels = docJson.tv.channel.map((c: Channel) => {
-        c.programs = docJson.tv.programme.filter((p: Program) => p.channel === c.id)
-        return c
-      })
-
-      const currentDay = DateTime.local(this.state.currentDate.year, this.state.currentDate.month, this.state.currentDate.day)
-      const tvgChannelsDay = [...allTvgChannels]
-      tvgChannelsDay.forEach((c: Channel) => {
-        c.programs = c.programs.filter((p: Program) => {
-          return (
-            (p.startTime.diff(currentDay, 'minutes').minutes >= 0 && p.startTime.diff(currentDay, 'minutes').minutes <= 1440) ||
-            (p.stopTime.diff(currentDay, 'minutes').minutes >= 0 && p.stopTime.diff(currentDay, 'minutes').minutes <= 1440)
-          )
-        })
-      })
-
-      console.log(allTvgChannels)
-      this.setState({ allTvgChannels, tvgChannelsDay })
-      this.context.loader.loading = false
-    }
   }
 
   render() {
