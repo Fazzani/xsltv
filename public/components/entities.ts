@@ -9,6 +9,7 @@ export interface Channel {
 }
 
 export interface Program {
+  id: string;
   duration: number;
   durationPercent: number;
   coefficient: number;

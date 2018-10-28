@@ -83,6 +83,7 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
         p.coefficient = p.duration / 30
         p.durationPercent = Math.floor((p.duration / MinutesPerDay) * 100)
         p.width = this.state.halfHourWidth * p.coefficient
+        p.id = `${p.channel}${p.start}`.replace(/[\s\+\.]/g,'')
         return p
       })
 
@@ -207,7 +208,7 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
     const Programs = (programs: Program[]) => {
       return programs.map(p => {
         return (
-          <div className="listings-program" style={{ minWidth: p.width }} key={p.channel + p.startTime}>
+          <div className="listings-program" style={{ minWidth: p.width }} key={p.id}>
             <div className="listings-program-title">
               <a href="#" onClick={e => this.onSelectProgram(e, p)}>
                 {p.title['#text']}

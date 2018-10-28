@@ -53,12 +53,12 @@ export default class TvgChannel extends React.PureComponent<TvgChannelProps, {}>
             <h3>{p.startTime.toLocaleString(DateTime.TIME_24_SIMPLE)}</h3>
           </span>
           <span className="content">
-            <a className="title" data-toggle="collapse" data-target={'#' + p.start} onClick={e => this.handleClickCollapse(e)}>
+            <a className="title" data-toggle="collapse" data-target={'#' + p.id} onClick={e => this.handleClickCollapse(e)}>
               {p.title['#text']}
             </a>
             <span>{p.category && category(p.category)}</span>
 
-            <div className="collapse" id={p.start}>
+            <div className="collapse" id={p.id}>
               <div className="row details">
                 {subtitle(p)}
                 {date(p)}

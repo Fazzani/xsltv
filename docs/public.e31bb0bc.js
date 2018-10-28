@@ -59236,13 +59236,13 @@ function (_React$PureComponent) {
         }, React.createElement("a", {
           className: "title",
           "data-toggle": "collapse",
-          "data-target": '#' + p.start,
+          "data-target": '#' + p.id,
           onClick: function onClick(e) {
             return _this2.handleClickCollapse(e);
           }
         }, p.title['#text']), React.createElement("span", null, p.category && category(p.category)), React.createElement("div", {
           className: "collapse",
-          id: p.start
+          id: p.id
         }, React.createElement("div", {
           className: "row details"
         }, subtitle(p), date(p), country(p), credits(p)), React.createElement("div", {
@@ -59545,6 +59545,7 @@ function (_React$PureComponent) {
                     p.coefficient = p.duration / 30;
                     p.durationPercent = Math.floor(p.duration / entities_1.MinutesPerDay * 100);
                     p.width = _this3.state.halfHourWidth * p.coefficient;
+                    p.id = "".concat(p.channel).concat(p.start).replace(/[\s\+\.]/g, '');
                     return p;
                   });
                   allTvgChannels = docJson.tv.channel.map(function (c) {
@@ -59625,7 +59626,7 @@ function (_React$PureComponent) {
             style: {
               minWidth: p.width
             },
-            key: p.channel + p.startTime
+            key: p.id
           }, React.createElement("div", {
             className: "listings-program-title"
           }, React.createElement("a", {
@@ -64617,7 +64618,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64829" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49479" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
