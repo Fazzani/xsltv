@@ -44,8 +44,8 @@ export default class Home extends React.Component<HomeProps, HomeState> {
   }
 
   async componentDidMount() {
-    // const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'
-    const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
+    const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'
+    // const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
     await this.loadFile(this.props.xmltvFile || testUrl)
     console.log(this.context.settings.tz)
     const m = moment()
@@ -160,13 +160,16 @@ export default class Home extends React.Component<HomeProps, HomeState> {
         return (
           <div className="listings-program" style={{ minWidth: p.width }} key={i}>
             <div className="listings-program-title">
-              <a href="#" onClick={e => this.onSelectProgram(e, p)}>
+              <a href="#" onClick={(e) => this.onSelectProgram(e, p)}>
                 {p.title['#text']}
               </a>
             </div>
             <div className="listings-details">
-              <span className="listings-details-first">{p.duration}</span>
-              {p.width}
+              <span className="listings-details-first">{p.category && p.category['#text']}</span>
+              {p['sub-title'] && p['sub-title']['#text']}
+              <div className="small">
+                {p.startTime.format('hh:mm')} &nbsp;-&nbsp; {p.stopTime.format('hh:mm')}
+              </div>
             </div>
           </div>
         )

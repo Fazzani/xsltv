@@ -57923,8 +57923,8 @@ function (_React$Component) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                // const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'
-                testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv';
+                testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'; // const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
+
                 _context.next = 3;
                 return this.loadFile(this.props.xmltvFile || testUrl);
 
@@ -58074,7 +58074,9 @@ function (_React$Component) {
             className: "listings-details"
           }, React.createElement("span", {
             className: "listings-details-first"
-          }, p.duration), p.width));
+          }, p.category && p.category['#text']), p['sub-title'] && p['sub-title']['#text'], React.createElement("div", {
+            className: "small"
+          }, p.startTime.format('hh:mm'), " \xA0-\xA0 ", p.stopTime.format('hh:mm'))));
         });
       };
 

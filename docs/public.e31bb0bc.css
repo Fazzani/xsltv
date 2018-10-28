@@ -270,9 +270,9 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   background-color: black;
+  background-size: 20% auto;
 }
 .epg-container ul.listings-grid .listings-program .listings-details {
-  font-size: 20px;
   float: left;
 }
 .epg-container ul.listings-grid .listings-program .listings-details-first {
