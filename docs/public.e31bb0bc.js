@@ -63896,8 +63896,9 @@ function (_React$PureComponent) {
       return "-".concat(inter.length('hour') * _this.state.halfHourWidth * 2);
     };
 
-    _this.onSlide = function () {
-      var isLeft = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+    _this.onSlide = function (e) {
+      var isLeft = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+      e.preventDefault();
 
       if (isLeft) {
         _this.setState({
@@ -64044,20 +64045,20 @@ function (_React$PureComponent) {
       var timeBar = function timeBar(totalWidth) {
         return React.createElement("li", {
           className: "listings-timebar"
-        }, entities_1.INTERVALS.map(function (x, i) {
+        }, entities_1.INTERVALS.map(function (x) {
           return React.createElement("div", {
             className: "listings-timebar-time",
             style: {
               width: _this3.state.halfHourWidth
             },
-            key: i
+            key: x
           }, x);
         }));
       };
 
-      var Channels = this.state && this.state.tvgChannels && this.state.tvgChannels !== null && this.state.tvgChannels.map(function (c, i) {
+      var Channels = this.state && this.state.tvgChannels && this.state.tvgChannels !== null && this.state.tvgChannels.map(function (c) {
         return React.createElement("li", {
-          key: i,
+          key: c.id,
           className: "listings-channel-row"
         }, React.createElement("div", {
           className: "listings-channel",
@@ -64085,7 +64086,7 @@ function (_React$PureComponent) {
             style: {
               minWidth: p.width
             },
-            key: i
+            key: p.channel + p.startTime
           }, React.createElement("div", {
             className: "listings-program-title"
           }, React.createElement("a", {
@@ -64109,9 +64110,9 @@ function (_React$PureComponent) {
           width: this.state.totalWidth,
           left: "".concat(this.state.offset, "px")
         }
-      }, timeBar(this.state.totalWidth), this.state.tvgChannels.map(function (c, i) {
+      }, timeBar(this.state.totalWidth), this.state.tvgChannels.map(function (c) {
         return React.createElement("li", {
-          key: i,
+          key: c.id,
           className: "col-md-12 listings-channel-row"
         }, c.programs && Programs(c.programs));
       }));
@@ -64121,7 +64122,7 @@ function (_React$PureComponent) {
         href: "#",
         className: "previous pull-left",
         onClick: function onClick(e) {
-          return _this3.onSlide();
+          return _this3.onSlide(e);
         },
         "data-toggle": "tooltip",
         "data-placement": "top",
@@ -64132,7 +64133,7 @@ function (_React$PureComponent) {
         href: "#",
         className: "next pull-right",
         onClick: function onClick(e) {
-          return _this3.onSlide(false);
+          return _this3.onSlide(e, false);
         },
         "data-toggle": "tooltip",
         "data-placement": "top",
@@ -64525,7 +64526,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62415" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56602" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

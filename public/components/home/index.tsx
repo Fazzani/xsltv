@@ -63,7 +63,8 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
     return `-${inter.length('hour') * this.state.halfHourWidth * 2}`
   }
 
-  onSlide = (isLeft: boolean = true) => {
+  onSlide = (e: Event, isLeft: boolean = true) => {
+    e.preventDefault()
     if (isLeft) {
       this.setState({ offset: this.state.offset + this.state.halfHourWidth })
     } else {
@@ -121,9 +122,9 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
     const timeBar = (totalWidth: number) => {
       return (
         <li className="listings-timebar">
-          {INTERVALS.map((x, i) => {
+          {INTERVALS.map(x => {
             return (
-              <div className="listings-timebar-time" style={{ width: this.state.halfHourWidth }} key={i}>
+              <div className="listings-timebar-time" style={{ width: this.state.halfHourWidth }} key={x}>
                 {x}
               </div>
             )
@@ -136,9 +137,9 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
       this.state &&
       this.state.tvgChannels &&
       this.state.tvgChannels !== null &&
-      this.state.tvgChannels.map((c, i) => {
+      this.state.tvgChannels.map(c => {
         return (
-          <li key={i} className="listings-channel-row">
+          <li key={c.id} className="listings-channel-row">
             <div className="listings-channel" style={{ width: this.state.channelLeftWidth }}>
               <a href="#" onClick={e => this.onSelectChannel(e, c)}>
                 {c.icon ? (
@@ -161,7 +162,7 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
     const Programs = (programs: Program[]) => {
       return programs.map((p, i) => {
         return (
-          <div className="listings-program" style={{ minWidth: p.width }} key={i}>
+          <div className="listings-program" style={{ minWidth: p.width }} key={p.channel + p.startTime}>
             <div className="listings-program-title">
               <a href="#" onClick={e => this.onSelectProgram(e, p)}>
                 {p.title['#text']}
@@ -185,9 +186,9 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
       this.state.tvgChannels !== null && (
         <ul className="listings-grid-progs" style={{ width: this.state.totalWidth, left: `${this.state.offset}px` }}>
           {timeBar(this.state.totalWidth)}
-          {this.state.tvgChannels.map((c, i) => {
+          {this.state.tvgChannels.map(c => {
             return (
-              <li key={i} className="col-md-12 listings-channel-row">
+              <li key={c.id} className="col-md-12 listings-channel-row">
                 {c.programs && Programs(c.programs)}
               </li>
             )
@@ -197,10 +198,10 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
 
     const navigationButtons = (
       <div className="toolbar">
-        <a href="#" className="previous pull-left" onClick={e => this.onSlide()} data-toggle="tooltip" data-placement="top" title="Previous">
+        <a href="#" className="previous pull-left" onClick={e => this.onSlide(e)} data-toggle="tooltip" data-placement="top" title="Previous">
           <i className="fa fa-arrow-circle-left" />
         </a>
-        <a href="#" className="next pull-right" onClick={e => this.onSlide(false)} data-toggle="tooltip" data-placement="top" title="Next">
+        <a href="#" className="next pull-right" onClick={e => this.onSlide(e, false)} data-toggle="tooltip" data-placement="top" title="Next">
           <i className="fa fa-arrow-circle-right" />
         </a>
       </div>
