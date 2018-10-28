@@ -63738,10 +63738,10 @@ function (_React$Component) {
         }, p.country['#text']);
       };
 
-      var listItems = this.props.channel && this.props.channel.programs && this.props.channel.programs.map(function (p, i) {
+      var listItems = this.props.channel && this.props.channel.programs && this.props.channel.programs.map(function (p) {
         return React.createElement("li", {
           className: "program-item row",
-          key: i
+          key: p.channel + p.start
         }, React.createElement("span", {
           className: "start"
         }, React.createElement("h3", null, _this2.getFormatedDateTime(p.start))), React.createElement("span", {
@@ -63749,13 +63749,13 @@ function (_React$Component) {
         }, React.createElement("a", {
           className: "title",
           "data-toggle": "collapse",
-          "data-target": '#' + i.toString(),
+          "data-target": '#' + p.start,
           onClick: function onClick(e) {
             return _this2.handleClickCollapse(e);
           }
         }, p.title['#text']), React.createElement("span", null, p.category && category(p.category)), React.createElement("div", {
           className: "collapse",
-          id: i.toString()
+          id: p.start
         }, React.createElement("div", {
           className: "row details"
         }, subtitle(p), date(p), country(p), credits(p)), React.createElement("div", {
@@ -63885,13 +63885,12 @@ function (_React$PureComponent) {
     _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Home).call(this, props)); // calculate time offset from midnight
 
     _this.getTimeOffsetPerDay = function () {
-      var now = luxon_1.DateTime.local();
-      var year = now.year,
-          month = now.month,
-          day = now.day;
-      var dt = luxon_1.DateTime.local(year, month, day); // console.log(`now ${now} dt: ${dt}`)
-
-      var inter = luxon_1.Interval.fromDateTimes(dt, now);
+      var _this$state$currentDa = _this.state.currentDate,
+          year = _this$state$currentDa.year,
+          month = _this$state$currentDa.month,
+          day = _this$state$currentDa.day;
+      var dt = luxon_1.DateTime.local(year, month, day);
+      var inter = luxon_1.Interval.fromDateTimes(dt, _this.state.currentDate);
       console.log("Interval ".concat(inter.length('hour')));
       return "-".concat(inter.length('hour') * _this.state.halfHourWidth * 2);
     };
@@ -63943,11 +63942,13 @@ function (_React$PureComponent) {
     value: function componentDidMount() {
       return __awaiter(this, void 0, void 0,
       /*#__PURE__*/
-      _regenerator.default.mark(function _callee() {
+      _regenerator.default.mark(function _callee2() {
+        var _this2 = this;
+
         var testUrl, current_date;
-        return _regenerator.default.wrap(function _callee$(_context) {
+        return _regenerator.default.wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
                 // const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'
                 testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv';
@@ -63955,18 +63956,36 @@ function (_React$PureComponent) {
                 current_date = luxon_1.DateTime.local();
                 this.setState({
                   currentDate: current_date,
-                  intervals: entities_1.INTERVALS,
-                  offset: this.getTimeOffsetPerDay()
-                });
-                _context.next = 6;
-                return this.loadFile(this.props.xmltvFile || testUrl);
+                  intervals: entities_1.INTERVALS
+                }, function () {
+                  return __awaiter(_this2, void 0, void 0,
+                  /*#__PURE__*/
+                  _regenerator.default.mark(function _callee() {
+                    return _regenerator.default.wrap(function _callee$(_context) {
+                      while (1) {
+                        switch (_context.prev = _context.next) {
+                          case 0:
+                            this.setState({
+                              offset: this.getTimeOffsetPerDay()
+                            });
+                            _context.next = 3;
+                            return this.loadFile(this.props.xmltvFile || testUrl);
 
-              case 6:
+                          case 3:
+                          case "end":
+                            return _context.stop();
+                        }
+                      }
+                    }, _callee, this);
+                  }));
+                });
+
+              case 4:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee, this);
+        }, _callee2, this);
       }));
     }
   }, {
@@ -63982,25 +64001,25 @@ function (_React$PureComponent) {
     value: function loadFile(fileUrl, currentDate) {
       return __awaiter(this, void 0, void 0,
       /*#__PURE__*/
-      _regenerator.default.mark(function _callee2() {
-        var _this2 = this;
+      _regenerator.default.mark(function _callee3() {
+        var _this3 = this;
 
         var response, xmlString, docJson, tvgChannels;
-        return _regenerator.default.wrap(function _callee2$(_context2) {
+        return _regenerator.default.wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
-                _context2.next = 2;
+                _context3.next = 2;
                 return fetch(fileUrl);
 
               case 2:
-                response = _context2.sent;
+                response = _context3.sent;
                 this.context.handleErrors(response);
-                _context2.next = 6;
+                _context3.next = 6;
                 return response.text();
 
               case 6:
-                xmlString = _context2.sent;
+                xmlString = _context3.sent;
                 docJson = fast_xml_parser_1.default.parse(xmlString, {
                   attributeNamePrefix: '',
                   ignoreAttributes: false
@@ -64013,7 +64032,7 @@ function (_React$PureComponent) {
                     p.duration = luxon_1.Interval.fromDateTimes(p.startTime, p.stopTime).length('minute');
                     p.coefficient = p.duration / 30;
                     p.durationPercent = Math.floor(p.duration / entities_1.MinutesPerDay * 100);
-                    p.width = _this2.state.halfHourWidth * p.coefficient;
+                    p.width = _this3.state.halfHourWidth * p.coefficient;
                     return p;
                   });
                   tvgChannels = docJson.tv.channel.map(function (c) {
@@ -64031,16 +64050,16 @@ function (_React$PureComponent) {
 
               case 9:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
           }
-        }, _callee2, this);
+        }, _callee3, this);
       }));
     }
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
       var timeBar = function timeBar(totalWidth) {
         return React.createElement("li", {
@@ -64049,7 +64068,7 @@ function (_React$PureComponent) {
           return React.createElement("div", {
             className: "listings-timebar-time",
             style: {
-              width: _this3.state.halfHourWidth
+              width: _this4.state.halfHourWidth
             },
             key: x
           }, x);
@@ -64063,12 +64082,12 @@ function (_React$PureComponent) {
         }, React.createElement("div", {
           className: "listings-channel",
           style: {
-            width: _this3.state.channelLeftWidth
+            width: _this4.state.channelLeftWidth
           }
         }, React.createElement("a", {
           href: "#",
           onClick: function onClick(e) {
-            return _this3.onSelectChannel(e, c);
+            return _this4.onSelectChannel(e, c);
           }
         }, c.icon ? React.createElement("img", {
           src: c.icon.src,
@@ -64080,7 +64099,7 @@ function (_React$PureComponent) {
       });
 
       var Programs = function Programs(programs) {
-        return programs.map(function (p, i) {
+        return programs.map(function (p) {
           return React.createElement("div", {
             className: "listings-program",
             style: {
@@ -64092,15 +64111,15 @@ function (_React$PureComponent) {
           }, React.createElement("a", {
             href: "#",
             onClick: function onClick(e) {
-              return _this3.onSelectProgram(e, p);
+              return _this4.onSelectProgram(e, p);
             }
           }, p.title['#text'])), React.createElement("div", {
             className: "listings-details"
           }, React.createElement("span", {
             className: "listings-details-first"
-          }, p.category && p.category['#text']), p['sub-title'] && p['sub-title']['#text'], p.width, React.createElement("div", {
+          }, p.category && p.category['#text']), p['sub-title'] && p['sub-title']['#text'], p.country && ' | ' + p.country['#text'], p.duration && ' | ' + p.duration + 'min', React.createElement("div", {
             className: "small"
-          }, p.startTime.toString('hh:mm'), " \xA0-\xA0 ", p.stopTime.toString('hh:mm'))));
+          }, p.startTime.toLocaleString(luxon_1.DateTime.TIME_24_SIMPLE), " \xA0-\xA0 ", p.stopTime.toLocaleString(luxon_1.DateTime.TIME_24_SIMPLE))));
         });
       };
 
@@ -64122,7 +64141,7 @@ function (_React$PureComponent) {
         href: "#",
         className: "previous pull-left",
         onClick: function onClick(e) {
-          return _this3.onSlide(e);
+          return _this4.onSlide(e);
         },
         "data-toggle": "tooltip",
         "data-placement": "top",
@@ -64133,7 +64152,7 @@ function (_React$PureComponent) {
         href: "#",
         className: "next pull-right",
         onClick: function onClick(e) {
-          return _this3.onSlide(e, false);
+          return _this4.onSlide(e, false);
         },
         "data-toggle": "tooltip",
         "data-placement": "top",

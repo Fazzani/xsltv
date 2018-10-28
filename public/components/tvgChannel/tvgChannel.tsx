@@ -49,18 +49,18 @@ export default class TvgChannel extends React.Component<TvgChannelProps, {}> {
     const listItems =
       this.props.channel &&
       this.props.channel.programs &&
-      this.props.channel.programs.map((p, i) => (
-        <li className="program-item row" key={i}>
+      this.props.channel.programs.map((p) => (
+        <li className="program-item row" key={p.channel+p.start}>
           <span className="start">
             <h3>{this.getFormatedDateTime(p.start)}</h3>
           </span>
           <span className="content">
-            <a className="title" data-toggle="collapse" data-target={'#' + i.toString()} onClick={e => this.handleClickCollapse(e)}>
+            <a className="title" data-toggle="collapse" data-target={'#' + p.start} onClick={e => this.handleClickCollapse(e)}>
               {p.title['#text']}
             </a>
             <span>{p.category && category(p.category)}</span>
 
-            <div className="collapse" id={i.toString()}>
+            <div className="collapse" id={p.start}>
               <div className="row details">
                 {subtitle(p)}
                 {date(p)}

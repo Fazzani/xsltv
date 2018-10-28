@@ -15,7 +15,7 @@ interface HomeState {
   tvgChannels: Channel[]
   selectedChannel: Channel | undefined
   selectedProgram: Program | undefined
-  currentDate: string
+  currentDate: DateTime
   halfHourWidth: number
   totalWidth: number
   offset: number
@@ -48,17 +48,17 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
     const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
     console.log(this.context.settings.tz)
     const current_date = DateTime.local()
-    this.setState({ currentDate: current_date, intervals: INTERVALS, offset: this.getTimeOffsetPerDay() })
-    await this.loadFile(this.props.xmltvFile || testUrl)
+    this.setState({ currentDate: current_date, intervals: INTERVALS }, async () => {
+      this.setState({ offset: this.getTimeOffsetPerDay() })
+      await this.loadFile(this.props.xmltvFile || testUrl)
+    })
   }
 
   // calculate time offset from midnight
   getTimeOffsetPerDay = () => {
-    const now = DateTime.local()
-    const { year, month, day } = now
+    const { year, month, day } = this.state.currentDate
     const dt = DateTime.local(year, month, day)
-    // console.log(`now ${now} dt: ${dt}`)
-    const inter = Interval.fromDateTimes(dt, now)
+    const inter = Interval.fromDateTimes(dt, this.state.currentDate)
     console.log(`Interval ${inter.length('hour')}`)
     return `-${inter.length('hour') * this.state.halfHourWidth * 2}`
   }
@@ -160,7 +160,7 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
       })
 
     const Programs = (programs: Program[]) => {
-      return programs.map((p, i) => {
+      return programs.map(p => {
         return (
           <div className="listings-program" style={{ minWidth: p.width }} key={p.channel + p.startTime}>
             <div className="listings-program-title">
@@ -171,9 +171,10 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
             <div className="listings-details">
               <span className="listings-details-first">{p.category && p.category['#text']}</span>
               {p['sub-title'] && p['sub-title']['#text']}
-              {p.width}
+              {p.country && ' | ' + p.country['#text']}
+              {p.duration && ' | ' + p.duration + 'min'}
               <div className="small">
-                {p.startTime.toString('hh:mm')} &nbsp;-&nbsp; {p.stopTime.toString('hh:mm')}
+                {p.startTime.toLocaleString(DateTime.TIME_24_SIMPLE)} &nbsp;-&nbsp; {p.stopTime.toLocaleString(DateTime.TIME_24_SIMPLE)}
               </div>
             </div>
           </div>

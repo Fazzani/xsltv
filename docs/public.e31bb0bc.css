@@ -126,7 +126,7 @@
   text-decoration: none;
   display: inline-block;
   padding: 8px 16px;
-  color: white;
+  background-color: #ddd;
   height: 100%;
 }
 .epg-container .toolbar a:hover {
@@ -217,6 +217,7 @@
 .epg-container ul.listings-grid.grid-channels {
   z-index: 5;
   margin-top: 50px;
+  box-shadow: 3px 5px 9px 3px #212123;
 }
 .epg-container ul.listings-grid.grid-progs {
   z-index: 4;

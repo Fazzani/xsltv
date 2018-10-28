@@ -23,7 +23,7 @@ $cell-height:83px;
             text-decoration: none;
             display: inline-block;
             padding: 8px 16px;
-            color: white;
+            background-color: #ddd;
             height: 100%;
             &:hover {
                 background-color: #ddd;
@@ -114,6 +114,7 @@ $cell-height:83px;
         &.grid-channels {
             z-index: 5;
             margin-top: 50px;
+            box-shadow: 3px 5px 9px 3px #212123;
         }
         &.grid-progs {
             z-index: 4;
