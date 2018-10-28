@@ -121,16 +121,18 @@
   height: 50px;
   width: 100%;
   z-index: 6;
+  box-shadow: inset -4px -9px 19px 4px #433c1e;
 }
 .epg-container .toolbar a {
   text-decoration: none;
   display: inline-block;
-  padding: 8px 16px;
-  background-color: #ddd;
+  padding: 8px 12px;
+  background-color: black;
   height: 100%;
+  font-size: larger;
 }
 .epg-container .toolbar a:hover {
-  background-color: #ddd;
+  background-color: #ffbb10;
   color: black;
 }
 .epg-container .right-arrow {

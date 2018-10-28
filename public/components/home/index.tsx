@@ -7,6 +7,7 @@ import './style.scss'
 import 'bootstrap'
 import SidePanel from '../sidePanel/sidePanel'
 import TvgChannel from '../tvgChannel/tvgChannel'
+import { Channel } from './../entities'
 
 interface HomeProps {
   xmltvFile: string
@@ -47,8 +48,8 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
   }
 
   async componentDidMount() {
-    // const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'
-    const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
+    const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'
+    // const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
     console.log(this.context.settings.tz)
     const current_date = DateTime.local()
     this.setState({ currentDate: current_date, intervals: INTERVALS }, async () => {
@@ -83,7 +84,6 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
         c.programs = docJson.tv.programme.filter((p: Program) => p.channel === c.id)
         return c
       })
-
       this.setState({ allTvgChannels }, () => {
         this.fetchPrograms()
       })
@@ -92,14 +92,18 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
 
   fetchPrograms = () => {
     const currentDay = DateTime.local(this.state.currentDate.year, this.state.currentDate.month, this.state.currentDate.day)
-    const tvgChannelsDay = [...this.state.allTvgChannels]
-    tvgChannelsDay.forEach((c: Channel) => {
-      c.programs = c.programs.filter((p: Program) => {
-        return (
-          (p.startTime.diff(currentDay, 'minutes').minutes >= 0 && p.startTime.diff(currentDay, 'minutes').minutes <= 1440) ||
-          (p.stopTime.diff(currentDay, 'minutes').minutes >= 0 && p.stopTime.diff(currentDay, 'minutes').minutes <= 1440)
-        )
-      })
+    const tvgChannelsDay: Channel[] = []
+    this.state.allTvgChannels.forEach((c: Channel) => {
+      const ch = { ...c }
+      ch.programs = c.programs
+        .filter((p: Program) => {
+          return (
+            (p.startTime.diff(currentDay, 'minutes').minutes >= 0 && p.startTime.diff(currentDay, 'minutes').minutes <= 1440) ||
+            (p.stopTime.diff(currentDay, 'minutes').minutes >= 0 && p.stopTime.diff(currentDay, 'minutes').minutes <= 1440)
+          )
+        })
+        .slice()
+      tvgChannelsDay.push(ch)
     })
     this.setState({ tvgChannelsDay })
     this.context.loader.loading = false
@@ -112,6 +116,22 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
     const inter = Interval.fromDateTimes(dt, this.state.currentDate)
     console.log(`Interval ${inter.length('hour')}`)
     return `-${inter.length('hour') * this.state.halfHourWidth * 2}`
+  }
+
+  onDayChanged = (e: Event, offset = 1) => {
+    const date = this.state.currentDate.plus({ days: offset })
+    this.setState({ currentDate: date }, () => {
+      this.fetchPrograms()
+    })
+  }
+
+  get PreviousDay(): DateTime {
+    if (!this.state.currentDate) return DateTime.local().plus({ days: -1 })
+    return this.state.currentDate.plus({ days: -1 })
+  }
+  get NextDay(): DateTime {
+    if (!this.state.currentDate) return DateTime.local().plus({ days: +1 })
+    return this.state.currentDate.plus({ days: +1 })
   }
 
   onSlide = (e: Event, isLeft: boolean = true) => {
@@ -138,7 +158,7 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
   }
 
   render() {
-    const timeBar = (totalWidth: number) => {
+    const headerTimeBar = (totalWidth: number) => {
       return (
         <li className="listings-timebar">
           {INTERVALS.map(x => {
@@ -205,7 +225,7 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
       this.state.tvgChannelsDay &&
       this.state.tvgChannelsDay !== null && (
         <ul className="listings-grid-progs" style={{ width: this.state.totalWidth, left: `${this.state.offset}px` }}>
-          {timeBar(this.state.totalWidth)}
+          {headerTimeBar(this.state.totalWidth)}
           {this.state.tvgChannelsDay.map(c => {
             return (
               <li key={c.id} className="col-md-12 listings-channel-row">
@@ -218,8 +238,23 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
 
     const navigationButtons = (
       <div className="toolbar">
+        <a
+          href="#"
+          className="previous-day pull-left"
+          onClick={e => this.onDayChanged(e, -1)}
+          data-toggle="tooltip"
+          data-placement="top"
+          title="Previous day">
+          <i className="fa fa-angle-double-left" />
+          {' ' + this.PreviousDay.toISODate()}
+        </a>
         <a href="#" className="previous pull-left" onClick={e => this.onSlide(e)} data-toggle="tooltip" data-placement="top" title="Previous">
           <i className="fa fa-arrow-circle-left" />
+        </a>
+
+        <a href="#" className="next-day pull-right" onClick={e => this.onDayChanged(e)} data-toggle="tooltip" data-placement="top" title="Next day">
+          {this.NextDay.toISODate() + ' '}
+          <i className="fa fa-angle-double-right" />
         </a>
         <a href="#" className="next pull-right" onClick={e => this.onSlide(e, false)} data-toggle="tooltip" data-placement="top" title="Next">
           <i className="fa fa-arrow-circle-right" />

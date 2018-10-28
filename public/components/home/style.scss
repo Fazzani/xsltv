@@ -1,4 +1,5 @@
 $cell-height:83px;
+@import '../../styles/vars';
 .epg-container {
     a {
         text-decoration: none;
@@ -19,14 +20,16 @@ $cell-height:83px;
         height: 50px;
         width: 100%;
         z-index: 6;
+        box-shadow: inset -4px -9px 19px 4px #433c1e;
         a {
             text-decoration: none;
             display: inline-block;
-            padding: 8px 16px;
-            background-color: #ddd;
+            padding: 8px 12px;
+            background-color: black;
             height: 100%;
+            font-size: larger;
             &:hover {
-                background-color: #ddd;
+                background-color: $highlight-text;
                 color: black;
             }
         }
