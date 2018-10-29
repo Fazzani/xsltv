@@ -218,6 +218,7 @@
     "font-awesome": "^4.7.0",
     "jquery": "^3.3.1",
     "jquery.cookie": "^1.4.1",
+    "js": "^0.1.0",
     "lang": "^0.1.13",
     "luxon": "^1.4.4",
     "popper": "^1.0.1",

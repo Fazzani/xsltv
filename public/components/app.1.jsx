@@ -9,7 +9,7 @@ import XsltvProcessor from '../js/xsltvProcessor'
 import SettingsModal from './settingsModal/settingsModal'
 import SideMenu from './sidemenu/sidemenu'
 import Header from './header/header'
-import Settings, { SettingsService } from '../js/settings'
+import Settings, { SettingsService } from './settingsService'
 // @ts-ignore
 import index_xsl from '../js/index.xsl'
 import { getParamsCurrentDate } from '../js/shared'
@@ -47,7 +47,7 @@ export default class App extends Component {
 
   async componentDidMount() {
     try {
-      if (!this.state.AppSettings.MyJsonId) {
+      if (!this.context.settings.MyJsonId) {
         const result = await filesServices.add({ files: [] })
         const id = result.uri.split('bins//')[1]
         this.setState(

@@ -11766,6 +11766,7 @@ a.text-dark:hover, a.text-dark:focus {
 @import url("https://fonts.googleapis.com/css?family=Libre+Baskerville:400,700");
 @import url("https://fonts.googleapis.com/css?family=Charmonman");
 html body {
+  color: white;
   scroll-behavior: smooth;
   margin: 0;
   font-family: "Libre Baskerville", BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;

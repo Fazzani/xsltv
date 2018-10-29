@@ -100,6 +100,67 @@
   50% {
     transform: rotate(720deg) scale(0.6);
   }
+}.xviewer-list {
+  counter-reset: cpt;
+  padding: 0;
+  text-shadow: 0 1px 0 black;
+}
+
+.xviewer-list-item {
+  position: relative;
+  padding: 0.4em 0.4em 0.4em 0.8em;
+  *padding: 0.4em;
+  margin: 0.5em 0 0.5em 2.5em;
+  text-decoration: none;
+  transition: all 0.3s ease-out;
+  text-transform: capitalize;
+  padding: 0;
+}
+.xviewer-list-item .col {
+  padding-left: 2px;
+}
+.xviewer-list-item:before {
+  color: black;
+  content: counter(cpt);
+  counter-increment: cpt;
+  position: absolute;
+  left: -2.5em;
+  top: 50%;
+  margin-top: -1em;
+  background: #d3ef01;
+  height: 2em;
+  width: 2em;
+  line-height: 2em;
+  text-align: center;
+}
+.xviewer-list-item:after {
+  position: absolute;
+  content: "";
+  border: 0.5em solid transparent;
+  left: -1em;
+  top: 50%;
+  margin-top: -0.5em;
+  transition: all 0.3s ease-out;
+}
+.xviewer-list-item:hover:after {
+  left: -0.5em;
+  border-left-color: #d3ef01;
+}
+.xviewer-list-item:before {
+  transform: rotate(360deg);
+}
+.xviewer-list-item button {
+  transition: all 0.3s ease;
+  color: white !important;
+  opacity: 0 !important;
+}
+.xviewer-list-item:hover .btn {
+  opacity: 0.6 !important;
+  background-color: transparent !important;
+}
+.xviewer-list-item:hover .btn:hover {
+  opacity: 1 !important;
+  font-weight: bolder !important;
 }.epg-container {
   display: flex;
   position: relative;
@@ -12257,6 +12318,7 @@ a.text-dark:hover, a.text-dark:focus {
 @import url("https://fonts.googleapis.com/css?family=Libre+Baskerville:400,700");
 @import url("https://fonts.googleapis.com/css?family=Charmonman");
 html body {
+  color: white;
   scroll-behavior: smooth;
   margin: 0;
   font-family: "Libre Baskerville", BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;

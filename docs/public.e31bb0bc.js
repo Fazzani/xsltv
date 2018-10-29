@@ -27663,16 +27663,7 @@ exports.ErrorBoundary = ErrorBoundary;
 ErrorBoundary.propTypes = {
   children: _propTypes.default.element
 };
-},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-toastify":"../node_modules/react-toastify/lib/index.js"}],"../node_modules/core-js/library/fn/json/stringify.js":[function(require,module,exports) {
-var core = require('../../modules/_core');
-var $JSON = core.JSON || (core.JSON = { stringify: JSON.stringify });
-module.exports = function stringify(it) { // eslint-disable-line no-unused-vars
-  return $JSON.stringify.apply($JSON, arguments);
-};
-
-},{"../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/json/stringify.js":[function(require,module,exports) {
-module.exports = require("core-js/library/fn/json/stringify");
-},{"core-js/library/fn/json/stringify":"../node_modules/core-js/library/fn/json/stringify.js"}],"../node_modules/process/browser.js":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","react-toastify":"../node_modules/react-toastify/lib/index.js"}],"../node_modules/process/browser.js":[function(require,module,exports) {
 
 // shim for using process in browser
 var process = module.exports = {}; // cached from whatever global is present so that test runners that stub it
@@ -49011,58 +49002,219 @@ function (_React$Component) {
 }(React.Component);
 
 exports.default = About;
-},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js"}],"components/settingsModal/settingsPage.tsx":[function(require,module,exports) {
-"use strict";
+},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js"}],"../node_modules/core-js/library/modules/es6.array.is-array.js":[function(require,module,exports) {
+// 22.1.2.2 / 15.4.3.2 Array.isArray(arg)
+var $export = require('./_export');
 
-var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
+$export($export.S, 'Array', { isArray: require('./_is-array') });
 
-var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
+},{"./_export":"../node_modules/core-js/library/modules/_export.js","./_is-array":"../node_modules/core-js/library/modules/_is-array.js"}],"../node_modules/core-js/library/fn/array/is-array.js":[function(require,module,exports) {
+require('../../modules/es6.array.is-array');
+module.exports = require('../../modules/_core').Array.isArray;
 
-var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
+},{"../../modules/es6.array.is-array":"../node_modules/core-js/library/modules/es6.array.is-array.js","../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/array/is-array.js":[function(require,module,exports) {
+module.exports = require("core-js/library/fn/array/is-array");
+},{"core-js/library/fn/array/is-array":"../node_modules/core-js/library/fn/array/is-array.js"}],"../node_modules/@babel/runtime-corejs2/helpers/arrayWithoutHoles.js":[function(require,module,exports) {
+var _Array$isArray = require("../core-js/array/is-array");
 
-var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
+function _arrayWithoutHoles(arr) {
+  if (_Array$isArray(arr)) {
+    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
 
-var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var __importStar = void 0 && (void 0).__importStar || function (mod) {
-  if (mod && mod.__esModule) return mod;
-  var result = {};
-  if (mod != null) for (var k in mod) {
-    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    return arr2;
   }
-  result["default"] = mod;
-  return result;
+}
+
+module.exports = _arrayWithoutHoles;
+},{"../core-js/array/is-array":"../node_modules/@babel/runtime-corejs2/core-js/array/is-array.js"}],"../node_modules/core-js/library/modules/_iter-call.js":[function(require,module,exports) {
+// call something on iterator step with safe closing on error
+var anObject = require('./_an-object');
+module.exports = function (iterator, fn, value, entries) {
+  try {
+    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
+  // 7.4.6 IteratorClose(iterator, completion)
+  } catch (e) {
+    var ret = iterator['return'];
+    if (ret !== undefined) anObject(ret.call(iterator));
+    throw e;
+  }
 };
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
+},{"./_an-object":"../node_modules/core-js/library/modules/_an-object.js"}],"../node_modules/core-js/library/modules/_is-array-iter.js":[function(require,module,exports) {
+// check on default Array iterator
+var Iterators = require('./_iterators');
+var ITERATOR = require('./_wks')('iterator');
+var ArrayProto = Array.prototype;
+
+module.exports = function (it) {
+  return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
+};
+
+},{"./_iterators":"../node_modules/core-js/library/modules/_iterators.js","./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/_create-property.js":[function(require,module,exports) {
+'use strict';
+var $defineProperty = require('./_object-dp');
+var createDesc = require('./_property-desc');
+
+module.exports = function (object, index, value) {
+  if (index in object) $defineProperty.f(object, index, createDesc(0, value));
+  else object[index] = value;
+};
+
+},{"./_object-dp":"../node_modules/core-js/library/modules/_object-dp.js","./_property-desc":"../node_modules/core-js/library/modules/_property-desc.js"}],"../node_modules/core-js/library/modules/_classof.js":[function(require,module,exports) {
+// getting tag from 19.1.3.6 Object.prototype.toString()
+var cof = require('./_cof');
+var TAG = require('./_wks')('toStringTag');
+// ES3 wrong here
+var ARG = cof(function () { return arguments; }()) == 'Arguments';
+
+// fallback for IE11 Script Access Denied error
+var tryGet = function (it, key) {
+  try {
+    return it[key];
+  } catch (e) { /* empty */ }
+};
+
+module.exports = function (it) {
+  var O, T, B;
+  return it === undefined ? 'Undefined' : it === null ? 'Null'
+    // @@toStringTag case
+    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
+    // builtinTag case
+    : ARG ? cof(O)
+    // ES3 arguments fallback
+    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
+};
+
+},{"./_cof":"../node_modules/core-js/library/modules/_cof.js","./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/core.get-iterator-method.js":[function(require,module,exports) {
+var classof = require('./_classof');
+var ITERATOR = require('./_wks')('iterator');
+var Iterators = require('./_iterators');
+module.exports = require('./_core').getIteratorMethod = function (it) {
+  if (it != undefined) return it[ITERATOR]
+    || it['@@iterator']
+    || Iterators[classof(it)];
+};
+
+},{"./_classof":"../node_modules/core-js/library/modules/_classof.js","./_wks":"../node_modules/core-js/library/modules/_wks.js","./_iterators":"../node_modules/core-js/library/modules/_iterators.js","./_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/core-js/library/modules/_iter-detect.js":[function(require,module,exports) {
+var ITERATOR = require('./_wks')('iterator');
+var SAFE_CLOSING = false;
+
+try {
+  var riter = [7][ITERATOR]();
+  riter['return'] = function () { SAFE_CLOSING = true; };
+  // eslint-disable-next-line no-throw-literal
+  Array.from(riter, function () { throw 2; });
+} catch (e) { /* empty */ }
+
+module.exports = function (exec, skipClosing) {
+  if (!skipClosing && !SAFE_CLOSING) return false;
+  var safe = false;
+  try {
+    var arr = [7];
+    var iter = arr[ITERATOR]();
+    iter.next = function () { return { done: safe = true }; };
+    arr[ITERATOR] = function () { return iter; };
+    exec(arr);
+  } catch (e) { /* empty */ }
+  return safe;
+};
+
+},{"./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/es6.array.from.js":[function(require,module,exports) {
+'use strict';
+var ctx = require('./_ctx');
+var $export = require('./_export');
+var toObject = require('./_to-object');
+var call = require('./_iter-call');
+var isArrayIter = require('./_is-array-iter');
+var toLength = require('./_to-length');
+var createProperty = require('./_create-property');
+var getIterFn = require('./core.get-iterator-method');
+
+$export($export.S + $export.F * !require('./_iter-detect')(function (iter) { Array.from(iter); }), 'Array', {
+  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
+  from: function from(arrayLike /* , mapfn = undefined, thisArg = undefined */) {
+    var O = toObject(arrayLike);
+    var C = typeof this == 'function' ? this : Array;
+    var aLen = arguments.length;
+    var mapfn = aLen > 1 ? arguments[1] : undefined;
+    var mapping = mapfn !== undefined;
+    var index = 0;
+    var iterFn = getIterFn(O);
+    var length, result, step, iterator;
+    if (mapping) mapfn = ctx(mapfn, aLen > 2 ? arguments[2] : undefined, 2);
+    // if object isn't iterable or it's array with default iterator - use simple case
+    if (iterFn != undefined && !(C == Array && isArrayIter(iterFn))) {
+      for (iterator = iterFn.call(O), result = new C(); !(step = iterator.next()).done; index++) {
+        createProperty(result, index, mapping ? call(iterator, mapfn, [step.value, index], true) : step.value);
+      }
+    } else {
+      length = toLength(O.length);
+      for (result = new C(length); length > index; index++) {
+        createProperty(result, index, mapping ? mapfn(O[index], index) : O[index]);
+      }
+    }
+    result.length = index;
+    return result;
+  }
 });
 
-var React = __importStar(require("react"));
+},{"./_ctx":"../node_modules/core-js/library/modules/_ctx.js","./_export":"../node_modules/core-js/library/modules/_export.js","./_to-object":"../node_modules/core-js/library/modules/_to-object.js","./_iter-call":"../node_modules/core-js/library/modules/_iter-call.js","./_is-array-iter":"../node_modules/core-js/library/modules/_is-array-iter.js","./_to-length":"../node_modules/core-js/library/modules/_to-length.js","./_create-property":"../node_modules/core-js/library/modules/_create-property.js","./core.get-iterator-method":"../node_modules/core-js/library/modules/core.get-iterator-method.js","./_iter-detect":"../node_modules/core-js/library/modules/_iter-detect.js"}],"../node_modules/core-js/library/fn/array/from.js":[function(require,module,exports) {
+require('../../modules/es6.string.iterator');
+require('../../modules/es6.array.from');
+module.exports = require('../../modules/_core').Array.from;
 
-var SettingsPage =
-/*#__PURE__*/
-function (_React$Component) {
-  (0, _inherits2.default)(SettingsPage, _React$Component);
+},{"../../modules/es6.string.iterator":"../node_modules/core-js/library/modules/es6.string.iterator.js","../../modules/es6.array.from":"../node_modules/core-js/library/modules/es6.array.from.js","../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/array/from.js":[function(require,module,exports) {
+module.exports = require("core-js/library/fn/array/from");
+},{"core-js/library/fn/array/from":"../node_modules/core-js/library/fn/array/from.js"}],"../node_modules/core-js/library/modules/core.is-iterable.js":[function(require,module,exports) {
+var classof = require('./_classof');
+var ITERATOR = require('./_wks')('iterator');
+var Iterators = require('./_iterators');
+module.exports = require('./_core').isIterable = function (it) {
+  var O = Object(it);
+  return O[ITERATOR] !== undefined
+    || '@@iterator' in O
+    // eslint-disable-next-line no-prototype-builtins
+    || Iterators.hasOwnProperty(classof(O));
+};
 
-  function SettingsPage() {
-    (0, _classCallCheck2.default)(this, SettingsPage);
-    return (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(SettingsPage).apply(this, arguments));
-  }
+},{"./_classof":"../node_modules/core-js/library/modules/_classof.js","./_wks":"../node_modules/core-js/library/modules/_wks.js","./_iterators":"../node_modules/core-js/library/modules/_iterators.js","./_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/core-js/library/fn/is-iterable.js":[function(require,module,exports) {
+require('../modules/web.dom.iterable');
+require('../modules/es6.string.iterator');
+module.exports = require('../modules/core.is-iterable');
 
-  (0, _createClass2.default)(SettingsPage, [{
-    key: "render",
-    value: function render() {
-      return React.createElement("div", null, "Settings");
-    }
-  }]);
-  return SettingsPage;
-}(React.Component);
+},{"../modules/web.dom.iterable":"../node_modules/core-js/library/modules/web.dom.iterable.js","../modules/es6.string.iterator":"../node_modules/core-js/library/modules/es6.string.iterator.js","../modules/core.is-iterable":"../node_modules/core-js/library/modules/core.is-iterable.js"}],"../node_modules/@babel/runtime-corejs2/core-js/is-iterable.js":[function(require,module,exports) {
+module.exports = require("core-js/library/fn/is-iterable");
+},{"core-js/library/fn/is-iterable":"../node_modules/core-js/library/fn/is-iterable.js"}],"../node_modules/@babel/runtime-corejs2/helpers/iterableToArray.js":[function(require,module,exports) {
+var _Array$from = require("../core-js/array/from");
 
-exports.default = SettingsPage;
-},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js"}],"../node_modules/regenerator-runtime/runtime.js":[function(require,module,exports) {
+var _isIterable = require("../core-js/is-iterable");
+
+function _iterableToArray(iter) {
+  if (_isIterable(Object(iter)) || Object.prototype.toString.call(iter) === "[object Arguments]") return _Array$from(iter);
+}
+
+module.exports = _iterableToArray;
+},{"../core-js/array/from":"../node_modules/@babel/runtime-corejs2/core-js/array/from.js","../core-js/is-iterable":"../node_modules/@babel/runtime-corejs2/core-js/is-iterable.js"}],"../node_modules/@babel/runtime-corejs2/helpers/nonIterableSpread.js":[function(require,module,exports) {
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance");
+}
+
+module.exports = _nonIterableSpread;
+},{}],"../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js":[function(require,module,exports) {
+var arrayWithoutHoles = require("./arrayWithoutHoles");
+
+var iterableToArray = require("./iterableToArray");
+
+var nonIterableSpread = require("./nonIterableSpread");
+
+function _toConsumableArray(arr) {
+  return arrayWithoutHoles(arr) || iterableToArray(arr) || nonIterableSpread();
+}
+
+module.exports = _toConsumableArray;
+},{"./arrayWithoutHoles":"../node_modules/@babel/runtime-corejs2/helpers/arrayWithoutHoles.js","./iterableToArray":"../node_modules/@babel/runtime-corejs2/helpers/iterableToArray.js","./nonIterableSpread":"../node_modules/@babel/runtime-corejs2/helpers/nonIterableSpread.js"}],"../node_modules/regenerator-runtime/runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
@@ -49828,143 +49980,14 @@ if (hadRuntime) {
 },{"./runtime":"../node_modules/regenerator-runtime/runtime.js"}],"../node_modules/@babel/runtime-corejs2/regenerator/index.js":[function(require,module,exports) {
 module.exports = require("regenerator-runtime");
 
-},{"regenerator-runtime":"../node_modules/regenerator-runtime/runtime-module.js"}],"../node_modules/core-js/library/modules/_object-assign.js":[function(require,module,exports) {
-'use strict';
-// 19.1.2.1 Object.assign(target, source, ...)
-var getKeys = require('./_object-keys');
-var gOPS = require('./_object-gops');
-var pIE = require('./_object-pie');
-var toObject = require('./_to-object');
-var IObject = require('./_iobject');
-var $assign = Object.assign;
-
-// should work with symbols and should have deterministic property order (V8 bug)
-module.exports = !$assign || require('./_fails')(function () {
-  var A = {};
-  var B = {};
-  // eslint-disable-next-line no-undef
-  var S = Symbol();
-  var K = 'abcdefghijklmnopqrst';
-  A[S] = 7;
-  K.split('').forEach(function (k) { B[k] = k; });
-  return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
-}) ? function assign(target, source) { // eslint-disable-line no-unused-vars
-  var T = toObject(target);
-  var aLen = arguments.length;
-  var index = 1;
-  var getSymbols = gOPS.f;
-  var isEnum = pIE.f;
-  while (aLen > index) {
-    var S = IObject(arguments[index++]);
-    var keys = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S);
-    var length = keys.length;
-    var j = 0;
-    var key;
-    while (length > j) if (isEnum.call(S, key = keys[j++])) T[key] = S[key];
-  } return T;
-} : $assign;
-
-},{"./_object-keys":"../node_modules/core-js/library/modules/_object-keys.js","./_object-gops":"../node_modules/core-js/library/modules/_object-gops.js","./_object-pie":"../node_modules/core-js/library/modules/_object-pie.js","./_to-object":"../node_modules/core-js/library/modules/_to-object.js","./_iobject":"../node_modules/core-js/library/modules/_iobject.js","./_fails":"../node_modules/core-js/library/modules/_fails.js"}],"../node_modules/core-js/library/modules/es6.object.assign.js":[function(require,module,exports) {
-// 19.1.3.1 Object.assign(target, source)
-var $export = require('./_export');
-
-$export($export.S + $export.F, 'Object', { assign: require('./_object-assign') });
-
-},{"./_export":"../node_modules/core-js/library/modules/_export.js","./_object-assign":"../node_modules/core-js/library/modules/_object-assign.js"}],"../node_modules/core-js/library/fn/object/assign.js":[function(require,module,exports) {
-require('../../modules/es6.object.assign');
-module.exports = require('../../modules/_core').Object.assign;
-
-},{"../../modules/es6.object.assign":"../node_modules/core-js/library/modules/es6.object.assign.js","../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/object/assign.js":[function(require,module,exports) {
-module.exports = require("core-js/library/fn/object/assign");
-},{"core-js/library/fn/object/assign":"../node_modules/core-js/library/fn/object/assign.js"}],"../node_modules/@babel/runtime-corejs2/helpers/extends.js":[function(require,module,exports) {
-var _Object$assign = require("../core-js/object/assign");
-
-function _extends() {
-  module.exports = _extends = _Object$assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends.apply(this, arguments);
-}
-
-module.exports = _extends;
-},{"../core-js/object/assign":"../node_modules/@babel/runtime-corejs2/core-js/object/assign.js"}],"../node_modules/core-js/library/modules/_classof.js":[function(require,module,exports) {
-// getting tag from 19.1.3.6 Object.prototype.toString()
-var cof = require('./_cof');
-var TAG = require('./_wks')('toStringTag');
-// ES3 wrong here
-var ARG = cof(function () { return arguments; }()) == 'Arguments';
-
-// fallback for IE11 Script Access Denied error
-var tryGet = function (it, key) {
-  try {
-    return it[key];
-  } catch (e) { /* empty */ }
-};
-
-module.exports = function (it) {
-  var O, T, B;
-  return it === undefined ? 'Undefined' : it === null ? 'Null'
-    // @@toStringTag case
-    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
-    // builtinTag case
-    : ARG ? cof(O)
-    // ES3 arguments fallback
-    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
-};
-
-},{"./_cof":"../node_modules/core-js/library/modules/_cof.js","./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/_an-instance.js":[function(require,module,exports) {
+},{"regenerator-runtime":"../node_modules/regenerator-runtime/runtime-module.js"}],"../node_modules/core-js/library/modules/_an-instance.js":[function(require,module,exports) {
 module.exports = function (it, Constructor, name, forbiddenField) {
   if (!(it instanceof Constructor) || (forbiddenField !== undefined && forbiddenField in it)) {
     throw TypeError(name + ': incorrect invocation!');
   } return it;
 };
 
-},{}],"../node_modules/core-js/library/modules/_iter-call.js":[function(require,module,exports) {
-// call something on iterator step with safe closing on error
-var anObject = require('./_an-object');
-module.exports = function (iterator, fn, value, entries) {
-  try {
-    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
-  // 7.4.6 IteratorClose(iterator, completion)
-  } catch (e) {
-    var ret = iterator['return'];
-    if (ret !== undefined) anObject(ret.call(iterator));
-    throw e;
-  }
-};
-
-},{"./_an-object":"../node_modules/core-js/library/modules/_an-object.js"}],"../node_modules/core-js/library/modules/_is-array-iter.js":[function(require,module,exports) {
-// check on default Array iterator
-var Iterators = require('./_iterators');
-var ITERATOR = require('./_wks')('iterator');
-var ArrayProto = Array.prototype;
-
-module.exports = function (it) {
-  return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
-};
-
-},{"./_iterators":"../node_modules/core-js/library/modules/_iterators.js","./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/core.get-iterator-method.js":[function(require,module,exports) {
-var classof = require('./_classof');
-var ITERATOR = require('./_wks')('iterator');
-var Iterators = require('./_iterators');
-module.exports = require('./_core').getIteratorMethod = function (it) {
-  if (it != undefined) return it[ITERATOR]
-    || it['@@iterator']
-    || Iterators[classof(it)];
-};
-
-},{"./_classof":"../node_modules/core-js/library/modules/_classof.js","./_wks":"../node_modules/core-js/library/modules/_wks.js","./_iterators":"../node_modules/core-js/library/modules/_iterators.js","./_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/core-js/library/modules/_for-of.js":[function(require,module,exports) {
+},{}],"../node_modules/core-js/library/modules/_for-of.js":[function(require,module,exports) {
 var ctx = require('./_ctx');
 var call = require('./_iter-call');
 var isArrayIter = require('./_is-array-iter');
@@ -50257,31 +50280,7 @@ module.exports = function (KEY) {
   });
 };
 
-},{"./_global":"../node_modules/core-js/library/modules/_global.js","./_core":"../node_modules/core-js/library/modules/_core.js","./_object-dp":"../node_modules/core-js/library/modules/_object-dp.js","./_descriptors":"../node_modules/core-js/library/modules/_descriptors.js","./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/_iter-detect.js":[function(require,module,exports) {
-var ITERATOR = require('./_wks')('iterator');
-var SAFE_CLOSING = false;
-
-try {
-  var riter = [7][ITERATOR]();
-  riter['return'] = function () { SAFE_CLOSING = true; };
-  // eslint-disable-next-line no-throw-literal
-  Array.from(riter, function () { throw 2; });
-} catch (e) { /* empty */ }
-
-module.exports = function (exec, skipClosing) {
-  if (!skipClosing && !SAFE_CLOSING) return false;
-  var safe = false;
-  try {
-    var arr = [7];
-    var iter = arr[ITERATOR]();
-    iter.next = function () { return { done: safe = true }; };
-    arr[ITERATOR] = function () { return iter; };
-    exec(arr);
-  } catch (e) { /* empty */ }
-  return safe;
-};
-
-},{"./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/es6.promise.js":[function(require,module,exports) {
+},{"./_global":"../node_modules/core-js/library/modules/_global.js","./_core":"../node_modules/core-js/library/modules/_core.js","./_object-dp":"../node_modules/core-js/library/modules/_object-dp.js","./_descriptors":"../node_modules/core-js/library/modules/_descriptors.js","./_wks":"../node_modules/core-js/library/modules/_wks.js"}],"../node_modules/core-js/library/modules/es6.promise.js":[function(require,module,exports) {
 
 
 'use strict';
@@ -50619,1135 +50618,305 @@ module.exports = require('../modules/_core').Promise;
 
 },{"../modules/es6.object.to-string":"../node_modules/core-js/library/modules/es6.object.to-string.js","../modules/es6.string.iterator":"../node_modules/core-js/library/modules/es6.string.iterator.js","../modules/web.dom.iterable":"../node_modules/core-js/library/modules/web.dom.iterable.js","../modules/es6.promise":"../node_modules/core-js/library/modules/es6.promise.js","../modules/es7.promise.finally":"../node_modules/core-js/library/modules/es7.promise.finally.js","../modules/es7.promise.try":"../node_modules/core-js/library/modules/es7.promise.try.js","../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/promise.js":[function(require,module,exports) {
 module.exports = require("core-js/library/fn/promise");
-},{"core-js/library/fn/promise":"../node_modules/core-js/library/fn/promise.js"}],"../node_modules/fast-xml-parser/src/util.js":[function(require,module,exports) {
+},{"core-js/library/fn/promise":"../node_modules/core-js/library/fn/promise.js"}],"styles/file-items.scss":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"js/common.js":[function(require,module,exports) {
 "use strict";
 
-const getAllMatches = function(string, regex) {
-    const matches = [];
-    let match = regex.exec(string);
-    while (match) {
-        const allmatches = [];
-        const len = match.length;
-        for (let index = 0; index < len; index++) {
-            allmatches.push(match[index]);
-        }
-        matches.push(allmatches);
-        match = regex.exec(string);
-    }
-    return matches;
-};
-
-const doesMatch = function(string, regex) {
-    const match = regex.exec(string);
-    return !(match === null || typeof match === "undefined");
-};
-
-const doesNotMatch = function(string, regex) {
-    return !doesMatch(string, regex);
-};
-
-exports.isExist = function(v) {
-    return typeof v !== "undefined";
-};
-
-exports.isEmptyObject = function(obj) {
-    return Object.keys(obj).length === 0;
-};
-
-/**
- * Copy all the properties of a into b.
- * @param {*} target
- * @param {*} a
- */
-exports.merge = function(target, a) {
-    if (a) {
-        const keys = Object.keys(a); // will return an array of own properties
-        const len = keys.length; //don't make it inline
-        for (let i = 0; i < len; i++) {
-            target[keys[i]] = a[keys[i]];
-        }
-    }
-};
-/* exports.merge =function (b,a){
-  return Object.assign(b,a);
-} */
-
-exports.getValue = function(v) {
-    if (exports.isExist(v)) {
-        return v;
-    } else {
-        return "";
-    }
-};
-
-// const fakeCall = function(a) {return a;};
-// const fakeCallNoReturn = function() {};
-
-exports.buildOptions = function(options,defaultOptions,props) {
-    var newOptions = {};
-    if (!options) {
-        return defaultOptions; //if there are not options
-    }
-
-    for (let i = 0; i < props.length; i++) {
-        if ( options[props[i]] !== undefined) {
-            newOptions[props[i]] = options[props[i]];
-        }else{
-            newOptions[props[i]] = defaultOptions[props[i]];
-        }
-    }
-    return newOptions;
-};
-
-exports.doesMatch = doesMatch;
-exports.doesNotMatch = doesNotMatch;
-exports.getAllMatches = getAllMatches;
-
-},{}],"../node_modules/fast-xml-parser/src/node2json.js":[function(require,module,exports) {
-"use strict";
-
-const util = require("./util");
-
-const convertToJson =function(node, options) {
-    const jObj = {};
-
-    //when no child node or attr is present
-    if ((!node.child  ||  util.isEmptyObject(node.child)) && (!node.attrsMap || util.isEmptyObject(node.attrsMap))) {
-        return util.isExist(node.val) ? node.val : "";
-    } else { //otherwise create a textnode if node has some text
-        if (util.isExist(node.val)) {
-            if (!(typeof node.val === "string" && (node.val === "" || node.val === options.cdataPositionChar))) {
-                jObj[options.textNodeName] = node.val;
-            }
-        }
-    }
-
-    util.merge(jObj, node.attrsMap);
-
-    const keys = Object.keys(node.child);
-    for (let index = 0; index < keys.length; index++) {
-        var tagname = keys[index];
-        if (node.child[tagname] && node.child[tagname].length > 1) {
-            jObj[tagname] = [];
-            for (var tag in node.child[tagname]) {
-                jObj[tagname].push( convertToJson(node.child[tagname][tag], options) );
-            }
-        } else {
-            jObj[tagname] = convertToJson(node.child[tagname][0], options);
-        }
-    }
-    
-    //add value
-    return jObj;
-};
-
-exports.convertToJson = convertToJson;
-},{"./util":"../node_modules/fast-xml-parser/src/util.js"}],"../node_modules/fast-xml-parser/src/xmlNode.js":[function(require,module,exports) {
-"use strict";
-
-module.exports = function(tagname, parent, val) {
-    this.tagname = tagname;
-    this.parent = parent;
-    this.child = {};//child tags
-    this.attrsMap = {};//attributes map
-    this.val = val;//text only
-    this.addChild = function(child) {
-        if (this.child[child.tagname]) {//already presents
-            this.child[child.tagname].push(child);
-        } else {
-            this.child[child.tagname] = [child];
-        }
-    };
-};
-
-},{}],"../node_modules/fast-xml-parser/src/xmlstr2xmlnode.js":[function(require,module,exports) {
-"use strict";
-
-const util = require("./util");
-const buildOptions = require("./util").buildOptions;
-const xmlNode = require("./xmlNode");
-const TagType = {"OPENING": 1, "CLOSING": 2, "SELF": 3, "CDATA": 4};
-let regx = "<((!\\[CDATA\\[([\\s\\S]*?)(]]>))|(([\\w:\\-._]*:)?([\\w:\\-._]+))([^>]*)>|((\\/)(([\\w:\\-._]*:)?([\\w:\\-._]+))\\s*>))([^<]*)";
-
-//const tagsRegx = new RegExp("<(\\/?[\\w:\\-\._]+)([^>]*)>(\\s*"+cdataRegx+")*([^<]+)?","g");
-//const tagsRegx = new RegExp("<(\\/?)((\\w*:)?([\\w:\\-\._]+))([^>]*)>([^<]*)("+cdataRegx+"([^<]*))*([^<]+)?","g");
-
-//treat cdata as a tag
-
-const defaultOptions = {
-    attributeNamePrefix:    "@_",
-    attrNodeName:           false,
-    textNodeName:           "#text",
-    ignoreAttributes:       true,
-    ignoreNameSpace:        false,
-    allowBooleanAttributes: false,         //a tag can have attributes without any value
-    //ignoreRootElement : false,
-    parseNodeValue:         true,
-    parseAttributeValue:    false,
-    arrayMode:              false,
-    trimValues:             true,                                //Trim string values of tag and attributes
-    cdataTagName:           false,
-    cdataPositionChar:      "\\c",
-    localeRange:            "",
-    tagValueProcessor: function(a) {return a},
-    attrValueProcessor: function(a) {return a}
-    //decodeStrict: false,
-};
-
-exports.defaultOptions = defaultOptions;
-
-const props = ["attributeNamePrefix", "attrNodeName", "textNodeName", "ignoreAttributes", "ignoreNameSpace", "allowBooleanAttributes", "parseNodeValue", "parseAttributeValue", "arrayMode", "trimValues", "cdataTagName", "cdataPositionChar", "localeRange", "tagValueProcessor", "attrValueProcessor", "parseTrueNumberOnly"];
-exports.props = props;
-
-const getTraversalObj = function(xmlData, options) {
-    options = buildOptions(options,defaultOptions,props);
-    //xmlData = xmlData.replace(/\r?\n/g, " ");//make it single line
-    xmlData = xmlData.replace(/<!--[\s\S]*?-->/g, "");//Remove  comments
-
-    const xmlObj = new xmlNode("!xml");
-    let currentNode = xmlObj;
-
-    regx = regx.replace(/\[\\w/g, "[" + options.localeRange + "\\w");
-    const tagsRegx = new RegExp(regx, "g");
-    let tag = tagsRegx.exec(xmlData);
-    let nextTag = tagsRegx.exec(xmlData);
-    while (tag) {
-        const tagType = checkForTagType(tag);
-
-        if (tagType === TagType.CLOSING) {
-            //add parsed data to parent node
-            if (currentNode.parent && tag[14]) {
-                currentNode.parent.val = util.getValue(currentNode.parent.val) + "" + processTagValue(tag[14], options);
-            }
-
-            currentNode = currentNode.parent;
-        } else if (tagType === TagType.CDATA) {
-            if (options.cdataTagName) {
-                //add cdata node
-                const childNode = new xmlNode(options.cdataTagName, currentNode, tag[3]);
-                childNode.attrsMap = buildAttributesMap(tag[8], options);
-                currentNode.addChild(childNode);
-                //for backtracking
-                currentNode.val = util.getValue(currentNode.val) + options.cdataPositionChar;
-                //add rest value to parent node
-                if (tag[14]) {
-                    currentNode.val += processTagValue(tag[14], options);
-                }
-            } else {
-                currentNode.val = (currentNode.val || "") + (tag[3] || "") + processTagValue(tag[14], options);
-            }
-        } else if (tagType === TagType.SELF) {
-            if (currentNode && tag[14]) {
-                currentNode.val = util.getValue(currentNode.val) + "" + processTagValue(tag[14], options);
-            }
-
-            const childNode = new xmlNode(options.ignoreNameSpace ? tag[7] : tag[5], currentNode, "");
-            if (tag[8] && tag[8].length > 1) {
-                tag[8] = tag[8].substr(0, tag[8].length - 1);
-            }
-            childNode.attrsMap = buildAttributesMap(tag[8], options);
-            currentNode.addChild(childNode);
-        } else {//TagType.OPENING
-            const childNode = new xmlNode(options.ignoreNameSpace ? tag[7] : tag[5], currentNode, processTagValue(tag[14], options));
-            childNode.attrsMap = buildAttributesMap(tag[8], options);
-            currentNode.addChild(childNode);
-            currentNode = childNode;
-        }
-
-        tag = nextTag;
-        nextTag = tagsRegx.exec(xmlData);
-    }
-
-    return xmlObj;
-};
-
-function processTagValue(val, options) {
-    if (val) {
-        if (options.trimValues) {
-            val = val.trim();
-        }
-        val = options.tagValueProcessor(val);
-        val = parseValue(val, options.parseNodeValue, options.parseTrueNumberOnly);
-    }
-
-    return val;
-}
-
-function checkForTagType(match) {
-    if (match[4] === "]]>") {
-        return TagType.CDATA;
-    } else if (match[10] === "/") {
-        return TagType.CLOSING;
-    } else if (typeof match[8] !== "undefined" && match[8].substr(match[8].length - 1) === "/") {
-        return TagType.SELF;
-    } else {
-        return TagType.OPENING;
-    }
-}
-
-function resolveNameSpace(tagname, options) {
-    if (options.ignoreNameSpace) {
-        const tags = tagname.split(":");
-        const prefix = tagname.charAt(0) === "/" ? "/" : "";
-        if (tags[0] === "xmlns") {
-            return "";
-        }
-        if (tags.length === 2) {
-            tagname = prefix + tags[1];
-        }
-    }
-    return tagname;
-}
-
-function parseValue(val, shouldParse, parseTrueNumberOnly) {
-    if (shouldParse && typeof val === "string") {
-        let parsed;
-        if (val.trim() === "" || isNaN(val)) {
-            parsed = val === "true" ? true : val === "false" ? false : val;
-        } else {
-            if(val.indexOf("0x") !== -1){//support hexa decimal
-                parsed = Number.parseInt(val,16);
-            } else if (val.indexOf(".") !== -1) {
-                parsed = Number.parseFloat(val);
-            } else {
-                parsed = Number.parseInt(val, 10);
-            }
-            if(parseTrueNumberOnly){
-                parsed = String(parsed) === val ? parsed : val;
-                
-            }
-        }
-        return parsed;
-    } else {
-        if (util.isExist(val)) {
-            return val;
-        } else {
-            return "";
-        }
-    }
-}
-
-//TODO: change regex to capture NS
-//const attrsRegx = new RegExp("([\\w\\-\\.\\:]+)\\s*=\\s*(['\"])((.|\n)*?)\\2","gm");
-const attrsRegx = new RegExp("([^\\s=]+)\\s*(=\\s*(['\"])(.*?)\\3)?", "g");
-
-function buildAttributesMap(attrStr, options) {
-    if (!options.ignoreAttributes && typeof attrStr === "string") {
-        attrStr = attrStr.replace(/\r?\n/g, " ");
-        //attrStr = attrStr || attrStr.trim();
-
-        const matches = util.getAllMatches(attrStr, attrsRegx);
-        const len = matches.length; //don't make it inline
-        const attrs = {};
-        for (let i = 0; i < len; i++) {
-            const attrName = resolveNameSpace(matches[i][1], options);
-            if (attrName.length) {
-                if (matches[i][4] !== undefined) {
-                    if (options.trimValues) {
-                        matches[i][4] = matches[i][4].trim();
-                    }
-                    matches[i][4] = options.attrValueProcessor(matches[i][4]);
-                    attrs[options.attributeNamePrefix + attrName] = parseValue(matches[i][4], options.parseAttributeValue, options.parseTrueNumberOnly);
-                } else if (options.allowBooleanAttributes) {
-                    attrs[options.attributeNamePrefix + attrName] = true;
-                }
-
-            }
-        }
-        if (!Object.keys(attrs).length) {
-            return;
-        }
-        if (options.attrNodeName) {
-            const attrCollection = {};
-            attrCollection[options.attrNodeName] = attrs;
-            return attrCollection;
-        }
-        return attrs;
-    }
-}
-
-exports.getTraversalObj = getTraversalObj;
-
-},{"./util":"../node_modules/fast-xml-parser/src/util.js","./xmlNode":"../node_modules/fast-xml-parser/src/xmlNode.js"}],"../node_modules/fast-xml-parser/src/nimndata.js":[function(require,module,exports) {
-"use strict";
-const char = function(a) {
-    return String.fromCharCode(a);
-};
-
-const chars = {
-    nilChar : char(176),
-    missingChar : char(201),
-    nilPremitive : char(175),
-    missingPremitive : char(200),
-
-    emptyChar : char(178),
-    emptyValue:  char(177),//empty Premitive
-    
-    boundryChar : char(179),
-    
-    objStart: char(198),
-    arrStart: char(204),
-    arrayEnd: char(185),
-};
-
-const charsArr = [
-    chars.nilChar,
-    chars.nilPremitive,
-    chars.missingChar,
-    chars.missingPremitive,
-    chars.boundryChar,
-    chars.emptyChar,
-    chars.emptyValue,
-    chars.arrayEnd,
-    chars.objStart,
-    chars.arrStart
-];
-
-const _e = function(node, e_schema, options) {
-    if (typeof e_schema === "string") {//premitive
-        if (node && node[0] && node[0].val !== undefined) {
-            return getValue(node[0].val, e_schema);
-        } else {
-            return getValue(node, e_schema);
-        }
-    } else {
-        const hasValidData = hasData(node);
-        if (hasValidData === true) {
-            let str = "";
-            if (Array.isArray(e_schema)) {
-                //attributes can't be repeated. hence check in children tags only
-                str += chars.arrStart;
-                const itemSchema = e_schema[0];
-                //var itemSchemaType = itemSchema;
-                const arr_len = node.length;
-
-                if (typeof itemSchema === "string") {
-                    for (let arr_i = 0; arr_i < arr_len; arr_i++) {
-                        const r = getValue(node[arr_i].val, itemSchema);
-                        str = processValue(str, r);
-                    }
-                } else {
-                    for (let arr_i = 0; arr_i < arr_len; arr_i++) {
-                        const r = _e(node[arr_i], itemSchema, options);
-                        str = processValue(str, r);
-                    }
-                }
-                str += chars.arrayEnd;//indicates that next item is not array item
-            } else {//object
-                str += chars.objStart;
-                const keys = Object.keys(e_schema);
-                if (Array.isArray(node)) {
-                    node = node[0];
-                }
-                for (let i in keys) {
-                    const key = keys[i];
-                    //a property defined in schema can be present either in attrsMap or children tags
-                    //options.textNodeName will not present in both maps, take it's value from val
-                    //options.attrNodeName will be present in attrsMap
-                    let r;
-                    if (!options.ignoreAttributes && node.attrsMap && node.attrsMap[key]) {
-                        r = _e(node.attrsMap[key], e_schema[key], options);
-                    } else if (key === options.textNodeName) {
-                        r = _e(node.val, e_schema[key], options);
-                    } else {
-                        r = _e(node.child[key], e_schema[key], options);
-                    }
-                    str = processValue(str, r);
-                }
-            }
-            return str;
-        } else {
-            return hasValidData;
-        }
-    }
-};
-
-const getValue = function(a/*, type*/) {
-    switch (a) {
-        case undefined:
-            return chars.missingPremitive;
-        case null:
-            return chars.nilPremitive;
-        case "":
-            return chars.emptyValue;
-        default:
-            return a;
-    }
-};
-
-const processValue = function(str, r) {
-    if (!isAppChar(r[0]) && !isAppChar(str[str.length - 1])) {
-        str += chars.boundryChar;
-    }
-    return str + r;
-};
-
-const isAppChar = function(ch) {
-    return charsArr.indexOf(ch) !== -1;
-};
-
-function hasData(jObj) {
-    if (jObj === undefined) {
-        return chars.missingChar;
-    } else if (jObj === null) {
-        return chars.nilChar;
-    } else if (jObj.child && Object.keys(jObj.child).length === 0 && (!jObj.attrsMap || Object.keys(jObj.attrsMap).length === 0)) {
-        return chars.emptyChar;
-    } else {
-        return true;
-    }
-}
-
-const x2j = require("./xmlstr2xmlnode");
-const buildOptions = require("./util").buildOptions;
-
-const convert2nimn = function(node, e_schema, options) {
-    options = buildOptions(options,x2j.defaultOptions,x2j.props);
-    return _e(node, e_schema, options);
-};
-
-exports.convert2nimn = convert2nimn;
-
-},{"./xmlstr2xmlnode":"../node_modules/fast-xml-parser/src/xmlstr2xmlnode.js","./util":"../node_modules/fast-xml-parser/src/util.js"}],"../node_modules/fast-xml-parser/src/node2json_str.js":[function(require,module,exports) {
-"use strict";
-
-const util = require("./util");
-const buildOptions = require("./util").buildOptions;
-const x2j = require("./xmlstr2xmlnode");
-
-//TODO: do it later
-const convertToJsonString = function(node, options) {
-    options = buildOptions(options,x2j.defaultOptions,x2j.props);
-
-    options.indentBy = options.indentBy || "";
-    return _cToJsonStr(node, options,0);
-}
-
-const _cToJsonStr = function(node, options,level) {
-    let jObj = "{";
-
-    //traver through all the children
-    const keys = Object.keys(node.child);
-    
-    for (let index = 0; index < keys.length; index++) {
-        var tagname = keys[index];
-        if (node.child[tagname] && node.child[tagname].length > 1) {
-            jObj  += "\"" + tagname + "\" : [ ";
-            for (var tag in node.child[tagname]) {
-                jObj += _cToJsonStr(node.child[tagname][tag], options) + " , ";
-            }
-            jObj = jObj.substr(0,jObj.length-1) + " ] "; //remove extra comma in last
-        } else {
-            jObj += "\"" +tagname + "\" : " + _cToJsonStr(node.child[tagname][0], options) + " ,";
-        }
-    }
-    util.merge(jObj, node.attrsMap);
-    //add attrsMap as new children
-    if (util.isEmptyObject(jObj)) {
-        return util.isExist(node.val) ? node.val : "";
-    } else {
-        if (util.isExist(node.val)) {
-            if (!(typeof node.val === "string" && (node.val === "" || node.val === options.cdataPositionChar))) {
-                jObj += "\"" + options.textNodeName +"\" : " + stringval(node.val);
-            }
-        }
-    }
-    //add value
-    if(jObj[jObj.length-1] === ","){
-        jObj = jObj.substr(0,jObj.length-2);
-    }
-    return jObj + "}";
-};
-
-function stringval(v){
-    if(v === true || v === false || !isNaN(v)){
-        return v;
-    }else{
-        return "\"" + v + "\"";
-    }
-}
-
-function indentate(options, level) {
-    return options.indentBy.repeat(level);
-}
-
-exports.convertToJsonString = convertToJsonString;
-},{"./util":"../node_modules/fast-xml-parser/src/util.js","./xmlstr2xmlnode":"../node_modules/fast-xml-parser/src/xmlstr2xmlnode.js"}],"../node_modules/fast-xml-parser/src/validator.js":[function(require,module,exports) {
-"use strict";
-
-const util = require("./util");
-
-const defaultOptions = {
-    allowBooleanAttributes: false,         //A tag can have attributes without any value
-    localeRange:  "a-zA-Z"
-};
-
-const props = ["allowBooleanAttributes", "localeRange"];
-
-//const tagsPattern = new RegExp("<\\/?([\\w:\\-_\.]+)\\s*\/?>","g");
-exports.validate = function(xmlData, options) {
-    options = util.buildOptions(options,defaultOptions,props);
-
-    //xmlData = xmlData.replace(/(\r\n|\n|\r)/gm,"");//make it single line
-    //xmlData = xmlData.replace(/(^\s*<\?xml.*?\?>)/g,"");//Remove XML starting tag
-    //xmlData = xmlData.replace(/(<!DOCTYPE[\s\w\"\.\/\-\:]+(\[.*\])*\s*>)/g,"");//Remove DOCTYPE
-
-    const tags = [];
-    let tagFound = false;
-    if (xmlData[0] === "\ufeff") {  // check for byte order mark (BOM)
-      xmlData = xmlData.substr(1);
-    }
-    const regxAttrName = new RegExp("^[_w][\\w\\-.:]*$".replace("_w", "_" + options.localeRange));
-    const regxTagName = new RegExp("^([w]|_)[\\w.\\-_:]*".replace("([w", "([" + options.localeRange));
-    for (let i = 0; i < xmlData.length; i++) {
-
-        if (xmlData[i] === "<") { //starting of tag
-            //read until you reach to '>' avoiding any '>' in attribute value
-
-            i++;
-            if (xmlData[i] === "?") {
-                i = readPI(xmlData, ++i);
-                if (i.err) {
-                    return i;
-                }
-            } else if (xmlData[i] === "!") {
-                i = readCommentAndCDATA(xmlData, i);
-                continue;
-            } else {
-                let closingTag = false;
-                if (xmlData[i] === "/") {//closing tag
-                    closingTag = true;
-                    i++;
-                }
-                //read tagname
-                let tagName = "";
-                for (; i < xmlData.length &&
-                       xmlData[i] !== ">" &&
-                       xmlData[i] !== " " &&
-                       xmlData[i] !== "\t"; i++) {
-
-                    tagName += xmlData[i];
-                }
-                tagName = tagName.trim();
-                //console.log(tagName);
-
-                if (tagName[tagName.length - 1] === "/") {//self closing tag without attributes
-                    tagName = tagName.substring(0, tagName.length - 1);
-                    continue;
-                }
-                if (!validateTagName(tagName, regxTagName)) {
-                    return {err: {code: "InvalidTag", msg: "Tag " + tagName + " is an invalid name."}};
-                }
-
-                const result = readAttributeStr(xmlData, i);
-                if (result === false) {
-                    return {err: {code: "InvalidAttr", msg: "Attributes for " + tagName + " have open quote"}};
-                }
-                let attrStr = result.value;
-                i = result.index;
-
-                if (attrStr[attrStr.length - 1] === "/") {//self closing tag
-                    attrStr = attrStr.substring(0, attrStr.length - 1);
-                    const isValid = validateAttributeString(attrStr, options, regxAttrName);
-                    if (isValid === true) {
-                        tagFound = true;
-                        //continue; //text may presents after self closing tag
-                    } else {
-                        return isValid;
-                    }
-                } else if (closingTag) {
-                    if (attrStr.trim().length > 0) {
-                        return {err: {code: "InvalidTag", msg: "closing tag " + tagName + " can't have attributes or invalid starting."}};
-                    } else {
-                        const otg = tags.pop();
-                        if (tagName !== otg) {
-                            return {err: {code: "InvalidTag", msg: "closing tag " + otg + " is expected inplace of " + tagName + "."}};
-                        }
-                    }
-                } else {
-                    const isValid = validateAttributeString(attrStr, options, regxAttrName);
-                    if (isValid !== true) {
-                        return isValid;
-                    }
-                    tags.push(tagName);
-                    tagFound = true;
-                }
-
-                //skip tag text value
-                //It may include comments and CDATA value
-                for (i++; i < xmlData.length; i++) {
-                    if (xmlData[i] === "<") {
-                        if (xmlData[i + 1] === "!") {//comment or CADATA
-                            i++;
-                            i = readCommentAndCDATA(xmlData, i);
-                            continue;
-                        } else {
-                            break;
-                        }
-                    }
-                }//end of reading tag text value
-                if (xmlData[i] === "<") {
-                    i--;
-                }
-            }
-        } else {
-            if (xmlData[i] === " " || xmlData[i] === "\t" || xmlData[i] === "\n" || xmlData[i] === "\r") {
-                continue;
-            }
-            return {err: {code: "InvalidChar", msg: "char " + xmlData[i] + " is not expected ."}};
-        }
-    }
-
-    if (!tagFound) {
-        return {err: {code: "InvalidXml", msg: "Start tag expected."}};
-    } else if (tags.length > 0) {
-        return {err: {code: "InvalidXml", msg: "Invalid " + JSON.stringify(tags, null, 4).replace(/\r?\n/g, "") + " found."}};
-    }
-
-    return true;
-};
-
-/**
- * Read Processing insstructions and skip
- * @param {*} xmlData
- * @param {*} i
- */
-function readPI(xmlData, i) {
-    var start = i;
-    for (; i < xmlData.length; i++) {
-        if (xmlData[i] == "?" || xmlData[i] == " ") {//tagname
-            var tagname = xmlData.substr(start, i - start);
-            if (i > 5 && tagname === "xml") {
-                return {err: {code: "InvalidXml", msg: "XML declaration allowed only at the start of the document."}};
-            } else if (xmlData[i] == "?" && xmlData[i + 1] == ">") {
-                //check if valid attribut string
-                i++;
-                break;
-            } else {
-                continue;
-            }
-        }
-    }
-    return i;
-}
-
-function readCommentAndCDATA(xmlData, i) {
-    if (xmlData.length > i + 5 && xmlData[i + 1] === "-" && xmlData[i + 2] === "-") {//comment
-        for (i += 3; i < xmlData.length; i++) {
-            if (xmlData[i] === "-" && xmlData[i + 1] === "-" && xmlData[i + 2] === ">") {
-                i += 2;
-                break;
-            }
-        }
-    } else if (xmlData.length > i + 8 &&
-               xmlData[i + 1] === "D" &&
-               xmlData[i + 2] === "O" &&
-               xmlData[i + 3] === "C" &&
-               xmlData[i + 4] === "T" &&
-               xmlData[i + 5] === "Y" &&
-               xmlData[i + 6] === "P" &&
-               xmlData[i + 7] === "E") {
-        let angleBracketsCount = 1;
-        for (i += 8; i < xmlData.length; i++) {
-            if (xmlData[i] === "<") {angleBracketsCount++;}
-            else if (xmlData[i] === ">") {
-                angleBracketsCount--;
-                if (angleBracketsCount === 0) {
-                    break;
-                }
-            }
-        }
-    } else if (xmlData.length > i + 9 &&
-               xmlData[i + 1] === "[" &&
-               xmlData[i + 2] === "C" &&
-               xmlData[i + 3] === "D" &&
-               xmlData[i + 4] === "A" &&
-               xmlData[i + 5] === "T" &&
-               xmlData[i + 6] === "A" &&
-               xmlData[i + 7] === "[") {
-
-        for (i += 8; i < xmlData.length; i++) {
-            if (xmlData[i] === "]" && xmlData[i + 1] === "]" && xmlData[i + 2] === ">") {
-                i += 2;
-                break;
-            }
-        }
-    }
-
-    return i;
-}
-
-var doubleQuote = "\"";
-var singleQuote = "'";
-
-/**
- * Keep reading xmlData until '<' is found outside the attribute value.
- * @param {string} xmlData
- * @param {number} i
- */
-function readAttributeStr(xmlData, i) {
-    let attrStr = "";
-    let startChar = "";
-    for (; i < xmlData.length; i++) {
-        if (xmlData[i] === doubleQuote || xmlData[i] === singleQuote) {
-            if (startChar === "") {
-                startChar = xmlData[i];
-            } else if (startChar !== xmlData[i]) {
-                //if vaue is enclosed with double quote then single quotes are allowed inside the value and vice versa
-                continue;
-            } else {
-                startChar = "";
-            }
-        } else if (xmlData[i] === ">") {
-            if (startChar === "") {
-                break;
-            }
-        }
-        attrStr += xmlData[i];
-    }
-    if (startChar !== "") {
-        return false;
-    }
-
-    return {value: attrStr, index: i};
-}
-
-/**
- * Select all the attributes whether valid or invalid.
- */
-const validAttrStrRegxp = new RegExp("(\\s*)([^\\s=]+)(\\s*=)?(\\s*(['\"])(([\\s\\S])*?)\\5)?", "g");
-
-//attr, ="sd", a="amit's", a="sd"b="saf", ab  cd=""
-
-function validateAttributeString(attrStr, options, regxAttrName) {
-    //console.log("start:"+attrStr+":end");
-
-    //if(attrStr.trim().length === 0) return true; //empty string
-
-    const matches = util.getAllMatches(attrStr, validAttrStrRegxp);
-    const attrNames = [];
-
-    for (let i = 0; i < matches.length; i++) {
-        //console.log(matches[i]);
-
-        if (matches[i][1].length === 0) {//nospace before attribute name: a="sd"b="saf"
-            return {err: {code: "InvalidAttr", msg: "attribute " + matches[i][2] + " has no space in starting."}};
-        } else if (matches[i][3] === undefined && !options.allowBooleanAttributes) {//independent attribute: ab
-            return {err: {code: "InvalidAttr", msg: "boolean attribute " + matches[i][2] + " is not allowed."}};
-        }
-        /* else if(matches[i][6] === undefined){//attribute without value: ab=
-                    return { err: { code:"InvalidAttr",msg:"attribute " + matches[i][2] + " has no value assigned."}};
-                } */
-        const attrName = matches[i][2];
-        if (!validateAttrName(attrName, regxAttrName)) {
-            return {err: {code: "InvalidAttr", msg: "attribute " + attrName + " is an invalid name."}};
-        }
-        if (!attrNames.hasOwnProperty(attrName)) {//check for duplicate attribute.
-            attrNames[attrName] = 1;
-        } else {
-            return {err: {code: "InvalidAttr", msg: "attribute " + attrName + " is repeated."}};
-        }
-    }
-
-    return true;
-
-}
-
-// const validAttrRegxp = /^[_a-zA-Z][\w\-.:]*$/;
-
-function validateAttrName(attrName, regxAttrName) {
-    // const validAttrRegxp = new RegExp(regxAttrName);
-    return util.doesMatch(attrName, regxAttrName);
-}
-
-//const startsWithXML = new RegExp("^[Xx][Mm][Ll]");
-//  startsWith = /^([a-zA-Z]|_)[\w.\-_:]*/;
-
-function validateTagName(tagname, regxTagName) {
-    /*if(util.doesMatch(tagname,startsWithXML)) return false;
-    else*/
-    return !util.doesNotMatch(tagname, regxTagName);
-}
-
-},{"./util":"../node_modules/fast-xml-parser/src/util.js"}],"../node_modules/fast-xml-parser/src/json2xml.js":[function(require,module,exports) {
-"use strict";
-//parse Empty Node as self closing node
-const buildOptions = require("./util").buildOptions;
-
-const defaultOptions = {
-    attributeNamePrefix: "@_",
-    attrNodeName: false,
-    textNodeName: "#text",
-    ignoreAttributes: true,
-    cdataTagName: false,
-    cdataPositionChar: "\\c",
-    format: false,
-    indentBy: "  ",
-    supressEmptyNode: false,
-    tagValueProcessor: function(a) {return a},
-    attrValueProcessor: function(a) {return a}
-};
-
-const props = [
-    "attributeNamePrefix",
-    "attrNodeName",
-    "textNodeName",
-    "ignoreAttributes",
-    "cdataTagName",
-    "cdataPositionChar",
-    "format",
-    "indentBy",
-    "supressEmptyNode",
-    "tagValueProcessor",
-    "attrValueProcessor"
-]
-
-function Parser(options) {
-    this.options = buildOptions(options,defaultOptions,props);
-    if (this.options.ignoreAttributes || this.options.attrNodeName) {
-        this.isAttribute = function(/*a*/) { return false;};
-    } else {
-        this.attrPrefixLen = this.options.attributeNamePrefix.length;
-        this.isAttribute = isAttribute;
-    }
-    if (this.options.cdataTagName) {
-        this.isCDATA = isCDATA;
-    } else {
-        this.isCDATA = function(/*a*/) { return false;};
-    }
-    this.replaceCDATAstr = replaceCDATAstr;
-    this.replaceCDATAarr = replaceCDATAarr;
-
-    if (this.options.format) {
-        this.indentate = indentate;
-        this.tagEndChar = ">\n";
-        this.newLine = "\n";
-    } else {
-        this.indentate = function() { return "";};
-        this.tagEndChar = ">";
-        this.newLine = "";
-    }
-
-    if (this.options.supressEmptyNode) {
-        this.buildTextNode = buildEmptyTextNode;
-        this.buildObjNode = buildEmptyObjNode;
-    } else {
-        this.buildTextNode = buildTextValNode;
-        this.buildObjNode = buildObjectNode;
-    }
-
-    this.buildTextValNode = buildTextValNode;
-    this.buildObjectNode = buildObjectNode;
-
-}
-
-Parser.prototype.parse = function(jObj) {
-    return this.j2x(jObj, 0).val;
-};
-
-Parser.prototype.j2x = function(jObj, level) {
-    let attrStr = "";
-    let val = "";
-    const keys = Object.keys(jObj);
-    const len = keys.length;
-    for (let i = 0; i < len; i++) {
-        const key = keys[i];
-        if (typeof jObj[key] === "undefined") {
-            // supress undefined node
-        }else if (jObj[key] === null) {
-            val += this.indentate(level) + "<" + key + "/" + this.tagEndChar;
-        }else if (typeof jObj[key] !== "object") {//premitive type
-            const attr = this.isAttribute(key);
-            if (attr) {
-                attrStr += " " + attr + "=\"" +  this.options.attrValueProcessor("" + jObj[key]) + "\"";
-            } else if (this.isCDATA(key)) {
-                if (jObj[this.options.textNodeName]) {
-                    val += this.replaceCDATAstr(jObj[this.options.textNodeName], jObj[key]);
-                } else {
-                    val += this.replaceCDATAstr("", jObj[key]);
-                }
-            } else {//tag value
-                if (key === this.options.textNodeName) {
-                    if (jObj[this.options.cdataTagName]) {
-                        //value will added while processing cdata
-                    } else {
-                        val +=  this.options.tagValueProcessor("" + jObj[key]);
-                    }
-                } else {
-                    val += this.buildTextNode(jObj[key], key, "", level);
-                }
-            }
-        } else if (Array.isArray(jObj[key])) {//repeated nodes
-            if (this.isCDATA(key)) {
-              val += this.indentate(level)
-                if (jObj[this.options.textNodeName]) {
-                  val += this.replaceCDATAarr(jObj[this.options.textNodeName], jObj[key]);
-                } else {
-                  val += this.replaceCDATAarr("", jObj[key]);
-                }
-            } else {//nested nodes
-                const arrLen = jObj[key].length;
-                for (let j = 0; j < arrLen; j++) {
-                    const item = jObj[key][j];
-                    if (typeof item === "undefined") {
-                        // supress undefined node
-                    }else if(item === null){
-                        val += this.indentate(level) + "<" + key + "/" + this.tagEndChar;
-                    }else if (typeof item === "object") {
-                        const result = this.j2x(item, level + 1);
-                        val += this.buildObjNode(result.val, key, result.attrStr, level);
-                    } else {
-                        val += this.buildTextNode(item, key, "", level);
-                    }
-                }
-            }
-        } else {//nested node
-            if (this.options.attrNodeName && key === this.options.attrNodeName) {
-                const Ks = Object.keys(jObj[key]);
-                const L = Ks.length;
-                for (let j = 0; j < L; j++) {
-                    attrStr += " " + Ks[j] + "=\"" + this.options.tagValueProcessor("" + jObj[key][Ks[j]]) + "\"";
-                }
-            } else {
-                const result = this.j2x(jObj[key], level + 1);
-                val += this.buildObjNode(result.val, key, result.attrStr, level);
-            }
-        }
-    }
-    return {attrStr: attrStr, val: val};
-};
-
-function replaceCDATAstr(str, cdata) {
-    str = this.options.tagValueProcessor("" + str);
-    if (this.options.cdataPositionChar === "" || str === "") {
-        return str + "<![CDATA[" + cdata + "]]" + this.tagEndChar;
-    } else {
-        return str.replace(this.options.cdataPositionChar, "<![CDATA[" + cdata + "]]" + this.tagEndChar);
-    }
-}
-
-function replaceCDATAarr(str, cdata) {
-    str = this.options.tagValueProcessor("" + str);
-    if (this.options.cdataPositionChar === "" || str === "") {
-        return str + "<![CDATA[" + cdata.join("]]><![CDATA[") + "]]" + this.tagEndChar;
-    } else {
-        for (let v in cdata) {
-            str = str.replace(this.options.cdataPositionChar, "<![CDATA[" + cdata[v] + "]]>");
-        }
-        return str + this.newLine;
-    }
-}
-
-function buildObjectNode(val, key, attrStr, level) {
-  if (attrStr && !val.includes('<')) {
-    return this.indentate(level)
-          + "<" + key + attrStr
-          + ">"
-          + val
-          //+ this.newLine
-          // + this.indentate(level)
-          + "</" + key + this.tagEndChar;
-  } else {
-    return this.indentate(level)
-          + "<" + key + attrStr
-          + this.tagEndChar
-          + val
-          //+ this.newLine
-          + this.indentate(level)
-          + "</" + key + this.tagEndChar;
-  }
-}
-
-function buildEmptyObjNode(val, key, attrStr, level) {
-    if (val !== "") {
-        return this.buildObjectNode(val, key, attrStr, level);
-    } else {
-        return this.indentate(level)
-               + "<" + key + attrStr
-               + "/"
-               + this.tagEndChar;
-        //+ this.newLine
-    }
-}
-
-function buildTextValNode(val, key, attrStr, level) {
-    return this.indentate(level) + "<" + key + attrStr + ">" + this.options.tagValueProcessor("" + val) + "</" + key + this.tagEndChar;
-}
-
-function buildEmptyTextNode(val, key, attrStr, level) {
-    if (val !== "") {
-        return this.buildTextValNode(val, key, attrStr, level);
-    } else {
-        return this.indentate(level) + "<" + key + attrStr + "/" + this.tagEndChar;
-    }
-}
-
-function indentate(level) {
-    return this.options.indentBy.repeat(level);
-}
-
-function isAttribute(name/*, options*/) {
-    if (name.startsWith(this.options.attributeNamePrefix)) {
-        return name.substr(this.attrPrefixLen);
-    } else {
-        return false;
-    }
-}
-
-function isCDATA(name) {
-    return name === this.options.cdataTagName;
-}
-
-//formatting
-//indentation
-//\n after each closing or self closing tag
-
-module.exports = Parser;
-
-},{"./util":"../node_modules/fast-xml-parser/src/util.js"}],"../node_modules/fast-xml-parser/src/parser.js":[function(require,module,exports) {
-"use strict";
-
-const nodeToJson = require("./node2json");
-const xmlToNodeobj = require("./xmlstr2xmlnode");
-const x2xmlnode = require("./xmlstr2xmlnode");
-const buildOptions = require("./util").buildOptions;
-
-exports.parse = function(xmlData, options) {
-    options = buildOptions(options, x2xmlnode.defaultOptions, x2xmlnode.props);
-    return nodeToJson.convertToJson(xmlToNodeobj.getTraversalObj(xmlData, options), options);
-};
-exports.convertTonimn = require("../src/nimndata").convert2nimn;
-exports.getTraversalObj = xmlToNodeobj.getTraversalObj;
-exports.convertToJson = nodeToJson.convertToJson;
-exports.convertToJsonString = require("./node2json_str").convertToJsonString;
-exports.validate = require("./validator").validate;
-exports.j2xParser = require("./json2xml");
-exports.parseToNimn = function (xmlData,schema,options){
-    return exports.convertTonimn(exports.getTraversalObj(xmlData,options), schema, options);
-};
-
-},{"./node2json":"../node_modules/fast-xml-parser/src/node2json.js","./xmlstr2xmlnode":"../node_modules/fast-xml-parser/src/xmlstr2xmlnode.js","./util":"../node_modules/fast-xml-parser/src/util.js","../src/nimndata":"../node_modules/fast-xml-parser/src/nimndata.js","./node2json_str":"../node_modules/fast-xml-parser/src/node2json_str.js","./validator":"../node_modules/fast-xml-parser/src/validator.js","./json2xml":"../node_modules/fast-xml-parser/src/json2xml.js"}],"components/entities.ts":[function(require,module,exports) {
-"use strict";
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Constants = exports.default = void 0;
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
 
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var Common = function Common() {
+  (0, _classCallCheck2.default)(this, Common);
+};
+
+exports.default = Common;
+
+Common.parseQueryString = function () {
+  var str = window.location.search;
+  var objURL = {}; // @ts-ignore
+
+  str.replace(new RegExp('([^?=&]+)(=([^&]*))?', 'g'), function ($0, $1, $2, $3) {
+    objURL[$1] = $3;
+  });
+  return objURL;
+};
+
+var Constants =
+/*#__PURE__*/
+function () {
+  function Constants() {
+    (0, _classCallCheck2.default)(this, Constants);
+  }
+
+  (0, _createClass2.default)(Constants, null, [{
+    key: "Urls",
+    get: function get() {
+      return {
+        MYJSON_API_URL: 'https://api.myjson.com/bins/'
+      };
+    }
+  }]);
+  return Constants;
+}();
+
+exports.Constants = Constants;
+Constants.Events = {
+  SELECTED_XMLTV_CHANGED: 'SELECTED_XMLTV_CHANGED',
+  LOAD_XMLTV_URL: 'onViewXmltvUrl',
+  ADD_XMLTV_URL: 'onAddXmltvUrl',
+  REMOVE_XMLTV_URL: 'onRemoveXmltvUrl'
+};
+},{"@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js"}],"components/xmltvFiles/xmltvFileItem.jsx":[function(require,module,exports) {
+"use strict";
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = void 0;
 
-var Credits = function Credits() {
-  (0, _classCallCheck2.default)(this, Credits);
-  this.director = [];
-  this.presenter = [];
-  this.actor = [];
-  this.writer = [];
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _propTypes = require("prop-types");
+
+var _common = require("../../js/common");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var XmltvFileItem =
+/*#__PURE__*/
+function (_React$PureComponent) {
+  (0, _inherits2.default)(XmltvFileItem, _React$PureComponent);
+
+  function XmltvFileItem(props) {
+    var _this;
+
+    (0, _classCallCheck2.default)(this, XmltvFileItem);
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(XmltvFileItem).call(this, props));
+
+    _this.view = function (e) {
+      e.preventDefault();
+
+      if (_this.props.itemCallback) {
+        _this.props.itemCallback({
+          type: _common.Constants.Events.LOAD_XMLTV_URL,
+          file: _this.createFileObject(_this.props.file.url)
+        });
+      }
+    };
+
+    _this.add = function (e) {
+      e.preventDefault();
+
+      if (_this.props.itemCallback) {
+        _this.props.itemCallback({
+          type: _common.Constants.Events.ADD_XMLTV_URL,
+          file: _this.createFileObject(_this.state.value)
+        });
+      }
+
+      _this.setState({
+        value: ''
+      });
+    };
+
+    _this.remove = function (e) {
+      e.preventDefault();
+
+      if (_this.props.itemCallback) {
+        _this.props.itemCallback({
+          type: _common.Constants.Events.REMOVE_XMLTV_URL,
+          file: _this.createFileObject(_this.props.file.url)
+        });
+      }
+    };
+
+    _this.createFileObject = function (xmltv_file_url) {
+      return {
+        name: xmltv_file_url.split('/').pop(),
+        url: xmltv_file_url
+      };
+    };
+
+    _this.state = {
+      isNew: props.isNew
+    };
+    return _this;
+  }
+
+  (0, _createClass2.default)(XmltvFileItem, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.setState({
+        isNew: !this.props.file ? true : this.props.isNew
+      });
+    }
+  }, {
+    key: "handleChange",
+    value: function handleChange(event) {
+      this.setState({
+        value: event.target.value
+      });
+    }
+    /**
+     * Generate xmltv object from url
+     * @param {string} xmltv_file_url - xmltv file url
+     * @memberof SettingsModal
+     */
+
+  }, {
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      var removeBtn = !this.state.isNew && _react.default.createElement("button", {
+        className: "pull-right btn btn-sm border-0 rounded-circle btn-outline-danger",
+        onClick: function onClick(e) {
+          return _this2.remove(e);
+        }
+      }, _react.default.createElement("i", {
+        className: "fa fa-trash-o"
+      }));
+
+      var inputUrl = this.state.isNew ? _react.default.createElement("div", {
+        className: "col-8"
+      }, _react.default.createElement("input", {
+        type: "url",
+        value: this.state.value || '',
+        onChange: function onChange(e) {
+          return _this2.handleChange(e);
+        },
+        placeholder: "Add new xmltv url...",
+        className: "form-control"
+      })) : this.props.file && _react.default.createElement("div", {
+        className: "col"
+      }, this.props.file.name);
+      return _react.default.createElement("div", {
+        className: "row xviewer-list-item"
+      }, inputUrl, _react.default.createElement("div", {
+        className: "col"
+      }, _react.default.createElement("button", {
+        className: "pull-right btn btn-sm border-0 rounded-circle btn-outline-success",
+        onClick: function onClick(e) {
+          return _this2.view(e);
+        }
+      }, _react.default.createElement("i", {
+        className: "fa fa-eye"
+      })), this.state.isNew && _react.default.createElement("button", {
+        className: "pull-right btn btn-sm border-0 rounded-circle btn-outline-primary",
+        onClick: function onClick(e) {
+          return _this2.add(e);
+        }
+      }, _react.default.createElement("i", {
+        className: "fa fa-plus"
+      })), removeBtn));
+    }
+  }]);
+  return XmltvFileItem;
+}(_react.default.PureComponent);
+
+exports.default = XmltvFileItem;
+XmltvFileItem.propTypes = {
+  file: _propTypes.PropTypes.shape({
+    name: _propTypes.PropTypes.string,
+    url: _propTypes.PropTypes.string
+  }),
+  itemCallback: _propTypes.PropTypes.func,
+  isNew: _propTypes.PropTypes.bool
 };
+XmltvFileItem.defaultPropTypes = {
+  isNew: false
+};
+},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","../../js/common":"js/common.js"}],"components/xmltvFiles/xmltvFiles.jsx":[function(require,module,exports) {
+"use strict";
 
-exports.INTERVALS = ['00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00', '05:30', '06:00', '06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30'];
-exports.MinutesPerDay = 1440; //24*60
-},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js"}],"../node_modules/luxon/build/cjs-browser/luxon.js":[function(require,module,exports) {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
+
+var _react = _interopRequireDefault(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+require("../../styles/file-items.scss");
+
+var _xmltvFileItem = _interopRequireDefault(require("./xmltvFileItem"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var XmltvFilesComponent =
+/*#__PURE__*/
+function (_React$PureComponent) {
+  (0, _inherits2.default)(XmltvFilesComponent, _React$PureComponent);
+
+  function XmltvFilesComponent() {
+    (0, _classCallCheck2.default)(this, XmltvFilesComponent);
+    return (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(XmltvFilesComponent).apply(this, arguments));
+  }
+
+  (0, _createClass2.default)(XmltvFilesComponent, [{
+    key: "render",
+    value: function render() {
+      var _this = this;
+
+      return _react.default.createElement("div", {
+        className: "xviewer-list"
+      }, this.props.files && this.props.files.map(function (file, key) {
+        return _react.default.createElement(_xmltvFileItem.default, {
+          file: file,
+          key: key,
+          itemCallback: _this.props.onChangeCallback
+        });
+      }), _react.default.createElement(_xmltvFileItem.default, {
+        isNew: true,
+        itemCallback: this.props.onChangeCallback
+      }));
+    }
+  }]);
+  return XmltvFilesComponent;
+}(_react.default.PureComponent);
+
+exports.default = XmltvFilesComponent;
+XmltvFilesComponent.propTypes = {
+  files: _propTypes.default.arrayOf(_propTypes.default.shape({
+    name: _propTypes.default.string.isRequired,
+    url: _propTypes.default.string.isRequired
+  })),
+  onChangeCallback: _propTypes.default.func
+};
+},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","../../styles/file-items.scss":"styles/file-items.scss","./xmltvFileItem":"components/xmltvFiles/xmltvFileItem.jsx"}],"../node_modules/luxon/build/cjs-browser/luxon.js":[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, '__esModule', { value: true });
@@ -59022,7 +58191,12 @@ var AppContext = React.createContext({
   },
   settings: {
     hours: 4,
-    tz: luxon_1.DateTime.local().zoneName
+    tz: luxon_1.DateTime.local().zoneName,
+    halfHourWidth: 100,
+    onSettingsChanged: function onSettingsChanged() {},
+    HighlightMovies: false,
+    HighlightNew: false,
+    MyJsonId: ''
   },
   handleErrors: function handleErrors(response) {
     var origin = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'XViewer App';
@@ -59034,8 +58208,1765 @@ var AppContext = React.createContext({
     return response;
   }
 });
+exports.Zones = ['Europe/Warsaw', 'Europe/Mariehamn', 'Europe/Minsk', 'Europe/Monaco', 'Europe/Moscow', 'Europe/Nicosia', 'Europe/Oslo', 'Europe/Paris', 'Europe/Podgorica', 'Europe/Prague', 'Europe/Riga', 'Europe/Rome', 'America/Los_Angeles'];
 exports.default = AppContext;
-},{"react":"../node_modules/react/index.js","luxon":"../node_modules/luxon/build/cjs-browser/luxon.js"}],"components/home/style.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","luxon":"../node_modules/luxon/build/cjs-browser/luxon.js"}],"../node_modules/core-js/library/fn/json/stringify.js":[function(require,module,exports) {
+var core = require('../../modules/_core');
+var $JSON = core.JSON || (core.JSON = { stringify: JSON.stringify });
+module.exports = function stringify(it) { // eslint-disable-line no-unused-vars
+  return $JSON.stringify.apply($JSON, arguments);
+};
+
+},{"../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/json/stringify.js":[function(require,module,exports) {
+module.exports = require("core-js/library/fn/json/stringify");
+},{"core-js/library/fn/json/stringify":"../node_modules/core-js/library/fn/json/stringify.js"}],"components/settingsService.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SettingsService = void 0;
+
+var _stringify = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/json/stringify"));
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var SettingsService =
+/*#__PURE__*/
+function () {
+  function SettingsService() {
+    (0, _classCallCheck2.default)(this, SettingsService);
+  }
+
+  (0, _createClass2.default)(SettingsService, null, [{
+    key: "load",
+    value: function load() {
+      var key = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'settings';
+      var settingsJson = localStorage.getItem(key);
+
+      if (settingsJson == null) {
+        return new Settings();
+      }
+
+      return JSON.parse(settingsJson);
+    }
+  }, {
+    key: "save",
+    value: function save(settings) {
+      var key = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'settings';
+      localStorage.setItem(key, (0, _stringify.default)(settings));
+    }
+  }]);
+  return SettingsService;
+}();
+
+exports.SettingsService = SettingsService;
+},{"@babel/runtime-corejs2/core-js/json/stringify":"../node_modules/@babel/runtime-corejs2/core-js/json/stringify.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js"}],"../node_modules/@babel/runtime-corejs2/helpers/asyncToGenerator.js":[function(require,module,exports) {
+var _Promise = require("../core-js/promise");
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+  try {
+    var info = gen[key](arg);
+    var value = info.value;
+  } catch (error) {
+    reject(error);
+    return;
+  }
+
+  if (info.done) {
+    resolve(value);
+  } else {
+    _Promise.resolve(value).then(_next, _throw);
+  }
+}
+
+function _asyncToGenerator(fn) {
+  return function () {
+    var self = this,
+        args = arguments;
+    return new _Promise(function (resolve, reject) {
+      var gen = fn.apply(self, args);
+
+      function _next(value) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+      }
+
+      function _throw(err) {
+        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+      }
+
+      _next(undefined);
+    });
+  };
+}
+
+module.exports = _asyncToGenerator;
+},{"../core-js/promise":"../node_modules/@babel/runtime-corejs2/core-js/promise.js"}],"js/filesService.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _stringify = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/json/stringify"));
+
+var _regenerator = _interopRequireDefault(require("@babel/runtime-corejs2/regenerator"));
+
+var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/asyncToGenerator"));
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
+
+var _common = require("./common");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var filesServices = function filesServices() {
+  (0, _classCallCheck2.default)(this, filesServices);
+};
+
+exports.default = filesServices;
+
+filesServices.get =
+/*#__PURE__*/
+function () {
+  var _ref = (0, _asyncToGenerator2.default)(
+  /*#__PURE__*/
+  _regenerator.default.mark(function _callee(id) {
+    var res;
+    return _regenerator.default.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return fetch("".concat(_common.Constants.Urls.MYJSON_API_URL).concat(id));
+
+          case 2:
+            res = _context.sent;
+
+            if (res.ok) {
+              _context.next = 5;
+              break;
+            }
+
+            throw Error('Fetching files was failed');
+
+          case 5:
+            return _context.abrupt("return", res.json());
+
+          case 6:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  return function (_x) {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+filesServices.update =
+/*#__PURE__*/
+function () {
+  var _ref2 = (0, _asyncToGenerator2.default)(
+  /*#__PURE__*/
+  _regenerator.default.mark(function _callee2(id, obj) {
+    var options, res;
+    return _regenerator.default.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            options = {
+              method: 'PUT',
+              body: (0, _stringify.default)(obj),
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+              }
+            };
+            _context2.next = 3;
+            return fetch("".concat(_common.Constants.Urls.MYJSON_API_URL).concat(id), options);
+
+          case 3:
+            res = _context2.sent;
+
+            if (res.ok) {
+              _context2.next = 6;
+              break;
+            }
+
+            throw Error('Updating files was failed');
+
+          case 6:
+            return _context2.abrupt("return", res.json());
+
+          case 7:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, this);
+  }));
+
+  return function (_x2, _x3) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+
+filesServices.add =
+/*#__PURE__*/
+function () {
+  var _ref3 = (0, _asyncToGenerator2.default)(
+  /*#__PURE__*/
+  _regenerator.default.mark(function _callee3(obj) {
+    var options, res;
+    return _regenerator.default.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            options = {
+              method: 'POST',
+              body: (0, _stringify.default)(obj),
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+              }
+            };
+            _context3.next = 3;
+            return fetch("".concat(_common.Constants.Urls.MYJSON_API_URL), options);
+
+          case 3:
+            res = _context3.sent;
+
+            if (!(!res.ok || res.status !== 201)) {
+              _context3.next = 6;
+              break;
+            }
+
+            throw Error('Creating files was failed');
+
+          case 6:
+            return _context3.abrupt("return", res.json());
+
+          case 7:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3, this);
+  }));
+
+  return function (_x4) {
+    return _ref3.apply(this, arguments);
+  };
+}();
+},{"@babel/runtime-corejs2/core-js/json/stringify":"../node_modules/@babel/runtime-corejs2/core-js/json/stringify.js","@babel/runtime-corejs2/regenerator":"../node_modules/@babel/runtime-corejs2/regenerator/index.js","@babel/runtime-corejs2/helpers/asyncToGenerator":"../node_modules/@babel/runtime-corejs2/helpers/asyncToGenerator.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","./common":"js/common.js"}],"components/settingsModal/settingsPage.tsx":[function(require,module,exports) {
+"use strict";
+
+var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/toConsumableArray"));
+
+var _regenerator = _interopRequireDefault(require("@babel/runtime-corejs2/regenerator"));
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
+
+var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
+
+var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/possibleConstructorReturn"));
+
+var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/getPrototypeOf"));
+
+var _inherits2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/inherits"));
+
+var _assertThisInitialized2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/assertThisInitialized"));
+
+var _promise = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/promise"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var __awaiter = void 0 && (void 0).__awaiter || function (thisArg, _arguments, P, generator) {
+  return new (P || (P = _promise.default))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : new P(function (resolve) {
+        resolve(result.value);
+      }).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+
+var __importStar = void 0 && (void 0).__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
+var __importDefault = void 0 && (void 0).__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var React = __importStar(require("react"));
+
+var xmltvFiles_1 = __importDefault(require("../xmltvFiles/xmltvFiles"));
+
+var appContext_1 = __importStar(require("../appContext"));
+
+var common_1 = require("../../js/common");
+
+var settingsService_1 = require("../settingsService");
+
+var filesService_1 = __importDefault(require("../../js/filesService"));
+
+var SettingsPage =
+/*#__PURE__*/
+function (_React$PureComponent) {
+  (0, _inherits2.default)(SettingsPage, _React$PureComponent);
+
+  function SettingsPage(props) {
+    var _this;
+
+    (0, _classCallCheck2.default)(this, SettingsPage);
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(SettingsPage).call(this, props)); //TODO: load settings before mounting the component (from routing)
+
+    _this.componentDidMount = function () {
+      return __awaiter((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)), void 0, void 0,
+      /*#__PURE__*/
+      _regenerator.default.mark(function _callee() {
+        var result, id;
+        return _regenerator.default.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.prev = 0;
+
+                if (this.context.settings.MyJsonId) {
+                  _context.next = 11;
+                  break;
+                }
+
+                this.setState({
+                  files: this.props.files
+                });
+                _context.next = 5;
+                return filesService_1.default.add({
+                  files: []
+                });
+
+              case 5:
+                result = _context.sent;
+                id = result.uri.split('bins//')[1];
+                this.context.settings.MyJsonId = id;
+                settingsService_1.SettingsService.save(this.context.settings);
+                _context.next = 12;
+                break;
+
+              case 11:
+                settingsService_1.SettingsService.save(this.context.settings);
+
+              case 12:
+                _context.next = 16;
+                break;
+
+              case 14:
+                _context.prev = 14;
+                _context.t0 = _context["catch"](0);
+
+              case 16:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[0, 14]]);
+      }));
+    }; // // @ts-ignore
+    // componentDidCatch(error, errorInfo) {
+    //   this.state.notify({
+    //     message: error.toString(),
+    //     errorInfo,
+    //     type: toast.TYPE.ERROR,
+    //   })
+    // }
+
+    /**
+     *
+     * @param e
+     */
+
+
+    _this.halfHourWidthChanged = function (e) {
+      e.preventDefault();
+      _this.context.settings.halfHourWidth = e.currentTarget.value;
+      settingsService_1.SettingsService.save(_this.context.settings); // this.context.settings.onSettingsChanged()
+    };
+
+    _this.onTzSelectChanged = function (e) {
+      e.preventDefault();
+      _this.context.settings.tz = e.currentTarget.value;
+      settingsService_1.SettingsService.save(_this.context.settings); // this.context.settings.onSettingsChanged()
+    };
+
+    _this.onXmltvFilesChangeCallback = function (fileItemEvent) {
+      switch (fileItemEvent.type) {
+        case common_1.Constants.Events.LOAD_XMLTV_URL:
+          // this.loadXML(e.file)
+          break;
+
+        case common_1.Constants.Events.REMOVE_XMLTV_URL:
+          _this.setState(function (prevState) {
+            return {
+              files: prevState.files.filter(function (f) {
+                return f.url != fileItemEvent.file.url;
+              })
+            };
+          }, function () {
+            return __awaiter((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)), void 0, void 0,
+            /*#__PURE__*/
+            _regenerator.default.mark(function _callee2() {
+              return _regenerator.default.wrap(function _callee2$(_context2) {
+                while (1) {
+                  switch (_context2.prev = _context2.next) {
+                    case 0:
+                      _context2.next = 2;
+                      return filesService_1.default.update(this.context.settings.MyJsonId, this.state.files);
+
+                    case 2:
+                    case "end":
+                      return _context2.stop();
+                  }
+                }
+              }, _callee2, this);
+            }));
+          });
+
+          break;
+
+        case common_1.Constants.Events.ADD_XMLTV_URL:
+          fileItemEvent.file.selected = true;
+
+          _this.state.files.forEach(function (element) {
+            element.selected = false;
+          });
+
+          _this.setState(function (prevState) {
+            return {
+              files: [fileItemEvent.file].concat((0, _toConsumableArray2.default)(prevState.files))
+            };
+          }, function () {
+            return __awaiter((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)), void 0, void 0,
+            /*#__PURE__*/
+            _regenerator.default.mark(function _callee3() {
+              return _regenerator.default.wrap(function _callee3$(_context3) {
+                while (1) {
+                  switch (_context3.prev = _context3.next) {
+                    case 0:
+                      _context3.next = 2;
+                      return filesService_1.default.update(this.context.settings.MyJsonId, this.state.files);
+
+                    case 2:
+                    case "end":
+                      return _context3.stop();
+                  }
+                }
+              }, _callee3, this);
+            }));
+          });
+
+          break;
+      }
+
+      settingsService_1.SettingsService.save(_this.context.settings); //this.context.settings.onSettingsChanged()
+    };
+
+    _this.halfHourWidthChanged.bind((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)));
+
+    _this.onTzSelectChanged.bind((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)));
+
+    _this.onXmltvFilesChangeCallback.bind((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)));
+
+    return _this;
+  }
+
+  (0, _createClass2.default)(SettingsPage, [{
+    key: "render",
+    value: function render() {
+      var halfHourInput = React.createElement("div", {
+        className: "form-group"
+      }, React.createElement("label", {
+        htmlFor: "formControlRange"
+      }, "Half hour width"), React.createElement("input", {
+        className: "form-control-range",
+        type: "range",
+        min: "50",
+        max: "250",
+        step: "50",
+        defaultValue: this.context.settings.halfHourWidth,
+        onChange: this.halfHourWidthChanged
+      }));
+      var timeZone = React.createElement("div", {
+        className: "form-group"
+      }, React.createElement("label", {
+        htmlFor: "xmltv_list",
+        className: "col-form-label"
+      }, "Time zone"), React.createElement("select", {
+        className: "form-control",
+        id: "zone_lit",
+        onChange: this.onTzSelectChanged,
+        value: this.context.settings.tz
+      }, appContext_1.Zones.map(function (e, key) {
+        return React.createElement("option", {
+          key: key,
+          value: e
+        }, e);
+      })));
+      return React.createElement("div", null, React.createElement("h1", null, "Settings"), React.createElement("div", {
+        className: "container"
+      }, React.createElement("form", {
+        className: "form"
+      }, halfHourInput, timeZone), React.createElement(xmltvFiles_1.default, {
+        files: this.props.files,
+        onChangeCallback: this.onXmltvFilesChangeCallback
+      })));
+    }
+  }]);
+  return SettingsPage;
+}(React.PureComponent);
+
+SettingsPage.contextType = appContext_1.default;
+SettingsPage.defaultProps = {
+  files: []
+};
+exports.default = SettingsPage;
+},{"@babel/runtime-corejs2/helpers/toConsumableArray":"../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js","@babel/runtime-corejs2/regenerator":"../node_modules/@babel/runtime-corejs2/regenerator/index.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","@babel/runtime-corejs2/helpers/assertThisInitialized":"../node_modules/@babel/runtime-corejs2/helpers/assertThisInitialized.js","@babel/runtime-corejs2/core-js/promise":"../node_modules/@babel/runtime-corejs2/core-js/promise.js","react":"../node_modules/react/index.js","../xmltvFiles/xmltvFiles":"components/xmltvFiles/xmltvFiles.jsx","../appContext":"components/appContext.ts","../../js/common":"js/common.js","../settingsService":"components/settingsService.js","../../js/filesService":"js/filesService.js"}],"../node_modules/core-js/library/modules/_object-assign.js":[function(require,module,exports) {
+'use strict';
+// 19.1.2.1 Object.assign(target, source, ...)
+var getKeys = require('./_object-keys');
+var gOPS = require('./_object-gops');
+var pIE = require('./_object-pie');
+var toObject = require('./_to-object');
+var IObject = require('./_iobject');
+var $assign = Object.assign;
+
+// should work with symbols and should have deterministic property order (V8 bug)
+module.exports = !$assign || require('./_fails')(function () {
+  var A = {};
+  var B = {};
+  // eslint-disable-next-line no-undef
+  var S = Symbol();
+  var K = 'abcdefghijklmnopqrst';
+  A[S] = 7;
+  K.split('').forEach(function (k) { B[k] = k; });
+  return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
+}) ? function assign(target, source) { // eslint-disable-line no-unused-vars
+  var T = toObject(target);
+  var aLen = arguments.length;
+  var index = 1;
+  var getSymbols = gOPS.f;
+  var isEnum = pIE.f;
+  while (aLen > index) {
+    var S = IObject(arguments[index++]);
+    var keys = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S);
+    var length = keys.length;
+    var j = 0;
+    var key;
+    while (length > j) if (isEnum.call(S, key = keys[j++])) T[key] = S[key];
+  } return T;
+} : $assign;
+
+},{"./_object-keys":"../node_modules/core-js/library/modules/_object-keys.js","./_object-gops":"../node_modules/core-js/library/modules/_object-gops.js","./_object-pie":"../node_modules/core-js/library/modules/_object-pie.js","./_to-object":"../node_modules/core-js/library/modules/_to-object.js","./_iobject":"../node_modules/core-js/library/modules/_iobject.js","./_fails":"../node_modules/core-js/library/modules/_fails.js"}],"../node_modules/core-js/library/modules/es6.object.assign.js":[function(require,module,exports) {
+// 19.1.3.1 Object.assign(target, source)
+var $export = require('./_export');
+
+$export($export.S + $export.F, 'Object', { assign: require('./_object-assign') });
+
+},{"./_export":"../node_modules/core-js/library/modules/_export.js","./_object-assign":"../node_modules/core-js/library/modules/_object-assign.js"}],"../node_modules/core-js/library/fn/object/assign.js":[function(require,module,exports) {
+require('../../modules/es6.object.assign');
+module.exports = require('../../modules/_core').Object.assign;
+
+},{"../../modules/es6.object.assign":"../node_modules/core-js/library/modules/es6.object.assign.js","../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/object/assign.js":[function(require,module,exports) {
+module.exports = require("core-js/library/fn/object/assign");
+},{"core-js/library/fn/object/assign":"../node_modules/core-js/library/fn/object/assign.js"}],"../node_modules/@babel/runtime-corejs2/helpers/extends.js":[function(require,module,exports) {
+var _Object$assign = require("../core-js/object/assign");
+
+function _extends() {
+  module.exports = _extends = _Object$assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+module.exports = _extends;
+},{"../core-js/object/assign":"../node_modules/@babel/runtime-corejs2/core-js/object/assign.js"}],"../node_modules/fast-xml-parser/src/util.js":[function(require,module,exports) {
+"use strict";
+
+const getAllMatches = function(string, regex) {
+    const matches = [];
+    let match = regex.exec(string);
+    while (match) {
+        const allmatches = [];
+        const len = match.length;
+        for (let index = 0; index < len; index++) {
+            allmatches.push(match[index]);
+        }
+        matches.push(allmatches);
+        match = regex.exec(string);
+    }
+    return matches;
+};
+
+const doesMatch = function(string, regex) {
+    const match = regex.exec(string);
+    return !(match === null || typeof match === "undefined");
+};
+
+const doesNotMatch = function(string, regex) {
+    return !doesMatch(string, regex);
+};
+
+exports.isExist = function(v) {
+    return typeof v !== "undefined";
+};
+
+exports.isEmptyObject = function(obj) {
+    return Object.keys(obj).length === 0;
+};
+
+/**
+ * Copy all the properties of a into b.
+ * @param {*} target
+ * @param {*} a
+ */
+exports.merge = function(target, a) {
+    if (a) {
+        const keys = Object.keys(a); // will return an array of own properties
+        const len = keys.length; //don't make it inline
+        for (let i = 0; i < len; i++) {
+            target[keys[i]] = a[keys[i]];
+        }
+    }
+};
+/* exports.merge =function (b,a){
+  return Object.assign(b,a);
+} */
+
+exports.getValue = function(v) {
+    if (exports.isExist(v)) {
+        return v;
+    } else {
+        return "";
+    }
+};
+
+// const fakeCall = function(a) {return a;};
+// const fakeCallNoReturn = function() {};
+
+exports.buildOptions = function(options,defaultOptions,props) {
+    var newOptions = {};
+    if (!options) {
+        return defaultOptions; //if there are not options
+    }
+
+    for (let i = 0; i < props.length; i++) {
+        if ( options[props[i]] !== undefined) {
+            newOptions[props[i]] = options[props[i]];
+        }else{
+            newOptions[props[i]] = defaultOptions[props[i]];
+        }
+    }
+    return newOptions;
+};
+
+exports.doesMatch = doesMatch;
+exports.doesNotMatch = doesNotMatch;
+exports.getAllMatches = getAllMatches;
+
+},{}],"../node_modules/fast-xml-parser/src/node2json.js":[function(require,module,exports) {
+"use strict";
+
+const util = require("./util");
+
+const convertToJson =function(node, options) {
+    const jObj = {};
+
+    //when no child node or attr is present
+    if ((!node.child  ||  util.isEmptyObject(node.child)) && (!node.attrsMap || util.isEmptyObject(node.attrsMap))) {
+        return util.isExist(node.val) ? node.val : "";
+    } else { //otherwise create a textnode if node has some text
+        if (util.isExist(node.val)) {
+            if (!(typeof node.val === "string" && (node.val === "" || node.val === options.cdataPositionChar))) {
+                jObj[options.textNodeName] = node.val;
+            }
+        }
+    }
+
+    util.merge(jObj, node.attrsMap);
+
+    const keys = Object.keys(node.child);
+    for (let index = 0; index < keys.length; index++) {
+        var tagname = keys[index];
+        if (node.child[tagname] && node.child[tagname].length > 1) {
+            jObj[tagname] = [];
+            for (var tag in node.child[tagname]) {
+                jObj[tagname].push( convertToJson(node.child[tagname][tag], options) );
+            }
+        } else {
+            jObj[tagname] = convertToJson(node.child[tagname][0], options);
+        }
+    }
+    
+    //add value
+    return jObj;
+};
+
+exports.convertToJson = convertToJson;
+},{"./util":"../node_modules/fast-xml-parser/src/util.js"}],"../node_modules/fast-xml-parser/src/xmlNode.js":[function(require,module,exports) {
+"use strict";
+
+module.exports = function(tagname, parent, val) {
+    this.tagname = tagname;
+    this.parent = parent;
+    this.child = {};//child tags
+    this.attrsMap = {};//attributes map
+    this.val = val;//text only
+    this.addChild = function(child) {
+        if (this.child[child.tagname]) {//already presents
+            this.child[child.tagname].push(child);
+        } else {
+            this.child[child.tagname] = [child];
+        }
+    };
+};
+
+},{}],"../node_modules/fast-xml-parser/src/xmlstr2xmlnode.js":[function(require,module,exports) {
+"use strict";
+
+const util = require("./util");
+const buildOptions = require("./util").buildOptions;
+const xmlNode = require("./xmlNode");
+const TagType = {"OPENING": 1, "CLOSING": 2, "SELF": 3, "CDATA": 4};
+let regx = "<((!\\[CDATA\\[([\\s\\S]*?)(]]>))|(([\\w:\\-._]*:)?([\\w:\\-._]+))([^>]*)>|((\\/)(([\\w:\\-._]*:)?([\\w:\\-._]+))\\s*>))([^<]*)";
+
+//const tagsRegx = new RegExp("<(\\/?[\\w:\\-\._]+)([^>]*)>(\\s*"+cdataRegx+")*([^<]+)?","g");
+//const tagsRegx = new RegExp("<(\\/?)((\\w*:)?([\\w:\\-\._]+))([^>]*)>([^<]*)("+cdataRegx+"([^<]*))*([^<]+)?","g");
+
+//treat cdata as a tag
+
+const defaultOptions = {
+    attributeNamePrefix:    "@_",
+    attrNodeName:           false,
+    textNodeName:           "#text",
+    ignoreAttributes:       true,
+    ignoreNameSpace:        false,
+    allowBooleanAttributes: false,         //a tag can have attributes without any value
+    //ignoreRootElement : false,
+    parseNodeValue:         true,
+    parseAttributeValue:    false,
+    arrayMode:              false,
+    trimValues:             true,                                //Trim string values of tag and attributes
+    cdataTagName:           false,
+    cdataPositionChar:      "\\c",
+    localeRange:            "",
+    tagValueProcessor: function(a) {return a},
+    attrValueProcessor: function(a) {return a}
+    //decodeStrict: false,
+};
+
+exports.defaultOptions = defaultOptions;
+
+const props = ["attributeNamePrefix", "attrNodeName", "textNodeName", "ignoreAttributes", "ignoreNameSpace", "allowBooleanAttributes", "parseNodeValue", "parseAttributeValue", "arrayMode", "trimValues", "cdataTagName", "cdataPositionChar", "localeRange", "tagValueProcessor", "attrValueProcessor", "parseTrueNumberOnly"];
+exports.props = props;
+
+const getTraversalObj = function(xmlData, options) {
+    options = buildOptions(options,defaultOptions,props);
+    //xmlData = xmlData.replace(/\r?\n/g, " ");//make it single line
+    xmlData = xmlData.replace(/<!--[\s\S]*?-->/g, "");//Remove  comments
+
+    const xmlObj = new xmlNode("!xml");
+    let currentNode = xmlObj;
+
+    regx = regx.replace(/\[\\w/g, "[" + options.localeRange + "\\w");
+    const tagsRegx = new RegExp(regx, "g");
+    let tag = tagsRegx.exec(xmlData);
+    let nextTag = tagsRegx.exec(xmlData);
+    while (tag) {
+        const tagType = checkForTagType(tag);
+
+        if (tagType === TagType.CLOSING) {
+            //add parsed data to parent node
+            if (currentNode.parent && tag[14]) {
+                currentNode.parent.val = util.getValue(currentNode.parent.val) + "" + processTagValue(tag[14], options);
+            }
+
+            currentNode = currentNode.parent;
+        } else if (tagType === TagType.CDATA) {
+            if (options.cdataTagName) {
+                //add cdata node
+                const childNode = new xmlNode(options.cdataTagName, currentNode, tag[3]);
+                childNode.attrsMap = buildAttributesMap(tag[8], options);
+                currentNode.addChild(childNode);
+                //for backtracking
+                currentNode.val = util.getValue(currentNode.val) + options.cdataPositionChar;
+                //add rest value to parent node
+                if (tag[14]) {
+                    currentNode.val += processTagValue(tag[14], options);
+                }
+            } else {
+                currentNode.val = (currentNode.val || "") + (tag[3] || "") + processTagValue(tag[14], options);
+            }
+        } else if (tagType === TagType.SELF) {
+            if (currentNode && tag[14]) {
+                currentNode.val = util.getValue(currentNode.val) + "" + processTagValue(tag[14], options);
+            }
+
+            const childNode = new xmlNode(options.ignoreNameSpace ? tag[7] : tag[5], currentNode, "");
+            if (tag[8] && tag[8].length > 1) {
+                tag[8] = tag[8].substr(0, tag[8].length - 1);
+            }
+            childNode.attrsMap = buildAttributesMap(tag[8], options);
+            currentNode.addChild(childNode);
+        } else {//TagType.OPENING
+            const childNode = new xmlNode(options.ignoreNameSpace ? tag[7] : tag[5], currentNode, processTagValue(tag[14], options));
+            childNode.attrsMap = buildAttributesMap(tag[8], options);
+            currentNode.addChild(childNode);
+            currentNode = childNode;
+        }
+
+        tag = nextTag;
+        nextTag = tagsRegx.exec(xmlData);
+    }
+
+    return xmlObj;
+};
+
+function processTagValue(val, options) {
+    if (val) {
+        if (options.trimValues) {
+            val = val.trim();
+        }
+        val = options.tagValueProcessor(val);
+        val = parseValue(val, options.parseNodeValue, options.parseTrueNumberOnly);
+    }
+
+    return val;
+}
+
+function checkForTagType(match) {
+    if (match[4] === "]]>") {
+        return TagType.CDATA;
+    } else if (match[10] === "/") {
+        return TagType.CLOSING;
+    } else if (typeof match[8] !== "undefined" && match[8].substr(match[8].length - 1) === "/") {
+        return TagType.SELF;
+    } else {
+        return TagType.OPENING;
+    }
+}
+
+function resolveNameSpace(tagname, options) {
+    if (options.ignoreNameSpace) {
+        const tags = tagname.split(":");
+        const prefix = tagname.charAt(0) === "/" ? "/" : "";
+        if (tags[0] === "xmlns") {
+            return "";
+        }
+        if (tags.length === 2) {
+            tagname = prefix + tags[1];
+        }
+    }
+    return tagname;
+}
+
+function parseValue(val, shouldParse, parseTrueNumberOnly) {
+    if (shouldParse && typeof val === "string") {
+        let parsed;
+        if (val.trim() === "" || isNaN(val)) {
+            parsed = val === "true" ? true : val === "false" ? false : val;
+        } else {
+            if(val.indexOf("0x") !== -1){//support hexa decimal
+                parsed = Number.parseInt(val,16);
+            } else if (val.indexOf(".") !== -1) {
+                parsed = Number.parseFloat(val);
+            } else {
+                parsed = Number.parseInt(val, 10);
+            }
+            if(parseTrueNumberOnly){
+                parsed = String(parsed) === val ? parsed : val;
+                
+            }
+        }
+        return parsed;
+    } else {
+        if (util.isExist(val)) {
+            return val;
+        } else {
+            return "";
+        }
+    }
+}
+
+//TODO: change regex to capture NS
+//const attrsRegx = new RegExp("([\\w\\-\\.\\:]+)\\s*=\\s*(['\"])((.|\n)*?)\\2","gm");
+const attrsRegx = new RegExp("([^\\s=]+)\\s*(=\\s*(['\"])(.*?)\\3)?", "g");
+
+function buildAttributesMap(attrStr, options) {
+    if (!options.ignoreAttributes && typeof attrStr === "string") {
+        attrStr = attrStr.replace(/\r?\n/g, " ");
+        //attrStr = attrStr || attrStr.trim();
+
+        const matches = util.getAllMatches(attrStr, attrsRegx);
+        const len = matches.length; //don't make it inline
+        const attrs = {};
+        for (let i = 0; i < len; i++) {
+            const attrName = resolveNameSpace(matches[i][1], options);
+            if (attrName.length) {
+                if (matches[i][4] !== undefined) {
+                    if (options.trimValues) {
+                        matches[i][4] = matches[i][4].trim();
+                    }
+                    matches[i][4] = options.attrValueProcessor(matches[i][4]);
+                    attrs[options.attributeNamePrefix + attrName] = parseValue(matches[i][4], options.parseAttributeValue, options.parseTrueNumberOnly);
+                } else if (options.allowBooleanAttributes) {
+                    attrs[options.attributeNamePrefix + attrName] = true;
+                }
+
+            }
+        }
+        if (!Object.keys(attrs).length) {
+            return;
+        }
+        if (options.attrNodeName) {
+            const attrCollection = {};
+            attrCollection[options.attrNodeName] = attrs;
+            return attrCollection;
+        }
+        return attrs;
+    }
+}
+
+exports.getTraversalObj = getTraversalObj;
+
+},{"./util":"../node_modules/fast-xml-parser/src/util.js","./xmlNode":"../node_modules/fast-xml-parser/src/xmlNode.js"}],"../node_modules/fast-xml-parser/src/nimndata.js":[function(require,module,exports) {
+"use strict";
+const char = function(a) {
+    return String.fromCharCode(a);
+};
+
+const chars = {
+    nilChar : char(176),
+    missingChar : char(201),
+    nilPremitive : char(175),
+    missingPremitive : char(200),
+
+    emptyChar : char(178),
+    emptyValue:  char(177),//empty Premitive
+    
+    boundryChar : char(179),
+    
+    objStart: char(198),
+    arrStart: char(204),
+    arrayEnd: char(185),
+};
+
+const charsArr = [
+    chars.nilChar,
+    chars.nilPremitive,
+    chars.missingChar,
+    chars.missingPremitive,
+    chars.boundryChar,
+    chars.emptyChar,
+    chars.emptyValue,
+    chars.arrayEnd,
+    chars.objStart,
+    chars.arrStart
+];
+
+const _e = function(node, e_schema, options) {
+    if (typeof e_schema === "string") {//premitive
+        if (node && node[0] && node[0].val !== undefined) {
+            return getValue(node[0].val, e_schema);
+        } else {
+            return getValue(node, e_schema);
+        }
+    } else {
+        const hasValidData = hasData(node);
+        if (hasValidData === true) {
+            let str = "";
+            if (Array.isArray(e_schema)) {
+                //attributes can't be repeated. hence check in children tags only
+                str += chars.arrStart;
+                const itemSchema = e_schema[0];
+                //var itemSchemaType = itemSchema;
+                const arr_len = node.length;
+
+                if (typeof itemSchema === "string") {
+                    for (let arr_i = 0; arr_i < arr_len; arr_i++) {
+                        const r = getValue(node[arr_i].val, itemSchema);
+                        str = processValue(str, r);
+                    }
+                } else {
+                    for (let arr_i = 0; arr_i < arr_len; arr_i++) {
+                        const r = _e(node[arr_i], itemSchema, options);
+                        str = processValue(str, r);
+                    }
+                }
+                str += chars.arrayEnd;//indicates that next item is not array item
+            } else {//object
+                str += chars.objStart;
+                const keys = Object.keys(e_schema);
+                if (Array.isArray(node)) {
+                    node = node[0];
+                }
+                for (let i in keys) {
+                    const key = keys[i];
+                    //a property defined in schema can be present either in attrsMap or children tags
+                    //options.textNodeName will not present in both maps, take it's value from val
+                    //options.attrNodeName will be present in attrsMap
+                    let r;
+                    if (!options.ignoreAttributes && node.attrsMap && node.attrsMap[key]) {
+                        r = _e(node.attrsMap[key], e_schema[key], options);
+                    } else if (key === options.textNodeName) {
+                        r = _e(node.val, e_schema[key], options);
+                    } else {
+                        r = _e(node.child[key], e_schema[key], options);
+                    }
+                    str = processValue(str, r);
+                }
+            }
+            return str;
+        } else {
+            return hasValidData;
+        }
+    }
+};
+
+const getValue = function(a/*, type*/) {
+    switch (a) {
+        case undefined:
+            return chars.missingPremitive;
+        case null:
+            return chars.nilPremitive;
+        case "":
+            return chars.emptyValue;
+        default:
+            return a;
+    }
+};
+
+const processValue = function(str, r) {
+    if (!isAppChar(r[0]) && !isAppChar(str[str.length - 1])) {
+        str += chars.boundryChar;
+    }
+    return str + r;
+};
+
+const isAppChar = function(ch) {
+    return charsArr.indexOf(ch) !== -1;
+};
+
+function hasData(jObj) {
+    if (jObj === undefined) {
+        return chars.missingChar;
+    } else if (jObj === null) {
+        return chars.nilChar;
+    } else if (jObj.child && Object.keys(jObj.child).length === 0 && (!jObj.attrsMap || Object.keys(jObj.attrsMap).length === 0)) {
+        return chars.emptyChar;
+    } else {
+        return true;
+    }
+}
+
+const x2j = require("./xmlstr2xmlnode");
+const buildOptions = require("./util").buildOptions;
+
+const convert2nimn = function(node, e_schema, options) {
+    options = buildOptions(options,x2j.defaultOptions,x2j.props);
+    return _e(node, e_schema, options);
+};
+
+exports.convert2nimn = convert2nimn;
+
+},{"./xmlstr2xmlnode":"../node_modules/fast-xml-parser/src/xmlstr2xmlnode.js","./util":"../node_modules/fast-xml-parser/src/util.js"}],"../node_modules/fast-xml-parser/src/node2json_str.js":[function(require,module,exports) {
+"use strict";
+
+const util = require("./util");
+const buildOptions = require("./util").buildOptions;
+const x2j = require("./xmlstr2xmlnode");
+
+//TODO: do it later
+const convertToJsonString = function(node, options) {
+    options = buildOptions(options,x2j.defaultOptions,x2j.props);
+
+    options.indentBy = options.indentBy || "";
+    return _cToJsonStr(node, options,0);
+}
+
+const _cToJsonStr = function(node, options,level) {
+    let jObj = "{";
+
+    //traver through all the children
+    const keys = Object.keys(node.child);
+    
+    for (let index = 0; index < keys.length; index++) {
+        var tagname = keys[index];
+        if (node.child[tagname] && node.child[tagname].length > 1) {
+            jObj  += "\"" + tagname + "\" : [ ";
+            for (var tag in node.child[tagname]) {
+                jObj += _cToJsonStr(node.child[tagname][tag], options) + " , ";
+            }
+            jObj = jObj.substr(0,jObj.length-1) + " ] "; //remove extra comma in last
+        } else {
+            jObj += "\"" +tagname + "\" : " + _cToJsonStr(node.child[tagname][0], options) + " ,";
+        }
+    }
+    util.merge(jObj, node.attrsMap);
+    //add attrsMap as new children
+    if (util.isEmptyObject(jObj)) {
+        return util.isExist(node.val) ? node.val : "";
+    } else {
+        if (util.isExist(node.val)) {
+            if (!(typeof node.val === "string" && (node.val === "" || node.val === options.cdataPositionChar))) {
+                jObj += "\"" + options.textNodeName +"\" : " + stringval(node.val);
+            }
+        }
+    }
+    //add value
+    if(jObj[jObj.length-1] === ","){
+        jObj = jObj.substr(0,jObj.length-2);
+    }
+    return jObj + "}";
+};
+
+function stringval(v){
+    if(v === true || v === false || !isNaN(v)){
+        return v;
+    }else{
+        return "\"" + v + "\"";
+    }
+}
+
+function indentate(options, level) {
+    return options.indentBy.repeat(level);
+}
+
+exports.convertToJsonString = convertToJsonString;
+},{"./util":"../node_modules/fast-xml-parser/src/util.js","./xmlstr2xmlnode":"../node_modules/fast-xml-parser/src/xmlstr2xmlnode.js"}],"../node_modules/fast-xml-parser/src/validator.js":[function(require,module,exports) {
+"use strict";
+
+const util = require("./util");
+
+const defaultOptions = {
+    allowBooleanAttributes: false,         //A tag can have attributes without any value
+    localeRange:  "a-zA-Z"
+};
+
+const props = ["allowBooleanAttributes", "localeRange"];
+
+//const tagsPattern = new RegExp("<\\/?([\\w:\\-_\.]+)\\s*\/?>","g");
+exports.validate = function(xmlData, options) {
+    options = util.buildOptions(options,defaultOptions,props);
+
+    //xmlData = xmlData.replace(/(\r\n|\n|\r)/gm,"");//make it single line
+    //xmlData = xmlData.replace(/(^\s*<\?xml.*?\?>)/g,"");//Remove XML starting tag
+    //xmlData = xmlData.replace(/(<!DOCTYPE[\s\w\"\.\/\-\:]+(\[.*\])*\s*>)/g,"");//Remove DOCTYPE
+
+    const tags = [];
+    let tagFound = false;
+    if (xmlData[0] === "\ufeff") {  // check for byte order mark (BOM)
+      xmlData = xmlData.substr(1);
+    }
+    const regxAttrName = new RegExp("^[_w][\\w\\-.:]*$".replace("_w", "_" + options.localeRange));
+    const regxTagName = new RegExp("^([w]|_)[\\w.\\-_:]*".replace("([w", "([" + options.localeRange));
+    for (let i = 0; i < xmlData.length; i++) {
+
+        if (xmlData[i] === "<") { //starting of tag
+            //read until you reach to '>' avoiding any '>' in attribute value
+
+            i++;
+            if (xmlData[i] === "?") {
+                i = readPI(xmlData, ++i);
+                if (i.err) {
+                    return i;
+                }
+            } else if (xmlData[i] === "!") {
+                i = readCommentAndCDATA(xmlData, i);
+                continue;
+            } else {
+                let closingTag = false;
+                if (xmlData[i] === "/") {//closing tag
+                    closingTag = true;
+                    i++;
+                }
+                //read tagname
+                let tagName = "";
+                for (; i < xmlData.length &&
+                       xmlData[i] !== ">" &&
+                       xmlData[i] !== " " &&
+                       xmlData[i] !== "\t"; i++) {
+
+                    tagName += xmlData[i];
+                }
+                tagName = tagName.trim();
+                //console.log(tagName);
+
+                if (tagName[tagName.length - 1] === "/") {//self closing tag without attributes
+                    tagName = tagName.substring(0, tagName.length - 1);
+                    continue;
+                }
+                if (!validateTagName(tagName, regxTagName)) {
+                    return {err: {code: "InvalidTag", msg: "Tag " + tagName + " is an invalid name."}};
+                }
+
+                const result = readAttributeStr(xmlData, i);
+                if (result === false) {
+                    return {err: {code: "InvalidAttr", msg: "Attributes for " + tagName + " have open quote"}};
+                }
+                let attrStr = result.value;
+                i = result.index;
+
+                if (attrStr[attrStr.length - 1] === "/") {//self closing tag
+                    attrStr = attrStr.substring(0, attrStr.length - 1);
+                    const isValid = validateAttributeString(attrStr, options, regxAttrName);
+                    if (isValid === true) {
+                        tagFound = true;
+                        //continue; //text may presents after self closing tag
+                    } else {
+                        return isValid;
+                    }
+                } else if (closingTag) {
+                    if (attrStr.trim().length > 0) {
+                        return {err: {code: "InvalidTag", msg: "closing tag " + tagName + " can't have attributes or invalid starting."}};
+                    } else {
+                        const otg = tags.pop();
+                        if (tagName !== otg) {
+                            return {err: {code: "InvalidTag", msg: "closing tag " + otg + " is expected inplace of " + tagName + "."}};
+                        }
+                    }
+                } else {
+                    const isValid = validateAttributeString(attrStr, options, regxAttrName);
+                    if (isValid !== true) {
+                        return isValid;
+                    }
+                    tags.push(tagName);
+                    tagFound = true;
+                }
+
+                //skip tag text value
+                //It may include comments and CDATA value
+                for (i++; i < xmlData.length; i++) {
+                    if (xmlData[i] === "<") {
+                        if (xmlData[i + 1] === "!") {//comment or CADATA
+                            i++;
+                            i = readCommentAndCDATA(xmlData, i);
+                            continue;
+                        } else {
+                            break;
+                        }
+                    }
+                }//end of reading tag text value
+                if (xmlData[i] === "<") {
+                    i--;
+                }
+            }
+        } else {
+            if (xmlData[i] === " " || xmlData[i] === "\t" || xmlData[i] === "\n" || xmlData[i] === "\r") {
+                continue;
+            }
+            return {err: {code: "InvalidChar", msg: "char " + xmlData[i] + " is not expected ."}};
+        }
+    }
+
+    if (!tagFound) {
+        return {err: {code: "InvalidXml", msg: "Start tag expected."}};
+    } else if (tags.length > 0) {
+        return {err: {code: "InvalidXml", msg: "Invalid " + JSON.stringify(tags, null, 4).replace(/\r?\n/g, "") + " found."}};
+    }
+
+    return true;
+};
+
+/**
+ * Read Processing insstructions and skip
+ * @param {*} xmlData
+ * @param {*} i
+ */
+function readPI(xmlData, i) {
+    var start = i;
+    for (; i < xmlData.length; i++) {
+        if (xmlData[i] == "?" || xmlData[i] == " ") {//tagname
+            var tagname = xmlData.substr(start, i - start);
+            if (i > 5 && tagname === "xml") {
+                return {err: {code: "InvalidXml", msg: "XML declaration allowed only at the start of the document."}};
+            } else if (xmlData[i] == "?" && xmlData[i + 1] == ">") {
+                //check if valid attribut string
+                i++;
+                break;
+            } else {
+                continue;
+            }
+        }
+    }
+    return i;
+}
+
+function readCommentAndCDATA(xmlData, i) {
+    if (xmlData.length > i + 5 && xmlData[i + 1] === "-" && xmlData[i + 2] === "-") {//comment
+        for (i += 3; i < xmlData.length; i++) {
+            if (xmlData[i] === "-" && xmlData[i + 1] === "-" && xmlData[i + 2] === ">") {
+                i += 2;
+                break;
+            }
+        }
+    } else if (xmlData.length > i + 8 &&
+               xmlData[i + 1] === "D" &&
+               xmlData[i + 2] === "O" &&
+               xmlData[i + 3] === "C" &&
+               xmlData[i + 4] === "T" &&
+               xmlData[i + 5] === "Y" &&
+               xmlData[i + 6] === "P" &&
+               xmlData[i + 7] === "E") {
+        let angleBracketsCount = 1;
+        for (i += 8; i < xmlData.length; i++) {
+            if (xmlData[i] === "<") {angleBracketsCount++;}
+            else if (xmlData[i] === ">") {
+                angleBracketsCount--;
+                if (angleBracketsCount === 0) {
+                    break;
+                }
+            }
+        }
+    } else if (xmlData.length > i + 9 &&
+               xmlData[i + 1] === "[" &&
+               xmlData[i + 2] === "C" &&
+               xmlData[i + 3] === "D" &&
+               xmlData[i + 4] === "A" &&
+               xmlData[i + 5] === "T" &&
+               xmlData[i + 6] === "A" &&
+               xmlData[i + 7] === "[") {
+
+        for (i += 8; i < xmlData.length; i++) {
+            if (xmlData[i] === "]" && xmlData[i + 1] === "]" && xmlData[i + 2] === ">") {
+                i += 2;
+                break;
+            }
+        }
+    }
+
+    return i;
+}
+
+var doubleQuote = "\"";
+var singleQuote = "'";
+
+/**
+ * Keep reading xmlData until '<' is found outside the attribute value.
+ * @param {string} xmlData
+ * @param {number} i
+ */
+function readAttributeStr(xmlData, i) {
+    let attrStr = "";
+    let startChar = "";
+    for (; i < xmlData.length; i++) {
+        if (xmlData[i] === doubleQuote || xmlData[i] === singleQuote) {
+            if (startChar === "") {
+                startChar = xmlData[i];
+            } else if (startChar !== xmlData[i]) {
+                //if vaue is enclosed with double quote then single quotes are allowed inside the value and vice versa
+                continue;
+            } else {
+                startChar = "";
+            }
+        } else if (xmlData[i] === ">") {
+            if (startChar === "") {
+                break;
+            }
+        }
+        attrStr += xmlData[i];
+    }
+    if (startChar !== "") {
+        return false;
+    }
+
+    return {value: attrStr, index: i};
+}
+
+/**
+ * Select all the attributes whether valid or invalid.
+ */
+const validAttrStrRegxp = new RegExp("(\\s*)([^\\s=]+)(\\s*=)?(\\s*(['\"])(([\\s\\S])*?)\\5)?", "g");
+
+//attr, ="sd", a="amit's", a="sd"b="saf", ab  cd=""
+
+function validateAttributeString(attrStr, options, regxAttrName) {
+    //console.log("start:"+attrStr+":end");
+
+    //if(attrStr.trim().length === 0) return true; //empty string
+
+    const matches = util.getAllMatches(attrStr, validAttrStrRegxp);
+    const attrNames = [];
+
+    for (let i = 0; i < matches.length; i++) {
+        //console.log(matches[i]);
+
+        if (matches[i][1].length === 0) {//nospace before attribute name: a="sd"b="saf"
+            return {err: {code: "InvalidAttr", msg: "attribute " + matches[i][2] + " has no space in starting."}};
+        } else if (matches[i][3] === undefined && !options.allowBooleanAttributes) {//independent attribute: ab
+            return {err: {code: "InvalidAttr", msg: "boolean attribute " + matches[i][2] + " is not allowed."}};
+        }
+        /* else if(matches[i][6] === undefined){//attribute without value: ab=
+                    return { err: { code:"InvalidAttr",msg:"attribute " + matches[i][2] + " has no value assigned."}};
+                } */
+        const attrName = matches[i][2];
+        if (!validateAttrName(attrName, regxAttrName)) {
+            return {err: {code: "InvalidAttr", msg: "attribute " + attrName + " is an invalid name."}};
+        }
+        if (!attrNames.hasOwnProperty(attrName)) {//check for duplicate attribute.
+            attrNames[attrName] = 1;
+        } else {
+            return {err: {code: "InvalidAttr", msg: "attribute " + attrName + " is repeated."}};
+        }
+    }
+
+    return true;
+
+}
+
+// const validAttrRegxp = /^[_a-zA-Z][\w\-.:]*$/;
+
+function validateAttrName(attrName, regxAttrName) {
+    // const validAttrRegxp = new RegExp(regxAttrName);
+    return util.doesMatch(attrName, regxAttrName);
+}
+
+//const startsWithXML = new RegExp("^[Xx][Mm][Ll]");
+//  startsWith = /^([a-zA-Z]|_)[\w.\-_:]*/;
+
+function validateTagName(tagname, regxTagName) {
+    /*if(util.doesMatch(tagname,startsWithXML)) return false;
+    else*/
+    return !util.doesNotMatch(tagname, regxTagName);
+}
+
+},{"./util":"../node_modules/fast-xml-parser/src/util.js"}],"../node_modules/fast-xml-parser/src/json2xml.js":[function(require,module,exports) {
+"use strict";
+//parse Empty Node as self closing node
+const buildOptions = require("./util").buildOptions;
+
+const defaultOptions = {
+    attributeNamePrefix: "@_",
+    attrNodeName: false,
+    textNodeName: "#text",
+    ignoreAttributes: true,
+    cdataTagName: false,
+    cdataPositionChar: "\\c",
+    format: false,
+    indentBy: "  ",
+    supressEmptyNode: false,
+    tagValueProcessor: function(a) {return a},
+    attrValueProcessor: function(a) {return a}
+};
+
+const props = [
+    "attributeNamePrefix",
+    "attrNodeName",
+    "textNodeName",
+    "ignoreAttributes",
+    "cdataTagName",
+    "cdataPositionChar",
+    "format",
+    "indentBy",
+    "supressEmptyNode",
+    "tagValueProcessor",
+    "attrValueProcessor"
+]
+
+function Parser(options) {
+    this.options = buildOptions(options,defaultOptions,props);
+    if (this.options.ignoreAttributes || this.options.attrNodeName) {
+        this.isAttribute = function(/*a*/) { return false;};
+    } else {
+        this.attrPrefixLen = this.options.attributeNamePrefix.length;
+        this.isAttribute = isAttribute;
+    }
+    if (this.options.cdataTagName) {
+        this.isCDATA = isCDATA;
+    } else {
+        this.isCDATA = function(/*a*/) { return false;};
+    }
+    this.replaceCDATAstr = replaceCDATAstr;
+    this.replaceCDATAarr = replaceCDATAarr;
+
+    if (this.options.format) {
+        this.indentate = indentate;
+        this.tagEndChar = ">\n";
+        this.newLine = "\n";
+    } else {
+        this.indentate = function() { return "";};
+        this.tagEndChar = ">";
+        this.newLine = "";
+    }
+
+    if (this.options.supressEmptyNode) {
+        this.buildTextNode = buildEmptyTextNode;
+        this.buildObjNode = buildEmptyObjNode;
+    } else {
+        this.buildTextNode = buildTextValNode;
+        this.buildObjNode = buildObjectNode;
+    }
+
+    this.buildTextValNode = buildTextValNode;
+    this.buildObjectNode = buildObjectNode;
+
+}
+
+Parser.prototype.parse = function(jObj) {
+    return this.j2x(jObj, 0).val;
+};
+
+Parser.prototype.j2x = function(jObj, level) {
+    let attrStr = "";
+    let val = "";
+    const keys = Object.keys(jObj);
+    const len = keys.length;
+    for (let i = 0; i < len; i++) {
+        const key = keys[i];
+        if (typeof jObj[key] === "undefined") {
+            // supress undefined node
+        }else if (jObj[key] === null) {
+            val += this.indentate(level) + "<" + key + "/" + this.tagEndChar;
+        }else if (typeof jObj[key] !== "object") {//premitive type
+            const attr = this.isAttribute(key);
+            if (attr) {
+                attrStr += " " + attr + "=\"" +  this.options.attrValueProcessor("" + jObj[key]) + "\"";
+            } else if (this.isCDATA(key)) {
+                if (jObj[this.options.textNodeName]) {
+                    val += this.replaceCDATAstr(jObj[this.options.textNodeName], jObj[key]);
+                } else {
+                    val += this.replaceCDATAstr("", jObj[key]);
+                }
+            } else {//tag value
+                if (key === this.options.textNodeName) {
+                    if (jObj[this.options.cdataTagName]) {
+                        //value will added while processing cdata
+                    } else {
+                        val +=  this.options.tagValueProcessor("" + jObj[key]);
+                    }
+                } else {
+                    val += this.buildTextNode(jObj[key], key, "", level);
+                }
+            }
+        } else if (Array.isArray(jObj[key])) {//repeated nodes
+            if (this.isCDATA(key)) {
+              val += this.indentate(level)
+                if (jObj[this.options.textNodeName]) {
+                  val += this.replaceCDATAarr(jObj[this.options.textNodeName], jObj[key]);
+                } else {
+                  val += this.replaceCDATAarr("", jObj[key]);
+                }
+            } else {//nested nodes
+                const arrLen = jObj[key].length;
+                for (let j = 0; j < arrLen; j++) {
+                    const item = jObj[key][j];
+                    if (typeof item === "undefined") {
+                        // supress undefined node
+                    }else if(item === null){
+                        val += this.indentate(level) + "<" + key + "/" + this.tagEndChar;
+                    }else if (typeof item === "object") {
+                        const result = this.j2x(item, level + 1);
+                        val += this.buildObjNode(result.val, key, result.attrStr, level);
+                    } else {
+                        val += this.buildTextNode(item, key, "", level);
+                    }
+                }
+            }
+        } else {//nested node
+            if (this.options.attrNodeName && key === this.options.attrNodeName) {
+                const Ks = Object.keys(jObj[key]);
+                const L = Ks.length;
+                for (let j = 0; j < L; j++) {
+                    attrStr += " " + Ks[j] + "=\"" + this.options.tagValueProcessor("" + jObj[key][Ks[j]]) + "\"";
+                }
+            } else {
+                const result = this.j2x(jObj[key], level + 1);
+                val += this.buildObjNode(result.val, key, result.attrStr, level);
+            }
+        }
+    }
+    return {attrStr: attrStr, val: val};
+};
+
+function replaceCDATAstr(str, cdata) {
+    str = this.options.tagValueProcessor("" + str);
+    if (this.options.cdataPositionChar === "" || str === "") {
+        return str + "<![CDATA[" + cdata + "]]" + this.tagEndChar;
+    } else {
+        return str.replace(this.options.cdataPositionChar, "<![CDATA[" + cdata + "]]" + this.tagEndChar);
+    }
+}
+
+function replaceCDATAarr(str, cdata) {
+    str = this.options.tagValueProcessor("" + str);
+    if (this.options.cdataPositionChar === "" || str === "") {
+        return str + "<![CDATA[" + cdata.join("]]><![CDATA[") + "]]" + this.tagEndChar;
+    } else {
+        for (let v in cdata) {
+            str = str.replace(this.options.cdataPositionChar, "<![CDATA[" + cdata[v] + "]]>");
+        }
+        return str + this.newLine;
+    }
+}
+
+function buildObjectNode(val, key, attrStr, level) {
+  if (attrStr && !val.includes('<')) {
+    return this.indentate(level)
+          + "<" + key + attrStr
+          + ">"
+          + val
+          //+ this.newLine
+          // + this.indentate(level)
+          + "</" + key + this.tagEndChar;
+  } else {
+    return this.indentate(level)
+          + "<" + key + attrStr
+          + this.tagEndChar
+          + val
+          //+ this.newLine
+          + this.indentate(level)
+          + "</" + key + this.tagEndChar;
+  }
+}
+
+function buildEmptyObjNode(val, key, attrStr, level) {
+    if (val !== "") {
+        return this.buildObjectNode(val, key, attrStr, level);
+    } else {
+        return this.indentate(level)
+               + "<" + key + attrStr
+               + "/"
+               + this.tagEndChar;
+        //+ this.newLine
+    }
+}
+
+function buildTextValNode(val, key, attrStr, level) {
+    return this.indentate(level) + "<" + key + attrStr + ">" + this.options.tagValueProcessor("" + val) + "</" + key + this.tagEndChar;
+}
+
+function buildEmptyTextNode(val, key, attrStr, level) {
+    if (val !== "") {
+        return this.buildTextValNode(val, key, attrStr, level);
+    } else {
+        return this.indentate(level) + "<" + key + attrStr + "/" + this.tagEndChar;
+    }
+}
+
+function indentate(level) {
+    return this.options.indentBy.repeat(level);
+}
+
+function isAttribute(name/*, options*/) {
+    if (name.startsWith(this.options.attributeNamePrefix)) {
+        return name.substr(this.attrPrefixLen);
+    } else {
+        return false;
+    }
+}
+
+function isCDATA(name) {
+    return name === this.options.cdataTagName;
+}
+
+//formatting
+//indentation
+//\n after each closing or self closing tag
+
+module.exports = Parser;
+
+},{"./util":"../node_modules/fast-xml-parser/src/util.js"}],"../node_modules/fast-xml-parser/src/parser.js":[function(require,module,exports) {
+"use strict";
+
+const nodeToJson = require("./node2json");
+const xmlToNodeobj = require("./xmlstr2xmlnode");
+const x2xmlnode = require("./xmlstr2xmlnode");
+const buildOptions = require("./util").buildOptions;
+
+exports.parse = function(xmlData, options) {
+    options = buildOptions(options, x2xmlnode.defaultOptions, x2xmlnode.props);
+    return nodeToJson.convertToJson(xmlToNodeobj.getTraversalObj(xmlData, options), options);
+};
+exports.convertTonimn = require("../src/nimndata").convert2nimn;
+exports.getTraversalObj = xmlToNodeobj.getTraversalObj;
+exports.convertToJson = nodeToJson.convertToJson;
+exports.convertToJsonString = require("./node2json_str").convertToJsonString;
+exports.validate = require("./validator").validate;
+exports.j2xParser = require("./json2xml");
+exports.parseToNimn = function (xmlData,schema,options){
+    return exports.convertTonimn(exports.getTraversalObj(xmlData,options), schema, options);
+};
+
+},{"./node2json":"../node_modules/fast-xml-parser/src/node2json.js","./xmlstr2xmlnode":"../node_modules/fast-xml-parser/src/xmlstr2xmlnode.js","./util":"../node_modules/fast-xml-parser/src/util.js","../src/nimndata":"../node_modules/fast-xml-parser/src/nimndata.js","./node2json_str":"../node_modules/fast-xml-parser/src/node2json_str.js","./validator":"../node_modules/fast-xml-parser/src/validator.js","./json2xml":"../node_modules/fast-xml-parser/src/json2xml.js"}],"components/entities.ts":[function(require,module,exports) {
+"use strict";
+
+var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var Credits = function Credits() {
+  (0, _classCallCheck2.default)(this, Credits);
+  this.director = [];
+  this.presenter = [];
+  this.actor = [];
+  this.writer = [];
+};
+
+exports.INTERVALS = ['00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00', '05:30', '06:00', '06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30'];
+exports.MinutesPerDay = 1440; //24*60
+},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js"}],"components/home/style.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -64465,8 +65396,6 @@ module.hot.accept(reloadCSS);
 },{"../../node_modules/font-awesome/css/font-awesome.css":"../node_modules/font-awesome/css/font-awesome.css","../../node_modules/bootstrap/dist/css/bootstrap.css":"../node_modules/bootstrap/dist/css/bootstrap.css","../../node_modules/react-toastify/dist/ReactToastify.css":"../node_modules/react-toastify/dist/ReactToastify.css","./..\\images\\bg.jpg":[["bg.43bfd8b0.jpg","images/bg.jpg"],"images/bg.jpg"],"./..\\images\\empty.gif":[["empty.d0b8fc41.gif","images/empty.gif"],"images/empty.gif"],"./..\\images\\starempty.png":[["starempty.cf8af87e.png","images/starempty.png"],"images/starempty.png"],"./..\\images\\starhalf.png":[["starhalf.bc55ac13.png","images/starhalf.png"],"images/starhalf.png"],"./..\\images\\starfilled.png":[["starfilled.ff5b9747.png","images/starfilled.png"],"images/starfilled.png"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"components/app.tsx":[function(require,module,exports) {
 "use strict";
 
-var _stringify = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/json/stringify"));
-
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
 
 var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
@@ -64548,7 +65477,7 @@ function (_React$Component) {
         );
       })), this.context.loader && this.context.loader.loading ? React.createElement(loader_1.default, {
         displayText: this.context.loader.text
-      }) : null, (0, _stringify.default)(this.context), React.createElement(snackBar_1.default, null), React.createElement(navBottom_1.default, null)));
+      }) : null, React.createElement(snackBar_1.default, null), React.createElement(navBottom_1.default, null)));
     }
   }]);
   return App;
@@ -64556,7 +65485,7 @@ function (_React$Component) {
 
 App.contextType = appContext_1.default;
 exports.default = App;
-},{"@babel/runtime-corejs2/core-js/json/stringify":"../node_modules/@babel/runtime-corejs2/core-js/json/stringify.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","./sidemenu/sidemenu":"components/sidemenu/sidemenu.jsx","./loader/loader":"components/loader/loader.tsx","react-router-dom":"../node_modules/react-router-dom/es/index.js","../routes":"routes.js","./navBottom":"components/navBottom/index.jsx","./snackBar/snackBar":"components/snackBar/snackBar.jsx","./appContext":"components/appContext.ts","../styles/style.scss":"styles/style.scss"}],"index.js":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","./sidemenu/sidemenu":"components/sidemenu/sidemenu.jsx","./loader/loader":"components/loader/loader.tsx","react-router-dom":"../node_modules/react-router-dom/es/index.js","../routes":"routes.js","./navBottom":"components/navBottom/index.jsx","./snackBar/snackBar":"components/snackBar/snackBar.jsx","./appContext":"components/appContext.ts","../styles/style.scss":"styles/style.scss"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var React = _interopRequireWildcard(require("react"));
@@ -64618,7 +65547,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49479" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50342" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

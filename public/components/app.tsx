@@ -28,7 +28,6 @@ export default class App extends React.Component<void, AppState> {
             ))}
           </div>
           {this.context.loader && this.context.loader.loading ? <Loader displayText={this.context.loader.text} /> : null}
-          {JSON.stringify(this.context)}
           <SnackBar />
           <NavBottom />
         </section>
