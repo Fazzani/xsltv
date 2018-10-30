@@ -6,6 +6,7 @@ export interface AppContextInterface {
   loader: Loader
   settings: Settings
   handleErrors: any
+  files: any[]
 }
 
 interface Loader {
@@ -18,6 +19,7 @@ export interface Settings {
   tz: string
   halfHourWidth: number
   onSettingsChanged(): void
+  notify(): void
   HighlightMovies: boolean
   HighlightNew: boolean
   MyJsonId: string | undefined
@@ -26,14 +28,16 @@ export interface Settings {
 const AppContext = React.createContext<AppContextInterface>({
   name: 'XViewer',
   loader: { loading: false, text: 'Loading' },
+  files: [],
   settings: {
     hours: 4,
     tz: DateTime.local().zoneName,
     halfHourWidth: 100,
     onSettingsChanged: () => {},
+    notify: () => {},
     HighlightMovies: false,
     HighlightNew: false,
-    MyJsonId: ''
+    MyJsonId: '',
   },
   handleErrors: (response: Response, origin = 'XViewer App') => {
     if (!response.ok) {

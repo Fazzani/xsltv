@@ -1,6 +1,6 @@
 import * as React from 'react'
 import parser from 'fast-xml-parser'
-import { Channel, Program, INTERVALS, MinutesPerDay } from '../entities'
+import { Channel, Program, INTERVALS, MinutesPerDay, XmltvFile } from '../entities'
 import AppContext, { AppContextInterface } from '../appContext'
 import { DateTime, Interval } from 'luxon'
 import './style.scss'
@@ -9,7 +9,6 @@ import SidePanel from '../sidePanel/sidePanel'
 import TvgChannel from '../tvgChannel/tvgChannel'
 
 interface HomeProps {
-  xmltvFile: string
 }
 interface HomeState {
   //channel with programs for selected day only
@@ -26,6 +25,7 @@ interface HomeState {
   sidebarOpen: boolean
   handleClosePanel: void
   intervals: string[]
+  files: XmltvFile[]
 }
 
 //TODO: react optimizations
@@ -43,8 +43,10 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
   }
 
   async componentDidMount() {
+    this.setState({ files: this.context.files })
     // const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'
-    const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
+    const testUrl =
+      (this.state.files && this.state.files.filter(f => f.selected)[0]) || 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
     console.log(this.context.settings.tz)
     const current_date = DateTime.local()
     const halfHourWidth = 100
@@ -59,14 +61,14 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
       },
       async () => {
         this.setState({ totalWidth: halfHourWidth * 48 + this.state.channelLeftWidth, offset: this.getTimeOffsetPerDay() })
-        await this.loadFile(this.props.xmltvFile || testUrl)
+        await this.loadFile(testUrl)
       }
     )
   }
 
-  async loadFile(fileUrl: string) {
+  async loadFile(fileUrl: XmltvFile) {
     // this.context.loader.loading = true
-    const response = await fetch(fileUrl)
+    const response = await fetch(fileUrl.url)
     this.context.handleErrors(response)
     const xmlString = await response.text()
     const docJson = parser.parse(xmlString, {
@@ -83,7 +85,7 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
         p.coefficient = p.duration / 30
         p.durationPercent = Math.floor((p.duration / MinutesPerDay) * 100)
         p.width = this.state.halfHourWidth * p.coefficient
-        p.id = `${p.channel}${p.start}`.replace(/[\s\+\.]/g,'')
+        p.id = `${p.channel}${p.start}`.replace(/[\s\+\.]/g, '')
         return p
       })
 

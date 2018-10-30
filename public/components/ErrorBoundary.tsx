@@ -1,12 +1,17 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { toast, ToastContainer } from 'react-toastify'
+import { toast, ToastContainer, ToastType } from 'react-toastify'
+import { AppNotification } from './entities'
 
-export class ErrorBoundary extends React.Component {
-  static propTypes = {
-    children: PropTypes.element,
-  }
-  constructor(props) {
+interface ErrorBoundryProps {
+  children: React.ReactChildren
+}
+interface ErrorBoundaryState {
+  hasError: boolean
+  error: any
+  notification: AppNotification
+}
+export class ErrorBoundary extends React.PureComponent<ErrorBoundryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundryProps) {
     super(props)
     this.state = { hasError: false }
   }
@@ -17,25 +22,25 @@ export class ErrorBoundary extends React.Component {
     this.notify()
   }
 
-  notify = (notification) => {
+  notify = (notification?: AppNotification) => {
     if (this.state.error) {
       toast(this.state.error.toString(), {
         type: toast.TYPE.ERROR,
       })
     } else if (this.state.notification && this.state.notification.message) {
       toast(this.state.notification.message, {
-        type: this.state.notification.type,
+        type: this.state.notification.type as ToastType,
       })
     } else if (notification) {
       toast(notification.message, {
-        type: notification.type,
+        type: notification.type as ToastType,
       })
     }
   }
 
   render() {
-    const children = React.Children.map(this.props.children, (child) => {
-      return React.cloneElement(child, {
+    const children = React.Children.map(this.props.children, (child: React.ReactChild) => {
+      return React.cloneElement(child as React.ReactElement<any>, {
         notify: this.notify,
       })
     })

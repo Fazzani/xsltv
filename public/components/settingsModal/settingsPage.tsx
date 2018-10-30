@@ -1,22 +1,21 @@
 import * as React from 'react'
 import XmltvFilesComponent from '../xmltvFiles/xmltvFiles'
 import AppContext, { Settings, AppContextInterface, Zones } from '../appContext'
-import { DateTime } from 'luxon'
 import { Constants } from '../../js/common'
 import { SettingsService } from '../settingsService'
 import filesServices from '../../js/filesService'
+import { XmltvFile } from '../entities'
 
 interface SettingsPageProps extends Settings {
-  files: { url: string; selected: boolean }[]
   zones: string[]
 }
 interface SettingsPageState extends Settings {
-  files: { url: string; selected: boolean }[]
+  files: XmltvFile[]
+  settings: any
 }
 
 export default class SettingsPage extends React.PureComponent<SettingsPageProps, SettingsPageState> {
   static contextType: React.Context<AppContextInterface> = AppContext
-  static defaultProps = { files: [] }
   constructor(props: SettingsPageProps) {
     super(props)
     this.halfHourWidthChanged.bind(this)
@@ -24,31 +23,9 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
     this.onXmltvFilesChangeCallback.bind(this)
   }
 
-  //TODO: load settings before mounting the component (from routing)
-  componentDidMount = async () => {
-    try {
-      if (!this.context.settings.MyJsonId) {
-        this.setState({ files: this.props.files })
-        const result = await filesServices.add({ files: [] })
-        const id = result.uri.split('bins//')[1]
-        this.context.settings.MyJsonId = id
-        SettingsService.save(this.context.settings)
-      } else {
-        SettingsService.save(this.context.settings)
-      }
-    } catch (error) {
-      //this.componentDidCatch(error, null)
-    }
+  componentWillMount() {
+    this.setState({ files: this.context.files, settings: this.context.settings })
   }
-
-  // // @ts-ignore
-  // componentDidCatch(error, errorInfo) {
-  //   this.state.notify({
-  //     message: error.toString(),
-  //     errorInfo,
-  //     type: toast.TYPE.ERROR,
-  //   })
-  // }
 
   /**
    *
@@ -56,22 +33,22 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
    */
   halfHourWidthChanged = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault()
-    this.context.settings.halfHourWidth = e.currentTarget.value
-    SettingsService.save(this.context.settings)
-    // this.context.settings.onSettingsChanged()
+    this.setState({ settings: { halfHourWidth: e.currentTarget.value }, ...this.state.settings })
+    SettingsService.save(this.state.settings)
   }
 
   onTzSelectChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault()
-    this.context.settings.tz = e.currentTarget.value
-    SettingsService.save(this.context.settings)
-    // this.context.settings.onSettingsChanged()
+    this.setState({ settings: { tz: e.currentTarget.value }, ...this.state.settings })
+    SettingsService.save(this.state.settings)
   }
 
-  onXmltvFilesChangeCallback = (fileItemEvent: { type: string; file: { url: string; selected: boolean } }) => {
+  onXmltvFilesChangeCallback = async (fileItemEvent: { type: string; file: XmltvFile }) => {
     switch (fileItemEvent.type) {
       case Constants.Events.LOAD_XMLTV_URL:
-        // this.loadXML(e.file)
+        this.state.files.forEach(f => (f.selected = false))
+        fileItemEvent.file.selected = true
+        await filesServices.update(this.state.settings.MyJsonId, this.state.files)
         break
       case Constants.Events.REMOVE_XMLTV_URL:
         this.setState(
@@ -81,7 +58,7 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
             }
           },
           async () => {
-            await filesServices.update(this.context.settings.MyJsonId, this.state.files)
+            await filesServices.update(this.state.settings.MyJsonId, this.state.files)
           }
         )
         break
@@ -97,13 +74,11 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
             }
           },
           async () => {
-            await filesServices.update(this.context.settings.MyJsonId, this.state.files)
+            await filesServices.update(this.state.settings.MyJsonId, this.state.files)
           }
         )
         break
     }
-    SettingsService.save(this.context.settings)
-    //this.context.settings.onSettingsChanged()
   }
 
   render() {
@@ -116,7 +91,7 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
           min="50"
           max="250"
           step="50"
-          defaultValue={this.context.settings.halfHourWidth}
+          defaultValue={this.state.settings.halfHourWidth}
           onChange={this.halfHourWidthChanged}
         />
       </div>
@@ -127,7 +102,7 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
         <label htmlFor="xmltv_list" className="col-form-label">
           Time zone
         </label>
-        <select className="form-control" id="zone_lit" onChange={this.onTzSelectChanged} value={this.context.settings.tz}>
+        <select className="form-control" id="zone_lit" onChange={this.onTzSelectChanged} value={this.state.settings.tz}>
           {Zones.map((e, key) => {
             return (
               <option key={key} value={e}>
@@ -147,7 +122,7 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
             {halfHourInput}
             {timeZone}
           </form>
-          <XmltvFilesComponent files={this.props.files} onChangeCallback={this.onXmltvFilesChangeCallback} />
+          <XmltvFilesComponent files={this.state.files} onChangeCallback={this.onXmltvFilesChangeCallback} />
         </div>
       </div>
     )

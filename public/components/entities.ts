@@ -1,4 +1,4 @@
-import { DateTime } from "luxon";
+import { DateTime } from 'luxon'
 
 export interface Channel {
   id: string
@@ -9,13 +9,13 @@ export interface Channel {
 }
 
 export interface Program {
-  id: string;
-  duration: number;
-  durationPercent: number;
-  coefficient: number;
-  width: number;
-  stopTime: DateTime;
-  startTime: DateTime;
+  id: string
+  duration: number
+  durationPercent: number
+  coefficient: number
+  width: number
+  stopTime: DateTime
+  startTime: DateTime
   category: TextProp
   channel: string
   country: TextProp
@@ -103,3 +103,14 @@ export const INTERVALS = [
 ]
 
 export const MinutesPerDay = 1440 //24*60
+export type NotificationType = 'error' | 'warning' | 'info' | 'verbose'
+export interface AppNotification {
+  type: NotificationType
+  message: string
+}
+
+export interface XmltvFile {
+  name: string
+  url: string
+  selected: boolean
+}

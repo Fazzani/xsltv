@@ -1,6 +1,7 @@
 export class SettingsService {
   static load(key = 'settings') {
     var settingsJson = localStorage.getItem(key)
+    console.log(settingsJson)
     if (settingsJson == null) {
       return new Settings()
     }
