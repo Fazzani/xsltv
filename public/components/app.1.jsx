@@ -12,7 +12,7 @@ import Header from './header/header'
 import Settings, { SettingsService } from '../services/settingsService'
 // @ts-ignore
 import index_xsl from '../js/index.xsl'
-import { getParamsCurrentDate } from '../js/shared'
+import { getParamsCurrentDate } from '../services/shared'
 import Timeline from './timeline/timeline'
 import Xslt from './xslt/xslt'
 import { Constants } from '../js/common'
@@ -201,8 +201,6 @@ export default class App extends Component {
 
     this.setState({ fragment: helperDiv.innerHTML, loading: false })
   }
-
-  
 
   /**
    * handle click on epg table corners. that's allow as to navigate
