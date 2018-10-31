@@ -20,9 +20,9 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
   static contextType: React.Context<AppContextInterface> = AppContext
 
   state = {
-    ... this.props
+    ...this.props,
   }
-    constructor(props: SettingsPageProps) {
+  constructor(props: SettingsPageProps) {
     super(props)
     this.halfHourWidthChanged.bind(this)
     this.onTzSelectChanged.bind(this)
@@ -35,52 +35,60 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
    */
   halfHourWidthChanged = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault()
-    this.setState({ settings: { halfHourWidth: Number.parseInt(e.currentTarget.value) } })
-    SettingsService.save(this.state.settings)
-    this.context.onSettingsChanged()
+    this.setState({ settings: { halfHourWidth: Number.parseInt(e.currentTarget.value) } }, () => {
+      SettingsService.save(this.state.settings)
+      this.context.onSettingsChanged()
+    })
   }
 
   onTzSelectChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault()
-    this.setState({ settings: { tz: e.currentTarget.value } })
-    SettingsService.save(this.state.settings)
-    this.context.onSettingsChanged()
+    this.setState({ settings: { tz: e.currentTarget.value } }, () => {
+      SettingsService.save(this.state.settings)
+      this.context.onSettingsChanged()
+    })
   }
 
   onXmltvFilesChangeCallback = async (fileItemEvent: { type: string; file: XmltvFile }) => {
     switch (fileItemEvent.type) {
       case Constants.Events.LOAD_XMLTV_URL:
-        this.state.files.forEach(f => (f.selected = false))
-        fileItemEvent.file.selected = true
-        await filesServices.update(this.state.settings.MyJsonId, this.state.files)
+        if (this.state.files) {
+          this.state.files.forEach(f => (f.selected = false))
+          fileItemEvent.file.selected = true
+          await filesServices.update(this.state.settings.MyJsonId, this.state.files)
+        }
         break
       case Constants.Events.REMOVE_XMLTV_URL:
-        this.setState(
-          prevState => {
-            return {
-              files: prevState.files.filter(f => f.url != fileItemEvent.file.url),
+        if (this.state.files) {
+          this.setState(
+            prevState => {
+              return {
+                files: prevState.files.filter(f => f.url != fileItemEvent.file.url),
+              }
+            },
+            async () => {
+              await filesServices.update(this.state.settings.MyJsonId, this.state.files)
             }
-          },
-          async () => {
-            await filesServices.update(this.state.settings.MyJsonId, this.state.files)
-          }
-        )
+          )
+        }
         break
       case Constants.Events.ADD_XMLTV_URL:
-        fileItemEvent.file.selected = true
-        this.state.files.forEach(element => {
-          element.selected = false
-        })
-        this.setState(
-          prevState => {
-            return {
-              files: [fileItemEvent.file, ...prevState.files],
+        if (this.state.files) {
+          fileItemEvent.file.selected = true
+          this.state.files.forEach(element => {
+            element.selected = false
+          })
+          this.setState(
+            prevState => {
+              return {
+                files: [fileItemEvent.file, ...(prevState.files || [])],
+              }
+            },
+            async () => {
+              await filesServices.update(this.state.settings.MyJsonId, this.state.files)
             }
-          },
-          async () => {
-            await filesServices.update(this.state.settings.MyJsonId, this.state.files)
-          }
-        )
+          )
+        }
         break
     }
   }
@@ -95,7 +103,7 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
           min="50"
           max="250"
           step="50"
-          defaultValue={this.state.settings.halfHourWidth}
+          value={this.state.settings.halfHourWidth}
           onChange={this.halfHourWidthChanged}
         />
       </div>

@@ -25,17 +25,24 @@ interface AppProps {
 export default class App extends React.Component<AppProps, AppState> {
   state: AppState = DefaultAppContext
   async componentDidMount() {
-    try {
-      if (!this.state.settings.MyJsonId) {
-        const result = await filesServices.add({ files: [] })
-        this.state.settings.MyJsonId = result.uri.split('bins//')[1]
-        SettingsService.save(this.state.settings)
-      } else {
-        await this.fetchFiles()
+    this.setState(
+      {
+        settings: SettingsService.load(),
+      },
+      async () => {
+        try {
+          if (!this.state.settings.MyJsonId) {
+            const result = await filesServices.add({ files: [] })
+            this.state.settings.MyJsonId = result.uri.split('bins//')[1]
+            SettingsService.save(this.state.settings)
+          } else {
+            await this.fetchFiles()
+          }
+        } catch (error) {
+          this.componentDidCatch(error, null)
+        }
       }
-    } catch (error) {
-      this.componentDidCatch(error, null)
-    }
+    )
   }
 
   // @ts-ignore

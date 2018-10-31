@@ -62388,7 +62388,6 @@ function () {
     value: function load() {
       var key = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'settings';
       var settingsJson = localStorage.getItem(key);
-      console.log(settingsJson);
 
       if (settingsJson == null) {
         return new Settings();
@@ -65244,11 +65243,11 @@ function (_React$PureComponent) {
         settings: {
           halfHourWidth: (0, _parseInt.default)(e.currentTarget.value)
         }
+      }, function () {
+        settingsService_1.SettingsService.save(_this.state.settings);
+
+        _this.context.onSettingsChanged();
       });
-
-      settingsService_1.SettingsService.save(_this.state.settings);
-
-      _this.context.onSettingsChanged();
     };
 
     _this.onTzSelectChanged = function (e) {
@@ -65258,11 +65257,11 @@ function (_React$PureComponent) {
         settings: {
           tz: e.currentTarget.value
         }
+      }, function () {
+        settingsService_1.SettingsService.save(_this.state.settings);
+
+        _this.context.onSettingsChanged();
       });
-
-      settingsService_1.SettingsService.save(_this.state.settings);
-
-      _this.context.onSettingsChanged();
     };
 
     _this.onXmltvFilesChangeCallback = function (fileItemEvent) {
@@ -65276,79 +65275,90 @@ function (_React$PureComponent) {
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.t0 = fileItemEvent.type;
-                _context3.next = _context3.t0 === common_1.Constants.Events.LOAD_XMLTV_URL ? 3 : _context3.t0 === common_1.Constants.Events.REMOVE_XMLTV_URL ? 8 : _context3.t0 === common_1.Constants.Events.ADD_XMLTV_URL ? 10 : 14;
+                _context3.next = _context3.t0 === common_1.Constants.Events.LOAD_XMLTV_URL ? 3 : _context3.t0 === common_1.Constants.Events.REMOVE_XMLTV_URL ? 9 : _context3.t0 === common_1.Constants.Events.ADD_XMLTV_URL ? 11 : 13;
                 break;
 
               case 3:
+                if (!this.state.files) {
+                  _context3.next = 8;
+                  break;
+                }
+
                 this.state.files.forEach(function (f) {
                   return f.selected = false;
                 });
                 fileItemEvent.file.selected = true;
-                _context3.next = 7;
+                _context3.next = 8;
                 return filesService_1.default.update(this.state.settings.MyJsonId, this.state.files);
 
-              case 7:
-                return _context3.abrupt("break", 14);
-
               case 8:
-                this.setState(function (prevState) {
-                  return {
-                    files: prevState.files.filter(function (f) {
-                      return f.url != fileItemEvent.file.url;
-                    })
-                  };
-                }, function () {
-                  return __awaiter(_this2, void 0, void 0,
-                  /*#__PURE__*/
-                  _regenerator.default.mark(function _callee() {
-                    return _regenerator.default.wrap(function _callee$(_context) {
-                      while (1) {
-                        switch (_context.prev = _context.next) {
-                          case 0:
-                            _context.next = 2;
-                            return filesService_1.default.update(this.state.settings.MyJsonId, this.state.files);
+                return _context3.abrupt("break", 13);
 
-                          case 2:
-                          case "end":
-                            return _context.stop();
+              case 9:
+                if (this.state.files) {
+                  this.setState(function (prevState) {
+                    return {
+                      files: prevState.files.filter(function (f) {
+                        return f.url != fileItemEvent.file.url;
+                      })
+                    };
+                  }, function () {
+                    return __awaiter(_this2, void 0, void 0,
+                    /*#__PURE__*/
+                    _regenerator.default.mark(function _callee() {
+                      return _regenerator.default.wrap(function _callee$(_context) {
+                        while (1) {
+                          switch (_context.prev = _context.next) {
+                            case 0:
+                              _context.next = 2;
+                              return filesService_1.default.update(this.state.settings.MyJsonId, this.state.files);
+
+                            case 2:
+                            case "end":
+                              return _context.stop();
+                          }
                         }
-                      }
-                    }, _callee, this);
-                  }));
-                });
-                return _context3.abrupt("break", 14);
+                      }, _callee, this);
+                    }));
+                  });
+                }
 
-              case 10:
-                fileItemEvent.file.selected = true;
-                this.state.files.forEach(function (element) {
-                  element.selected = false;
-                });
-                this.setState(function (prevState) {
-                  return {
-                    files: [fileItemEvent.file].concat((0, _toConsumableArray2.default)(prevState.files))
-                  };
-                }, function () {
-                  return __awaiter(_this2, void 0, void 0,
-                  /*#__PURE__*/
-                  _regenerator.default.mark(function _callee2() {
-                    return _regenerator.default.wrap(function _callee2$(_context2) {
-                      while (1) {
-                        switch (_context2.prev = _context2.next) {
-                          case 0:
-                            _context2.next = 2;
-                            return filesService_1.default.update(this.state.settings.MyJsonId, this.state.files);
+                return _context3.abrupt("break", 13);
 
-                          case 2:
-                          case "end":
-                            return _context2.stop();
+              case 11:
+                if (this.state.files) {
+                  fileItemEvent.file.selected = true;
+                  this.state.files.forEach(function (element) {
+                    element.selected = false;
+                  });
+                  this.setState(function (prevState) {
+                    return {
+                      files: [fileItemEvent.file].concat((0, _toConsumableArray2.default)(prevState.files || []))
+                    };
+                  }, function () {
+                    return __awaiter(_this2, void 0, void 0,
+                    /*#__PURE__*/
+                    _regenerator.default.mark(function _callee2() {
+                      return _regenerator.default.wrap(function _callee2$(_context2) {
+                        while (1) {
+                          switch (_context2.prev = _context2.next) {
+                            case 0:
+                              _context2.next = 2;
+                              return filesService_1.default.update(this.state.settings.MyJsonId, this.state.files);
+
+                            case 2:
+                            case "end":
+                              return _context2.stop();
+                          }
                         }
-                      }
-                    }, _callee2, this);
-                  }));
-                });
-                return _context3.abrupt("break", 14);
+                      }, _callee2, this);
+                    }));
+                  });
+                }
 
-              case 14:
+                return _context3.abrupt("break", 13);
+
+              case 13:
               case "end":
                 return _context3.stop();
             }
@@ -65379,7 +65389,7 @@ function (_React$PureComponent) {
         min: "50",
         max: "250",
         step: "50",
-        defaultValue: this.state.settings.halfHourWidth,
+        value: this.state.settings.halfHourWidth,
         onChange: this.halfHourWidthChanged
       }));
       var timeZone = React.createElement("div", {
@@ -65581,50 +65591,71 @@ function (_React$Component) {
     value: function componentDidMount() {
       return __awaiter(this, void 0, void 0,
       /*#__PURE__*/
-      _regenerator.default.mark(function _callee2() {
-        var result;
-        return _regenerator.default.wrap(function _callee2$(_context2) {
+      _regenerator.default.mark(function _callee3() {
+        var _this2 = this;
+
+        return _regenerator.default.wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
-                _context2.prev = 0;
+                this.setState({
+                  settings: settingsService_1.SettingsService.load()
+                }, function () {
+                  return __awaiter(_this2, void 0, void 0,
+                  /*#__PURE__*/
+                  _regenerator.default.mark(function _callee2() {
+                    var result;
+                    return _regenerator.default.wrap(function _callee2$(_context2) {
+                      while (1) {
+                        switch (_context2.prev = _context2.next) {
+                          case 0:
+                            _context2.prev = 0;
 
-                if (this.state.settings.MyJsonId) {
-                  _context2.next = 9;
-                  break;
-                }
+                            if (this.state.settings.MyJsonId) {
+                              _context2.next = 9;
+                              break;
+                            }
 
-                _context2.next = 4;
-                return filesService_1.default.add({
-                  files: []
+                            _context2.next = 4;
+                            return filesService_1.default.add({
+                              files: []
+                            });
+
+                          case 4:
+                            result = _context2.sent;
+                            this.state.settings.MyJsonId = result.uri.split('bins//')[1];
+                            settingsService_1.SettingsService.save(this.state.settings);
+                            _context2.next = 11;
+                            break;
+
+                          case 9:
+                            _context2.next = 11;
+                            return this.fetchFiles();
+
+                          case 11:
+                            _context2.next = 16;
+                            break;
+
+                          case 13:
+                            _context2.prev = 13;
+                            _context2.t0 = _context2["catch"](0);
+                            this.componentDidCatch(_context2.t0, null);
+
+                          case 16:
+                          case "end":
+                            return _context2.stop();
+                        }
+                      }
+                    }, _callee2, this, [[0, 13]]);
+                  }));
                 });
 
-              case 4:
-                result = _context2.sent;
-                this.state.settings.MyJsonId = result.uri.split('bins//')[1];
-                settingsService_1.SettingsService.save(this.state.settings);
-                _context2.next = 11;
-                break;
-
-              case 9:
-                _context2.next = 11;
-                return this.fetchFiles();
-
-              case 11:
-                _context2.next = 16;
-                break;
-
-              case 13:
-                _context2.prev = 13;
-                _context2.t0 = _context2["catch"](0);
-                this.componentDidCatch(_context2.t0, null);
-
-              case 16:
+              case 1:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
           }
-        }, _callee2, this, [[0, 13]]);
+        }, _callee3, this);
       }));
     } // @ts-ignore
 
@@ -65639,7 +65670,7 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       return React.createElement(appContext_1.default.Provider, {
         value: this.state
@@ -65657,8 +65688,8 @@ function (_React$Component) {
         render: function render() {
           return React.createElement(settingsPage_1.default, {
             zones: appContext_1.Zones,
-            files: _this2.state.files,
-            settings: _this2.state.settings
+            files: _this3.state.files,
+            settings: _this3.state.settings
           });
         }
       }), React.createElement(react_router_dom_1.Route, {
@@ -65666,7 +65697,7 @@ function (_React$Component) {
         exact: true,
         render: function render() {
           return React.createElement(home_1.default, {
-            files: _this2.state.files
+            files: _this3.state.files
           });
         }
       })), this.state.loader && this.state.loader.loading ? React.createElement(loader_1.default, {
