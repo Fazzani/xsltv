@@ -27662,7 +27662,77 @@ function (_react_1$default$Pure) {
 }(react_1.default.PureComponent);
 
 exports.ErrorBoundary = ErrorBoundary;
-},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","react-toastify":"../node_modules/react-toastify/lib/index.js"}],"../node_modules/regenerator-runtime/runtime.js":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","react-toastify":"../node_modules/react-toastify/lib/index.js"}],"../node_modules/core-js/library/modules/_object-assign.js":[function(require,module,exports) {
+'use strict';
+// 19.1.2.1 Object.assign(target, source, ...)
+var getKeys = require('./_object-keys');
+var gOPS = require('./_object-gops');
+var pIE = require('./_object-pie');
+var toObject = require('./_to-object');
+var IObject = require('./_iobject');
+var $assign = Object.assign;
+
+// should work with symbols and should have deterministic property order (V8 bug)
+module.exports = !$assign || require('./_fails')(function () {
+  var A = {};
+  var B = {};
+  // eslint-disable-next-line no-undef
+  var S = Symbol();
+  var K = 'abcdefghijklmnopqrst';
+  A[S] = 7;
+  K.split('').forEach(function (k) { B[k] = k; });
+  return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
+}) ? function assign(target, source) { // eslint-disable-line no-unused-vars
+  var T = toObject(target);
+  var aLen = arguments.length;
+  var index = 1;
+  var getSymbols = gOPS.f;
+  var isEnum = pIE.f;
+  while (aLen > index) {
+    var S = IObject(arguments[index++]);
+    var keys = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S);
+    var length = keys.length;
+    var j = 0;
+    var key;
+    while (length > j) if (isEnum.call(S, key = keys[j++])) T[key] = S[key];
+  } return T;
+} : $assign;
+
+},{"./_object-keys":"../node_modules/core-js/library/modules/_object-keys.js","./_object-gops":"../node_modules/core-js/library/modules/_object-gops.js","./_object-pie":"../node_modules/core-js/library/modules/_object-pie.js","./_to-object":"../node_modules/core-js/library/modules/_to-object.js","./_iobject":"../node_modules/core-js/library/modules/_iobject.js","./_fails":"../node_modules/core-js/library/modules/_fails.js"}],"../node_modules/core-js/library/modules/es6.object.assign.js":[function(require,module,exports) {
+// 19.1.3.1 Object.assign(target, source)
+var $export = require('./_export');
+
+$export($export.S + $export.F, 'Object', { assign: require('./_object-assign') });
+
+},{"./_export":"../node_modules/core-js/library/modules/_export.js","./_object-assign":"../node_modules/core-js/library/modules/_object-assign.js"}],"../node_modules/core-js/library/fn/object/assign.js":[function(require,module,exports) {
+require('../../modules/es6.object.assign');
+module.exports = require('../../modules/_core').Object.assign;
+
+},{"../../modules/es6.object.assign":"../node_modules/core-js/library/modules/es6.object.assign.js","../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/object/assign.js":[function(require,module,exports) {
+module.exports = require("core-js/library/fn/object/assign");
+},{"core-js/library/fn/object/assign":"../node_modules/core-js/library/fn/object/assign.js"}],"../node_modules/@babel/runtime-corejs2/helpers/extends.js":[function(require,module,exports) {
+var _Object$assign = require("../core-js/object/assign");
+
+function _extends() {
+  module.exports = _extends = _Object$assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+module.exports = _extends;
+},{"../core-js/object/assign":"../node_modules/@babel/runtime-corejs2/core-js/object/assign.js"}],"../node_modules/regenerator-runtime/runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
@@ -61482,7 +61552,7 @@ function () {
    * @example DateTime.utc(2014, 7, 13).toSQL() //=> '2014-07-13 00:00:00.000 Z'
    * @example DateTime.local(2014, 7, 13).toSQL() //=> '2014-07-13 00:00:00.000 -04:00'
    * @example DateTime.local(2014, 7, 13).toSQL({ includeOffset: false }) //=> '2014-07-13 00:00:00.000'
-   * @example DateTime.local(2014, 7, 13).toSQL({ includeZone: true }) //=> '2014-07-13 00:00:00.000 America/New_York'
+   * @example DateTime.local(2014, 7, 13).toSQL({ includeZone: false }) //=> '2014-07-13 00:00:00.000 America/New_York'
    * @return {string}
    */
 
@@ -62360,13 +62430,8 @@ module.exports = function stringify(it) { // eslint-disable-line no-unused-vars
 
 },{"../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/json/stringify.js":[function(require,module,exports) {
 module.exports = require("core-js/library/fn/json/stringify");
-},{"core-js/library/fn/json/stringify":"../node_modules/core-js/library/fn/json/stringify.js"}],"components/settingsService.js":[function(require,module,exports) {
+},{"core-js/library/fn/json/stringify":"../node_modules/core-js/library/fn/json/stringify.js"}],"services/settingsService.ts":[function(require,module,exports) {
 "use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.SettingsService = void 0;
 
 var _stringify = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/json/stringify"));
 
@@ -62375,6 +62440,10 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/he
 var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 var SettingsService =
 /*#__PURE__*/
@@ -62390,7 +62459,7 @@ function () {
       var settingsJson = localStorage.getItem(key);
 
       if (settingsJson == null) {
-        return new Settings();
+        return {};
       }
 
       return JSON.parse(settingsJson);
@@ -62405,7 +62474,7 @@ function () {
   return SettingsService;
 }();
 
-exports.SettingsService = SettingsService;
+exports.default = SettingsService;
 },{"@babel/runtime-corejs2/core-js/json/stringify":"../node_modules/@babel/runtime-corejs2/core-js/json/stringify.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js"}],"components/appContext.ts":[function(require,module,exports) {
 "use strict";
 
@@ -62419,6 +62488,12 @@ var __importStar = this && this.__importStar || function (mod) {
   return result;
 };
 
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -62427,7 +62502,7 @@ var React = __importStar(require("react"));
 
 var luxon_1 = require("luxon");
 
-var settingsService_1 = require("./settingsService");
+var settingsService_1 = __importDefault(require("../services/settingsService"));
 
 exports.DefaultAppContext = {
   name: 'XViewer',
@@ -62435,6 +62510,7 @@ exports.DefaultAppContext = {
     loading: false,
     text: 'Loading'
   },
+  files: [],
   notify: function notify(notification) {
     console.log(notification);
   },
@@ -62446,7 +62522,9 @@ exports.DefaultAppContext = {
     HighlightNew: false,
     MyJsonId: ''
   },
-  onSettingsChanged: settingsService_1.SettingsService.load,
+  onSettingsChanged: function onSettingsChanged() {
+    return settingsService_1.default.load();
+  },
   handleErrors: function handleErrors(response) {
     var origin = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'XViewer App';
 
@@ -62460,7 +62538,7 @@ exports.DefaultAppContext = {
 var AppContext = React.createContext(exports.DefaultAppContext);
 exports.Zones = ['Europe/Warsaw', 'Europe/Mariehamn', 'Europe/Minsk', 'Europe/Monaco', 'Europe/Moscow', 'Europe/Nicosia', 'Europe/Oslo', 'Europe/Paris', 'Europe/Podgorica', 'Europe/Prague', 'Europe/Riga', 'Europe/Rome', 'America/Los_Angeles'];
 exports.default = AppContext;
-},{"react":"../node_modules/react/index.js","luxon":"../node_modules/luxon/build/cjs-browser/luxon.js","./settingsService":"components/settingsService.js"}],"../node_modules/font-awesome/css/font-awesome.css":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","luxon":"../node_modules/luxon/build/cjs-browser/luxon.js","../services/settingsService":"services/settingsService.ts"}],"../node_modules/font-awesome/css/font-awesome.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -62788,77 +62866,7 @@ function (_React$Component) {
 }(React.Component);
 
 exports.default = About;
-},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js"}],"../node_modules/core-js/library/modules/_object-assign.js":[function(require,module,exports) {
-'use strict';
-// 19.1.2.1 Object.assign(target, source, ...)
-var getKeys = require('./_object-keys');
-var gOPS = require('./_object-gops');
-var pIE = require('./_object-pie');
-var toObject = require('./_to-object');
-var IObject = require('./_iobject');
-var $assign = Object.assign;
-
-// should work with symbols and should have deterministic property order (V8 bug)
-module.exports = !$assign || require('./_fails')(function () {
-  var A = {};
-  var B = {};
-  // eslint-disable-next-line no-undef
-  var S = Symbol();
-  var K = 'abcdefghijklmnopqrst';
-  A[S] = 7;
-  K.split('').forEach(function (k) { B[k] = k; });
-  return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
-}) ? function assign(target, source) { // eslint-disable-line no-unused-vars
-  var T = toObject(target);
-  var aLen = arguments.length;
-  var index = 1;
-  var getSymbols = gOPS.f;
-  var isEnum = pIE.f;
-  while (aLen > index) {
-    var S = IObject(arguments[index++]);
-    var keys = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S);
-    var length = keys.length;
-    var j = 0;
-    var key;
-    while (length > j) if (isEnum.call(S, key = keys[j++])) T[key] = S[key];
-  } return T;
-} : $assign;
-
-},{"./_object-keys":"../node_modules/core-js/library/modules/_object-keys.js","./_object-gops":"../node_modules/core-js/library/modules/_object-gops.js","./_object-pie":"../node_modules/core-js/library/modules/_object-pie.js","./_to-object":"../node_modules/core-js/library/modules/_to-object.js","./_iobject":"../node_modules/core-js/library/modules/_iobject.js","./_fails":"../node_modules/core-js/library/modules/_fails.js"}],"../node_modules/core-js/library/modules/es6.object.assign.js":[function(require,module,exports) {
-// 19.1.3.1 Object.assign(target, source)
-var $export = require('./_export');
-
-$export($export.S + $export.F, 'Object', { assign: require('./_object-assign') });
-
-},{"./_export":"../node_modules/core-js/library/modules/_export.js","./_object-assign":"../node_modules/core-js/library/modules/_object-assign.js"}],"../node_modules/core-js/library/fn/object/assign.js":[function(require,module,exports) {
-require('../../modules/es6.object.assign');
-module.exports = require('../../modules/_core').Object.assign;
-
-},{"../../modules/es6.object.assign":"../node_modules/core-js/library/modules/es6.object.assign.js","../../modules/_core":"../node_modules/core-js/library/modules/_core.js"}],"../node_modules/@babel/runtime-corejs2/core-js/object/assign.js":[function(require,module,exports) {
-module.exports = require("core-js/library/fn/object/assign");
-},{"core-js/library/fn/object/assign":"../node_modules/core-js/library/fn/object/assign.js"}],"../node_modules/@babel/runtime-corejs2/helpers/extends.js":[function(require,module,exports) {
-var _Object$assign = require("../core-js/object/assign");
-
-function _extends() {
-  module.exports = _extends = _Object$assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends.apply(this, arguments);
-}
-
-module.exports = _extends;
-},{"../core-js/object/assign":"../node_modules/@babel/runtime-corejs2/core-js/object/assign.js"}],"../node_modules/fast-xml-parser/src/util.js":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js"}],"../node_modules/fast-xml-parser/src/util.js":[function(require,module,exports) {
 "use strict";
 
 const getAllMatches = function(string, regex) {
@@ -64403,6 +64411,16 @@ function (_React$PureComponent) {
   }
 
   (0, _createClass2.default)(Home, [{
+    key: "componentWillReceiveProps",
+    value: function componentWillReceiveProps(nextProps) {
+      if (nextProps.files !== this.props.files) {
+        //Perform some operation
+        this.setState({
+          files: nextProps.files
+        });
+      }
+    }
+  }, {
     key: "componentDidMount",
     value: function componentDidMount() {
       return __awaiter(this, void 0, void 0,
@@ -64417,8 +64435,7 @@ function (_React$PureComponent) {
               case 0:
                 this.setState({
                   files: this.props.files
-                }); //const fallback = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'
-
+                });
                 fallback = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv';
                 testUrl = this.props.files && this.props.files.filter(function (f) {
                   return f.selected;
@@ -65216,7 +65233,7 @@ var appContext_1 = __importDefault(require("../appContext"));
 
 var common_1 = require("../../js/common");
 
-var settingsService_1 = require("../settingsService");
+var settingsService_1 = __importDefault(require("../../services/settingsService"));
 
 var filesService_1 = __importDefault(require("../../js/filesService"));
 
@@ -65244,7 +65261,7 @@ function (_React$PureComponent) {
           halfHourWidth: (0, _parseInt.default)(e.currentTarget.value)
         }
       }, function () {
-        settingsService_1.SettingsService.save(_this.state.settings);
+        settingsService_1.default.save(_this.state.settings);
 
         _this.context.onSettingsChanged();
       });
@@ -65258,7 +65275,7 @@ function (_React$PureComponent) {
           tz: e.currentTarget.value
         }
       }, function () {
-        settingsService_1.SettingsService.save(_this.state.settings);
+        settingsService_1.default.save(_this.state.settings);
 
         _this.context.onSettingsChanged();
       });
@@ -65275,12 +65292,12 @@ function (_React$PureComponent) {
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.t0 = fileItemEvent.type;
-                _context3.next = _context3.t0 === common_1.Constants.Events.LOAD_XMLTV_URL ? 3 : _context3.t0 === common_1.Constants.Events.REMOVE_XMLTV_URL ? 9 : _context3.t0 === common_1.Constants.Events.ADD_XMLTV_URL ? 11 : 13;
+                _context3.next = _context3.t0 === common_1.Constants.Events.LOAD_XMLTV_URL ? 3 : _context3.t0 === common_1.Constants.Events.REMOVE_XMLTV_URL ? 10 : _context3.t0 === common_1.Constants.Events.ADD_XMLTV_URL ? 12 : 14;
                 break;
 
               case 3:
                 if (!this.state.files) {
-                  _context3.next = 8;
+                  _context3.next = 9;
                   break;
                 }
 
@@ -65289,43 +65306,46 @@ function (_React$PureComponent) {
                 });
                 fileItemEvent.file.selected = true;
                 _context3.next = 8;
-                return filesService_1.default.update(this.state.settings.MyJsonId, this.state.files);
+                return filesService_1.default.update(this.props.settings.MyJsonId, this.state.files);
 
               case 8:
-                return _context3.abrupt("break", 13);
+                this.context.onFilesChanged();
 
               case 9:
-                if (this.state.files) {
-                  this.setState(function (prevState) {
-                    return {
-                      files: prevState.files.filter(function (f) {
-                        return f.url != fileItemEvent.file.url;
-                      })
-                    };
-                  }, function () {
-                    return __awaiter(_this2, void 0, void 0,
-                    /*#__PURE__*/
-                    _regenerator.default.mark(function _callee() {
-                      return _regenerator.default.wrap(function _callee$(_context) {
-                        while (1) {
-                          switch (_context.prev = _context.next) {
-                            case 0:
-                              _context.next = 2;
-                              return filesService_1.default.update(this.state.settings.MyJsonId, this.state.files);
+                return _context3.abrupt("break", 14);
 
-                            case 2:
-                            case "end":
-                              return _context.stop();
-                          }
+              case 10:
+                this.setState(function (prevState) {
+                  if (prevState.files) return {
+                    files: prevState.files.filter(function (f) {
+                      return f.url != fileItemEvent.file.url;
+                    })
+                  };else return {};
+                }, function () {
+                  return __awaiter(_this2, void 0, void 0,
+                  /*#__PURE__*/
+                  _regenerator.default.mark(function _callee() {
+                    return _regenerator.default.wrap(function _callee$(_context) {
+                      while (1) {
+                        switch (_context.prev = _context.next) {
+                          case 0:
+                            _context.next = 2;
+                            return filesService_1.default.update(this.props.settings.MyJsonId, this.state.files);
+
+                          case 2:
+                            this.context.onFilesChanged();
+
+                          case 3:
+                          case "end":
+                            return _context.stop();
                         }
-                      }, _callee, this);
-                    }));
-                  });
-                }
+                      }
+                    }, _callee, this);
+                  }));
+                });
+                return _context3.abrupt("break", 14);
 
-                return _context3.abrupt("break", 13);
-
-              case 11:
+              case 12:
                 if (this.state.files) {
                   fileItemEvent.file.selected = true;
                   this.state.files.forEach(function (element) {
@@ -65344,9 +65364,12 @@ function (_React$PureComponent) {
                           switch (_context2.prev = _context2.next) {
                             case 0:
                               _context2.next = 2;
-                              return filesService_1.default.update(this.state.settings.MyJsonId, this.state.files);
+                              return filesService_1.default.update(this.props.settings.MyJsonId, this.state.files);
 
                             case 2:
+                              this.context.onFilesChanged();
+
+                            case 3:
                             case "end":
                               return _context2.stop();
                           }
@@ -65356,9 +65379,9 @@ function (_React$PureComponent) {
                   });
                 }
 
-                return _context3.abrupt("break", 13);
+                return _context3.abrupt("break", 14);
 
-              case 13:
+              case 14:
               case "end":
                 return _context3.stop();
             }
@@ -65377,6 +65400,16 @@ function (_React$PureComponent) {
   }
 
   (0, _createClass2.default)(SettingsPage, [{
+    key: "componentWillReceiveProps",
+    value: function componentWillReceiveProps(nextProps) {
+      if (nextProps.files !== this.props.files) {
+        //Perform some operation
+        this.setState({
+          files: nextProps.files
+        });
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
       var halfHourInput = React.createElement("div", {
@@ -65423,8 +65456,10 @@ function (_React$PureComponent) {
 
 SettingsPage.contextType = appContext_1.default;
 exports.default = SettingsPage;
-},{"@babel/runtime-corejs2/helpers/toConsumableArray":"../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js","@babel/runtime-corejs2/regenerator":"../node_modules/@babel/runtime-corejs2/regenerator/index.js","@babel/runtime-corejs2/core-js/number/parse-int":"../node_modules/@babel/runtime-corejs2/core-js/number/parse-int.js","@babel/runtime-corejs2/helpers/extends":"../node_modules/@babel/runtime-corejs2/helpers/extends.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","@babel/runtime-corejs2/helpers/assertThisInitialized":"../node_modules/@babel/runtime-corejs2/helpers/assertThisInitialized.js","@babel/runtime-corejs2/core-js/promise":"../node_modules/@babel/runtime-corejs2/core-js/promise.js","react":"../node_modules/react/index.js","../xmltvFiles/xmltvFiles":"components/xmltvFiles/xmltvFiles.jsx","../appContext":"components/appContext.ts","../../js/common":"js/common.js","../settingsService":"components/settingsService.js","../../js/filesService":"js/filesService.js"}],"components/app.tsx":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/helpers/toConsumableArray":"../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js","@babel/runtime-corejs2/regenerator":"../node_modules/@babel/runtime-corejs2/regenerator/index.js","@babel/runtime-corejs2/core-js/number/parse-int":"../node_modules/@babel/runtime-corejs2/core-js/number/parse-int.js","@babel/runtime-corejs2/helpers/extends":"../node_modules/@babel/runtime-corejs2/helpers/extends.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","@babel/runtime-corejs2/helpers/assertThisInitialized":"../node_modules/@babel/runtime-corejs2/helpers/assertThisInitialized.js","@babel/runtime-corejs2/core-js/promise":"../node_modules/@babel/runtime-corejs2/core-js/promise.js","react":"../node_modules/react/index.js","../xmltvFiles/xmltvFiles":"components/xmltvFiles/xmltvFiles.jsx","../appContext":"components/appContext.ts","../../js/common":"js/common.js","../../services/settingsService":"services/settingsService.ts","../../js/filesService":"js/filesService.js"}],"components/app.tsx":[function(require,module,exports) {
 "use strict";
+
+var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/extends"));
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime-corejs2/regenerator"));
 
@@ -65514,7 +65549,7 @@ require("../styles/style.scss");
 
 var filesService_1 = __importDefault(require("../js/filesService"));
 
-var settingsService_1 = require("./settingsService");
+var settingsService_1 = __importDefault(require("../services/settingsService"));
 
 var about_1 = __importDefault(require("./about"));
 
@@ -65554,18 +65589,17 @@ function (_React$Component) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return filesService_1.default.get(this.context.settings.MyJsonId);
+                return filesService_1.default.get(this.state.settings.MyJsonId);
 
               case 2:
                 response = _context.sent;
 
                 if (response && response.length > 0) {
-                  response[0].selected = true;
                   this.setState({
                     files: response
                   });
                 } else {
-                  this.context.notify({
+                  this.props.notify({
                     message: 'No settings file was founded!',
                     type: react_toastify_1.toast.TYPE.WARNING
                   });
@@ -65591,71 +65625,101 @@ function (_React$Component) {
     value: function componentDidMount() {
       return __awaiter(this, void 0, void 0,
       /*#__PURE__*/
-      _regenerator.default.mark(function _callee3() {
+      _regenerator.default.mark(function _callee4() {
         var _this2 = this;
 
-        return _regenerator.default.wrap(function _callee3$(_context3) {
+        return _regenerator.default.wrap(function _callee4$(_context4) {
           while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context4.prev = _context4.next) {
               case 0:
                 this.setState({
-                  settings: settingsService_1.SettingsService.load()
+                  settings: (0, _extends2.default)({}, this.state.settings, settingsService_1.default.load()),
+                  onFilesChanged: function onFilesChanged() {
+                    return __awaiter(_this2, void 0, void 0,
+                    /*#__PURE__*/
+                    _regenerator.default.mark(function _callee2() {
+                      return _regenerator.default.wrap(function _callee2$(_context2) {
+                        while (1) {
+                          switch (_context2.prev = _context2.next) {
+                            case 0:
+                              _context2.next = 2;
+                              return this.fetchFiles();
+
+                            case 2:
+                              return _context2.abrupt("return", _context2.sent);
+
+                            case 3:
+                            case "end":
+                              return _context2.stop();
+                          }
+                        }
+                      }, _callee2, this);
+                    }));
+                  }
                 }, function () {
                   return __awaiter(_this2, void 0, void 0,
                   /*#__PURE__*/
-                  _regenerator.default.mark(function _callee2() {
-                    var result;
-                    return _regenerator.default.wrap(function _callee2$(_context2) {
+                  _regenerator.default.mark(function _callee3() {
+                    var _this3 = this;
+
+                    var result, MyJsonId;
+                    return _regenerator.default.wrap(function _callee3$(_context3) {
                       while (1) {
-                        switch (_context2.prev = _context2.next) {
+                        switch (_context3.prev = _context3.next) {
                           case 0:
-                            _context2.prev = 0;
+                            _context3.prev = 0;
 
                             if (this.state.settings.MyJsonId) {
-                              _context2.next = 9;
+                              _context3.next = 9;
                               break;
                             }
 
-                            _context2.next = 4;
+                            _context3.next = 4;
                             return filesService_1.default.add({
                               files: []
                             });
 
                           case 4:
-                            result = _context2.sent;
-                            this.state.settings.MyJsonId = result.uri.split('bins//')[1];
-                            settingsService_1.SettingsService.save(this.state.settings);
-                            _context2.next = 11;
+                            result = _context3.sent;
+                            MyJsonId = result.uri.split('bins//')[1];
+                            this.setState({
+                              settings: (0, _extends2.default)({}, this.state.settings, {
+                                MyJsonId: MyJsonId
+                              })
+                            }, function () {
+                              return settingsService_1.default.save(_this3.state.settings);
+                            });
+                            _context3.next = 11;
                             break;
 
                           case 9:
-                            _context2.next = 11;
+                            _context3.next = 11;
                             return this.fetchFiles();
 
                           case 11:
-                            _context2.next = 16;
+                            _context3.next = 16;
                             break;
 
                           case 13:
-                            _context2.prev = 13;
-                            _context2.t0 = _context2["catch"](0);
-                            this.componentDidCatch(_context2.t0, null);
+                            _context3.prev = 13;
+                            _context3.t0 = _context3["catch"](0);
+                            this.componentDidCatch(_context3.t0, null);
 
                           case 16:
                           case "end":
-                            return _context2.stop();
+                            return _context3.stop();
                         }
                       }
-                    }, _callee2, this, [[0, 13]]);
+                    }, _callee3, this, [[0, 13]]);
                   }));
                 });
 
               case 1:
               case "end":
-                return _context3.stop();
+                return _context4.stop();
             }
           }
-        }, _callee3, this);
+        }, _callee4, this);
       }));
     } // @ts-ignore
 
@@ -65670,7 +65734,7 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this4 = this;
 
       return React.createElement(appContext_1.default.Provider, {
         value: this.state
@@ -65688,8 +65752,8 @@ function (_React$Component) {
         render: function render() {
           return React.createElement(settingsPage_1.default, {
             zones: appContext_1.Zones,
-            files: _this3.state.files,
-            settings: _this3.state.settings
+            files: _this4.state.files,
+            settings: _this4.state.settings
           });
         }
       }), React.createElement(react_router_dom_1.Route, {
@@ -65697,7 +65761,7 @@ function (_React$Component) {
         exact: true,
         render: function render() {
           return React.createElement(home_1.default, {
-            files: _this3.state.files
+            files: _this4.state.files
           });
         }
       })), this.state.loader && this.state.loader.loading ? React.createElement(loader_1.default, {
@@ -65709,7 +65773,7 @@ function (_React$Component) {
 }(React.Component);
 
 exports.default = App;
-},{"@babel/runtime-corejs2/regenerator":"../node_modules/@babel/runtime-corejs2/regenerator/index.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","@babel/runtime-corejs2/helpers/assertThisInitialized":"../node_modules/@babel/runtime-corejs2/helpers/assertThisInitialized.js","@babel/runtime-corejs2/core-js/promise":"../node_modules/@babel/runtime-corejs2/core-js/promise.js","react":"../node_modules/react/index.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","./sidemenu/sidemenu":"components/sidemenu/sidemenu.jsx","./loader/loader":"components/loader/loader.tsx","react-router-dom":"../node_modules/react-router-dom/es/index.js","./navBottom":"components/navBottom/index.jsx","./snackBar/snackBar":"components/snackBar/snackBar.jsx","./appContext":"components/appContext.ts","react-toastify":"../node_modules/react-toastify/lib/index.js","../styles/style.scss":"styles/style.scss","../js/filesService":"js/filesService.js","./settingsService":"components/settingsService.js","./about":"components/about/index.tsx","./home":"components/home/index.tsx","./settingsModal/settingsPage":"components/settingsModal/settingsPage.tsx"}],"index.js":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/helpers/extends":"../node_modules/@babel/runtime-corejs2/helpers/extends.js","@babel/runtime-corejs2/regenerator":"../node_modules/@babel/runtime-corejs2/regenerator/index.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","@babel/runtime-corejs2/helpers/assertThisInitialized":"../node_modules/@babel/runtime-corejs2/helpers/assertThisInitialized.js","@babel/runtime-corejs2/core-js/promise":"../node_modules/@babel/runtime-corejs2/core-js/promise.js","react":"../node_modules/react/index.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","./sidemenu/sidemenu":"components/sidemenu/sidemenu.jsx","./loader/loader":"components/loader/loader.tsx","react-router-dom":"../node_modules/react-router-dom/es/index.js","./navBottom":"components/navBottom/index.jsx","./snackBar/snackBar":"components/snackBar/snackBar.jsx","./appContext":"components/appContext.ts","react-toastify":"../node_modules/react-toastify/lib/index.js","../styles/style.scss":"styles/style.scss","../js/filesService":"js/filesService.js","../services/settingsService":"services/settingsService.ts","./about":"components/about/index.tsx","./home":"components/home/index.tsx","./settingsModal/settingsPage":"components/settingsModal/settingsPage.tsx"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var React = _interopRequireWildcard(require("react"));
@@ -65771,7 +65835,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65230" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62529" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

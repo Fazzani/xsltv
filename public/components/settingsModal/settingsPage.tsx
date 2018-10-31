@@ -1,8 +1,8 @@
 import * as React from 'react'
 import XmltvFilesComponent from '../xmltvFiles/xmltvFiles'
-import AppContext, { Settings, AppContextInterface } from '../appContext'
+import AppContext, { AppContextInterface } from '../appContext'
 import { Constants } from '../../js/common'
-import { SettingsService } from '../settingsService'
+import SettingsService, { Settings } from '../../services/settingsService'
 import filesServices from '../../js/filesService'
 import { XmltvFile } from '../entities'
 
@@ -22,11 +22,19 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
   state = {
     ...this.props,
   }
+
   constructor(props: SettingsPageProps) {
     super(props)
     this.halfHourWidthChanged.bind(this)
     this.onTzSelectChanged.bind(this)
     this.onXmltvFilesChangeCallback.bind(this)
+  }
+
+  componentWillReceiveProps(nextProps: SettingsPageProps) {
+    if (nextProps.files !== this.props.files) {
+      //Perform some operation
+      this.setState({ files: nextProps.files });
+    }
   }
 
   /**
@@ -55,22 +63,24 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
         if (this.state.files) {
           this.state.files.forEach(f => (f.selected = false))
           fileItemEvent.file.selected = true
-          await filesServices.update(this.state.settings.MyJsonId, this.state.files)
+          await filesServices.update(this.props.settings.MyJsonId, this.state.files)
+          this.context.onFilesChanged()
         }
         break
       case Constants.Events.REMOVE_XMLTV_URL:
-        if (this.state.files) {
-          this.setState(
-            prevState => {
+        this.setState(
+          prevState => {
+            if (prevState.files)
               return {
                 files: prevState.files.filter(f => f.url != fileItemEvent.file.url),
               }
-            },
-            async () => {
-              await filesServices.update(this.state.settings.MyJsonId, this.state.files)
-            }
-          )
-        }
+            else return {}
+          },
+          async () => {
+            await filesServices.update(this.props.settings.MyJsonId, this.state.files)
+            this.context.onFilesChanged()
+          }
+        )
         break
       case Constants.Events.ADD_XMLTV_URL:
         if (this.state.files) {
@@ -85,7 +95,8 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
               }
             },
             async () => {
-              await filesServices.update(this.state.settings.MyJsonId, this.state.files)
+              await filesServices.update(this.props.settings.MyJsonId, this.state.files)
+              this.context.onFilesChanged()
             }
           )
         }

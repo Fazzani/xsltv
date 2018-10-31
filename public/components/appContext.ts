@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { DateTime } from 'luxon'
 import { AppNotification, XmltvFile } from './entities'
-import { SettingsService } from './settingsService';
+import SettingsService, { Settings } from '../services/settingsService'
 
 export interface AppContextInterface {
   name: string
@@ -11,6 +11,7 @@ export interface AppContextInterface {
   files?: XmltvFile[]
   notify(notification: AppNotification): void
   onSettingsChanged?(): void
+  onFilesChanged?(): void
 }
 
 interface Loader {
@@ -18,18 +19,10 @@ interface Loader {
   text: string
 }
 
-export interface Settings {
-  hours?: number
-  tz?: string
-  halfHourWidth?: number
-  HighlightMovies?: boolean
-  HighlightNew?: boolean
-  MyJsonId?: string | undefined
-}
-
 export const DefaultAppContext = {
   name: 'XViewer',
   loader: { loading: false, text: 'Loading' },
+  files: [],
   notify: (notification: AppNotification) => {
     console.log(notification)
   },
@@ -41,7 +34,7 @@ export const DefaultAppContext = {
     HighlightNew: false,
     MyJsonId: '',
   },
-  onSettingsChanged: SettingsService.load,
+  onSettingsChanged: () => SettingsService.load(),
   handleErrors: (response: Response, origin = 'XViewer App') => {
     if (!response.ok) {
       throw Error(`${origin} : ${response.statusText}`)

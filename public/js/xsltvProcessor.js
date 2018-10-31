@@ -1,4 +1,4 @@
-import { SettingsService } from '../components/settingsService'
+import { SettingsService } from '../services/settingsService'
 
 export default class XsltvProcessor {
   constructor() {

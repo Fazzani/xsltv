@@ -10,7 +10,7 @@ import { toast } from 'react-toastify'
 import '../styles/style.scss'
 import filesServices from '../js/filesService'
 import { AppNotification } from './entities'
-import { SettingsService } from './settingsService'
+import SettingsService from '../services/settingsService'
 import About from './about'
 import Home from './home'
 import SettingsPage from './settingsModal/settingsPage'
@@ -24,17 +24,19 @@ interface AppProps {
 
 export default class App extends React.Component<AppProps, AppState> {
   state: AppState = DefaultAppContext
+
   async componentDidMount() {
     this.setState(
       {
-        settings: SettingsService.load(),
+        settings: { ...this.state.settings, ...SettingsService.load() },
+        onFilesChanged: async () => await this.fetchFiles(),
       },
       async () => {
         try {
           if (!this.state.settings.MyJsonId) {
             const result = await filesServices.add({ files: [] })
-            this.state.settings.MyJsonId = result.uri.split('bins//')[1]
-            SettingsService.save(this.state.settings)
+            const MyJsonId = result.uri.split('bins//')[1]
+            this.setState({ settings: { ...this.state.settings, MyJsonId } }, () => SettingsService.save(this.state.settings))
           } else {
             await this.fetchFiles()
           }
@@ -61,13 +63,12 @@ export default class App extends React.Component<AppProps, AppState> {
   }
 
   fetchFiles = async () => {
-    const response = await filesServices.get(this.context.settings.MyJsonId)
+    const response = await filesServices.get(this.state.settings.MyJsonId)
 
     if (response && response.length > 0) {
-      response[0].selected = true
       this.setState({ files: response })
     } else {
-      this.context.notify({
+      this.props.notify({
         message: 'No settings file was founded!',
         type: toast.TYPE.WARNING,
       })

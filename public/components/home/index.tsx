@@ -43,9 +43,15 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
     super(props)
   }
 
+  componentWillReceiveProps(nextProps: HomeProps) {
+    if (nextProps.files !== this.props.files) {
+      //Perform some operation
+      this.setState({ files: nextProps.files })
+    }
+  }
+
   async componentDidMount() {
     this.setState({ files: this.props.files })
-    //const fallback = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'
     const fallback = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
     const testUrl = (this.props.files && this.props.files.filter(f => f.selected)[0]) || {
       url: fallback,

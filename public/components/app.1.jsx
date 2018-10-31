@@ -9,7 +9,7 @@ import XsltvProcessor from '../js/xsltvProcessor'
 import SettingsModal from './settingsModal/settingsModal'
 import SideMenu from './sidemenu/sidemenu'
 import Header from './header/header'
-import Settings, { SettingsService } from './settingsService'
+import Settings, { SettingsService } from '../services/settingsService'
 // @ts-ignore
 import index_xsl from '../js/index.xsl'
 import { getParamsCurrentDate } from '../js/shared'
