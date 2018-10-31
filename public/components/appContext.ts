@@ -1,12 +1,16 @@
 import * as React from 'react'
 import { DateTime } from 'luxon'
+import { AppNotification, XmltvFile } from './entities'
+import { SettingsService } from './settingsService';
 
 export interface AppContextInterface {
   name: string
   loader: Loader
   settings: Settings
-  handleErrors: any
-  files: any[]
+  handleErrors?: any
+  files?: XmltvFile[]
+  notify(notification: AppNotification): void
+  onSettingsChanged?(): void
 }
 
 interface Loader {
@@ -15,37 +19,38 @@ interface Loader {
 }
 
 export interface Settings {
-  hours: number
-  tz: string
-  halfHourWidth: number
-  onSettingsChanged(): void
-  notify(): void
-  HighlightMovies: boolean
-  HighlightNew: boolean
-  MyJsonId: string | undefined
+  hours?: number
+  tz?: string
+  halfHourWidth?: number
+  HighlightMovies?: boolean
+  HighlightNew?: boolean
+  MyJsonId?: string | undefined
 }
 
-const AppContext = React.createContext<AppContextInterface>({
+export const DefaultAppContext = {
   name: 'XViewer',
   loader: { loading: false, text: 'Loading' },
-  files: [],
+  notify: (notification: AppNotification) => {
+    console.log(notification)
+  },
   settings: {
     hours: 4,
     tz: DateTime.local().zoneName,
     halfHourWidth: 100,
-    onSettingsChanged: () => {},
-    notify: () => {},
     HighlightMovies: false,
     HighlightNew: false,
     MyJsonId: '',
   },
+  onSettingsChanged: SettingsService.load,
   handleErrors: (response: Response, origin = 'XViewer App') => {
     if (!response.ok) {
       throw Error(`${origin} : ${response.statusText}`)
     }
     return response
   },
-})
+}
+
+const AppContext = React.createContext<AppContextInterface>(DefaultAppContext)
 
 export const Zones: string[] = [
   'Europe/Warsaw',

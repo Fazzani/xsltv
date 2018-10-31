@@ -110,7 +110,7 @@ export interface AppNotification {
 }
 
 export interface XmltvFile {
-  name: string
+  name?: string
   url: string
-  selected: boolean
+  selected?: boolean
 }

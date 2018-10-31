@@ -1,30 +1,32 @@
 import * as React from 'react'
 import XmltvFilesComponent from '../xmltvFiles/xmltvFiles'
-import AppContext, { Settings, AppContextInterface, Zones } from '../appContext'
+import AppContext, { Settings, AppContextInterface } from '../appContext'
 import { Constants } from '../../js/common'
 import { SettingsService } from '../settingsService'
 import filesServices from '../../js/filesService'
 import { XmltvFile } from '../entities'
 
-interface SettingsPageProps extends Settings {
+interface SettingsPageProps {
   zones: string[]
+  files?: XmltvFile[]
+  settings: Settings
 }
-interface SettingsPageState extends Settings {
-  files: XmltvFile[]
-  settings: any
+interface SettingsPageState {
+  files?: XmltvFile[]
+  settings: Settings
 }
 
 export default class SettingsPage extends React.PureComponent<SettingsPageProps, SettingsPageState> {
   static contextType: React.Context<AppContextInterface> = AppContext
-  constructor(props: SettingsPageProps) {
+
+  state = {
+    ... this.props
+  }
+    constructor(props: SettingsPageProps) {
     super(props)
     this.halfHourWidthChanged.bind(this)
     this.onTzSelectChanged.bind(this)
     this.onXmltvFilesChangeCallback.bind(this)
-  }
-
-  componentWillMount() {
-    this.setState({ files: this.context.files, settings: this.context.settings })
   }
 
   /**
@@ -33,14 +35,16 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
    */
   halfHourWidthChanged = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault()
-    this.setState({ settings: { halfHourWidth: e.currentTarget.value }, ...this.state.settings })
+    this.setState({ settings: { halfHourWidth: Number.parseInt(e.currentTarget.value) } })
     SettingsService.save(this.state.settings)
+    this.context.onSettingsChanged()
   }
 
   onTzSelectChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault()
-    this.setState({ settings: { tz: e.currentTarget.value }, ...this.state.settings })
+    this.setState({ settings: { tz: e.currentTarget.value } })
     SettingsService.save(this.state.settings)
+    this.context.onSettingsChanged()
   }
 
   onXmltvFilesChangeCallback = async (fileItemEvent: { type: string; file: XmltvFile }) => {
@@ -103,7 +107,7 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
           Time zone
         </label>
         <select className="form-control" id="zone_lit" onChange={this.onTzSelectChanged} value={this.state.settings.tz}>
-          {Zones.map((e, key) => {
+          {this.props.zones.map((e, key) => {
             return (
               <option key={key} value={e}>
                 {e}

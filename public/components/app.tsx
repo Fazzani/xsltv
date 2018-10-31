@@ -3,32 +3,33 @@ import 'bootstrap'
 import SideMenu from './sidemenu/sidemenu'
 import Loader from './loader/loader'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import routes from '../routes'
 import NavBottom from './navBottom'
 import SnackBar from './snackBar/snackBar'
-import AppContext from './appContext'
+import AppContext, { AppContextInterface, Zones, DefaultAppContext } from './appContext'
 import { toast } from 'react-toastify'
 import '../styles/style.scss'
 import filesServices from '../js/filesService'
-import { NotificationType } from './entities'
+import { AppNotification } from './entities'
 import { SettingsService } from './settingsService'
+import About from './about'
+import Home from './home'
+import SettingsPage from './settingsModal/settingsPage'
 
-interface AppState {}
+interface AppState extends AppContextInterface {
+  noXmltvFiles?: boolean
+}
 interface AppProps {
-  notify(notification: NotificationType): void
+  notify(notification: AppNotification): void
 }
 
 export default class App extends React.Component<AppProps, AppState> {
-  static contextType = AppContext
-
-  async componentWillMount() {
-    this.context = { ...this.props }
+  state: AppState = DefaultAppContext
+  async componentDidMount() {
     try {
-      this.context.settings = SettingsService.load()
-      if (!this.context.settings.MyJsonId) {
+      if (!this.state.settings.MyJsonId) {
         const result = await filesServices.add({ files: [] })
-        this.context.settings.MyJsonId = result.uri.split('bins//')[1]
-        SettingsService.save(this.context.settings)
+        this.state.settings.MyJsonId = result.uri.split('bins//')[1]
+        SettingsService.save(this.state.settings)
       } else {
         await this.fetchFiles()
       }
@@ -39,11 +40,17 @@ export default class App extends React.Component<AppProps, AppState> {
 
   // @ts-ignore
   componentDidCatch(error, errorInfo) {
-    this.context.notify({
+    this.props.notify({
       message: error.toString(),
-      errorInfo,
       type: toast.TYPE.ERROR,
     })
+  }
+
+  handleErrors = (response: Response, origin = 'XViewer App') => {
+    if (!response.ok) {
+      throw Error(`${origin} : ${response.statusText}`)
+    }
+    return response
   }
 
   fetchFiles = async () => {
@@ -51,7 +58,7 @@ export default class App extends React.Component<AppProps, AppState> {
 
     if (response && response.length > 0) {
       response[0].selected = true
-      this.context.files = response
+      this.setState({ files: response })
     } else {
       this.context.notify({
         message: 'No settings file was founded!',
@@ -65,21 +72,21 @@ export default class App extends React.Component<AppProps, AppState> {
 
   render() {
     return (
-      <Router>
-        <section className="row-section">
-          <SideMenu />
-          <div className="container">
-            {routes.map((route, index) => (
-              // Render more <Route>s with the same paths as
-              // above, but different components this time.
-              <Route key={index} path={route.path} exact={route.exact} component={route.component} />
-            ))}
-          </div>
-          {this.context.loader && this.context.loader.loading ? <Loader displayText={this.context.loader.text} /> : null}
-          <SnackBar />
-          <NavBottom />
-        </section>
-      </Router>
+      <AppContext.Provider value={this.state}>
+        <Router>
+          <section className="row-section">
+            <SideMenu />
+            <div className="container">
+              <Route path="/about" render={() => <About />} />
+              <Route path="/settings" render={() => <SettingsPage zones={Zones} files={this.state.files} settings={this.state.settings} />} />
+              <Route path="/" exact={true} render={() => <Home files={this.state.files} />} />
+            </div>
+            {this.state.loader && this.state.loader.loading ? <Loader displayText={this.state.loader.text} /> : null}
+            <SnackBar />
+            <NavBottom />
+          </section>
+        </Router>
+      </AppContext.Provider>
     )
   }
 }

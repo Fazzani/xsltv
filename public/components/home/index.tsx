@@ -9,6 +9,7 @@ import SidePanel from '../sidePanel/sidePanel'
 import TvgChannel from '../tvgChannel/tvgChannel'
 
 interface HomeProps {
+  files?: XmltvFile[]
 }
 interface HomeState {
   //channel with programs for selected day only
@@ -25,7 +26,7 @@ interface HomeState {
   sidebarOpen: boolean
   handleClosePanel: void
   intervals: string[]
-  files: XmltvFile[]
+  files?: XmltvFile[]
 }
 
 //TODO: react optimizations
@@ -43,13 +44,17 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
   }
 
   async componentDidMount() {
-    this.setState({ files: this.context.files })
-    // const testUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'
-    const testUrl =
-      (this.state.files && this.state.files.filter(f => f.selected)[0]) || 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
+    this.setState({ files: this.props.files })
+    //const fallback = 'https://raw.githubusercontent.com/Fazzani/grab/master/fr_canal.xmltv'
+    const fallback = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
+    const testUrl = (this.props.files && this.props.files.filter(f => f.selected)[0]) || {
+      url: fallback,
+    }
+
     console.log(this.context.settings.tz)
     const current_date = DateTime.local()
     const halfHourWidth = 100
+
     this.setState(
       {
         currentDate: current_date,
