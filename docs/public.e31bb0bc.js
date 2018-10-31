@@ -27607,11 +27607,11 @@ var ErrorBoundary =
 function (_react_1$default$Pure) {
   (0, _inherits2.default)(ErrorBoundary, _react_1$default$Pure);
 
-  function ErrorBoundary(props) {
+  function ErrorBoundary() {
     var _this;
 
     (0, _classCallCheck2.default)(this, ErrorBoundary);
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(ErrorBoundary).call(this, props));
+    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(ErrorBoundary).apply(this, arguments));
 
     _this.notify = function (notification) {
       if (_this.state.error) {
@@ -27629,9 +27629,6 @@ function (_react_1$default$Pure) {
       }
     };
 
-    _this.state = {
-      hasError: false
-    };
     return _this;
   } // @ts-ignore
 
@@ -62559,53 +62556,8 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"../../node_modules/font-awesome/css/font-awesome.css":"../node_modules/font-awesome/css/font-awesome.css","../../node_modules/bootstrap/dist/css/bootstrap.css":"../node_modules/bootstrap/dist/css/bootstrap.css","../../node_modules/react-toastify/dist/ReactToastify.css":"../node_modules/react-toastify/dist/ReactToastify.css","./..\\images\\bg.jpg":[["bg.43bfd8b0.jpg","images/bg.jpg"],"images/bg.jpg"],"./..\\images\\empty.gif":[["empty.d0b8fc41.gif","images/empty.gif"],"images/empty.gif"],"./..\\images\\starempty.png":[["starempty.cf8af87e.png","images/starempty.png"],"images/starempty.png"],"./..\\images\\starhalf.png":[["starhalf.bc55ac13.png","images/starhalf.png"],"images/starhalf.png"],"./..\\images\\starfilled.png":[["starfilled.ff5b9747.png","images/starfilled.png"],"images/starfilled.png"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/@babel/runtime-corejs2/helpers/asyncToGenerator.js":[function(require,module,exports) {
-var _Promise = require("../core-js/promise");
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
-  try {
-    var info = gen[key](arg);
-    var value = info.value;
-  } catch (error) {
-    reject(error);
-    return;
-  }
-
-  if (info.done) {
-    resolve(value);
-  } else {
-    _Promise.resolve(value).then(_next, _throw);
-  }
-}
-
-function _asyncToGenerator(fn) {
-  return function () {
-    var self = this,
-        args = arguments;
-    return new _Promise(function (resolve, reject) {
-      var gen = fn.apply(self, args);
-
-      function _next(value) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
-      }
-
-      function _throw(err) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
-      }
-
-      _next(undefined);
-    });
-  };
-}
-
-module.exports = _asyncToGenerator;
-},{"../core-js/promise":"../node_modules/@babel/runtime-corejs2/core-js/promise.js"}],"js/common.js":[function(require,module,exports) {
+},{"../../node_modules/font-awesome/css/font-awesome.css":"../node_modules/font-awesome/css/font-awesome.css","../../node_modules/bootstrap/dist/css/bootstrap.css":"../node_modules/bootstrap/dist/css/bootstrap.css","../../node_modules/react-toastify/dist/ReactToastify.css":"../node_modules/react-toastify/dist/ReactToastify.css","./..\\images\\bg.jpg":[["bg.43bfd8b0.jpg","images/bg.jpg"],"images/bg.jpg"],"./..\\images\\empty.gif":[["empty.d0b8fc41.gif","images/empty.gif"],"images/empty.gif"],"./..\\images\\starempty.png":[["starempty.cf8af87e.png","images/starempty.png"],"images/starempty.png"],"./..\\images\\starhalf.png":[["starhalf.bc55ac13.png","images/starhalf.png"],"images/starhalf.png"],"./..\\images\\starfilled.png":[["starfilled.ff5b9747.png","images/starfilled.png"],"images/starfilled.png"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"services/common.ts":[function(require,module,exports) {
 "use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Constants = exports.default = void 0;
 
 var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
 
@@ -62613,11 +62565,13 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/he
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var Common = function Common() {
   (0, _classCallCheck2.default)(this, Common);
 };
-
-exports.default = Common;
 
 Common.parseQueryString = function () {
   var str = window.location.search;
@@ -62628,6 +62582,8 @@ Common.parseQueryString = function () {
   });
   return objURL;
 };
+
+exports.default = Common;
 
 var Constants =
 /*#__PURE__*/
@@ -62647,85 +62603,112 @@ function () {
   return Constants;
 }();
 
-exports.Constants = Constants;
 Constants.Events = {
   SELECTED_XMLTV_CHANGED: 'SELECTED_XMLTV_CHANGED',
-  LOAD_XMLTV_URL: 'onViewXmltvUrl',
-  ADD_XMLTV_URL: 'onAddXmltvUrl',
-  REMOVE_XMLTV_URL: 'onRemoveXmltvUrl'
+  LOAD_XMLTV_URL: 'LOAD_XMLTV_URL',
+  ADD_XMLTV_URL: 'ADD_XMLTV_URL',
+  REMOVE_XMLTV_URL: 'onRemoREMOVE_XMLTV_URLveXmltvUrl'
 };
-},{"@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js"}],"js/filesService.js":[function(require,module,exports) {
+exports.Constants = Constants;
+},{"@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js"}],"services/filesService.ts":[function(require,module,exports) {
 "use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
 
 var _stringify = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/json/stringify"));
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime-corejs2/regenerator"));
 
-var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/asyncToGenerator"));
-
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
 
-var _common = require("./common");
+var _promise = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/promise"));
+
+var _this = void 0;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var __awaiter = void 0 && (void 0).__awaiter || function (thisArg, _arguments, P, generator) {
+  return new (P || (P = _promise.default))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : new P(function (resolve) {
+        resolve(result.value);
+      }).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var common_1 = require("./common");
 
 var filesServices = function filesServices() {
   (0, _classCallCheck2.default)(this, filesServices);
 };
 
-exports.default = filesServices;
-
-filesServices.get =
-/*#__PURE__*/
-function () {
-  var _ref = (0, _asyncToGenerator2.default)(
+filesServices.get = function (id) {
+  return __awaiter(_this, void 0, void 0,
   /*#__PURE__*/
-  _regenerator.default.mark(function _callee(id) {
+  _regenerator.default.mark(function _callee() {
     var res;
     return _regenerator.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _context.next = 2;
-            return fetch("".concat(_common.Constants.Urls.MYJSON_API_URL).concat(id));
+            if (id) {
+              _context.next = 2;
+              break;
+            }
+
+            return _context.abrupt("return", null);
 
           case 2:
+            _context.next = 4;
+            return fetch("".concat(common_1.Constants.Urls.MYJSON_API_URL).concat(id));
+
+          case 4:
             res = _context.sent;
 
             if (res.ok) {
-              _context.next = 5;
+              _context.next = 7;
               break;
             }
 
             throw Error('Fetching files was failed');
 
-          case 5:
+          case 7:
             return _context.abrupt("return", res.json());
 
-          case 6:
+          case 8:
           case "end":
             return _context.stop();
         }
       }
     }, _callee, this);
   }));
+};
 
-  return function (_x) {
-    return _ref.apply(this, arguments);
-  };
-}();
-
-filesServices.update =
-/*#__PURE__*/
-function () {
-  var _ref2 = (0, _asyncToGenerator2.default)(
+filesServices.update = function (id, obj) {
+  return __awaiter(_this, void 0, void 0,
   /*#__PURE__*/
-  _regenerator.default.mark(function _callee2(id, obj) {
+  _regenerator.default.mark(function _callee2() {
     var options, res;
     return _regenerator.default.wrap(function _callee2$(_context2) {
       while (1) {
@@ -62740,7 +62723,7 @@ function () {
               }
             };
             _context2.next = 3;
-            return fetch("".concat(_common.Constants.Urls.MYJSON_API_URL).concat(id), options);
+            return fetch("".concat(common_1.Constants.Urls.MYJSON_API_URL).concat(id), options);
 
           case 3:
             res = _context2.sent;
@@ -62762,18 +62745,12 @@ function () {
       }
     }, _callee2, this);
   }));
+};
 
-  return function (_x2, _x3) {
-    return _ref2.apply(this, arguments);
-  };
-}();
-
-filesServices.add =
-/*#__PURE__*/
-function () {
-  var _ref3 = (0, _asyncToGenerator2.default)(
+filesServices.add = function (obj) {
+  return __awaiter(_this, void 0, void 0,
   /*#__PURE__*/
-  _regenerator.default.mark(function _callee3(obj) {
+  _regenerator.default.mark(function _callee3() {
     var options, res;
     return _regenerator.default.wrap(function _callee3$(_context3) {
       while (1) {
@@ -62788,7 +62765,7 @@ function () {
               }
             };
             _context3.next = 3;
-            return fetch("".concat(_common.Constants.Urls.MYJSON_API_URL), options);
+            return fetch("".concat(common_1.Constants.Urls.MYJSON_API_URL), options);
 
           case 3:
             res = _context3.sent;
@@ -62810,12 +62787,10 @@ function () {
       }
     }, _callee3, this);
   }));
+};
 
-  return function (_x4) {
-    return _ref3.apply(this, arguments);
-  };
-}();
-},{"@babel/runtime-corejs2/core-js/json/stringify":"../node_modules/@babel/runtime-corejs2/core-js/json/stringify.js","@babel/runtime-corejs2/regenerator":"../node_modules/@babel/runtime-corejs2/regenerator/index.js","@babel/runtime-corejs2/helpers/asyncToGenerator":"../node_modules/@babel/runtime-corejs2/helpers/asyncToGenerator.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","./common":"js/common.js"}],"components/about/index.tsx":[function(require,module,exports) {
+exports.default = filesServices;
+},{"@babel/runtime-corejs2/core-js/json/stringify":"../node_modules/@babel/runtime-corejs2/core-js/json/stringify.js","@babel/runtime-corejs2/regenerator":"../node_modules/@babel/runtime-corejs2/regenerator/index.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/core-js/promise":"../node_modules/@babel/runtime-corejs2/core-js/promise.js","./common":"services/common.ts"}],"components/about/index.tsx":[function(require,module,exports) {
 "use strict";
 
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
@@ -64934,7 +64909,7 @@ var _react = _interopRequireDefault(require("react"));
 
 var _propTypes = require("prop-types");
 
-var _common = require("../../js/common");
+var _common = require("../../services/common");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -65082,7 +65057,7 @@ XmltvFileItem.propTypes = {
 XmltvFileItem.defaultPropTypes = {
   isNew: false
 };
-},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","../../js/common":"js/common.js"}],"components/xmltvFiles/xmltvFiles.jsx":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","../../services/common":"services/common.ts"}],"components/xmltvFiles/xmltvFiles.jsx":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -65231,11 +65206,11 @@ var xmltvFiles_1 = __importDefault(require("../xmltvFiles/xmltvFiles"));
 
 var appContext_1 = __importDefault(require("../appContext"));
 
-var common_1 = require("../../js/common");
+var common_1 = require("../../services/common");
 
 var settingsService_1 = __importDefault(require("../../services/settingsService"));
 
-var filesService_1 = __importDefault(require("../../js/filesService"));
+var filesService_1 = __importDefault(require("../../services/filesService"));
 
 var SettingsPage =
 /*#__PURE__*/
@@ -65456,7 +65431,7 @@ function (_React$PureComponent) {
 
 SettingsPage.contextType = appContext_1.default;
 exports.default = SettingsPage;
-},{"@babel/runtime-corejs2/helpers/toConsumableArray":"../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js","@babel/runtime-corejs2/regenerator":"../node_modules/@babel/runtime-corejs2/regenerator/index.js","@babel/runtime-corejs2/core-js/number/parse-int":"../node_modules/@babel/runtime-corejs2/core-js/number/parse-int.js","@babel/runtime-corejs2/helpers/extends":"../node_modules/@babel/runtime-corejs2/helpers/extends.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","@babel/runtime-corejs2/helpers/assertThisInitialized":"../node_modules/@babel/runtime-corejs2/helpers/assertThisInitialized.js","@babel/runtime-corejs2/core-js/promise":"../node_modules/@babel/runtime-corejs2/core-js/promise.js","react":"../node_modules/react/index.js","../xmltvFiles/xmltvFiles":"components/xmltvFiles/xmltvFiles.jsx","../appContext":"components/appContext.ts","../../js/common":"js/common.js","../../services/settingsService":"services/settingsService.ts","../../js/filesService":"js/filesService.js"}],"components/app.tsx":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/helpers/toConsumableArray":"../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js","@babel/runtime-corejs2/regenerator":"../node_modules/@babel/runtime-corejs2/regenerator/index.js","@babel/runtime-corejs2/core-js/number/parse-int":"../node_modules/@babel/runtime-corejs2/core-js/number/parse-int.js","@babel/runtime-corejs2/helpers/extends":"../node_modules/@babel/runtime-corejs2/helpers/extends.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","@babel/runtime-corejs2/helpers/assertThisInitialized":"../node_modules/@babel/runtime-corejs2/helpers/assertThisInitialized.js","@babel/runtime-corejs2/core-js/promise":"../node_modules/@babel/runtime-corejs2/core-js/promise.js","react":"../node_modules/react/index.js","../xmltvFiles/xmltvFiles":"components/xmltvFiles/xmltvFiles.jsx","../appContext":"components/appContext.ts","../../services/common":"services/common.ts","../../services/settingsService":"services/settingsService.ts","../../services/filesService":"services/filesService.ts"}],"components/app.tsx":[function(require,module,exports) {
 "use strict";
 
 var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/extends"));
@@ -65547,7 +65522,7 @@ var react_toastify_1 = require("react-toastify");
 
 require("../styles/style.scss");
 
-var filesService_1 = __importDefault(require("../js/filesService"));
+var filesService_1 = __importDefault(require("../services/filesService"));
 
 var settingsService_1 = __importDefault(require("../services/settingsService"));
 
@@ -65588,10 +65563,13 @@ function (_React$Component) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.next = 2;
+                if (!this.state.settings.MyJsonId) this.setState({
+                  noXmltvFiles: true
+                });
+                _context.next = 3;
                 return filesService_1.default.get(this.state.settings.MyJsonId);
 
-              case 2:
+              case 3:
                 response = _context.sent;
 
                 if (response && response.length > 0) {
@@ -65608,7 +65586,7 @@ function (_React$Component) {
                   });
                 }
 
-              case 4:
+              case 5:
               case "end":
                 return _context.stop();
             }
@@ -65773,7 +65751,7 @@ function (_React$Component) {
 }(React.Component);
 
 exports.default = App;
-},{"@babel/runtime-corejs2/helpers/extends":"../node_modules/@babel/runtime-corejs2/helpers/extends.js","@babel/runtime-corejs2/regenerator":"../node_modules/@babel/runtime-corejs2/regenerator/index.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","@babel/runtime-corejs2/helpers/assertThisInitialized":"../node_modules/@babel/runtime-corejs2/helpers/assertThisInitialized.js","@babel/runtime-corejs2/core-js/promise":"../node_modules/@babel/runtime-corejs2/core-js/promise.js","react":"../node_modules/react/index.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","./sidemenu/sidemenu":"components/sidemenu/sidemenu.jsx","./loader/loader":"components/loader/loader.tsx","react-router-dom":"../node_modules/react-router-dom/es/index.js","./navBottom":"components/navBottom/index.jsx","./snackBar/snackBar":"components/snackBar/snackBar.jsx","./appContext":"components/appContext.ts","react-toastify":"../node_modules/react-toastify/lib/index.js","../styles/style.scss":"styles/style.scss","../js/filesService":"js/filesService.js","../services/settingsService":"services/settingsService.ts","./about":"components/about/index.tsx","./home":"components/home/index.tsx","./settingsModal/settingsPage":"components/settingsModal/settingsPage.tsx"}],"index.js":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/helpers/extends":"../node_modules/@babel/runtime-corejs2/helpers/extends.js","@babel/runtime-corejs2/regenerator":"../node_modules/@babel/runtime-corejs2/regenerator/index.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","@babel/runtime-corejs2/helpers/assertThisInitialized":"../node_modules/@babel/runtime-corejs2/helpers/assertThisInitialized.js","@babel/runtime-corejs2/core-js/promise":"../node_modules/@babel/runtime-corejs2/core-js/promise.js","react":"../node_modules/react/index.js","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","./sidemenu/sidemenu":"components/sidemenu/sidemenu.jsx","./loader/loader":"components/loader/loader.tsx","react-router-dom":"../node_modules/react-router-dom/es/index.js","./navBottom":"components/navBottom/index.jsx","./snackBar/snackBar":"components/snackBar/snackBar.jsx","./appContext":"components/appContext.ts","react-toastify":"../node_modules/react-toastify/lib/index.js","../styles/style.scss":"styles/style.scss","../services/filesService":"services/filesService.ts","../services/settingsService":"services/settingsService.ts","./about":"components/about/index.tsx","./home":"components/home/index.tsx","./settingsModal/settingsPage":"components/settingsModal/settingsPage.tsx"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var React = _interopRequireWildcard(require("react"));
@@ -65835,7 +65813,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55174" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56676" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

@@ -7,14 +7,11 @@ interface ErrorBoundryProps {
 }
 interface ErrorBoundaryState {
   hasError: boolean
-  error: any
-  notification: AppNotification
+  error?: any
+  notification?: AppNotification
 }
 export class ErrorBoundary extends React.PureComponent<ErrorBoundryProps, ErrorBoundaryState> {
-  constructor(props: ErrorBoundryProps) {
-    super(props)
-    this.state = { hasError: false }
-  }
+  
   // @ts-ignore
   componentDidCatch(error, info) {
     // Display fallback UI

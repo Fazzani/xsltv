@@ -1,6 +1,6 @@
 import React from 'react'
 import { PropTypes } from 'prop-types'
-import { Constants } from '../../js/common'
+import { Constants } from '../../services/common'
 
 export default class XmltvFileItem extends React.PureComponent {
   static propTypes = {

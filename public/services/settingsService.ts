@@ -4,7 +4,7 @@ export interface Settings {
   halfHourWidth?: number
   HighlightMovies?: boolean
   HighlightNew?: boolean
-  MyJsonId?: string | undefined
+  MyJsonId?: string
 }
 
 export default class SettingsService {

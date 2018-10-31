@@ -1,9 +1,9 @@
 import * as React from 'react'
 import XmltvFilesComponent from '../xmltvFiles/xmltvFiles'
 import AppContext, { AppContextInterface } from '../appContext'
-import { Constants } from '../../js/common'
+import { Constants } from '../../services/common'
 import SettingsService, { Settings } from '../../services/settingsService'
-import filesServices from '../../js/filesService'
+import filesServices from '../../services/filesService'
 import { XmltvFile } from '../entities'
 
 interface SettingsPageProps {

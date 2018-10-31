@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { Constants } from '../../js/common'
+import { Constants } from '../../services/common'
 import $ from 'jquery'
 import XmltvFilesComponent from '../xmltvFiles/xmltvFiles'
 import { AppContext } from '../app'

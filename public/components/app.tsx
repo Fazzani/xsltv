@@ -8,7 +8,7 @@ import SnackBar from './snackBar/snackBar'
 import AppContext, { AppContextInterface, Zones, DefaultAppContext } from './appContext'
 import { toast } from 'react-toastify'
 import '../styles/style.scss'
-import filesServices from '../js/filesService'
+import filesServices from '../services/filesService'
 import { AppNotification } from './entities'
 import SettingsService from '../services/settingsService'
 import About from './about'
@@ -63,6 +63,11 @@ export default class App extends React.Component<AppProps, AppState> {
   }
 
   fetchFiles = async () => {
+    if (!this.state.settings.MyJsonId)
+      this.setState({
+        noXmltvFiles: true,
+      })
+      
     const response = await filesServices.get(this.state.settings.MyJsonId)
 
     if (response && response.length > 0) {
