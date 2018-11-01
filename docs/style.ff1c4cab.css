@@ -11777,10 +11777,15 @@ html body {
   -o-background-size: "cover";
   background-size: "cover";
   /* *******************************************  clock *********************************************** */
-  /* ***** Popper js ******* */
-  /* *********************************************** side menu ****** */
-  /* END OF DEMO CSS */
-  /* *****  MODAL ******* */
+  /* *********************************************** Popper js ************************************************* */
+  /* *********************************************** side menu ************************************************ */
+  /* *************************************  MODAL *************************************** */
+  /* ************************************* END MODAL *************************************** */
+}
+html body #fullscreen {
+  position: fixed;
+  top: 10px;
+  right: 10px;
 }
 html body::-webkit-scrollbar {
   width: 1em;
@@ -11792,7 +11797,10 @@ html body::-webkit-scrollbar-thumb {
   background-color: darkgrey;
   outline: 1px solid slategrey;
 }
-html body .card-header {
+html body .card {
+  background-color: inherit !important;
+}
+html body .card .card-header {
   font-weight: bolder;
   color: #ffbb10;
 }
@@ -11823,10 +11831,15 @@ html body #barclock {
 html body #barclock .time {
   font-size: xx-small;
 }
+@media (max-width: 640px) {
+  html body #barclock {
+    display: none;
+  }
+}
 html body .popover {
   color: white !important;
 }
-html body .popover-header {
+html body .popover .popover-header {
   background-color: #000000 !important;
   color: yellow;
   text-align: center;
@@ -11838,11 +11851,6 @@ html body .popover .popover-body {
 html body .popover .popover-body img.popupimage {
   margin: 10px;
   border: 1px solid #1b1b17;
-}
-html body #fullscreen {
-  position: fixed;
-  top: 10px;
-  right: 10px;
 }
 html body .animate {
   -webkit-transition: all 0.3s ease-in-out;
@@ -11966,12 +11974,4 @@ html body .modal-content {
 html body .modal-header,
 html body .modal-footer {
   border: none;
-}
-@media (max-width: 640px) {
-  html body #barclock {
-    display: none;
-  }
-}
-html body .card {
-  background-color: inherit !important;
 }

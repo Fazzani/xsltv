@@ -14,6 +14,11 @@
 html {
     body {
         color: white;
+        #fullscreen {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+        }
         &::-webkit-scrollbar {
             width: 1em;
         }
@@ -24,9 +29,12 @@ html {
             background-color: darkgrey;
             outline: 1px solid slategrey;
         }
-        .card-header {
-            font-weight: bolder;
-            color: $highlight-text;
+        .card {
+            background-color: inherit !important;
+            .card-header {
+                font-weight: bolder;
+                color: $highlight-text;
+            }
         }
         scroll-behavior: smooth;
         margin: 0;
@@ -69,30 +77,29 @@ html {
                 font-size: xx-small;
             }
         }
-        /* ***** Popper js ******* */
-        .popover {
-            color: white !important;
-        }
-        .popover-header {
-            background-color: #000000 !important;
-            color: yellow;
-            text-align: center;
-        }
-        .popover .popover-body {
-            color: white !important;
-            background-color: #000000;
-            img.popupimage {
-                margin: 10px;
-                border: 1px solid #1b1b17;
+        @media (max-width: 640px) {
+            #barclock {
+                display: none;
             }
         }
-        /* *********************************************** side menu ****** */
-        #fullscreen {
-            position: fixed;
-            top: 10px;
-            right: 10px;
+        /* *********************************************** Popper js ************************************************* */
+        .popover {
+            color: white !important;
+            .popover-header {
+                background-color: #000000 !important;
+                color: yellow;
+                text-align: center;
+            }
+            .popover-body {
+                color: white !important;
+                background-color: #000000;
+                img.popupimage {
+                    margin: 10px;
+                    border: 1px solid #1b1b17;
+                }
+            }
         }
-        /* END OF DEMO CSS */
+        /* *********************************************** side menu ************************************************ */
         .animate {
             -webkit-transition: all 0.3s ease-in-out;
             -moz-transition: all 0.3s ease-in-out;
@@ -212,7 +219,7 @@ html {
                 }
             }
         }
-        /* *****  MODAL ******* */
+        /* *************************************  MODAL *************************************** */
         .modal-content {
             color: white;
             background-color: rgba(7, 7, 7, 0.75);
@@ -221,13 +228,6 @@ html {
         .modal-footer {
             border: none;
         }
-        @media (max-width: 640px) {
-            #barclock {
-                display: none;
-            }
-        }
-        .card {
-            background-color: inherit !important;
-        }
+        /* ************************************* END MODAL *************************************** */
     }
 }
