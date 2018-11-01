@@ -11902,8 +11902,7 @@ a.text-dark:hover, a.text-dark:focus {
 .Toastify__slide-exit--bottom-center {
   animation-name: Toastify__slideOutDown; }
 
-/*# sourceMappingURL=ReactToastify.css.map */@charset "UTF-8";
-@import url("https://fonts.googleapis.com/css?family=Libre+Baskerville:400,700");
+/*# sourceMappingURL=ReactToastify.css.map */@import url("https://fonts.googleapis.com/css?family=Libre+Baskerville:400,700");
 @import url("https://fonts.googleapis.com/css?family=Charmonman");
 html body {
   color: white;
@@ -11917,20 +11916,8 @@ html body {
   -moz-background-size: "cover";
   -o-background-size: "cover";
   background-size: "cover";
-  /*End Popup section*/
   /* *******************************************  clock *********************************************** */
   /* ***** Popper js ******* */
-  /* * Copyright (c) 2012-2013 Thibaut Courouble
-  * http://www.cssflow.com
-  *
-  * Licensed under the MIT License:
-  * http://www.opensource.org/licenses/mit-license.php
-  *
-  * View the Sass/SCSS source at:
-  * http://www.cssflow.com/snippets/dark-and-light-dropdown-lists/demo/scss
-  *
-  * Original PSD by Hemn Chawroka: http://goo.gl/nXZHJ */
-  /* Fix for IE 8 putting the arrows behind the select element. */
   /* *********************************************** side menu ****** */
   /* END OF DEMO CSS */
   /* *****  MODAL ******* */
@@ -11944,6 +11931,10 @@ html body::-webkit-scrollbar-track {
 html body::-webkit-scrollbar-thumb {
   background-color: darkgrey;
   outline: 1px solid slategrey;
+}
+html body .card-header {
+  font-weight: bolder;
+  color: #ffbb10;
 }
 html body .fixed-bottom {
   z-index: 99 !important;
@@ -11962,218 +11953,6 @@ html body .navbar {
   justify-content: space-between;
   padding: 5px;
   color: white;
-}
-html body .row-section {
-  margin-bottom: 50px;
-  background-color: rgba(25, 25, 37, 0.14);
-  width: 100%;
-}
-html body .selector-for-some-widget {
-  box-sizing: content-box;
-}
-html body #tvframe,
-html body .xslt-container {
-  position: relative;
-}
-html body #listings {
-  table-layout: fixed;
-  border-collapse: collapse;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: left;
-  box-shadow: -1px 3px 6px 0px #0000006b;
-}
-html body #listings tr {
-  border-bottom: 1px solid #231c1c;
-}
-html body td {
-  margin-left: 1px;
-  padding-left: 0px;
-  padding-right: 0px;
-  padding-top: 0px;
-  padding-bottom: 0px;
-  border-bottom: 0px;
-  border-top: 0px;
-  border-left: 1px solid #c2c2c2;
-  border-right: 1px solid #c2c2c2;
-  overflow: hidden;
-  height: 30px;
-  white-space: nowrap;
-}
-html body td.Goodmovie {
-  background-color: #ff9 !important;
-}
-html body td.Goodmovie table td {
-  background-color: #ff9;
-}
-html body td.program {
-  cursor: pointer;
-}
-html body td.highlight-search {
-  font-weight: bolder;
-  background: #ffbb10;
-}
-html body td.movie, html body td.film, html body td.Newshow {
-  border: 2px solid #666;
-  background-color: #401132 !important;
-}
-html body td[class*=foot].Longshow, html body td[class*=fudbal].Longshow, html body td[class*=match].Longshow, html body td[class*=tennis].Longshow, html body td[class*=league].Longshow, html body td[class*=copa].Longshow, html body td[class*=cup].Longshow {
-  border: 2px solid #666;
-  background-color: #143605 !important;
-}
-html body td div.internal {
-  table-layout: auto;
-  border-collapse: collapse;
-  width: 100%;
-  margin: 0px;
-  text-align: left;
-  border: 0px;
-  height: 100%;
-}
-html body td div.internal div.program {
-  text-align: left;
-  font-size: 9pt;
-  padding: 1px;
-  margin: 0px;
-  overflow: hidden;
-  white-space: nowrap;
-  width: 100%;
-  height: 100%;
-  line-height: 4em;
-  background: #141e30;
-  background: linear-gradient(to right, #101113 3px, #00000070 5%, #141e30);
-}
-html body td div.internal div.program::before, html body td div.internal div.program::after {
-  font: normal normal normal 14px/1 FontAwesome !important;
-  display: inline-block;
-  vertical-align: middle;
-  color: #ffbb10;
-  font-weight: bold;
-}
-html body td div.internal div.program.extendleft::before {
-  padding-right: 3px;
-  content: "";
-}
-html body td div.internal div.program.extendright::after {
-  padding-left: 3px;
-  content: "";
-}
-html body td i.extendleft {
-  margin: 0px;
-  padding: 3px;
-  border-right: 1px solid #c2c2c2;
-  overflow: hidden;
-  white-space: normal;
-  font-size: small;
-}
-html body td i.extendright {
-  margin: 0px;
-  padding: 3px;
-  border-left: 1px solid #c2c2c2;
-  border-right: 1px solid #c2c2c2;
-  overflow: hidden;
-  white-space: normal;
-  font-size: small;
-}
-html body td.extendright td.program {
-  padding: 0px;
-  border: 0px;
-}
-html body td.empty {
-  background-image: url(empty.d0b8fc41.gif);
-}
-html body th {
-  font-family: arial, sans-serif;
-  font-stretch: narrower;
-  font-size: 10pt;
-  overflow: hidden;
-}
-html body th.channel {
-  text-align: center;
-  padding: 0px;
-  overflow: hidden;
-  color: #ffbb10;
-  font-size: 8pt;
-}
-html body th.time {
-  text-align: left;
-  cursor: pointer;
-}
-html body th.time::before {
-  font: normal normal normal 14px/1 FontAwesome !important;
-  display: inline-block;
-  padding-right: 3px;
-  vertical-align: middle;
-  content: "";
-  color: #ffbb10;
-}
-html body th.topleftcorner {
-  height: 22px;
-  cursor: pointer;
-  width: 120px;
-}
-html body th.toprightcorner {
-  height: 22px;
-  cursor: pointer;
-  width: 48px;
-  text-align: right;
-}
-html body hr {
-  border: 0px;
-  background-color: black;
-  height: 1px;
-}
-html body .subtitle {
-  font-style: italic;
-}
-html body .starlist {
-  list-style: none;
-  padding: 0px;
-  margin: 0px;
-  height: 15px;
-  position: relative;
-}
-html body .starlist li {
-  padding: 0px;
-  margin: 0px;
-  width: 15px;
-  height: 15px;
-  float: left;
-}
-html body .starlist li span {
-  display: none;
-}
-html body .starlist li.starempty {
-  background-image: url(starempty.cf8af87e.png);
-}
-html body .starlist li.starhalf {
-  background-image: url(starhalf.bc55ac13.png);
-}
-html body .starlist li.starfilled {
-  background-image: url(starfilled.ff5b9747.png);
-}
-html body .leftchannel {
-  width: 100%;
-  margin: 0px;
-  border: 0px;
-  padding: 0px;
-  height: 50px;
-}
-html body .leftchannel .leftlogocell {
-  cursor: pointer;
-  border: 0px;
-  max-width: 50px;
-}
-html body .leftchannel .leftlogocell img {
-  max-width: 70%;
-  max-height: 100%;
-}
-html body .table-dark {
-  background-color: transparent !important;
-}
-html body .table-dark th,
-html body .table-dark thead th {
-  border-color: rgba(15, 18, 27, 0.4) !important;
 }
 html body #barclock {
   font-family: "Share Tech Mono", monospace;
@@ -12199,75 +11978,6 @@ html body .popover .popover-body {
 html body .popover .popover-body img.popupimage {
   margin: 10px;
   border: 1px solid #1b1b17;
-}
-html body .dropdown {
-  display: inline-block;
-  position: relative;
-  overflow: hidden;
-  height: 28px;
-  width: 150px;
-  background: #f2f2f2;
-  border: 1px solid;
-  border-color: white #f7f7f7 whitesmoke;
-  border-radius: 3px;
-  background-image: -webkit-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
-  background-image: -moz-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
-  background-image: -o-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
-  background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.06));
-  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
-}
-html body .dropdown:before, html body .dropdown:after {
-  content: "";
-  position: absolute;
-  z-index: 2;
-  top: 9px;
-  right: 10px;
-  width: 0;
-  height: 0;
-  border: 4px dashed;
-  border-color: #888888 transparent;
-  pointer-events: none;
-}
-html body .dropdown:before {
-  border-bottom-style: solid;
-  border-top: none;
-}
-html body .dropdown:after {
-  margin-top: 7px;
-  border-top-style: solid;
-  border-bottom: none;
-}
-html body .lt-ie9 .dropdown {
-  z-index: 1;
-}
-html body .dropdown-dark {
-  background: #191925;
-  border-color: #111111 #152236 #161425;
-  background-image: -moz-linear-gradient(top, transparent, rgba(0, 0, 0, 0.4));
-  background-image: -o-linear-gradient(top, transparent, rgba(0, 0, 0, 0.4));
-  -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px 1px rgba(0, 0, 0, 0.2);
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px 1px rgba(0, 0, 0, 0.2);
-  color: white;
-}
-html body .dropdown-dark:before {
-  border-bottom-color: #aaa;
-}
-html body .dropdown-dark:after {
-  border-top-color: #aaa;
-}
-html body .dropdown-dark .dropdown-select {
-  color: #aaa;
-  text-shadow: 0 1px black;
-  background: #444;
-  /* Fallback for IE 8 */
-}
-html body .dropdown-dark .dropdown-select:focus {
-  color: #ccc;
-}
-html body .dropdown-dark .dropdown-select > option {
-  background: #444;
-  text-shadow: 0 1px rgba(0, 0, 0, 0.4);
 }
 html body #fullscreen {
   position: fixed;

@@ -62556,14 +62556,48 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"../../node_modules/font-awesome/css/font-awesome.css":"../node_modules/font-awesome/css/font-awesome.css","../../node_modules/bootstrap/dist/css/bootstrap.css":"../node_modules/bootstrap/dist/css/bootstrap.css","../../node_modules/react-toastify/dist/ReactToastify.css":"../node_modules/react-toastify/dist/ReactToastify.css","./..\\images\\bg.jpg":[["bg.43bfd8b0.jpg","images/bg.jpg"],"images/bg.jpg"],"./..\\images\\empty.gif":[["empty.d0b8fc41.gif","images/empty.gif"],"images/empty.gif"],"./..\\images\\starempty.png":[["starempty.cf8af87e.png","images/starempty.png"],"images/starempty.png"],"./..\\images\\starhalf.png":[["starhalf.bc55ac13.png","images/starhalf.png"],"images/starhalf.png"],"./..\\images\\starfilled.png":[["starfilled.ff5b9747.png","images/starfilled.png"],"images/starfilled.png"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"services/common.ts":[function(require,module,exports) {
+},{"../../node_modules/font-awesome/css/font-awesome.css":"../node_modules/font-awesome/css/font-awesome.css","../../node_modules/bootstrap/dist/css/bootstrap.css":"../node_modules/bootstrap/dist/css/bootstrap.css","../../node_modules/react-toastify/dist/ReactToastify.css":"../node_modules/react-toastify/dist/ReactToastify.css","./..\\images\\bg.jpg":[["bg.43bfd8b0.jpg","images/bg.jpg"],"images/bg.jpg"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"services/common.ts":[function(require,module,exports) {
 "use strict";
 
 var _createClass2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/createClass"));
 
+var _regenerator = _interopRequireDefault(require("@babel/runtime-corejs2/regenerator"));
+
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/classCallCheck"));
 
+var _promise = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/promise"));
+
+var _this = void 0;
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var __awaiter = void 0 && (void 0).__awaiter || function (thisArg, _arguments, P, generator) {
+  return new (P || (P = _promise.default))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : new P(function (resolve) {
+        resolve(result.value);
+      }).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -62581,6 +62615,49 @@ Common.parseQueryString = function () {
     objURL[$1] = $3;
   });
   return objURL;
+};
+
+Common.getTimeZones = function () {
+  var key = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '7X0X1YP2FQH1';
+  var format = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'json';
+  return __awaiter(_this, void 0, void 0,
+  /*#__PURE__*/
+  _regenerator.default.mark(function _callee() {
+    var res, _ref, zones;
+
+    return _regenerator.default.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return fetch("http://api.timezonedb.com/v2.1/list-time-zone?key=".concat(key, "&format=").concat(format));
+
+          case 2:
+            res = _context.sent;
+
+            if (res.ok) {
+              _context.next = 5;
+              break;
+            }
+
+            throw Error('Updating files was failed');
+
+          case 5:
+            _context.next = 7;
+            return res.json();
+
+          case 7:
+            _ref = _context.sent;
+            zones = _ref.zones;
+            return _context.abrupt("return", zones);
+
+          case 10:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
 };
 
 exports.default = Common;
@@ -62610,7 +62687,7 @@ Constants.Events = {
   REMOVE_XMLTV_URL: 'onRemoREMOVE_XMLTV_URLveXmltvUrl'
 };
 exports.Constants = Constants;
-},{"@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js"}],"services/filesService.ts":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/regenerator":"../node_modules/@babel/runtime-corejs2/regenerator/index.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/core-js/promise":"../node_modules/@babel/runtime-corejs2/core-js/promise.js"}],"services/filesService.ts":[function(require,module,exports) {
 "use strict";
 
 var _stringify = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/json/stringify"));
@@ -65125,12 +65202,52 @@ XmltvFilesComponent.propTypes = {
   })),
   onChangeCallback: _propTypes.default.func
 };
-},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","../../styles/file-items.scss":"styles/file-items.scss","./xmltvFileItem":"components/xmltvFiles/xmltvFileItem.jsx"}],"components/settingsModal/settingsPage.tsx":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js","../../styles/file-items.scss":"styles/file-items.scss","./xmltvFileItem":"components/xmltvFiles/xmltvFileItem.jsx"}],"components/shared/index.tsx":[function(require,module,exports) {
+"use strict";
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+  }
+  result["default"] = mod;
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var React = __importStar(require("react"));
+
+exports.Checkbox = function (_ref) {
+  var name = _ref.name,
+      checked = _ref.checked,
+      label = _ref.label,
+      handleInputChange = _ref.handleInputChange;
+  return React.createElement("div", {
+    className: "custom-control custom-checkbox"
+  }, React.createElement("input", {
+    type: "checkbox",
+    className: "custom-control-input",
+    id: name,
+    checked: checked,
+    onChange: handleInputChange,
+    name: name
+  }), React.createElement("label", {
+    className: "custom-control-label",
+    htmlFor: name
+  }, label));
+};
+},{"react":"../node_modules/react/index.js"}],"components/settingsModal/settingsPage.tsx":[function(require,module,exports) {
 "use strict";
 
 var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/toConsumableArray"));
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime-corejs2/regenerator"));
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/defineProperty"));
 
 var _parseInt = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/number/parse-int"));
 
@@ -65206,11 +65323,13 @@ var xmltvFiles_1 = __importDefault(require("../xmltvFiles/xmltvFiles"));
 
 var appContext_1 = __importDefault(require("../appContext"));
 
-var common_1 = require("../../services/common");
+var common_1 = __importStar(require("../../services/common"));
 
 var settingsService_1 = __importDefault(require("../../services/settingsService"));
 
 var filesService_1 = __importDefault(require("../../services/filesService"));
+
+var shared_1 = require("../shared");
 
 var SettingsPage =
 /*#__PURE__*/
@@ -65222,7 +65341,9 @@ function (_React$PureComponent) {
 
     (0, _classCallCheck2.default)(this, SettingsPage);
     _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(SettingsPage).call(this, props));
-    _this.state = (0, _extends2.default)({}, _this.props);
+    _this.state = (0, _extends2.default)({}, _this.props, {
+      zones: []
+    });
     /**
      *
      * @param e
@@ -65232,9 +65353,21 @@ function (_React$PureComponent) {
       e.preventDefault();
 
       _this.setState({
-        settings: {
+        settings: (0, _extends2.default)({}, _this.state.settings, {
           halfHourWidth: (0, _parseInt.default)(e.currentTarget.value)
-        }
+        })
+      }, function () {
+        settingsService_1.default.save(_this.state.settings);
+
+        _this.context.onSettingsChanged();
+      });
+    };
+
+    _this.onSettingsInputChanged = function (e) {
+      e.preventDefault();
+
+      _this.setState({
+        settings: (0, _extends2.default)({}, _this.state.settings, (0, _defineProperty2.default)({}, e.currentTarget.name, e.currentTarget.checked))
       }, function () {
         settingsService_1.default.save(_this.state.settings);
 
@@ -65246,9 +65379,9 @@ function (_React$PureComponent) {
       e.preventDefault();
 
       _this.setState({
-        settings: {
+        settings: (0, _extends2.default)({}, _this.state.settings, {
           tz: e.currentTarget.value
-        }
+        })
       }, function () {
         settingsService_1.default.save(_this.state.settings);
 
@@ -65371,18 +65504,45 @@ function (_React$PureComponent) {
 
     _this.onXmltvFilesChangeCallback.bind((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)));
 
+    _this.onSettingsInputChanged.bind((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)));
+
     return _this;
   }
 
   (0, _createClass2.default)(SettingsPage, [{
+    key: "componentWillMount",
+    value: function componentWillMount() {
+      return __awaiter(this, void 0, void 0,
+      /*#__PURE__*/
+      _regenerator.default.mark(function _callee4() {
+        return _regenerator.default.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.t0 = this;
+                _context4.next = 3;
+                return common_1.default.getTimeZones();
+
+              case 3:
+                _context4.t1 = _context4.sent;
+                _context4.t2 = {
+                  zones: _context4.t1
+                };
+
+                _context4.t0.setState.call(_context4.t0, _context4.t2);
+
+              case 6:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+    }
+  }, {
     key: "componentWillReceiveProps",
     value: function componentWillReceiveProps(nextProps) {
-      if (nextProps.files !== this.props.files) {
-        //Perform some operation
-        this.setState({
-          files: nextProps.files
-        });
-      }
+      this.setState((0, _extends2.default)({}, nextProps));
     }
   }, {
     key: "render",
@@ -65410,20 +65570,51 @@ function (_React$PureComponent) {
         id: "zone_lit",
         onChange: this.onTzSelectChanged,
         value: this.state.settings.tz
-      }, this.props.zones.map(function (e, key) {
+      }, this.state.zones.map(function (e, key) {
         return React.createElement("option", {
           key: key,
-          value: e
-        }, e);
+          value: e.zoneName
+        }, e.zoneName);
       })));
-      return React.createElement("div", null, React.createElement("h1", null, "Settings"), React.createElement("div", {
-        className: "container"
-      }, React.createElement("form", {
+      return React.createElement("div", null, React.createElement("h1", null, "Settings"), React.createElement("form", {
         className: "form"
-      }, halfHourInput, timeZone), React.createElement(xmltvFiles_1.default, {
+      }, React.createElement("div", {
+        className: "card"
+      }, React.createElement("div", {
+        className: "card-header"
+      }, "General"), React.createElement("div", {
+        className: "card-body"
+      }, halfHourInput, timeZone)), React.createElement("div", {
+        className: "card"
+      }, React.createElement("div", {
+        className: "card-header"
+      }, "Hightlights"), React.createElement("div", {
+        className: "card-body"
+      }, React.createElement(shared_1.Checkbox, {
+        checked: this.state.settings.HighlightNew,
+        name: "HighlightNew",
+        label: "Highlight new tv shows",
+        handleInputChange: this.onSettingsInputChanged
+      }), React.createElement(shared_1.Checkbox, {
+        checked: this.state.settings.HighlightMovies,
+        name: "HighlightMovies",
+        label: "Highlight Movies",
+        handleInputChange: this.onSettingsInputChanged
+      }), React.createElement(shared_1.Checkbox, {
+        checked: this.state.settings.HighlightSport,
+        name: "HighlightSport",
+        label: "Highlight Sports",
+        handleInputChange: this.onSettingsInputChanged
+      }))), React.createElement("div", {
+        className: "card"
+      }, React.createElement("div", {
+        className: "card-header"
+      }, "Source"), React.createElement("div", {
+        className: "card-body"
+      }, React.createElement(xmltvFiles_1.default, {
         files: this.state.files,
         onChangeCallback: this.onXmltvFilesChangeCallback
-      })));
+      })))));
     }
   }]);
   return SettingsPage;
@@ -65431,7 +65622,7 @@ function (_React$PureComponent) {
 
 SettingsPage.contextType = appContext_1.default;
 exports.default = SettingsPage;
-},{"@babel/runtime-corejs2/helpers/toConsumableArray":"../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js","@babel/runtime-corejs2/regenerator":"../node_modules/@babel/runtime-corejs2/regenerator/index.js","@babel/runtime-corejs2/core-js/number/parse-int":"../node_modules/@babel/runtime-corejs2/core-js/number/parse-int.js","@babel/runtime-corejs2/helpers/extends":"../node_modules/@babel/runtime-corejs2/helpers/extends.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","@babel/runtime-corejs2/helpers/assertThisInitialized":"../node_modules/@babel/runtime-corejs2/helpers/assertThisInitialized.js","@babel/runtime-corejs2/core-js/promise":"../node_modules/@babel/runtime-corejs2/core-js/promise.js","react":"../node_modules/react/index.js","../xmltvFiles/xmltvFiles":"components/xmltvFiles/xmltvFiles.jsx","../appContext":"components/appContext.ts","../../services/common":"services/common.ts","../../services/settingsService":"services/settingsService.ts","../../services/filesService":"services/filesService.ts"}],"components/app.tsx":[function(require,module,exports) {
+},{"@babel/runtime-corejs2/helpers/toConsumableArray":"../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js","@babel/runtime-corejs2/regenerator":"../node_modules/@babel/runtime-corejs2/regenerator/index.js","@babel/runtime-corejs2/helpers/defineProperty":"../node_modules/@babel/runtime-corejs2/helpers/defineProperty.js","@babel/runtime-corejs2/core-js/number/parse-int":"../node_modules/@babel/runtime-corejs2/core-js/number/parse-int.js","@babel/runtime-corejs2/helpers/extends":"../node_modules/@babel/runtime-corejs2/helpers/extends.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","@babel/runtime-corejs2/helpers/assertThisInitialized":"../node_modules/@babel/runtime-corejs2/helpers/assertThisInitialized.js","@babel/runtime-corejs2/core-js/promise":"../node_modules/@babel/runtime-corejs2/core-js/promise.js","react":"../node_modules/react/index.js","../xmltvFiles/xmltvFiles":"components/xmltvFiles/xmltvFiles.jsx","../appContext":"components/appContext.ts","../../services/common":"services/common.ts","../../services/settingsService":"services/settingsService.ts","../../services/filesService":"services/filesService.ts","../shared":"components/shared/index.tsx"}],"components/app.tsx":[function(require,module,exports) {
 "use strict";
 
 var _extends2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/extends"));
@@ -65729,7 +65920,6 @@ function (_React$Component) {
         path: "/settings",
         render: function render() {
           return React.createElement(settingsPage_1.default, {
-            zones: appContext_1.Zones,
             files: _this4.state.files,
             settings: _this4.state.settings
           });

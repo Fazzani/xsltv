@@ -4,6 +4,7 @@ export interface Settings {
   halfHourWidth?: number
   HighlightMovies?: boolean
   HighlightNew?: boolean
+  HighlightSport?: boolean
   MyJsonId?: string
 }
 

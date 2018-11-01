@@ -1,19 +1,20 @@
 import * as React from 'react'
 import XmltvFilesComponent from '../xmltvFiles/xmltvFiles'
 import AppContext, { AppContextInterface } from '../appContext'
-import { Constants } from '../../services/common'
+import Common, { Constants, TimeZone } from '../../services/common'
 import SettingsService, { Settings } from '../../services/settingsService'
 import filesServices from '../../services/filesService'
 import { XmltvFile } from '../entities'
+import { Checkbox } from '../shared'
 
 interface SettingsPageProps {
-  zones: string[]
   files?: XmltvFile[]
   settings: Settings
 }
 interface SettingsPageState {
   files?: XmltvFile[]
   settings: Settings
+  zones: TimeZone[]
 }
 
 export default class SettingsPage extends React.PureComponent<SettingsPageProps, SettingsPageState> {
@@ -21,6 +22,7 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
 
   state = {
     ...this.props,
+    zones: [],
   }
 
   constructor(props: SettingsPageProps) {
@@ -28,13 +30,15 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
     this.halfHourWidthChanged.bind(this)
     this.onTzSelectChanged.bind(this)
     this.onXmltvFilesChangeCallback.bind(this)
+    this.onSettingsInputChanged.bind(this)
+  }
+
+  async componentWillMount() {
+    this.setState({ zones: await Common.getTimeZones() })
   }
 
   componentWillReceiveProps(nextProps: SettingsPageProps) {
-    if (nextProps.files !== this.props.files) {
-      //Perform some operation
-      this.setState({ files: nextProps.files });
-    }
+    this.setState({ ...nextProps })
   }
 
   /**
@@ -43,7 +47,15 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
    */
   halfHourWidthChanged = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault()
-    this.setState({ settings: { halfHourWidth: Number.parseInt(e.currentTarget.value) } }, () => {
+    this.setState({ settings: { ...this.state.settings, halfHourWidth: Number.parseInt(e.currentTarget.value) } }, () => {
+      SettingsService.save(this.state.settings)
+      this.context.onSettingsChanged()
+    })
+  }
+
+  onSettingsInputChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    this.setState({ settings: { ...this.state.settings, [e.currentTarget.name]: e.currentTarget.checked } }, () => {
       SettingsService.save(this.state.settings)
       this.context.onSettingsChanged()
     })
@@ -51,7 +63,7 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
 
   onTzSelectChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault()
-    this.setState({ settings: { tz: e.currentTarget.value } }, () => {
+    this.setState({ settings: { ...this.state.settings, tz: e.currentTarget.value } }, () => {
       SettingsService.save(this.state.settings)
       this.context.onSettingsChanged()
     })
@@ -126,27 +138,59 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
           Time zone
         </label>
         <select className="form-control" id="zone_lit" onChange={this.onTzSelectChanged} value={this.state.settings.tz}>
-          {this.props.zones.map((e, key) => {
+          {this.state.zones.map((e: TimeZone, key) => {
             return (
-              <option key={key} value={e}>
-                {e}
+              <option key={key} value={e.zoneName}>
+                {e.zoneName}
               </option>
             )
           })}
         </select>
       </div>
     )
-
     return (
       <div>
         <h1>Settings</h1>
-        <div className="container">
-          <form className="form">
-            {halfHourInput}
-            {timeZone}
-          </form>
-          <XmltvFilesComponent files={this.state.files} onChangeCallback={this.onXmltvFilesChangeCallback} />
-        </div>
+        <form className="form">
+            <div className="card">
+              <div className="card-header">General</div>
+              <div className="card-body">
+                {halfHourInput}
+                {timeZone}
+              </div>
+            </div>
+            <div className="card">
+              <div className="card-header">Hightlights</div>
+              <div className="card-body">
+                <Checkbox
+                  checked={this.state.settings.HighlightNew}
+                  name="HighlightNew"
+                  label="Highlight new tv shows"
+                  handleInputChange={this.onSettingsInputChanged}
+                />
+                <Checkbox
+                  checked={this.state.settings.HighlightMovies}
+                  name="HighlightMovies"
+                  label="Highlight Movies"
+                  handleInputChange={this.onSettingsInputChanged}
+                />
+                <Checkbox
+                  checked={this.state.settings.HighlightSport}
+                  name="HighlightSport"
+                  label="Highlight Sports"
+                  handleInputChange={this.onSettingsInputChanged}
+                />
+              </div>
+            </div>
+            <div className="card">
+              <div className="card-header">Source</div>
+              <div className="card-body">
+                <XmltvFilesComponent files={this.state.files} onChangeCallback={this.onXmltvFilesChangeCallback} />
+              </div>
+            </div>
+
+            {/* {JSON.stringify(this.state)} */}
+        </form>
       </div>
     )
   }

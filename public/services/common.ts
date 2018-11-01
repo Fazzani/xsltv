@@ -9,6 +9,23 @@ export default class Common {
     })
     return objURL
   }
+
+  static getTimeZones = async (key = '7X0X1YP2FQH1', format = 'json') => {
+    var res = await fetch(`http://api.timezonedb.com/v2.1/list-time-zone?key=${key}&format=${format}`)
+    if (!res.ok) {
+      throw Error('Updating files was failed')
+    }
+    const { zones }  = await res.json()
+    return zones as TimeZone[] 
+  }
+}
+
+export interface TimeZone {
+  countryCode: string
+  countryName: string
+  zoneName: string
+  gmtOffset: string
+  timestamp: number
 }
 
 export class Constants {

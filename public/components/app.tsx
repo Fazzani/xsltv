@@ -91,7 +91,7 @@ export default class App extends React.Component<AppProps, AppState> {
             <SideMenu />
             <div className="container">
               <Route path="/about" render={() => <About />} />
-              <Route path="/settings" render={() => <SettingsPage zones={Zones} files={this.state.files} settings={this.state.settings} />} />
+              <Route path="/settings" render={() => <SettingsPage files={this.state.files} settings={this.state.settings} />} />
               <Route path="/" exact={true} render={() => <Home files={this.state.files} />} />
             </div>
             {this.state.loader && this.state.loader.loading ? <Loader displayText={this.state.loader.text} /> : null}
