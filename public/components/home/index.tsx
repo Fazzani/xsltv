@@ -27,6 +27,7 @@ interface HomeState {
   handleClosePanel: void
   intervals: string[]
   files?: XmltvFile[]
+  selectedFile?: XmltvFile
 }
 
 //TODO: react optimizations
@@ -35,9 +36,11 @@ interface HomeState {
 //TODO: Gérer les gaps
 //TODO: Gérer mobile version
 //TODO: Afficher the vertical timebar
+//TODO: remove duplicated programs (some key)
 
 export default class Home extends React.PureComponent<HomeProps, HomeState> {
   static contextType: React.Context<AppContextInterface> = AppContext
+  static FallbackSelectedFileUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
 
   constructor(props: HomeProps) {
     super(props)
@@ -45,16 +48,18 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
 
   componentWillReceiveProps(nextProps: HomeProps) {
     if (nextProps.files !== this.props.files) {
+      const selectedFile = (nextProps.files && nextProps.files.find(f => f.selected === true)) || {
+        url: Home.FallbackSelectedFileUrl,
+      }
       //Perform some operation
-      this.setState({ files: nextProps.files })
+      this.setState({ files: nextProps.files, selectedFile: selectedFile }, () => this.loadFile())
     }
   }
 
-  async componentDidMount() {
+  async componentWillMount() {
     this.setState({ files: this.props.files })
-    const fallback = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
-    const testUrl = (this.props.files && this.props.files.filter(f => f.selected)[0]) || {
-      url: fallback,
+    const selectedFile = (this.props.files && this.props.files.find(f => f.selected === true)) || {
+      url: Home.FallbackSelectedFileUrl,
     }
 
     console.log(this.context.settings.tz)
@@ -69,44 +74,47 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
         totalWidth: halfHourWidth * 49,
         channelLeftWidth: halfHourWidth + 80,
         sidebarOpen: false,
+        selectedFile: selectedFile,
       },
       async () => {
         this.setState({ totalWidth: halfHourWidth * 48 + this.state.channelLeftWidth, offset: this.getTimeOffsetPerDay() })
-        await this.loadFile(testUrl)
+        await this.loadFile()
       }
     )
   }
 
-  async loadFile(fileUrl: XmltvFile) {
-    // this.context.loader.loading = true
-    const response = await fetch(fileUrl.url)
-    this.context.handleErrors(response)
-    const xmlString = await response.text()
-    const docJson = parser.parse(xmlString, {
-      attributeNamePrefix: '',
-      ignoreAttributes: false,
-    })
-
-    if (docJson.tv) {
-      docJson.tv.programme.map((p: Program) => {
-        p.startTime = DateTime.fromFormat(p.start, 'yyyyMMddhhmmss ZZZ')
-        p.stopTime = DateTime.fromFormat(p.stop, 'yyyyMMddhhmmss ZZZ')
-
-        p.duration = Interval.fromDateTimes(p.startTime, p.stopTime).length('minute')
-        p.coefficient = p.duration / 30
-        p.durationPercent = Math.floor((p.duration / MinutesPerDay) * 100)
-        p.width = this.state.halfHourWidth * p.coefficient
-        p.id = `${p.channel}${p.start}`.replace(/[\s\+\.]/g, '')
-        return p
+  async loadFile() {
+    if (this.state.selectedFile) {
+      // this.context.loader.loading = true
+      const response = await fetch(this.state.selectedFile.url)
+      this.context.handleErrors(response)
+      const xmlString = await response.text()
+      const docJson = parser.parse(xmlString, {
+        attributeNamePrefix: '',
+        ignoreAttributes: false,
       })
 
-      const allTvgChannels = docJson.tv.channel.map((c: Channel) => {
-        c.programs = docJson.tv.programme.filter((p: Program) => p.channel === c.id)
-        return c
-      })
-      this.setState({ allTvgChannels }, () => {
-        this.fetchPrograms()
-      })
+      if (docJson.tv) {
+        docJson.tv.programme.map((p: Program) => {
+          p.startTime = DateTime.fromFormat(p.start, 'yyyyMMddhhmmss ZZZ')
+          p.stopTime = DateTime.fromFormat(p.stop, 'yyyyMMddhhmmss ZZZ')
+
+          p.duration = Interval.fromDateTimes(p.startTime, p.stopTime).length('minute')
+          p.coefficient = p.duration / 30
+          p.durationPercent = Math.floor((p.duration / MinutesPerDay) * 100)
+          p.width = this.state.halfHourWidth * p.coefficient
+          p.id = `${p.channel}${p.start}`.replace(/[\s\+\.]/g, '')
+          return p
+        })
+
+        const allTvgChannels = docJson.tv.channel.map((c: Channel) => {
+          c.programs = docJson.tv.programme.filter((p: Program) => p.channel === c.id)
+          return c
+        })
+        this.setState({ allTvgChannels }, () => {
+          this.fetchPrograms()
+        })
+      }
     }
   }
 
@@ -224,7 +232,7 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
           <div className="listings-program" style={{ minWidth: p.width }} key={p.id}>
             <div className="listings-program-title">
               <a href="#" onClick={e => this.onSelectProgram(e, p)}>
-                {p.title['#text']}
+                {p.title && p.title['#text']}
               </a>
             </div>
             <div className="listings-details">

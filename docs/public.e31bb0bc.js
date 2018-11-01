@@ -64370,6 +64370,7 @@ var tvgChannel_1 = __importDefault(require("../tvgChannel/tvgChannel")); //TODO:
 //TODO: Gérer les gaps
 //TODO: Gérer mobile version
 //TODO: Afficher the vertical timebar
+//TODO: remove duplicated programs (some key)
 
 
 var Home =
@@ -64465,22 +64466,32 @@ function (_React$PureComponent) {
   (0, _createClass2.default)(Home, [{
     key: "componentWillReceiveProps",
     value: function componentWillReceiveProps(nextProps) {
+      var _this2 = this;
+
       if (nextProps.files !== this.props.files) {
-        //Perform some operation
+        var selectedFile = nextProps.files && nextProps.files.find(function (f) {
+          return f.selected === true;
+        }) || {
+          url: Home.FallbackSelectedFileUrl
+        }; //Perform some operation
+
         this.setState({
-          files: nextProps.files
+          files: nextProps.files,
+          selectedFile: selectedFile
+        }, function () {
+          return _this2.loadFile();
         });
       }
     }
   }, {
-    key: "componentDidMount",
-    value: function componentDidMount() {
+    key: "componentWillMount",
+    value: function componentWillMount() {
       return __awaiter(this, void 0, void 0,
       /*#__PURE__*/
       _regenerator.default.mark(function _callee2() {
-        var _this2 = this;
+        var _this3 = this;
 
-        var fallback, testUrl, current_date, halfHourWidth;
+        var selectedFile, current_date, halfHourWidth;
         return _regenerator.default.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
@@ -64488,11 +64499,10 @@ function (_React$PureComponent) {
                 this.setState({
                   files: this.props.files
                 });
-                fallback = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv';
-                testUrl = this.props.files && this.props.files.filter(function (f) {
-                  return f.selected;
-                })[0] || {
-                  url: fallback
+                selectedFile = this.props.files && this.props.files.find(function (f) {
+                  return f.selected === true;
+                }) || {
+                  url: Home.FallbackSelectedFileUrl
                 };
                 console.log(this.context.settings.tz);
                 current_date = luxon_1.DateTime.local();
@@ -64503,9 +64513,10 @@ function (_React$PureComponent) {
                   halfHourWidth: halfHourWidth,
                   totalWidth: halfHourWidth * 49,
                   channelLeftWidth: halfHourWidth + 80,
-                  sidebarOpen: false
+                  sidebarOpen: false,
+                  selectedFile: selectedFile
                 }, function () {
-                  return __awaiter(_this2, void 0, void 0,
+                  return __awaiter(_this3, void 0, void 0,
                   /*#__PURE__*/
                   _regenerator.default.mark(function _callee() {
                     return _regenerator.default.wrap(function _callee$(_context) {
@@ -64517,7 +64528,7 @@ function (_React$PureComponent) {
                               offset: this.getTimeOffsetPerDay()
                             });
                             _context.next = 3;
-                            return this.loadFile(testUrl);
+                            return this.loadFile();
 
                           case 3:
                           case "end":
@@ -64528,7 +64539,7 @@ function (_React$PureComponent) {
                   }));
                 });
 
-              case 7:
+              case 6:
               case "end":
                 return _context2.stop();
             }
@@ -64538,27 +64549,32 @@ function (_React$PureComponent) {
     }
   }, {
     key: "loadFile",
-    value: function loadFile(fileUrl) {
+    value: function loadFile() {
       return __awaiter(this, void 0, void 0,
       /*#__PURE__*/
       _regenerator.default.mark(function _callee3() {
-        var _this3 = this;
+        var _this4 = this;
 
         var response, xmlString, docJson, allTvgChannels;
         return _regenerator.default.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _context3.next = 2;
-                return fetch(fileUrl.url);
+                if (!this.state.selectedFile) {
+                  _context3.next = 10;
+                  break;
+                }
 
-              case 2:
+                _context3.next = 3;
+                return fetch(this.state.selectedFile.url);
+
+              case 3:
                 response = _context3.sent;
                 this.context.handleErrors(response);
-                _context3.next = 6;
+                _context3.next = 7;
                 return response.text();
 
-              case 6:
+              case 7:
                 xmlString = _context3.sent;
                 docJson = fast_xml_parser_1.default.parse(xmlString, {
                   attributeNamePrefix: '',
@@ -64572,7 +64588,7 @@ function (_React$PureComponent) {
                     p.duration = luxon_1.Interval.fromDateTimes(p.startTime, p.stopTime).length('minute');
                     p.coefficient = p.duration / 30;
                     p.durationPercent = Math.floor(p.duration / entities_1.MinutesPerDay * 100);
-                    p.width = _this3.state.halfHourWidth * p.coefficient;
+                    p.width = _this4.state.halfHourWidth * p.coefficient;
                     p.id = "".concat(p.channel).concat(p.start).replace(/[\s\+\.]/g, '');
                     return p;
                   });
@@ -64585,11 +64601,11 @@ function (_React$PureComponent) {
                   this.setState({
                     allTvgChannels: allTvgChannels
                   }, function () {
-                    _this3.fetchPrograms();
+                    _this4.fetchPrograms();
                   });
                 }
 
-              case 9:
+              case 10:
               case "end":
                 return _context3.stop();
             }
@@ -64608,7 +64624,7 @@ function (_React$PureComponent) {
   }, {
     key: "render",
     value: function render() {
-      var _this4 = this;
+      var _this5 = this;
 
       var headerTimeBar = function headerTimeBar(totalWidth) {
         return React.createElement("li", {
@@ -64617,7 +64633,7 @@ function (_React$PureComponent) {
           return React.createElement("div", {
             className: "listings-timebar-time",
             style: {
-              width: _this4.state.halfHourWidth
+              width: _this5.state.halfHourWidth
             },
             key: x
           }, x);
@@ -64631,12 +64647,12 @@ function (_React$PureComponent) {
         }, React.createElement("div", {
           className: "listings-channel",
           style: {
-            width: _this4.state.channelLeftWidth
+            width: _this5.state.channelLeftWidth
           }
         }, React.createElement("a", {
           href: "#",
           onClick: function onClick(e) {
-            return _this4.onSelectChannel(e, c);
+            return _this5.onSelectChannel(e, c);
           }
         }, c.icon ? React.createElement("img", {
           src: c.icon.src,
@@ -64660,9 +64676,9 @@ function (_React$PureComponent) {
           }, React.createElement("a", {
             href: "#",
             onClick: function onClick(e) {
-              return _this4.onSelectProgram(e, p);
+              return _this5.onSelectProgram(e, p);
             }
-          }, p.title['#text'])), React.createElement("div", {
+          }, p.title && p.title['#text'])), React.createElement("div", {
             className: "listings-details"
           }, React.createElement("span", {
             className: "listings-details-first"
@@ -64690,7 +64706,7 @@ function (_React$PureComponent) {
         href: "#",
         className: "previous-day pull-left",
         onClick: function onClick(e) {
-          return _this4.onDayChanged(e, -1);
+          return _this5.onDayChanged(e, -1);
         },
         "data-toggle": "tooltip",
         "data-placement": "top",
@@ -64701,7 +64717,7 @@ function (_React$PureComponent) {
         href: "#",
         className: "previous pull-left",
         onClick: function onClick(e) {
-          return _this4.onSlide(e);
+          return _this5.onSlide(e);
         },
         "data-toggle": "tooltip",
         "data-placement": "top",
@@ -64712,7 +64728,7 @@ function (_React$PureComponent) {
         href: "#",
         className: "next-day pull-right",
         onClick: function onClick(e) {
-          return _this4.onDayChanged(e);
+          return _this5.onDayChanged(e);
         },
         "data-toggle": "tooltip",
         "data-placement": "top",
@@ -64723,7 +64739,7 @@ function (_React$PureComponent) {
         href: "#",
         className: "next pull-right",
         onClick: function onClick(e) {
-          return _this4.onSlide(e, false);
+          return _this5.onSlide(e, false);
         },
         "data-toggle": "tooltip",
         "data-placement": "top",
@@ -64770,6 +64786,7 @@ function (_React$PureComponent) {
 }(React.PureComponent);
 
 Home.contextType = appContext_1.default;
+Home.FallbackSelectedFileUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv';
 exports.default = Home;
 },{"@babel/runtime-corejs2/regenerator":"../node_modules/@babel/runtime-corejs2/regenerator/index.js","@babel/runtime-corejs2/helpers/extends":"../node_modules/@babel/runtime-corejs2/helpers/extends.js","@babel/runtime-corejs2/helpers/classCallCheck":"../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js","@babel/runtime-corejs2/helpers/createClass":"../node_modules/@babel/runtime-corejs2/helpers/createClass.js","@babel/runtime-corejs2/helpers/possibleConstructorReturn":"../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js","@babel/runtime-corejs2/helpers/getPrototypeOf":"../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js","@babel/runtime-corejs2/helpers/inherits":"../node_modules/@babel/runtime-corejs2/helpers/inherits.js","@babel/runtime-corejs2/core-js/promise":"../node_modules/@babel/runtime-corejs2/core-js/promise.js","react":"../node_modules/react/index.js","fast-xml-parser":"../node_modules/fast-xml-parser/src/parser.js","../entities":"components/entities.ts","../appContext":"components/appContext.ts","luxon":"../node_modules/luxon/build/cjs-browser/luxon.js","./style.scss":"components/home/style.scss","bootstrap":"../node_modules/bootstrap/dist/js/bootstrap.js","../sidePanel/sidePanel":"components/sidePanel/sidePanel.tsx","../tvgChannel/tvgChannel":"components/tvgChannel/tvgChannel.tsx"}],"../node_modules/core-js/library/modules/es6.array.is-array.js":[function(require,module,exports) {
 // 22.1.2.2 / 15.4.3.2 Array.isArray(arg)

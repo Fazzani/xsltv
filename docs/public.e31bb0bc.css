@@ -12258,6 +12258,7 @@ html body .modal-footer {
   overflow: hidden;
   display: flex;
   position: relative;
+  min-height: 83px;
 }
 .epg-container ul.listings-grid .listings-timebar-time {
   vertical-align: middle;
@@ -12270,6 +12271,7 @@ html body .modal-footer {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  max-height: 81px;
 }
 .epg-container ul.listings-grid .listings-channel img {
   max-width: 100%;
