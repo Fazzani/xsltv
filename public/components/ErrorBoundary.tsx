@@ -11,12 +11,10 @@ interface ErrorBoundaryState {
   notification?: AppNotification
 }
 export class ErrorBoundary extends React.PureComponent<ErrorBoundryProps, ErrorBoundaryState> {
-  
+  state: ErrorBoundaryState = { hasError: false }
   // @ts-ignore
   componentDidCatch(error, info) {
-    // Display fallback UI
-    this.setState({ error: error })
-    this.notify()
+    this.setState({ error: error }, () => this.notify())
   }
 
   notify = (notification?: AppNotification) => {

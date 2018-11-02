@@ -6,7 +6,7 @@ export interface SidePanelProps {
   pullRight: boolean
   onSetOpen(e:any): void
 }
-export default class SidePanel extends React.Component<SidePanelProps, {}> {
+export default class SidePanel extends React.PureComponent<SidePanelProps, {}> {
   render() {
     return (
       <div className={this.props.open ? 'sidepanel container open' : 'sidepanel container'}>

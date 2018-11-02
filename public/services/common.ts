@@ -15,8 +15,8 @@ export default class Common {
     if (!res.ok) {
       throw Error('Updating files was failed')
     }
-    const { zones }  = await res.json()
-    return zones as TimeZone[] 
+    const { zones } = await res.json()
+    return zones as TimeZone[]
   }
 }
 
@@ -34,6 +34,10 @@ export class Constants {
     LOAD_XMLTV_URL: 'LOAD_XMLTV_URL',
     ADD_XMLTV_URL: 'ADD_XMLTV_URL',
     REMOVE_XMLTV_URL: 'onRemoREMOVE_XMLTV_URLveXmltvUrl',
+  }
+
+  static OTHERS = {
+    XMLTV_DATETIME_FORMAT: 'yyyyMMddhhmmss ZZZ',
   }
 
   static get Urls() {

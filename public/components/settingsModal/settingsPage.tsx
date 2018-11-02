@@ -64,7 +64,9 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
   onTzSelectChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault()
     this.setState({ settings: { ...this.state.settings, tz: e.currentTarget.value } }, () => {
+      console.log('onTzSelectChanged')
       SettingsService.save(this.state.settings)
+      debugger
       this.context.onSettingsChanged()
     })
   }
@@ -152,44 +154,44 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
       <div>
         <h1>Settings</h1>
         <form className="form">
-            <div className="card">
-              <div className="card-header">General</div>
-              <div className="card-body">
-                {halfHourInput}
-                {timeZone}
-              </div>
+          <div className="card">
+            <div className="card-header">General</div>
+            <div className="card-body">
+              {halfHourInput}
+              {timeZone}
             </div>
-            <div className="card">
-              <div className="card-header">Hightlights</div>
-              <div className="card-body">
-                <Checkbox
-                  checked={this.state.settings.HighlightNew}
-                  name="HighlightNew"
-                  label="Highlight new tv shows"
-                  handleInputChange={this.onSettingsInputChanged}
-                />
-                <Checkbox
-                  checked={this.state.settings.HighlightMovies}
-                  name="HighlightMovies"
-                  label="Highlight Movies"
-                  handleInputChange={this.onSettingsInputChanged}
-                />
-                <Checkbox
-                  checked={this.state.settings.HighlightSport}
-                  name="HighlightSport"
-                  label="Highlight Sports"
-                  handleInputChange={this.onSettingsInputChanged}
-                />
-              </div>
+          </div>
+          <div className="card">
+            <div className="card-header">Highlights</div>
+            <div className="card-body">
+              <Checkbox
+                checked={this.state.settings.HighlightNew}
+                name="HighlightNew"
+                label="Highlight new tv shows"
+                handleInputChange={this.onSettingsInputChanged}
+              />
+              <Checkbox
+                checked={this.state.settings.HighlightMovies}
+                name="HighlightMovies"
+                label="Highlight Movies"
+                handleInputChange={this.onSettingsInputChanged}
+              />
+              <Checkbox
+                checked={this.state.settings.HighlightSport}
+                name="HighlightSport"
+                label="Highlight Sports"
+                handleInputChange={this.onSettingsInputChanged}
+              />
             </div>
-            <div className="card">
-              <div className="card-header">Source</div>
-              <div className="card-body">
-                <XmltvFilesComponent files={this.state.files} onChangeCallback={this.onXmltvFilesChangeCallback} />
-              </div>
+          </div>
+          <div className="card">
+            <div className="card-header">Source</div>
+            <div className="card-body">
+              <XmltvFilesComponent files={this.state.files} onChangeCallback={this.onXmltvFilesChangeCallback} />
             </div>
+          </div>
 
-            {/* {JSON.stringify(this.state)} */}
+          {/* {JSON.stringify(this.state)} */}
         </form>
       </div>
     )

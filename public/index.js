@@ -8,7 +8,7 @@ import App from './components/app'
 
 render(
   <ErrorBoundary>
-   <App/>
+    <App />
   </ErrorBoundary>,
   document.getElementById('app')
 )
@@ -29,7 +29,9 @@ if (module.hot) {
   })
 }
 
-// if (process.env.NODE_ENV !== 'production') {
-//   const { whyDidYouUpdate } = require('why-did-you-update')
-//   whyDidYouUpdate(React)
-// }
+if (process.env.NODE_ENV !== 'production') {
+  const { whyDidYouUpdate } = require('why-did-you-update')
+  whyDidYouUpdate(React, {
+    exclude: ['Link', 'Route'],
+  })
+}

@@ -7,6 +7,7 @@ import './style.scss'
 import 'bootstrap'
 import SidePanel from '../sidePanel/sidePanel'
 import TvgChannel from '../tvgChannel/tvgChannel'
+import { Constants } from '../../services/common'
 
 interface HomeProps {
   files?: XmltvFile[]
@@ -30,6 +31,8 @@ interface HomeState {
   selectedFile?: XmltvFile
 }
 
+//TODO; Fix checkbox Highlights settings
+//TODO: Fetch program by interval
 //TODO: react optimizations
 //TODO: prog detail
 //TODO: Gérér les tz
@@ -47,30 +50,28 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
   }
 
   componentWillReceiveProps(nextProps: HomeProps) {
-    if (nextProps.files !== this.props.files) {
+    if (JSON.stringify(nextProps.files) !== JSON.stringify(this.props.files)) {
       const selectedFile = (nextProps.files && nextProps.files.find(f => f.selected === true)) || {
         url: Home.FallbackSelectedFileUrl,
       }
-      //Perform some operation
       this.setState({ files: nextProps.files, selectedFile: selectedFile }, () => this.loadFile())
     }
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     this.setState({ files: this.props.files })
     const selectedFile = (this.props.files && this.props.files.find(f => f.selected === true)) || {
       url: Home.FallbackSelectedFileUrl,
     }
 
-    console.log(this.context.settings.tz)
+    // console.log(this.context.settings.tz)
     const current_date = DateTime.local()
-    const halfHourWidth = 100
-
+    const halfHourWidth = this.context.settings.halfHourWidth || 100
     this.setState(
       {
         currentDate: current_date,
         intervals: INTERVALS,
-        halfHourWidth,
+        halfHourWidth: halfHourWidth,
         totalWidth: halfHourWidth * 49,
         channelLeftWidth: halfHourWidth + 80,
         sidebarOpen: false,
@@ -85,7 +86,7 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
 
   async loadFile() {
     if (this.state.selectedFile) {
-      // this.context.loader.loading = true
+      this.context.toggleLoader(`Downloading the file ${this.state.selectedFile.name}...`, true)
       const response = await fetch(this.state.selectedFile.url)
       this.context.handleErrors(response)
       const xmlString = await response.text()
@@ -96,8 +97,8 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
 
       if (docJson.tv) {
         docJson.tv.programme.map((p: Program) => {
-          p.startTime = DateTime.fromFormat(p.start, 'yyyyMMddhhmmss ZZZ')
-          p.stopTime = DateTime.fromFormat(p.stop, 'yyyyMMddhhmmss ZZZ')
+          p.startTime = DateTime.fromFormat(p.start, Constants.OTHERS.XMLTV_DATETIME_FORMAT)
+          p.stopTime = DateTime.fromFormat(p.stop, Constants.OTHERS.XMLTV_DATETIME_FORMAT)
 
           p.duration = Interval.fromDateTimes(p.startTime, p.stopTime).length('minute')
           p.coefficient = p.duration / 30
@@ -112,6 +113,7 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
           return c
         })
         this.setState({ allTvgChannels }, () => {
+          this.context.toggleLoader(`Fetching programs`, true)
           this.fetchPrograms()
         })
       }
@@ -134,7 +136,7 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
       tvgChannelsDay.push(ch)
     })
     this.setState({ tvgChannelsDay })
-    this.context.loader.loading = false
+    this.context.toggleLoader(``, false)
   }
 
   // calculate time offset from midnight

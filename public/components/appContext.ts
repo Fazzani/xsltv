@@ -12,6 +12,7 @@ export interface AppContextInterface {
   notify(notification: AppNotification): void
   onSettingsChanged?(): void
   onFilesChanged?(): void
+  toggleLoader?(text: string, isLoading?: boolean): void
 }
 
 interface Loader {
