@@ -13,10 +13,11 @@
     "tslint": "tslint --project ./tsconfig.json '**/*.ts' --exclude '**/node_modules/**'",
     "test": "cross-env NODE_ENV=test jest",
     "test:watch": "npm test -- --watchAll",
-    "build": "parcel build public/index.html --out-dir docs --detailed-report --public-url ./",
+    "build": "parcel build public/index.html --out-dir docs --detailed-report --public-url ./xviewer",
     "start": "parcel public/index.html --out-dir docs",
     "push": "git add --all && git commit -m \"vscode deploy\" && git push",
     "prettify": "prettier --write './public/**/*.{ts,tsx,js,jsx}'",
+    "prepare": "rm -rf ./docs/**",
     "publish": "cross-env NODE_ENV=production npm run build && npm run push",
     "publish:noverify": "git add --all && git commit -m 'fix no-verify' --no-verify && git push --no-verify"
   },
