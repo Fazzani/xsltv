@@ -1,6 +1,6 @@
 /*eslint no-undef: "error"*/
 /*eslint-env browser*/
-import React from 'react'
+import * as React from 'react'
 import { render } from 'react-dom'
 import registerServiceWorker from './registerServiceWorker'
 import { ErrorBoundary } from './components/ErrorBoundary'
@@ -29,7 +29,9 @@ if (module.hot) {
   })
 }
 
-// if (process.env.NODE_ENV !== 'production') {
-//   const { whyDidYouUpdate } = require('why-did-you-update')
-//   whyDidYouUpdate(React)
-// }
+if (process.env.NODE_ENV !== 'production') {
+  const { whyDidYouUpdate } = require('why-did-you-update')
+  whyDidYouUpdate(React, {
+    exclude: ['Link', 'Route'],
+  })
+}

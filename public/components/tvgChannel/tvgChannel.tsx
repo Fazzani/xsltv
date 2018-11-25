@@ -2,26 +2,24 @@ import * as React from 'react'
 import '../../styles/loader.scss'
 import { TvgChannelProps } from './tvgChannel'
 import './style.scss'
-import moment from 'moment'
 import $ from 'jquery'
 import 'bootstrap'
-import { Channel, Program } from './entities'
+import { Channel, Program } from '../entities'
+import { DateTime } from 'luxon'
 
 export interface TvgChannelProps {
-  channel: undefined | Channel,
+  channel: undefined | Channel
   currentDate?: Date
 }
 
-export default class TvgChannel extends React.Component<TvgChannelProps, {}> {
+export default class TvgChannel extends React.PureComponent<TvgChannelProps, {}> {
   constructor(props: TvgChannelProps) {
     super(props)
   }
 
   handleClickCollapse = (e: any) => {
-    ($(e.target.attributes['data-target'].value) as any).collapse('toggle')
+    ;($(e.target.attributes['data-target'].value) as any).collapse('toggle')
   }
-
-  getFormatedDateTime = (date: string) => moment(date, 'YYYYMMDDHHmmss [Z]').format('hh:MM')
 
   render() {
     const category = (c: any) => <span className="category">{c['#text']}</span>
@@ -49,18 +47,18 @@ export default class TvgChannel extends React.Component<TvgChannelProps, {}> {
     const listItems =
       this.props.channel &&
       this.props.channel.programs &&
-      this.props.channel.programs.map((p, i) => (
-        <li className="program-item row" key={i}>
+      this.props.channel.programs.map(p => (
+        <li className="program-item row" key={p.channel + p.start}>
           <span className="start">
-            <h3>{this.getFormatedDateTime(p.start)}</h3>
+            <h3>{p.startTime.toLocaleString(DateTime.TIME_24_SIMPLE)}</h3>
           </span>
           <span className="content">
-            <a className="title" data-toggle="collapse" data-target={'#' + i.toString()} onClick={e => this.handleClickCollapse(e)}>
+            <a className="title" data-toggle="collapse" data-target={'#' + p.id} onClick={e => this.handleClickCollapse(e)}>
               {p.title['#text']}
             </a>
             <span>{p.category && category(p.category)}</span>
 
-            <div className="collapse" id={i.toString()}>
+            <div className="collapse" id={p.id}>
               <div className="row details">
                 {subtitle(p)}
                 {date(p)}

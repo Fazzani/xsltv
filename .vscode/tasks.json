@@ -7,7 +7,9 @@
       "type": "npm",
       "script": "start",
       "isBackground": true,
-      "problemMatcher": ["$eslint-stylish"],
+      "problemMatcher": [
+        "$eslint-stylish"
+      ],
       "label": "Start",
       "presentation": {
         "echo": true,
@@ -64,7 +66,9 @@
       "label": "Lint",
       "type": "npm",
       "script": "lint",
-      "problemMatcher": ["$eslint-stylish"],
+      "problemMatcher": [
+        "$eslint-stylish"
+      ],
       "options": {
         "cwd": "${workspaceRoot}"
       },
@@ -80,7 +84,9 @@
       "label": "Publish",
       "type": "npm",
       "script": "publish",
-      "problemMatcher": ["$eslint-stylish"],
+      "problemMatcher": [
+        "$eslint-stylish"
+      ],
       "options": {
         "cwd": "${workspaceRoot}"
       },
@@ -91,6 +97,11 @@
         "panel": "shared",
         "showReuseMessage": true
       }
+    },
+    {
+      "type": "npm",
+      "script": "publish:noverify",
+      "problemMatcher": []
     }
   ]
 }
