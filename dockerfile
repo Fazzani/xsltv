@@ -1,6 +1,6 @@
 # You should always specify a full version here to ensure all of your developers
 # are running the same version of Node.
-FROM node:8 as build
+FROM node:11 as build
 
 # The base node image sets a very verbose log level.
 ENV NPM_CONFIG_LOGLEVEL warn
@@ -11,7 +11,7 @@ WORKDIR  /build
 # Copy all local files into the image.
 COPY . .
 
-RUN ls -la && npm install
+RUN npm i -g parcel-bundler && npm install
 # Build for production.
 RUN npm run prepare && npm run build
 
