@@ -15,7 +15,7 @@
     "test:watch": "npm test -- --watchAll",
     "build": "parcel build public/index.html --out-dir docs --detailed-report --public-url ./",
     "start": "parcel public/index.html --out-dir docs",
-    "push": "git add --all && git commit -m \"vscode deploy\" && git push",
+    "push": "git add --all && git commit -m \"vscode deploy\" --no-verify && git push --no-verify",
     "prettify": "prettier --write './public/**/*.{ts,tsx,js,jsx}'",
     "prepare": "rm -rf ./docs/**",
     "publish": "cross-env NODE_ENV=production npm run build && npm run push",
