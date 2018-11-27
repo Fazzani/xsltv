@@ -11,7 +11,7 @@ COPY . .
 
 RUN npm install
 # Build for production.
-RUN npm run build -- --production
+RUN npm run build
 
 FROM node:11-alpine
 # The base node image sets a very verbose log level.
