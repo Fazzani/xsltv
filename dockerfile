@@ -4,16 +4,14 @@ FROM node:11 as build
 
 # The base node image sets a very verbose log level.
 ENV NPM_CONFIG_LOGLEVEL warn
-ENV NODE_ENV=production
-ENV PORT=5000
 
 WORKDIR  /build
 # Copy all local files into the image.
 COPY . .
 
-RUN npm i -g parcel-bundler && npm install
+RUN npm install
 # Build for production.
-RUN npm run prepare && npm run build
+RUN npm run build -- --production
 
 FROM node:11-alpine
 # The base node image sets a very verbose log level.
