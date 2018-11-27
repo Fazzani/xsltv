@@ -165,3 +165,5 @@ node_modules/
 *.log
 coverage/
 __snapshots__
+docs/
+package-lock.json
