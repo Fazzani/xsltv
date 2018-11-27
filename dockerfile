@@ -11,7 +11,7 @@ WORKDIR  /build
 # Copy all local files into the image.
 COPY . .
 
-RUN npm install
+RUN ls -la && npm install
 # Build for production.
 RUN npm run prepare && npm run build
 

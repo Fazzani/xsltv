@@ -1,5 +1,7 @@
 # EPG Viewer
 
+[![Build Status](https://travis-ci.org/Fazzani/xviewer.svg?branch=master)](https://travis-ci.org/Fazzani/xviewer)
+
 Epg viewer for XMLTV format based on xsltv project.
 
 > [GO TO Live Demo][live]
