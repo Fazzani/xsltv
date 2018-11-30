@@ -4,7 +4,7 @@
   "theme_color": "#191925",
   "background_color": "#191925",
   "scope": "/",
-  "start_url": "/xviewer/",
+  "start_url": "/",
   "display": "fullscreen",
   "orientation": "landscape",
   "lang": "en-US",

@@ -43,7 +43,7 @@ interface HomeState {
 
 export default class Home extends React.PureComponent<HomeProps, HomeState> {
   static contextType: React.Context<AppContextInterface> = AppContext
-  static FallbackSelectedFileUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/others.xmltv'
+  static FallbackSelectedFileUrl = 'https://raw.githubusercontent.com/Fazzani/grab/master/ar_bein.xmltv'
 
   constructor(props: HomeProps) {
     super(props)
@@ -53,6 +53,7 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
     if (JSON.stringify(nextProps.files) !== JSON.stringify(this.props.files)) {
       const selectedFile = (nextProps.files && nextProps.files.find(f => f.selected === true)) || {
         url: Home.FallbackSelectedFileUrl,
+        name: 'Default',
       }
       this.setState({ files: nextProps.files, selectedFile: selectedFile }, () => this.loadFile())
     }
@@ -62,6 +63,7 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
     this.setState({ files: this.props.files })
     const selectedFile = (this.props.files && this.props.files.find(f => f.selected === true)) || {
       url: Home.FallbackSelectedFileUrl,
+      name: 'Default',
     }
 
     // console.log(this.context.settings.tz)
@@ -95,7 +97,7 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
         ignoreAttributes: false,
       })
 
-      if (docJson.tv) {
+      if (docJson.tv && docJson.tv.programme) {
         docJson.tv.programme.map((p: Program) => {
           p.startTime = DateTime.fromFormat(p.start, Constants.OTHERS.XMLTV_DATETIME_FORMAT)
           p.stopTime = DateTime.fromFormat(p.stop, Constants.OTHERS.XMLTV_DATETIME_FORMAT)
