@@ -11,3 +11,4 @@ script:
   - docker build -t "synker/xviewer:${version}" -t "synker/xviewer:latest" --build-arg version=$version -f ./dockerfile .
   - docker login -u=$DOCKER_USER -p=$DOCKER_PASS
   - docker push "synker/xviewer"
+  - trigger "Fazzani/synker-docker" $version
