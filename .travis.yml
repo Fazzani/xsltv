@@ -6,7 +6,7 @@ services:
 os:
   - linux
 #  - osx
-script: >
+script: |-
    export version=${TRAVIS_TAG:-"1.0.$TRAVIS_BUILD_NUMBER"}
    docker build -t "synker/xviewer:${version}" -t "synker/xviewer:latest" --build-arg version=$version -f ./dockerfile .
    docker login -u=$DOCKER_USER -p=$DOCKER_PASS
