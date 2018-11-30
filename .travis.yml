@@ -6,9 +6,16 @@ services:
 os:
   - linux
 #  - osx
-script:
-  - export version=${TRAVIS_TAG:-"1.0.$TRAVIS_BUILD_NUMBER"}
-  - docker build -t "synker/xviewer:${version}" -t "synker/xviewer:latest" --build-arg version=$version -f ./dockerfile .
-  - docker login -u=$DOCKER_USER -p=$DOCKER_PASS
-  - docker push "synker/xviewer"
-  - trigger "Fazzani/synker-docker" $version
+script: >
+   export version=${TRAVIS_TAG:-"1.0.$TRAVIS_BUILD_NUMBER"}
+   docker build -t "synker/xviewer:${version}" -t "synker/xviewer:latest" --build-arg version=$version -f ./dockerfile .
+   docker login -u=$DOCKER_USER -p=$DOCKER_PASS
+   docker push "synker/xviewer"
+   #Notif another build
+   trigger(){
+
+    if [ -f ./trigger-build.sh ]; then
+      . ./trigger-build.sh $1 $2
+    fi
+   }
+   trigger "Fazzani/synker-docker" $version
