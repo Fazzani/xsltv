@@ -214,13 +214,17 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
             <div className="listings-channel" style={{ width: this.state.channelLeftWidth }}>
               <a href="#" onClick={e => this.onSelectChannel(e, c)}>
                 {c.icon ? (
-                  <img
-                    src={c.icon.src}
-                    data-toggle="tooltip"
-                    data-placement="top"
-                    title={c['display-name']['#text']}
-                    alt={c['display-name']['#text']}
-                  />
+                  <div>
+                    {' '}
+                    <img
+                      src={c.icon.src}
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title={c['display-name']['#text']}
+                      alt={c['display-name']['#text']}
+                    />
+                    <div> {c['display-name']['#text']}</div>
+                  </div>
                 ) : (
                   c['display-name']['#text']
                 )}
@@ -253,20 +257,18 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
       })
     }
 
-    const Progs = this.state &&
-      this.state.tvgChannelsDay &&
-      this.state.tvgChannelsDay !== null && (
-        <ul className="listings-grid-progs" style={{ width: this.state.totalWidth, left: `${this.state.offset}px` }}>
-          {headerTimeBar(this.state.totalWidth)}
-          {this.state.tvgChannelsDay.map(c => {
-            return (
-              <li key={c.id} className="col-md-12 listings-channel-row">
-                {c.programs && Programs(c.programs)}
-              </li>
-            )
-          })}
-        </ul>
-      )
+    const Progs = this.state && this.state.tvgChannelsDay && this.state.tvgChannelsDay !== null && (
+      <ul className="listings-grid-progs" style={{ width: this.state.totalWidth, left: `${this.state.offset}px` }}>
+        {headerTimeBar(this.state.totalWidth)}
+        {this.state.tvgChannelsDay.map(c => {
+          return (
+            <li key={c.id} className="col-md-12 listings-channel-row">
+              {c.programs && Programs(c.programs)}
+            </li>
+          )
+        })}
+      </ul>
+    )
 
     const navigationButtons = (
       <div className="toolbar">
