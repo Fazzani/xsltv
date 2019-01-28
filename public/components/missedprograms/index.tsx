@@ -1,11 +1,12 @@
 import * as React from 'react'
-import { Constants } from '../../services/common'
 import elasticServices from '../../services/elasticService'
+import './style.scss'
 
 export class MissedProgramsState {
   value: string = ''
   query?: object
   result?: any
+  status: number = -1
 }
 
 export interface IQuery {
@@ -16,7 +17,7 @@ export interface IQuery {
 export default class MissedPrograms extends React.Component<{}, MissedProgramsState> {
   constructor(props: any) {
     super(props)
-    this.state = { value: '' }
+    this.state = { value: '', status: -1 }
   }
 
   async componentDidMount() {
@@ -24,7 +25,7 @@ export default class MissedPrograms extends React.Component<{}, MissedProgramsSt
     this.setState({ result: allChannels })
   }
 
-  queryFactory = (active?: boolean, size: number = 1000) => {
+  queryFactory = (size: number = 1000) => {
     const queryBase: any = {
       from: 0,
       size: 1,
@@ -45,10 +46,10 @@ export default class MissedPrograms extends React.Component<{}, MissedProgramsSt
         },
       },
     }
-    if (active !== undefined) {
+    if (this.state.status !== undefined && this.state.status !== -1) {
       queryBase.query.nested.query.bool.must.push({
         match: {
-          'tv.channel.active': active,
+          'tv.channel.active': this.state.status === 1,
         },
       })
     }
@@ -72,6 +73,16 @@ export default class MissedPrograms extends React.Component<{}, MissedProgramsSt
     })
   }
 
+  handleChangeStatus(e: React.ChangeEvent<HTMLSelectElement>): void {
+    e.preventDefault()
+    console.log(e.target.value)
+    this.setState({ status: Number.parseInt(e.target.value) }, async () => {
+      const result = await elasticServices.searchAsync(this.queryFactory())
+      console.log(`result => ${result}`)
+      this.setState({ result })
+    })
+  }
+
   render() {
     const ChannelIcon = ({ ch }) => {
       return ch._source.icon ? <img className="card-img-top" src={ch._source.icon.src} alt="Card image cap" style={{ width: '5rem' }} /> : null
@@ -79,12 +90,16 @@ export default class MissedPrograms extends React.Component<{}, MissedProgramsSt
     const ListChannels = (props: any) => {
       return props && props.value && props.value.inner_hits.channels_without_epg ? (
         props.value.inner_hits.channels_without_epg.hits.hits.map((channel: any, i: number) => (
-          <div className="card text-white bg-primary mb-3" key={channel._source.id + i} style={{ width: '18rem' }}>
+          <div
+            className={'card text-white bg-primary mb-3 ' + (channel._source.active ? 'enabled' : 'disabled')}
+            key={channel._source.id + i}
+            style={{ width: '18rem' }}>
             <ChannelIcon ch={channel} />
             <div className="card-body">
-              <h5 className="card-title">{channel._source.country}</h5>
               <h6 className="card-subtitle mb-2 text-muted">{channel._source.id}</h6>
+              <h5 className="card-title">{channel._source.country}</h5>
               <p>{channel._source.url}</p>
+              <p>{channel._source.active}</p>
             </div>
           </div>
         ))
@@ -105,6 +120,14 @@ export default class MissedPrograms extends React.Component<{}, MissedProgramsSt
               this.handleChange(e)
             }}
           />
+        </div>
+        <div className="form-group">
+          <label htmlFor="statusChannelList">Channel status</label>
+          <select className="form-control" id="statusChannelList" onChange={e => this.handleChangeStatus(e)}>
+            <option value="-1">All</option>
+            <option value="0">disabled</option>
+            <option value="1">enabled</option>
+          </select>
         </div>
         <div className="card-columns">
           <ListChannels value={this.state.result} />
