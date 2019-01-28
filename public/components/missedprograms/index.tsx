@@ -7,6 +7,7 @@ export class MissedProgramsState {
   query?: object
   result?: any
   status: number = -1
+  size: number = 1000
 }
 
 export interface IQuery {
@@ -17,7 +18,7 @@ export interface IQuery {
 export default class MissedPrograms extends React.Component<{}, MissedProgramsState> {
   constructor(props: any) {
     super(props)
-    this.state = { value: '', status: -1 }
+    this.state = { value: '', status: -1, size: 1000 }
   }
 
   async componentDidMount() {
@@ -25,7 +26,7 @@ export default class MissedPrograms extends React.Component<{}, MissedProgramsSt
     this.setState({ result: allChannels })
   }
 
-  queryFactory = (size: number = 1000) => {
+  queryFactory = () => {
     const queryBase: any = {
       from: 0,
       size: 1,
@@ -41,7 +42,7 @@ export default class MissedPrograms extends React.Component<{}, MissedProgramsSt
           },
           inner_hits: {
             name: 'channels_without_epg',
-            size: size,
+            size: this.state.size,
           },
         },
       },
