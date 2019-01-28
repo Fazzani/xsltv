@@ -41,6 +41,12 @@ export default class SideMenu extends React.PureComponent {
             </Link>
           </li>
           <li>
+            <Link className="animate" to="/missed">
+              <span className="desc animate"> Missed epg </span>
+              <span className="fa fa-bug" />
+            </Link>
+          </li>
+          <li>
             <Link className="animate" to="/about">
               <span className="desc animate"> Who We Are </span>
               <span className="fa fa-comment" />

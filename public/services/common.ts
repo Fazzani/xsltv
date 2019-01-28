@@ -43,6 +43,7 @@ export class Constants {
   static get Urls() {
     return {
       MYJSON_API_URL: 'https://api.myjson.com/bins/',
+      ELASTIC_URL: 'http://elastic.synker.ovh/epg/channels/_search',
     }
   }
 }

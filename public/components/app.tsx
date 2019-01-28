@@ -15,6 +15,7 @@ import About from './about'
 import Home from './home'
 import SettingsPage from './settingsModal/settingsPage'
 import { DateTime } from 'luxon'
+import MissedPrograms from './missedprograms';
 
 interface AppState extends AppContextInterface {
   noXmltvFiles?: boolean
@@ -114,6 +115,7 @@ export default class App extends React.Component<AppProps, AppState> {
             <SideMenu />
             <div className="container">
               <Route path="/about" render={() => <About />} />
+              <Route path="/missed" render={() => <MissedPrograms />} />
               <Route path="/settings" render={() => <SettingsPage files={this.state.files} settings={this.state.settings} />} />
               <Route path="/" exact={true} render={() => this.state.filesFetched && <Home files={this.state.files} />} />
             </div>
