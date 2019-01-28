@@ -57,8 +57,8 @@ export default class MissedPrograms extends React.Component<{}, MissedProgramsSt
     if (this.state.value && this.state.value !== '') {
       console.log(`${this.state.value}`)
       queryBase.query.nested.query.bool.must.push({
-        match: {
-          'tv.channel.id': this.state.value,
+        wildcard: {
+          'tv.channel.id': '*' + this.state.value + '*',
         },
       })
     }
@@ -117,6 +117,7 @@ export default class MissedPrograms extends React.Component<{}, MissedProgramsSt
             className="form-control"
             type="text"
             value={this.state.value}
+            autoFocus
             onChange={e => {
               this.handleChange(e)
             }}
