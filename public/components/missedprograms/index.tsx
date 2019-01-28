@@ -37,7 +37,7 @@ export default class MissedPrograms extends React.Component<{}, MissedProgramsSt
           score_mode: 'avg',
           query: {
             bool: {
-              must: [],
+              should: [],
             },
           },
           inner_hits: {
@@ -55,10 +55,15 @@ export default class MissedPrograms extends React.Component<{}, MissedProgramsSt
       })
     }
     if (this.state.value && this.state.value !== '') {
-      console.log(`${this.state.value}`)
-      queryBase.query.nested.query.bool.must.push({
+      // console.log(`${this.state.value}`)
+      queryBase.query.nested.query.bool.should.push({
         wildcard: {
-          'tv.channel.id': '*' + this.state.value + '*',
+          'tv.channel.id': { value: '*' + this.state.value + '*', boost: 2.0 },
+        },
+      })
+      queryBase.query.nested.query.bool.should.push({
+        wildcard: {
+          'tv.channel.url': '*' + this.state.value + '*',
         },
       })
     }
@@ -69,7 +74,7 @@ export default class MissedPrograms extends React.Component<{}, MissedProgramsSt
     e.preventDefault()
     this.setState({ value: (e.target as HTMLInputElement).value }, async () => {
       const result = await elasticServices.searchAsync(this.queryFactory())
-      console.log(`result => ${result}`)
+      // console.log(`result => ${result}`)
       this.setState({ result })
     })
   }
