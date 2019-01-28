@@ -52,7 +52,7 @@ export default class MissedPrograms extends React.Component<{}, MissedProgramsSt
         },
       })
     }
-    if (this.state.value !== '') {
+    if (this.state.value && this.state.value !== '') {
       console.log(`${this.state.value}`)
       queryBase.query.nested.query.bool.must.push({
         match: {
