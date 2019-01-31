@@ -48,7 +48,7 @@ export default class MissedPrograms extends React.Component<{}, MissedProgramsSt
       },
     }
     if (this.state.status !== undefined && this.state.status !== -1) {
-      queryBase.query.nested.query.bool.must.push({
+      queryBase.query.nested.query.bool.should.push({
         match: {
           'tv.channel.active': this.state.status === 1,
         },
