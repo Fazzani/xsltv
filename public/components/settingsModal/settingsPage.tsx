@@ -66,7 +66,6 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
     this.setState({ settings: { ...this.state.settings, tz: e.currentTarget.value } }, () => {
       console.log('onTzSelectChanged')
       SettingsService.save(this.state.settings)
-      debugger
       this.context.onSettingsChanged()
     })
   }
@@ -76,7 +75,7 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
       case Constants.Events.LOAD_XMLTV_URL:
         if (this.state.files) {
           this.state.files.forEach(f => (f.selected = false))
-          fileItemEvent.file.selected = true
+          this.state.files.filter(f => f.url === fileItemEvent.file.url)[0].selected = true
           await filesServices.update(this.props.settings.MyJsonId, this.state.files)
           this.context.onFilesChanged()
         }

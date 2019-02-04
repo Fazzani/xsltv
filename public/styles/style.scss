@@ -48,7 +48,7 @@ html {
         height: 100vh;
         overflow: auto;
         background: url(../images/bg.jpg) no-repeat center center fixed;
-        @include bg-size('cover');
+        background-size: cover;
         .fixed-bottom {
             z-index: 99 !important;
         }
