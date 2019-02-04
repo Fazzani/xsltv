@@ -64,7 +64,6 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
   onTzSelectChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault()
     this.setState({ settings: { ...this.state.settings, tz: e.currentTarget.value } }, () => {
-      console.log('onTzSelectChanged')
       SettingsService.save(this.state.settings)
       this.context.onSettingsChanged()
     })
