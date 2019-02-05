@@ -7,6 +7,7 @@ export default class XmltvFileItem extends React.PureComponent {
     file: PropTypes.shape({
       name: PropTypes.string,
       url: PropTypes.string,
+      selected: PropTypes.bool,
     }),
     itemCallback: PropTypes.func,
     isNew: PropTypes.bool,
@@ -29,7 +30,7 @@ export default class XmltvFileItem extends React.PureComponent {
     })
   }
 
-  view = (e) => {
+  view = e => {
     e.preventDefault()
     if (this.props.itemCallback) {
       this.props.itemCallback({
@@ -39,7 +40,7 @@ export default class XmltvFileItem extends React.PureComponent {
     }
   }
 
-  add = (e) => {
+  add = e => {
     e.preventDefault()
     if (this.props.itemCallback) {
       this.props.itemCallback({
@@ -50,7 +51,7 @@ export default class XmltvFileItem extends React.PureComponent {
     this.setState({ value: '' })
   }
 
-  remove = (e) => {
+  remove = e => {
     e.preventDefault()
     if (this.props.itemCallback) {
       this.props.itemCallback({
@@ -62,6 +63,9 @@ export default class XmltvFileItem extends React.PureComponent {
 
   handleChange(event) {
     this.setState({ value: event.target.value })
+    if (event.key === 'Enter') {
+      this.add(event)
+    }
   }
 
   /**
@@ -69,16 +73,13 @@ export default class XmltvFileItem extends React.PureComponent {
    * @param {string} xmltv_file_url - xmltv file url
    * @memberof SettingsModal
    */
-  createFileObject = (xmltv_file_url) => {
+  createFileObject = xmltv_file_url => {
     return { name: xmltv_file_url.split('/').pop(), url: xmltv_file_url }
   }
 
   render() {
     const removeBtn = !this.state.isNew && (
-      <button
-        className="pull-right btn btn-sm border-0 rounded-circle btn-outline-danger"
-        onClick={(e) => this.remove(e)}
-      >
+      <button className="pull-right btn btn-sm border-0 rounded-circle btn-outline-danger" onClick={e => this.remove(e)}>
         <i className="fa fa-trash-o" />
       </button>
     )
@@ -88,30 +89,25 @@ export default class XmltvFileItem extends React.PureComponent {
         <input
           type="url"
           value={this.state.value || ''}
-          onChange={(e) => this.handleChange(e)}
+          onChange={e => this.handleChange(e)}
           placeholder="Add new xmltv url..."
           className="form-control"
+          onKeyPress={e=> this.handleChange(e)}
         />
       </div>
     ) : (
-      this.props.file && <div className="col">{this.props.file.name}</div>
+      this.props.file && <div className={'col ' + (this.props.file.selected ? 'selected' : '')}>{this.props.file.name}</div>
     )
 
     return (
       <div className="row xviewer-list-item">
         {inputUrl}
         <div className="col">
-          <button
-            className="pull-right btn btn-sm border-0 rounded-circle btn-outline-success"
-            onClick={(e) => this.view(e)}
-          >
+          <button className="pull-right btn btn-sm border-0 rounded-circle btn-outline-success" onClick={e => this.view(e)}>
             <i className="fa fa-eye" />
           </button>
           {this.state.isNew && (
-            <button
-              className="pull-right btn btn-sm border-0 rounded-circle btn-outline-primary"
-              onClick={(e) => this.add(e)}
-            >
+            <button className="pull-right btn btn-sm border-0 rounded-circle btn-outline-primary" onClick={e => this.add(e)}>
               <i className="fa fa-plus" />
             </button>
           )}

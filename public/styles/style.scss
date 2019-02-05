@@ -229,5 +229,9 @@ html {
             border: none;
         }
         /* ************************************* END MODAL *************************************** */
+        .selected {
+            font-size: larger;
+            color: $primary-bg-color;
+        }
     }
 }

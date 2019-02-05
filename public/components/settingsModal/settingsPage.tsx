@@ -89,6 +89,12 @@ export default class SettingsPage extends React.PureComponent<SettingsPageProps,
             else return {}
           },
           async () => {
+            if (this.state.files) {
+              const selectedFile = this.state.files.filter(f => f.selected)
+              if (selectedFile.length === 0 && this.state.files.length > 0) {
+                this.state.files[0].selected = true
+              }
+            }
             await filesServices.update(this.props.settings.MyJsonId, this.state.files)
             this.context.onFilesChanged()
           }
