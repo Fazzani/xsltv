@@ -1,7 +1,7 @@
 import * as React from "react";
 import "bootstrap";
 import SideMenu from "./sidemenu/sidemenu";
-import Loader from "./loader/loader";
+import {Loader} from "./loader/loader";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import NavBottom from "./navBottom/index";
 import SnackBar from "./snackBar/snackBar";
@@ -14,7 +14,7 @@ import "../styles/style.scss";
 import filesServices from "../services/filesService";
 import { AppNotification } from "./entities";
 import SettingsService from "../services/settingsService";
-import About from "./about";
+import {About} from "./about";
 import Home from "./home";
 import SettingsPage from "./settingsModal/settingsPage";
 import { DateTime } from "luxon";

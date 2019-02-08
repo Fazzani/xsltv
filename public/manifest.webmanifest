@@ -6,7 +6,7 @@
   "scope": "/",
   "start_url": "/",
   "display": "fullscreen",
-  "orientation": "portrait",
+  "orientation": "landscape",
   "lang": "en-US",
   "icons": [
     {

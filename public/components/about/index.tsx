@@ -1,11 +1,11 @@
-import * as React from "react";
+import React, { FunctionComponent, useState } from 'react';
+import "../../styles/loader.scss";
 
-export default class About extends React.Component {
-  render() {
-    return (
-      <div>
-        <h1>About</h1>
-      </div>
-    );
-  }
+// our components props accept a number for the initial value
+export const About: FunctionComponent = () => {
+  return <>
+    <div>
+      <h1>About</h1>
+    </div>
+  </>
 }

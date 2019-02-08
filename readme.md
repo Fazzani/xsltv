@@ -17,6 +17,7 @@ Epg viewer for XMLTV format based on xsltv project.
 - [ ] Finalize settings modal page
 - [ ] Fix timeline position
 - [ ] About modal
+- [ ] React hooks
 - [ ] React enhancement
   - [ ] BIT for sharing component
   - [x] UI tests (JEST & e2e)
