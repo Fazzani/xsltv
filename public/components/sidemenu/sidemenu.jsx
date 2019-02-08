@@ -1,29 +1,33 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react";
+import { Link } from "react-router-dom";
 
 export default class SideMenu extends React.PureComponent {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      open: true,
-    }
+      open: true
+    };
   }
 
   handleToggleClick(e) {
-    e.preventDefault()
+    e.preventDefault();
     this.setState({
       ...this.state,
-      open: !this.state.open,
-    })
+      open: !this.state.open
+    });
   }
 
   render() {
     const openClassNames = this.state.open
-      ? 'navbar navbar-fixed-left navbar-minimal animate open'
-      : 'navbar navbar-fixed-left navbar-minimal animate'
+      ? "navbar navbar-fixed-left navbar-minimal animate open"
+      : "navbar navbar-fixed-left navbar-minimal animate";
 
     return (
-      <nav onClick={e => this.handleToggleClick(e)} className={openClassNames} role="navigation">
+      <nav
+        onClick={e => this.handleToggleClick(e)}
+        className={openClassNames}
+        role="navigation"
+      >
         <div className="navbar-toggler animate">
           <i className="fa fa-align-justify" />
         </div>
@@ -54,6 +58,6 @@ export default class SideMenu extends React.PureComponent {
           </li>
         </ul>
       </nav>
-    )
+    );
   }
 }

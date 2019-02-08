@@ -1,31 +1,31 @@
-import * as React from 'react'
-import { DateTime } from 'luxon'
-import { AppNotification, XmltvFile } from './entities'
-import SettingsService, { Settings } from '../services/settingsService'
+import * as React from "react";
+import { DateTime } from "luxon";
+import { AppNotification, XmltvFile } from "./entities";
+import SettingsService, { Settings } from "../services/settingsService";
 
 export interface AppContextInterface {
-  name: string
-  loader: Loader
-  settings: Settings
-  handleErrors?: any
-  files?: XmltvFile[]
-  notify(notification: AppNotification): void
-  onSettingsChanged?(): void
-  onFilesChanged?(): void
-  toggleLoader?(text: string, isLoading?: boolean): void
+  name: string;
+  loader: Loader;
+  settings: Settings;
+  handleErrors?: any;
+  files?: XmltvFile[];
+  notify(notification: AppNotification): void;
+  onSettingsChanged?(): void;
+  onFilesChanged?(): void;
+  toggleLoader?(text: string, isLoading?: boolean): void;
 }
 
 interface Loader {
-  loading: boolean
-  text: string
+  loading: boolean;
+  text: string;
 }
 
 export const DefaultAppContext = {
-  name: 'XViewer',
-  loader: { loading: false, text: 'Loading' },
+  name: "XViewer",
+  loader: { loading: false, text: "Loading" },
   files: [],
   notify: (notification: AppNotification) => {
-    console.log(notification)
+    console.log(notification);
   },
   settings: {
     hours: 4,
@@ -33,33 +33,33 @@ export const DefaultAppContext = {
     halfHourWidth: 100,
     HighlightMovies: false,
     HighlightNew: false,
-    MyJsonId: '',
+    MyJsonId: ""
   },
   onSettingsChanged: () => SettingsService.load(),
-  handleErrors: (response: Response, origin = 'XViewer App') => {
+  handleErrors: (response: Response, origin = "XViewer App") => {
     if (!response.ok) {
-      throw Error(`${origin} : ${response.statusText}`)
+      throw Error(`${origin} : ${response.statusText}`);
     }
-    return response
-  },
-}
+    return response;
+  }
+};
 
-const AppContext = React.createContext<AppContextInterface>(DefaultAppContext)
+const AppContext = React.createContext<AppContextInterface>(DefaultAppContext);
 
 export const Zones: string[] = [
-  'Europe/Warsaw',
-  'Europe/Mariehamn',
-  'Europe/Minsk',
-  'Europe/Monaco',
-  'Europe/Moscow',
-  'Europe/Nicosia',
-  'Europe/Oslo',
-  'Europe/Paris',
-  'Europe/Podgorica',
-  'Europe/Prague',
-  'Europe/Riga',
-  'Europe/Rome',
-  'America/Los_Angeles',
-]
+  "Europe/Warsaw",
+  "Europe/Mariehamn",
+  "Europe/Minsk",
+  "Europe/Monaco",
+  "Europe/Moscow",
+  "Europe/Nicosia",
+  "Europe/Oslo",
+  "Europe/Paris",
+  "Europe/Podgorica",
+  "Europe/Prague",
+  "Europe/Riga",
+  "Europe/Rome",
+  "America/Los_Angeles"
+];
 
-export default AppContext
+export default AppContext;

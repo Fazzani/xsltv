@@ -1,13 +1,13 @@
-import React from 'react'
-import './style.scss'
+import React from "react";
+import "./style.scss";
 
 const SnackBar = () => (
   <div id="snackbar" className="show">
-    A new version of this app is available. Click{' '}
+    A new version of this app is available. Click{" "}
     <a id="reload" href="_self">
       here
-    </a>{' '}
+    </a>{" "}
     to update.
   </div>
-)
-export default SnackBar
+);
+export default SnackBar;

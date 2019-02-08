@@ -1,9 +1,9 @@
-import React from 'react'
-import Clock from './clock'
-import AppContext, { AppContextInterface } from '../appContext'
+import React from "react";
+import Clock from "./clock";
+import AppContext, { AppContextInterface } from "../appContext";
 
 export default class NavBottom extends React.Component {
-  static contextType: React.Context<AppContextInterface> = AppContext
+  static contextType: React.Context<AppContextInterface> = AppContext;
   render() {
     return (
       <nav className="navbar fixed-bottom navbar-dark bg-dark  form-inline justify-content-between">
@@ -13,6 +13,6 @@ export default class NavBottom extends React.Component {
           <a href="http://synker.ovh"> Synker.ovh</a>
         </small>
       </nav>
-    )
+    );
   }
 }

@@ -9,17 +9,19 @@
 // This link also includes instructions on opting out of this behavior.
 
 const isLocalhost = Boolean(
-  window.location.hostname === 'localhost' ||
+  window.location.hostname === "localhost" ||
     // [::1] is the IPv6 localhost address.
-    window.location.hostname === '[::1]' ||
+    window.location.hostname === "[::1]" ||
     // 127.0.0.1/8 is considered localhost for IPv4.
-    window.location.hostname.match(/^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/)
-)
+    window.location.hostname.match(
+      /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
+    )
+);
 
 const showUpdateBar = () => {
-  const snackBar = document.getElementById('snackbar')
-  snackBar.className = 'show'
-}
+  const snackBar = document.getElementById("snackbar");
+  snackBar.className = "show";
+};
 // $(function() {
 //   // The click event on the pop up notification
 //   document.getElementById('reload').addEventListener('click', function() {
@@ -30,32 +32,32 @@ const showUpdateBar = () => {
 // })
 
 export default function register() {
-  if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+  if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
     // The URL constructor is available in all browsers that support SW.
-    const publicUrl = new URL(process.env.PUBLIC_URL, window.location)
+    const publicUrl = new URL(process.env.PUBLIC_URL, window.location);
     if (publicUrl.origin !== window.location.origin) {
       // Our service worker won't work if PUBLIC_URL is on a different origin
       // from what our page is served on. This might happen if a CDN is used to
       // serve assets; see https://github.com/facebookincubator/create-react-app/issues/2374
-      return
+      return;
     }
 
-    window.addEventListener('load', async () => {
-      registerValidSW()
-    })
+    window.addEventListener("load", async () => {
+      registerValidSW();
+    });
   }
 }
 
 function registerValidSW() {
   navigator.serviceWorker
-    .register('service-worker.js')
+    .register("service-worker.js")
     .then(registration => {
       registration.onupdatefound = () => {
-        const installingWorker = registration.installing
+        const installingWorker = registration.installing;
         installingWorker.onstatechange = () => {
-          if (installingWorker.state === 'installed') {
+          if (installingWorker.state === "installed") {
             if (navigator.serviceWorker.controller) {
-              showUpdateBar()
+              showUpdateBar();
             } else {
               // At this point, everything has been precached.
               // It's the perfect time to display a
@@ -63,13 +65,13 @@ function registerValidSW() {
               //console.log('Content is cached for offline use.')
             }
           }
-        }
-      }
+        };
+      };
     })
     .catch(error => {
       //console.error('Error during service worker registration:', error)
-      throw error
-    })
+      throw error;
+    });
 }
 
 // function checkValidServiceWorker(swUrl) {
