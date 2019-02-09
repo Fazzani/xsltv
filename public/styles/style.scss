@@ -31,9 +31,23 @@ html {
         }
         .card {
             background-color: inherit !important;
+            .header-card {
+                padding-left: 0.25rem;
+                display: inline;
+                .card-img-top {
+                    width: 5rem;
+                    position: absolute;
+                    top: 0.25rem;
+                    right: 0.25rem;
+                }
+            }
             .card-header {
                 font-weight: bolder;
                 color: $highlight-text;
+            }
+            .card-body {
+                font-size:0.25rem !important;
+                padding: 0 1.25rem !important;
             }
         }
         scroll-behavior: smooth;

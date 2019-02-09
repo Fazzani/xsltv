@@ -114,7 +114,9 @@ export default class MissedPrograms extends React.Component<{}, MissedProgramsSt
 
   render() {
     const ChannelIcon = ({ ch }) => {
-      return ch._source.icon ? <img className="card-img-top" src={ch._source.icon.src} alt="Card image cap" style={{ width: '5rem' }} /> : null
+      return ch._source.icon ? (
+        <img className="card-img-top" src={ch._source.icon.src} alt="Card image cap" />
+      ) : null
     }
     const ListChannels = (props: any) => {
       return props && props.value ? (
@@ -123,11 +125,13 @@ export default class MissedPrograms extends React.Component<{}, MissedProgramsSt
             className={'card text-white bg-primary mb-3 ' + (channel._source.active ? 'enabled' : 'disabled')}
             key={channel._source.id + i}
             style={{ width: '18rem' }}>
-            <ChannelIcon ch={channel} />
+            <div className="header-card">
+              <span>{channel._source.id}</span>
+              <ChannelIcon ch={channel} />
+            </div>
             <div className="card-body">
-              <h5 className="card-title">{channel._source.id}</h5>
-              <h6 className="card-subtitle mb-2 text-muted">{channel._source.country}</h6>
-              <p>{channel._source.url}</p>
+              <h5 className="card-title">{channel._source.country}</h5>
+              <h6 className="card-subtitle mb-2 text-muted">{channel._source.url}</h6>
             </div>
           </div>
         ))
