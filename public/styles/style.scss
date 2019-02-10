@@ -12,6 +12,17 @@
 }
 
 html {
+    @media all and (max-device-width: 500px) {
+        body {
+            font-size: 0.75rem !important;
+            .toolbar {
+                font-size: 0.5rem;
+            }
+            .listings-channel {
+                width: 5rem !important;
+            }
+        }
+    }
     body {
         color: white;
         #fullscreen {
@@ -46,7 +57,7 @@ html {
                 color: $highlight-text;
             }
             .card-body {
-                font-size:0.25rem !important;
+                font-size: 0.25rem !important;
                 padding: 0 1.25rem !important;
             }
         }
