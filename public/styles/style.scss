@@ -15,11 +15,14 @@ html {
     @media all and (max-device-width: 500px) {
         body {
             font-size: 0.75rem !important;
-            .toolbar {
-                font-size: 0.5rem;
-            }
-            .listings-channel {
-                width: 5rem !important;
+            .row-section {
+                .toolbar {
+                    font-size: 0.5rem;
+                }
+                padding-left: 2rem !important;
+                .listings-channel {
+                    width: 5rem !important;
+                }
             }
         }
     }
@@ -201,7 +204,7 @@ html {
                 }
             }
             &.open {
-                width: 60px;
+                width: 2rem;
                 >.navbar-menu {
                     overflow: visible;
                     background-color: #191925;
