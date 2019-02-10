@@ -155,7 +155,7 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
     return -(inter.length('hour') * this.state.halfHourWidth * 2)
   }
 
-  onDayChanged = (e: React.MouseEvent<HTMLElement>, offset = 1) => {
+  onDayChanged = (e: React.MouseEvent<HTMLElement> | undefined, offset = 1) => {
     const date = this.state.currentDate.plus({ days: offset })
     this.setState({ currentDate: date }, () => {
       this.fetchPrograms()
@@ -176,11 +176,11 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
     this.swipe(isLeft)
   }
 
-  swipe = (isLeft: boolean = true, offset?:number) => {
+  swipe = (isLeft: boolean = true, offset?: number) => {
     if (isLeft) {
       this.setState({ offset: this.state.offset + (offset || this.state.halfHourWidth) })
     } else {
-      this.setState({ offset: this.state.offset - (offset || this.state.halfHourWidth)  })
+      this.setState({ offset: this.state.offset - (offset || this.state.halfHourWidth) })
     }
   }
 
@@ -198,27 +198,30 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
     this.setState({ selectedChannel: undefined, sidebarOpen: false })
   }
 
-//#region Swipe
+  //#region Swipe
   handleTouchStart = (e: React.TouchEvent) => {
     this.setState({ slideStartX: e.targetTouches[0].clientX })
   }
 
   handleTouchMove = (e: React.TouchEvent) => {
-    this.setState({ deltaX: (this.state.slideStartX || 0)- e.targetTouches[0].clientX })
+    this.setState({ deltaX: (this.state.slideStartX || 0) - e.targetTouches[0].clientX })
   }
 
   handleTouchEnd = (e: React.TouchEvent) => {
     e.preventDefault()
-    if (this.state.deltaX > 0) {
-      //move right
-      this.swipe(false, this.state.deltaX)
-    } else {
-      //move left
-      this.swipe(true, this.state.deltaX)
-    }
+    this.swipe(false, this.state.deltaX)
     this.setState({ slideStartX: undefined, deltaX: 0 })
+    if (this.state.totalWidth + this.state.offset < 150) {
+      if (this.state.offset + 150 > 0) {
+        //previous day
+        this.onDayChanged(undefined, -1)
+      } else {
+        this.onDayChanged(undefined)
+      }
+      this.setState({ offset: -33 })
+    }
   }
-//#endregion
+  //#endregion
 
   render() {
     const headerTimeBar = (totalWidth: number) => {
@@ -342,8 +345,7 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
             className="listings-grid grid-progs"
             onTouchStart={e => this.handleTouchStart(e)}
             onTouchMove={e => this.handleTouchMove(e)}
-            onTouchEnd={e => this.handleTouchEnd(e)}
-            >
+            onTouchEnd={e => this.handleTouchEnd(e)}>
             {Progs}
           </ul>
         </div>
