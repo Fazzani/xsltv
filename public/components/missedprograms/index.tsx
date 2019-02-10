@@ -3,6 +3,7 @@ import elasticServices from '../../services/elasticService'
 import './style.scss'
 import debounce from 'lodash/debounce'
 
+const all:string='ALL'
 export class MissedProgramsState {
   value: string = ''
   query?: object
@@ -10,7 +11,7 @@ export class MissedProgramsState {
   groups: any[string]
   status: number = -1
   size: number = 1000
-  groupFilter: string = 'all'
+  groupFilter: string = all
   total: number = 0
 }
 
@@ -24,7 +25,7 @@ export default class MissedPrograms extends React.Component<{}, MissedProgramsSt
   constructor(props: any) {
     super(props)
     this.debouncedFilter = debounce(async () => await this.filterChange(), 300)
-    this.state = { value: '', status: -1, size: 1000, groups: [], groupFilter: 'all', total: 0 }
+    this.state = { value: '', status: -1, size: 1000, groups: [], groupFilter: all, total: 0 }
   }
 
   async componentDidMount() {
@@ -50,7 +51,7 @@ export default class MissedPrograms extends React.Component<{}, MissedProgramsSt
         {}
       )
 
-      groups['all'] = this.state.result
+      groups[all] = this.state.result
       this.setState({ groups })
     }
   }
