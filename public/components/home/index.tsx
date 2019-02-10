@@ -162,6 +162,10 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
     })
   }
 
+  get TZOffset(): number {
+    return -(new Date().getTimezoneOffset() / 60)
+  }
+
   get PreviousDay(): DateTime {
     if (!this.state || !this.state.currentDate) return DateTime.local().plus({ days: -1 })
     return this.state.currentDate.plus({ days: -1 })
@@ -283,7 +287,8 @@ export default class Home extends React.PureComponent<HomeProps, HomeState> {
               {p.country && ' | ' + p.country['#text']}
               {p.duration && ' | ' + p.duration + 'min'}
               <div className="small">
-                {p.startTime.toLocaleString(DateTime.TIME_24_SIMPLE)} &nbsp;-&nbsp; {p.stopTime.toLocaleString(DateTime.TIME_24_SIMPLE)}
+                {p.startTime.toLocaleString(DateTime.TIME_24_SIMPLE)} &nbsp;-&nbsp; 
+                {p.stopTime.toLocaleString(DateTime.TIME_24_SIMPLE)}
               </div>
             </div>
           </div>
