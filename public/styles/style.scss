@@ -49,10 +49,15 @@ html {
                 padding-left: 0.25rem;
                 display: inline;
                 .card-img-top {
-                    width: 5rem;
+                    width: 2.5rem;
                     position: absolute;
-                    top: 0.25rem;
-                    right: 0.25rem;
+                    top: .1rem;
+                    left: 0.1rem;
+                }
+                span {
+                    margin-left: 3rem;
+                    word-wrap: break-word;
+                    overflow-wrap: break-word;
                 }
             }
             .card-header {

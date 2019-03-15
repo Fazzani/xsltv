@@ -153,7 +153,7 @@ export default class MissedPrograms extends React.Component<{}, MissedProgramsSt
           <div
             className={'card text-white bg-primary mb-3 ' + (channel._source.active ? 'enabled' : 'disabled')}
             key={channel._source.id + i}
-            style={{ width: '18rem' }}>
+            >
             <div className="header-card">
               <span>{channel._source.id}</span>
               <ChannelIcon ch={channel} />
